@@ -9,6 +9,7 @@
 #import "AAAppDelegate.h"
 #import "AAGroupViewController.h"
 #import "AAAssetLibHelper.h"
+#import "AADataStore.h"
 
 @implementation AAAppDelegate
 
@@ -20,6 +21,7 @@
 - (void)dealloc
 {
     [AAAssetLibHelper staticRelease];
+    [AADataStore staticRelease];
     [_window release];
     [__managedObjectContext release];
     [__managedObjectModel release];

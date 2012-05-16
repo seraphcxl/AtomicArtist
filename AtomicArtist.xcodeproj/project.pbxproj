@@ -27,6 +27,12 @@
 		1BECA6131563D16000BCB96D /* AAGroupViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BECA60E1563D16000BCB96D /* AAGroupViewCell.m */; };
 		1BECA6141563D16000BCB96D /* AAGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BECA6101563D16000BCB96D /* AAGroupViewController.m */; };
 		1BECA6151563D16000BCB96D /* AAGroupViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1BECA6111563D16000BCB96D /* AAGroupViewController.xib */; };
+		1BECA6221563D3FE00BCB96D /* AADataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BECA61B1563D3FE00BCB96D /* AADataStore.m */; };
+		1BECA6231563D3FE00BCB96D /* Album.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BECA61D1563D3FE00BCB96D /* Album.m */; };
+		1BECA6241563D3FE00BCB96D /* Asset.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BECA61F1563D3FE00BCB96D /* Asset.m */; };
+		1BECA6251563D3FE00BCB96D /* DataStore.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1BECA6201563D3FE00BCB96D /* DataStore.xcdatamodeld */; };
+		1BECA62C1563D41E00BCB96D /* AAPageScrollViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BECA6291563D41E00BCB96D /* AAPageScrollViewController.m */; };
+		1BECA62D1563D41E00BCB96D /* AAPageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BECA62B1563D41E00BCB96D /* AAPageView.m */; };
 		1BEE14CC1562387400F6596D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BEE14CB1562387400F6596D /* QuartzCore.framework */; };
 /* End PBXBuildFile section */
 
@@ -66,6 +72,17 @@
 		1BECA60F1563D16000BCB96D /* AAGroupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AAGroupViewController.h; sourceTree = "<group>"; };
 		1BECA6101563D16000BCB96D /* AAGroupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AAGroupViewController.m; sourceTree = "<group>"; };
 		1BECA6111563D16000BCB96D /* AAGroupViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AAGroupViewController.xib; sourceTree = "<group>"; };
+		1BECA61A1563D3FE00BCB96D /* AADataStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AADataStore.h; sourceTree = "<group>"; };
+		1BECA61B1563D3FE00BCB96D /* AADataStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AADataStore.m; sourceTree = "<group>"; };
+		1BECA61C1563D3FE00BCB96D /* Album.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Album.h; sourceTree = "<group>"; };
+		1BECA61D1563D3FE00BCB96D /* Album.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Album.m; sourceTree = "<group>"; };
+		1BECA61E1563D3FE00BCB96D /* Asset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Asset.h; sourceTree = "<group>"; };
+		1BECA61F1563D3FE00BCB96D /* Asset.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Asset.m; sourceTree = "<group>"; };
+		1BECA6211563D3FE00BCB96D /* DataStore.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DataStore.xcdatamodel; sourceTree = "<group>"; };
+		1BECA6281563D41E00BCB96D /* AAPageScrollViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AAPageScrollViewController.h; sourceTree = "<group>"; };
+		1BECA6291563D41E00BCB96D /* AAPageScrollViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AAPageScrollViewController.m; sourceTree = "<group>"; };
+		1BECA62A1563D41E00BCB96D /* AAPageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AAPageView.h; sourceTree = "<group>"; };
+		1BECA62B1563D41E00BCB96D /* AAPageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AAPageView.m; sourceTree = "<group>"; };
 		1BEE14CB1562387400F6596D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -123,6 +140,7 @@
 				1BECA60A1563D16000BCB96D /* GroupView */,
 				1BECA5FE1563D15600BCB96D /* ItemView */,
 				1BECA5FA1563D15000BCB96D /* DetailView */,
+				1BECA6271563D41E00BCB96D /* PageScrollView */,
 				1B310AB31554EB2700B5CD26 /* Supporting Files */,
 				1B310ABB1554EB2700B5CD26 /* AAAppDelegate.h */,
 				1B310ABC1554EB2700B5CD26 /* AAAppDelegate.m */,
@@ -147,6 +165,13 @@
 		1BECA5F21563D14800BCB96D /* Data */ = {
 			isa = PBXGroup;
 			children = (
+				1BECA61A1563D3FE00BCB96D /* AADataStore.h */,
+				1BECA61B1563D3FE00BCB96D /* AADataStore.m */,
+				1BECA61C1563D3FE00BCB96D /* Album.h */,
+				1BECA61D1563D3FE00BCB96D /* Album.m */,
+				1BECA61E1563D3FE00BCB96D /* Asset.h */,
+				1BECA61F1563D3FE00BCB96D /* Asset.m */,
+				1BECA6201563D3FE00BCB96D /* DataStore.xcdatamodeld */,
 				1BECA5F31563D14800BCB96D /* AAAssetLibHelper.h */,
 				1BECA5F41563D14800BCB96D /* AAAssetLibHelper.m */,
 				1BECA5F51563D14800BCB96D /* AAAssetsGroup.h */,
@@ -190,6 +215,17 @@
 				1BECA6111563D16000BCB96D /* AAGroupViewController.xib */,
 			);
 			path = GroupView;
+			sourceTree = "<group>";
+		};
+		1BECA6271563D41E00BCB96D /* PageScrollView */ = {
+			isa = PBXGroup;
+			children = (
+				1BECA6281563D41E00BCB96D /* AAPageScrollViewController.h */,
+				1BECA6291563D41E00BCB96D /* AAPageScrollViewController.m */,
+				1BECA62A1563D41E00BCB96D /* AAPageView.h */,
+				1BECA62B1563D41E00BCB96D /* AAPageView.m */,
+			);
+			path = PageScrollView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -269,6 +305,12 @@
 				1BECA6121563D16000BCB96D /* AAGroupView.m in Sources */,
 				1BECA6131563D16000BCB96D /* AAGroupViewCell.m in Sources */,
 				1BECA6141563D16000BCB96D /* AAGroupViewController.m in Sources */,
+				1BECA6221563D3FE00BCB96D /* AADataStore.m in Sources */,
+				1BECA6231563D3FE00BCB96D /* Album.m in Sources */,
+				1BECA6241563D3FE00BCB96D /* Asset.m in Sources */,
+				1BECA6251563D3FE00BCB96D /* DataStore.xcdatamodeld in Sources */,
+				1BECA62C1563D41E00BCB96D /* AAPageScrollViewController.m in Sources */,
+				1BECA62D1563D41E00BCB96D /* AAPageView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -375,6 +417,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		1BECA6201563D3FE00BCB96D /* DataStore.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				1BECA6211563D3FE00BCB96D /* DataStore.xcdatamodel */,
+			);
+			currentVersion = 1BECA6211563D3FE00BCB96D /* DataStore.xcdatamodel */;
+			path = DataStore.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 1B310A9D1554EB2700B5CD26 /* Project object */;
 }
