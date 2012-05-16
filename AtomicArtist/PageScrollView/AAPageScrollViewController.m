@@ -33,6 +33,14 @@
 @synthesize contextView = _contextView;
 @synthesize pageViews = _pageViews;
 @synthesize pageViewCtrls = _pageViewCtrls;
+@synthesize scrollEnabled = _scrollEnabled;
+
+- (void)setScrollEnabled:(BOOL)scrollEnabled {
+    _scrollEnabled = scrollEnabled;
+    if (self.pageScrollView) {
+        self.pageScrollView.scrollEnabled = scrollEnabled;
+    }
+}
 
 - (void)initPageViews {
     if (self.pageViews) {
@@ -42,10 +50,14 @@
         self.pageViews = [[[NSMutableDictionary alloc] init] autorelease];
     }
     CGRect rectForPageView = [self.view bounds];
-    AAPageView *current = [[[AAPageView alloc] initWithFrame:rectForPageView] autorelease];
-    [self.pageViews setObject:current forKey:pageID_current];
     AAPageView *prev = [[[AAPageView alloc] initWithFrame:rectForPageView] autorelease];
     [self.pageViews setObject:prev forKey:pageID_previous];
+    
+    rectForPageView.origin.x += rectForPageView.size.width;
+    AAPageView *current = [[[AAPageView alloc] initWithFrame:rectForPageView] autorelease];
+    [self.pageViews setObject:current forKey:pageID_current];
+    
+    rectForPageView.origin.x += rectForPageView.size.width;
     AAPageView *next = [[[AAPageView alloc] initWithFrame:rectForPageView] autorelease];
     [self.pageViews setObject:next forKey:pageID_next];
 }
@@ -74,8 +86,9 @@
 - (void)setPageViewCtrlsWithCurrent:(UIViewController *)current previous:(UIViewController *)previous andNext:(UIViewController *)next {
     if (self.pageViewCtrls) {
         [self.pageViewCtrls removeAllObjects];
-        [self.pageViewCtrls setObject:current forKey:pageID_current];
+        
         [self.pageViewCtrls setObject:previous forKey:pageID_previous];
+        [self.pageViewCtrls setObject:current forKey:pageID_current];
         [self.pageViewCtrls setObject:next forKey:pageID_next];
     } else {
         [NSException raise:@"AAPageScrollViewController error" format:@"Reason: self.pageViewCtrls == nil"];
@@ -112,8 +125,8 @@
 
 - (void)reloadPageViews {
     if (self.pageViews) {
-        [self reloadPageViewWithID:pageID_current];
         [self reloadPageViewWithID:pageID_previous];
+        [self reloadPageViewWithID:pageID_current];
         [self reloadPageViewWithID:pageID_next];
     } else {
         [NSException raise:@"AAPageScrollViewController error" format:@"Reason: self.pageViews == nil"];
@@ -172,6 +185,14 @@
         [self initPageViews];
         
         [self reloadPageViews];
+        
+        [self.pageScrollView addSubview:self.contextView];
+        [self.pageScrollView setContentSize:rectForContextView.size];
+        AAPageView *currentPageView = [self currentPageView];
+        CGPoint offset = currentPageView.frame.origin;
+        [self.pageScrollView setContentOffset:offset animated:NO];
+        self.pageScrollView.scrollEnabled = self.scrollEnabled;
+        [self.view addSubview:self.pageScrollView];
     }
     
     return result;

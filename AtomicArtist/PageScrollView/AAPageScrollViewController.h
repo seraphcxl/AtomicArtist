@@ -22,6 +22,7 @@ const NSString *pageID_next = @"next";
 @property (retain, nonatomic) UIView *contextView;
 @property (retain, nonatomic) NSMutableDictionary *pageViews;
 @property (retain, nonatomic) NSMutableDictionary *pageViewCtrls;
+@property (assign, nonatomic) BOOL scrollEnabled;
 
 - (AAPageView *)currentPageView;
 - (AAPageView *)previousPageView;
