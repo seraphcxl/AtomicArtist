@@ -28,13 +28,13 @@
 		1BF9F4EE156488C70015E004 /* DCAssetLibHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BF9F4ED156488C60015E004 /* DCAssetLibHelper.m */; };
 		1BF9F4F1156489E00015E004 /* DCAssetsGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BF9F4F0156489DF0015E004 /* DCAssetsGroup.m */; };
 		1BF9F4F515648B730015E004 /* DCItemView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BF9F4F415648B730015E004 /* DCItemView.m */; };
-		1BF9F4F815648D770015E004 /* DCItemViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BF9F4F715648D770015E004 /* DCItemViewCell.m */; };
-		1BF9F4FC15648DF40015E004 /* DCItemViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BF9F4FA15648DF40015E004 /* DCItemViewController.m */; };
-		1BF9F4FD15648DF40015E004 /* DCItemViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1BF9F4FB15648DF40015E004 /* DCItemViewController.xib */; };
 		1BF9F50115648F920015E004 /* DCGroupView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BF9F50015648F920015E004 /* DCGroupView.m */; };
-		1BF9F5041564901F0015E004 /* DCGroupViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BF9F5031564901E0015E004 /* DCGroupViewCell.m */; };
-		1BF9F5081564908B0015E004 /* DCGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BF9F5061564908A0015E004 /* DCGroupViewController.m */; };
-		1BF9F5091564908B0015E004 /* DCGroupViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1BF9F5071564908A0015E004 /* DCGroupViewController.xib */; };
+		1BF9F5141564939C0015E004 /* DCGroupViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BF9F5101564939C0015E004 /* DCGroupViewCell.m */; };
+		1BF9F5151564939C0015E004 /* DCGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BF9F5121564939C0015E004 /* DCGroupViewController.m */; };
+		1BF9F5161564939C0015E004 /* DCGroupViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1BF9F5131564939C0015E004 /* DCGroupViewController.xib */; };
+		1BF9F51C156493A50015E004 /* DCItemViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BF9F518156493A50015E004 /* DCItemViewCell.m */; };
+		1BF9F51D156493A50015E004 /* DCItemViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BF9F51A156493A50015E004 /* DCItemViewController.m */; };
+		1BF9F51E156493A50015E004 /* DCItemViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1BF9F51B156493A50015E004 /* DCItemViewController.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -74,18 +74,18 @@
 		1BF9F4F0156489DF0015E004 /* DCAssetsGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCAssetsGroup.m; sourceTree = "<group>"; };
 		1BF9F4F315648B730015E004 /* DCItemView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DCItemView.h; path = ItemView/DCItemView.h; sourceTree = "<group>"; };
 		1BF9F4F415648B730015E004 /* DCItemView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DCItemView.m; path = ItemView/DCItemView.m; sourceTree = "<group>"; };
-		1BF9F4F615648D770015E004 /* DCItemViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCItemViewCell.h; sourceTree = "<group>"; };
-		1BF9F4F715648D770015E004 /* DCItemViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCItemViewCell.m; sourceTree = "<group>"; };
-		1BF9F4F915648DF40015E004 /* DCItemViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCItemViewController.h; sourceTree = "<group>"; };
-		1BF9F4FA15648DF40015E004 /* DCItemViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCItemViewController.m; sourceTree = "<group>"; };
-		1BF9F4FB15648DF40015E004 /* DCItemViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DCItemViewController.xib; sourceTree = "<group>"; };
 		1BF9F4FF15648F920015E004 /* DCGroupView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DCGroupView.h; path = GroupView/DCGroupView.h; sourceTree = "<group>"; };
 		1BF9F50015648F920015E004 /* DCGroupView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DCGroupView.m; path = GroupView/DCGroupView.m; sourceTree = "<group>"; };
-		1BF9F5021564901E0015E004 /* DCGroupViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCGroupViewCell.h; sourceTree = "<group>"; };
-		1BF9F5031564901E0015E004 /* DCGroupViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCGroupViewCell.m; sourceTree = "<group>"; };
-		1BF9F5051564908A0015E004 /* DCGroupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCGroupViewController.h; sourceTree = "<group>"; };
-		1BF9F5061564908A0015E004 /* DCGroupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCGroupViewController.m; sourceTree = "<group>"; };
-		1BF9F5071564908A0015E004 /* DCGroupViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DCGroupViewController.xib; sourceTree = "<group>"; };
+		1BF9F50F1564939C0015E004 /* DCGroupViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DCGroupViewCell.h; path = GroupView/DCGroupViewCell.h; sourceTree = "<group>"; };
+		1BF9F5101564939C0015E004 /* DCGroupViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DCGroupViewCell.m; path = GroupView/DCGroupViewCell.m; sourceTree = "<group>"; };
+		1BF9F5111564939C0015E004 /* DCGroupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DCGroupViewController.h; path = GroupView/DCGroupViewController.h; sourceTree = "<group>"; };
+		1BF9F5121564939C0015E004 /* DCGroupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DCGroupViewController.m; path = GroupView/DCGroupViewController.m; sourceTree = "<group>"; };
+		1BF9F5131564939C0015E004 /* DCGroupViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = DCGroupViewController.xib; path = GroupView/DCGroupViewController.xib; sourceTree = "<group>"; };
+		1BF9F517156493A50015E004 /* DCItemViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DCItemViewCell.h; path = ItemView/DCItemViewCell.h; sourceTree = "<group>"; };
+		1BF9F518156493A50015E004 /* DCItemViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DCItemViewCell.m; path = ItemView/DCItemViewCell.m; sourceTree = "<group>"; };
+		1BF9F519156493A50015E004 /* DCItemViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DCItemViewController.h; path = ItemView/DCItemViewController.h; sourceTree = "<group>"; };
+		1BF9F51A156493A50015E004 /* DCItemViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DCItemViewController.m; path = ItemView/DCItemViewController.m; sourceTree = "<group>"; };
+		1BF9F51B156493A50015E004 /* DCItemViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = DCItemViewController.xib; path = ItemView/DCItemViewController.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -206,13 +206,13 @@
 		1BF9F4F215648B480015E004 /* ItemView */ = {
 			isa = PBXGroup;
 			children = (
+				1BF9F517156493A50015E004 /* DCItemViewCell.h */,
+				1BF9F518156493A50015E004 /* DCItemViewCell.m */,
+				1BF9F519156493A50015E004 /* DCItemViewController.h */,
+				1BF9F51A156493A50015E004 /* DCItemViewController.m */,
+				1BF9F51B156493A50015E004 /* DCItemViewController.xib */,
 				1BF9F4F315648B730015E004 /* DCItemView.h */,
 				1BF9F4F415648B730015E004 /* DCItemView.m */,
-				1BF9F4F615648D770015E004 /* DCItemViewCell.h */,
-				1BF9F4F715648D770015E004 /* DCItemViewCell.m */,
-				1BF9F4F915648DF40015E004 /* DCItemViewController.h */,
-				1BF9F4FA15648DF40015E004 /* DCItemViewController.m */,
-				1BF9F4FB15648DF40015E004 /* DCItemViewController.xib */,
 			);
 			name = ItemView;
 			sourceTree = "<group>";
@@ -220,13 +220,13 @@
 		1BF9F4FE15648F6E0015E004 /* GroupView */ = {
 			isa = PBXGroup;
 			children = (
+				1BF9F50F1564939C0015E004 /* DCGroupViewCell.h */,
+				1BF9F5101564939C0015E004 /* DCGroupViewCell.m */,
+				1BF9F5111564939C0015E004 /* DCGroupViewController.h */,
+				1BF9F5121564939C0015E004 /* DCGroupViewController.m */,
+				1BF9F5131564939C0015E004 /* DCGroupViewController.xib */,
 				1BF9F4FF15648F920015E004 /* DCGroupView.h */,
 				1BF9F50015648F920015E004 /* DCGroupView.m */,
-				1BF9F5021564901E0015E004 /* DCGroupViewCell.h */,
-				1BF9F5031564901E0015E004 /* DCGroupViewCell.m */,
-				1BF9F5051564908A0015E004 /* DCGroupViewController.h */,
-				1BF9F5061564908A0015E004 /* DCGroupViewController.m */,
-				1BF9F5071564908A0015E004 /* DCGroupViewController.xib */,
 			);
 			name = GroupView;
 			sourceTree = "<group>";
@@ -284,8 +284,8 @@
 			files = (
 				1BF9F4B8156483AE0015E004 /* InfoPlist.strings in Resources */,
 				1BF9F4DA156486910015E004 /* DCDetailViewController.xib in Resources */,
-				1BF9F4FD15648DF40015E004 /* DCItemViewController.xib in Resources */,
-				1BF9F5091564908B0015E004 /* DCGroupViewController.xib in Resources */,
+				1BF9F5161564939C0015E004 /* DCGroupViewController.xib in Resources */,
+				1BF9F51E156493A50015E004 /* DCItemViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -309,11 +309,11 @@
 				1BF9F4EE156488C70015E004 /* DCAssetLibHelper.m in Sources */,
 				1BF9F4F1156489E00015E004 /* DCAssetsGroup.m in Sources */,
 				1BF9F4F515648B730015E004 /* DCItemView.m in Sources */,
-				1BF9F4F815648D770015E004 /* DCItemViewCell.m in Sources */,
-				1BF9F4FC15648DF40015E004 /* DCItemViewController.m in Sources */,
 				1BF9F50115648F920015E004 /* DCGroupView.m in Sources */,
-				1BF9F5041564901F0015E004 /* DCGroupViewCell.m in Sources */,
-				1BF9F5081564908B0015E004 /* DCGroupViewController.m in Sources */,
+				1BF9F5141564939C0015E004 /* DCGroupViewCell.m in Sources */,
+				1BF9F5151564939C0015E004 /* DCGroupViewController.m in Sources */,
+				1BF9F51C156493A50015E004 /* DCItemViewCell.m in Sources */,
+				1BF9F51D156493A50015E004 /* DCItemViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -417,6 +417,7 @@
 				1BF9F4C3156483AE0015E004 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 
