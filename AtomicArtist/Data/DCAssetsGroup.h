@@ -27,3 +27,4 @@
 - (NSUInteger)getIndexForAssetURL:(NSURL *)assetURL;
 
 @end
+

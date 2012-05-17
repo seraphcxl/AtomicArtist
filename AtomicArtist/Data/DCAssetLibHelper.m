@@ -3,7 +3,7 @@
 //  AtomicArtist
 //
 //  Created by Chen XiaoLiang on 12-5-17.
-//  Copyright (c) 2012年 __MyCompanyName__. All rights reserved.
+//  Copyright (c) 2012年 seraphCXL. All rights reserved.
 //
 
 #import "DCAssetLibHelper.h"
@@ -13,8 +13,8 @@ static DCAssetLibHelper *staticDefaultAssetLibHelper = nil;
 
 @interface DCAssetLibHelper () {
     ALAssetsLibrary *_assetLib;
-    NSMutableArray *_allALGroupPersistentIDs;
-    NSMutableDictionary *_allALGroups; // Key:(NSSString *)groupPersistentID Value:(DCAssetsGroup *)assetsGroup
+    NSMutableArray *_allALAssetsGroupPersistentIDs;
+    NSMutableDictionary *_allALAssetsGroups; // Key:(NSSString *)groupPersistentID Value:(DCAssetsGroup *)assetsGroup
 }
 
 @end
@@ -22,8 +22,8 @@ static DCAssetLibHelper *staticDefaultAssetLibHelper = nil;
 @implementation DCAssetLibHelper
 
 - (NSUInteger)getIndexInGoupPersistentID:(NSString *)groupPersistentID forAssetURL:(NSURL *)assetURL {
-    if (_allALGroups) {
-        DCAssetsGroup *assetsGroup = [_allALGroups objectForKey:groupPersistentID];
+    if (_allALAssetsGroups) {
+        DCAssetsGroup *assetsGroup = [_allALAssetsGroups objectForKey:groupPersistentID];
         if (assetsGroup) {
             return [assetsGroup getIndexForAssetURL:assetURL];
         } else {
@@ -38,8 +38,8 @@ static DCAssetLibHelper *staticDefaultAssetLibHelper = nil;
 }
 
 - (void)cleaeCacheForGoupPersistentID:(NSString *)groupPersistentID {
-    if (_allALGroups) {
-        DCAssetsGroup *assetsGroup = [_allALGroups objectForKey:groupPersistentID];
+    if (_allALAssetsGroups) {
+        DCAssetsGroup *assetsGroup = [_allALAssetsGroups objectForKey:groupPersistentID];
         if (assetsGroup) {
             [assetsGroup cleaeCache];
         } else {
@@ -52,11 +52,11 @@ static DCAssetLibHelper *staticDefaultAssetLibHelper = nil;
 }
 
 - (NSString *)getGoupPersistentIDAtIndex:(NSUInteger)index {
-    if (_allALGroupPersistentIDs) {
-        if (index < [_allALGroupPersistentIDs count]) {
-            return [_allALGroupPersistentIDs objectAtIndex:index];
+    if (_allALAssetsGroupPersistentIDs) {
+        if (index < [_allALAssetsGroupPersistentIDs count]) {
+            return [_allALAssetsGroupPersistentIDs objectAtIndex:index];
         } else {
-            [NSException raise:@"DCAssetLibHelper Error" format:@"Reason: Index: %d >= allALGroupPersistentIDs count: %d", index, [_allALGroupPersistentIDs count]];
+            [NSException raise:@"DCAssetLibHelper Error" format:@"Reason: Index: %d >= allALGroupPersistentIDs count: %d", index, [_allALAssetsGroupPersistentIDs count]];
             return nil;
         }
     } else {
@@ -66,8 +66,8 @@ static DCAssetLibHelper *staticDefaultAssetLibHelper = nil;
 }
 
 - (NSUInteger)assetCountForGroupWithPersistentID:(NSString *)groupPersistentID {
-    if (_allALGroups) {
-        DCAssetsGroup *assetsGroup = [_allALGroups objectForKey:groupPersistentID];
+    if (_allALAssetsGroups) {
+        DCAssetsGroup *assetsGroup = [_allALAssetsGroups objectForKey:groupPersistentID];
         if (assetsGroup) {
             return [assetsGroup assetCount];
         } else {
@@ -82,8 +82,8 @@ static DCAssetLibHelper *staticDefaultAssetLibHelper = nil;
 }
 
 - (NSURL *)getAssetURLForGoupPersistentID:(NSString *)groupPersistentID atIndex:(NSUInteger)index {
-    if (_allALGroups) {
-        DCAssetsGroup *assetsGroup = [_allALGroups objectForKey:groupPersistentID];
+    if (_allALAssetsGroups) {
+        DCAssetsGroup *assetsGroup = [_allALAssetsGroups objectForKey:groupPersistentID];
         if (assetsGroup) {
             return [assetsGroup getAssetURLAtIndex:index];
         } else {
@@ -97,8 +97,8 @@ static DCAssetLibHelper *staticDefaultAssetLibHelper = nil;
 }
 
 - (NSUInteger)assetsGroupCount {
-    if (_allALGroups) {
-        return [_allALGroups count];
+    if (_allALAssetsGroups) {
+        return [_allALAssetsGroups count];
     } else {
         return 0;
     }
@@ -108,8 +108,8 @@ static DCAssetLibHelper *staticDefaultAssetLibHelper = nil;
     BOOL successful = NO;
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     
-    if (_allALGroups) {
-        DCAssetsGroup *assetsGroup = [_allALGroups objectForKey:groupPersistentID];
+    if (_allALAssetsGroups) {
+        DCAssetsGroup *assetsGroup = [_allALAssetsGroups objectForKey:groupPersistentID];
         if (assetsGroup) {
             successful = [assetsGroup enumerateAssets];
         } else {
@@ -130,14 +130,14 @@ static DCAssetLibHelper *staticDefaultAssetLibHelper = nil;
     void (^ALAssetsLibraryGroupsEnumerationResultsBlock)(ALAssetsGroup *group, BOOL *stop) = ^(ALAssetsGroup *group, BOOL *stop) {
 		if (group != nil) {
 			NSString *groupPersistentID = [group valueForProperty:ALAssetsGroupPropertyPersistentID];
-            ALAssetsGroup *result = [_allALGroups objectForKey:groupPersistentID];
+            ALAssetsGroup *result = [_allALAssetsGroups objectForKey:groupPersistentID];
             if (result == nil) {
                 DCAssetsGroup *assetsGroup = [[[DCAssetsGroup alloc] init] autorelease];
                 assetsGroup.assetsGroup = group;
                 //                [allALGroupPersistentIDs addObject:groupPersistentID];
-                NSUInteger index = [_allALGroupPersistentIDs count];
-                [_allALGroupPersistentIDs insertObject:groupPersistentID atIndex:index];
-                [_allALGroups setObject:assetsGroup forKey:groupPersistentID];
+                NSUInteger index = [_allALAssetsGroupPersistentIDs count];
+                [_allALAssetsGroupPersistentIDs insertObject:groupPersistentID atIndex:index];
+                [_allALAssetsGroups setObject:assetsGroup forKey:groupPersistentID];
             }
 			//Don't mark this NSLog, it is a must. Otherwise, some thing bad would happen. HAHA~~
 			NSLog(@"Add group id: %@, count = %d", groupPersistentID, [group numberOfAssets]);
@@ -156,8 +156,8 @@ static DCAssetLibHelper *staticDefaultAssetLibHelper = nil;
         }
     };
     
-    if (_allALGroups) {
-        [_allALGroups removeAllObjects];
+    if (_allALAssetsGroups) {
+        [_allALAssetsGroups removeAllObjects];
     }
     
     if (_assetLib) {
@@ -174,8 +174,8 @@ static DCAssetLibHelper *staticDefaultAssetLibHelper = nil;
 - (ALAssetsGroup *)getALGroupForGoupPersistentID:(NSString *)groupPersistentID {
     ALAssetsGroup *result = nil;
     
-    if (_allALGroups) {
-        DCAssetsGroup *assetsGroup = [_allALGroups objectForKey:groupPersistentID];
+    if (_allALAssetsGroups) {
+        DCAssetsGroup *assetsGroup = [_allALAssetsGroups objectForKey:groupPersistentID];
         result = assetsGroup.assetsGroup;
     } else {
         [NSException raise:@"DCAssetLibHelper error" format:@"Reason: allALGroups is nil"];
@@ -187,8 +187,8 @@ static DCAssetLibHelper *staticDefaultAssetLibHelper = nil;
 - (ALAsset *)getALAssetForGoupPersistentID:(NSString *)groupPersistentID forAssetURL:(NSURL *)assetURL {
     ALAsset *result = nil;
     
-    if (_allALGroups) {
-        DCAssetsGroup *assetsGroup = [_allALGroups objectForKey:groupPersistentID];
+    if (_allALAssetsGroups) {
+        DCAssetsGroup *assetsGroup = [_allALAssetsGroups objectForKey:groupPersistentID];
         if (assetsGroup) {
             result = [assetsGroup getALAssetForAssetURL:assetURL];
         } else {
@@ -234,26 +234,26 @@ static DCAssetLibHelper *staticDefaultAssetLibHelper = nil;
         _assetLib = [[ALAssetsLibrary alloc] init];
     }
     
-    if (!_allALGroups) {
-        _allALGroups = [[NSMutableDictionary alloc] init];
+    if (!_allALAssetsGroups) {
+        _allALAssetsGroups = [[NSMutableDictionary alloc] init];
     }
     
-    if (!_allALGroupPersistentIDs) {
-        _allALGroupPersistentIDs = [[NSMutableArray alloc] init];
+    if (!_allALAssetsGroupPersistentIDs) {
+        _allALAssetsGroupPersistentIDs = [[NSMutableArray alloc] init];
     }
 }
 
 - (void)releaseAssetLibHelper {
     [self cleaeCache];
     
-    if (_allALGroupPersistentIDs) {
-        [_allALGroupPersistentIDs release];
-        _allALGroupPersistentIDs = nil;
+    if (_allALAssetsGroupPersistentIDs) {
+        [_allALAssetsGroupPersistentIDs release];
+        _allALAssetsGroupPersistentIDs = nil;
     }
     
-    if (_allALGroups) {
-        [_allALGroups release];
-        _allALGroups = nil;
+    if (_allALAssetsGroups) {
+        [_allALAssetsGroups release];
+        _allALAssetsGroups = nil;
     }
     
     if (_assetLib) {
@@ -263,12 +263,12 @@ static DCAssetLibHelper *staticDefaultAssetLibHelper = nil;
 }
 
 - (void)cleaeCache {
-    if (_allALGroupPersistentIDs) {
-        [_allALGroupPersistentIDs removeAllObjects];
+    if (_allALAssetsGroupPersistentIDs) {
+        [_allALAssetsGroupPersistentIDs removeAllObjects];
     }
     
-    if (_allALGroups) {
-        [_allALGroups removeAllObjects];
+    if (_allALAssetsGroups) {
+        [_allALAssetsGroups removeAllObjects];
     }
 }
 

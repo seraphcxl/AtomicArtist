@@ -3,7 +3,7 @@
 //  AtomicArtist
 //
 //  Created by Chen XiaoLiang on 12-5-17.
-//  Copyright (c) 2012年 __MyCompanyName__. All rights reserved.
+//  Copyright (c) 2012年 seraphCXL. All rights reserved.
 //
 
 #import "DCAssetsGroup.h"
@@ -86,7 +86,7 @@
                         NSURL *url = [representation url];
                         NSString *assetURLStr = [url absoluteString];
                         [_allAssets setObject:result forKey:assetURLStr];
-                        //                        [allAssetURLs addObject:url];
+//                        [allAssetURLs addObject:url];
                         [_allAssetURLs insertObject:url atIndex:index];
                         NSNotification *note = [NSNotification notificationWithName:@"ALAssetAdded" object:self];
                         [[NSNotificationCenter defaultCenter] postNotification:note];

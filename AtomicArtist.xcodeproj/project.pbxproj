@@ -35,6 +35,10 @@
 		1BF9F53D15649ACD0015E004 /* Group.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BF9F53C15649ACD0015E004 /* Group.m */; };
 		1BF9F54415649BD80015E004 /* Item.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BF9F54315649BD80015E004 /* Item.m */; };
 		1BF9F54815649D530015E004 /* DCDataModelHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BF9F54715649D530015E004 /* DCDataModelHelper.m */; };
+		1BF9F56A1564C0AA0015E004 /* DCALAssetItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BF9F5691564C0AA0015E004 /* DCALAssetItem.m */; };
+		1BF9F5771564D9660015E004 /* DCALAssetsGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BF9F5761564D9660015E004 /* DCALAssetsGroup.m */; };
+		1BF9F57E1564E2040015E004 /* DCALAssetsLibrary.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BF9F57D1564E2040015E004 /* DCALAssetsLibrary.m */; };
+		1BF9F5811564E8990015E004 /* DCALAssetsLibraryHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BF9F5801564E8980015E004 /* DCALAssetsLibraryHelper.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -86,6 +90,15 @@
 		1BF9F54315649BD80015E004 /* Item.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Item.m; sourceTree = "<group>"; };
 		1BF9F54615649D530015E004 /* DCDataModelHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCDataModelHelper.h; sourceTree = "<group>"; };
 		1BF9F54715649D530015E004 /* DCDataModelHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCDataModelHelper.m; sourceTree = "<group>"; };
+		1BF9F5551564A5230015E004 /* DCUniformDataProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCUniformDataProtocol.h; sourceTree = "<group>"; };
+		1BF9F5681564C0AA0015E004 /* DCALAssetItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCALAssetItem.h; sourceTree = "<group>"; };
+		1BF9F5691564C0AA0015E004 /* DCALAssetItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCALAssetItem.m; sourceTree = "<group>"; };
+		1BF9F5751564D9660015E004 /* DCALAssetsGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCALAssetsGroup.h; sourceTree = "<group>"; };
+		1BF9F5761564D9660015E004 /* DCALAssetsGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCALAssetsGroup.m; sourceTree = "<group>"; };
+		1BF9F57C1564E2040015E004 /* DCALAssetsLibrary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCALAssetsLibrary.h; sourceTree = "<group>"; };
+		1BF9F57D1564E2040015E004 /* DCALAssetsLibrary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCALAssetsLibrary.m; sourceTree = "<group>"; };
+		1BF9F57F1564E8980015E004 /* DCALAssetsLibraryHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCALAssetsLibraryHelper.h; sourceTree = "<group>"; };
+		1BF9F5801564E8980015E004 /* DCALAssetsLibraryHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCALAssetsLibraryHelper.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -188,6 +201,7 @@
 		1BF9F4DC156487470015E004 /* Data */ = {
 			isa = PBXGroup;
 			children = (
+				1BF9F56C1564CB880015E004 /* DataLibraryHelper */,
 				1BF9F5491564A2310015E004 /* DataModel */,
 				1BF9F4EF156489DF0015E004 /* DCAssetsGroup.h */,
 				1BF9F4F0156489DF0015E004 /* DCAssetsGroup.m */,
@@ -237,6 +251,22 @@
 				1BF9F54715649D530015E004 /* DCDataModelHelper.m */,
 			);
 			name = DataModel;
+			sourceTree = "<group>";
+		};
+		1BF9F56C1564CB880015E004 /* DataLibraryHelper */ = {
+			isa = PBXGroup;
+			children = (
+				1BF9F5551564A5230015E004 /* DCUniformDataProtocol.h */,
+				1BF9F5681564C0AA0015E004 /* DCALAssetItem.h */,
+				1BF9F5691564C0AA0015E004 /* DCALAssetItem.m */,
+				1BF9F5751564D9660015E004 /* DCALAssetsGroup.h */,
+				1BF9F5761564D9660015E004 /* DCALAssetsGroup.m */,
+				1BF9F57C1564E2040015E004 /* DCALAssetsLibrary.h */,
+				1BF9F57D1564E2040015E004 /* DCALAssetsLibrary.m */,
+				1BF9F57F1564E8980015E004 /* DCALAssetsLibraryHelper.h */,
+				1BF9F5801564E8980015E004 /* DCALAssetsLibraryHelper.m */,
+			);
+			name = DataLibraryHelper;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -322,6 +352,10 @@
 				1BF9F53D15649ACD0015E004 /* Group.m in Sources */,
 				1BF9F54415649BD80015E004 /* Item.m in Sources */,
 				1BF9F54815649D530015E004 /* DCDataModelHelper.m in Sources */,
+				1BF9F56A1564C0AA0015E004 /* DCALAssetItem.m in Sources */,
+				1BF9F5771564D9660015E004 /* DCALAssetsGroup.m in Sources */,
+				1BF9F57E1564E2040015E004 /* DCALAssetsLibrary.m in Sources */,
+				1BF9F5811564E8990015E004 /* DCALAssetsLibraryHelper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
