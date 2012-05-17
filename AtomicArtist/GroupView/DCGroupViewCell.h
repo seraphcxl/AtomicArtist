@@ -8,12 +8,13 @@
 
 #import <UIKit/UIKit.h>
 #import "DCGroupView.h"
+#import "DCUniformDataProtocol.h"
 
 @protocol DCGroupViewCellDelegate <NSObject>
 
 - (void)addGroupView:(DCGroupView *)groupView;
 
-- (DCGroupView *)getGroupViewWithGroupPersistentID:(NSString *)groupPersistentID;
+- (DCGroupView *)getGroupViewWithDataGroupUID:(NSString *)uid;
 
 @end
 
@@ -25,8 +26,9 @@
 @property (readonly, nonatomic) NSUInteger cellTopBottomMargin;
 @property (readonly, nonatomic) NSUInteger frameSize;
 @property (readonly, nonatomic) NSUInteger itemCount;
-@property (retain, nonatomic) NSArray *groupPersistentIDs;
+@property (retain, nonatomic) NSArray *dataGroupUIDs;
+@property (assign, nonatomic) id <DCDataLibraryHelper> dataLibraryHelper;
 
-- (id)initWithGroupPersistentIDs:(NSArray *)groupPersistentIDs cellSpace:(NSUInteger)cellSpace cellTopBottomMargin:(NSUInteger)cellTopBottomMargin frameSize:(NSUInteger)frameSize andItemCount:(NSUInteger)itemCount;
+- (id)initWithDataLibHelper:(id <DCDataLibraryHelper>)dataLibraryHelper dataGroupUIDs:(NSArray *)dataGroupUIDs cellSpace:(NSUInteger)cellSpace cellTopBottomMargin:(NSUInteger)cellTopBottomMargin frameSize:(NSUInteger)frameSize andItemCount:(NSUInteger)itemCount;
 
 @end

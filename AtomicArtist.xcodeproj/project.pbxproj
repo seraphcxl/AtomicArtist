@@ -151,9 +151,9 @@
 		1BF9F4B3156483AE0015E004 /* AtomicArtist */ = {
 			isa = PBXGroup;
 			children = (
+				1BF9F4DC156487470015E004 /* Data */,
 				1BF9F4FE15648F6E0015E004 /* GroupView */,
 				1BF9F4F215648B480015E004 /* ItemView */,
-				1BF9F4DC156487470015E004 /* Data */,
 				1BF9F4D51564866A0015E004 /* DetailView */,
 				1BF9F4D11564858F0015E004 /* PageScrollView */,
 				1BF9F4B4156483AE0015E004 /* Supporting Files */,
@@ -214,11 +214,11 @@
 		1BF9F4F215648B480015E004 /* ItemView */ = {
 			isa = PBXGroup;
 			children = (
-				1BF9F517156493A50015E004 /* DCItemViewCell.h */,
-				1BF9F518156493A50015E004 /* DCItemViewCell.m */,
 				1BF9F519156493A50015E004 /* DCItemViewController.h */,
 				1BF9F51A156493A50015E004 /* DCItemViewController.m */,
 				1BF9F51B156493A50015E004 /* DCItemViewController.xib */,
+				1BF9F517156493A50015E004 /* DCItemViewCell.h */,
+				1BF9F518156493A50015E004 /* DCItemViewCell.m */,
 				1BF9F4F315648B730015E004 /* DCItemView.h */,
 				1BF9F4F415648B730015E004 /* DCItemView.m */,
 			);
@@ -228,11 +228,11 @@
 		1BF9F4FE15648F6E0015E004 /* GroupView */ = {
 			isa = PBXGroup;
 			children = (
-				1BF9F50F1564939C0015E004 /* DCGroupViewCell.h */,
-				1BF9F5101564939C0015E004 /* DCGroupViewCell.m */,
 				1BF9F5111564939C0015E004 /* DCGroupViewController.h */,
 				1BF9F5121564939C0015E004 /* DCGroupViewController.m */,
 				1BF9F5131564939C0015E004 /* DCGroupViewController.xib */,
+				1BF9F50F1564939C0015E004 /* DCGroupViewCell.h */,
+				1BF9F5101564939C0015E004 /* DCGroupViewCell.m */,
 				1BF9F4FF15648F920015E004 /* DCGroupView.h */,
 				1BF9F50015648F920015E004 /* DCGroupView.m */,
 			);

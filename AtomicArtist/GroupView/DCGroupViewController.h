@@ -8,11 +8,15 @@
 
 #import <UIKit/UIKit.h>
 #import "DCGroupViewCell.h"
+#import "DCUniformDataProtocol.h"
 
 @interface DCGroupViewController : UITableViewController <DCGroupViewDelegate, DCGroupViewCellDelegate>
 
-@property (assign, nonatomic) ALAssetsGroupType assetsGroupType;
+@property (assign, nonatomic) id enumDataGroupParam;
+@property (assign, nonatomic) id <DCDataLibraryHelper> dataLibraryHelper;
 
 - (IBAction)refresh:(id)sender;
+
+- (id)initWithDataLibHelper:(id <DCDataLibraryHelper>)dataLibraryHelper;
 
 @end

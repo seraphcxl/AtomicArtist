@@ -30,9 +30,9 @@
 
 - (NSUInteger)calcFrameSize;
 
-- (NSArray *)getGroupPersistentIDsForCellAtIndexPath:(NSIndexPath *)indexPath;
+- (NSArray *)dataGroupUIDsForCellAtIndexPath:(NSIndexPath *)indexPath;
 
-- (void)refreshAssetsGroups:(BOOL)force;
+- (void)refreshGroups:(BOOL)force;
 
 - (void)clearCache;
 
@@ -46,8 +46,17 @@
 
 @implementation DCGroupViewController
 
-@synthesize assetsGroupType = _assetsGroupType;
+@synthesize enumDataGroupParam = _enumDataGroupParam;
+@synthesize dataLibraryHelper = _dataLibraryHelper;
 //@synthesize interfaceOrientation = _interfaceOrientation;
+
+- (id)initWithDataLibHelper:(id<DCDataLibraryHelper>)dataLibraryHelper {
+    self = [self initWithStyle:UITableViewStylePlain];
+    if (self) {
+        self.dataLibraryHelper = dataLibraryHelper;
+    }
+    return self;
+}
 
 - (void)dealloc {
     if (_groupViews) {
@@ -63,8 +72,7 @@
     if (_groupViews) {
         [_groupViews removeAllObjects];
     }
-    DCAssetLibHelper *assetLibHelper = [DCAssetLibHelper defaultAssetLibHelper];
-    [assetLibHelper cleaeCache];
+    [self.dataLibraryHelper clearCache];
 }
 
 - (void)addGroupView:(DCGroupView *)groupView {
@@ -73,11 +81,11 @@
     }
 }
 
-- (DCGroupView *)getGroupViewWithGroupPersistentID:(NSString *)groupPersistentID {
+- (DCGroupView *)getGroupViewWithDataGroupUID:(NSString *)uid {
     DCGroupView *result = nil;
     do {
         if (_groupViews) {
-            result = [_groupViews objectForKey:groupPersistentID];
+            result = [_groupViews objectForKey:uid];
         }
     } while (NO);
     return result;
@@ -85,24 +93,23 @@
 
 - (void)actionForWillEnterForegroud:(NSNotification *)note {
     if (self.navigationController.topViewController == self) {
-        [self refreshAssetsGroups:YES];
+        [self refreshGroups:YES];
     }
 }
 
 - (void)notifyRefresh:(NSNotification *)note {
-    [self refreshAssetsGroups:YES];
+    [self refreshGroups:YES];
 }
 
 - (IBAction)refresh:(id)sender {
-    [self refreshAssetsGroups:YES];
+    [self refreshGroups:YES];
 }
 
-- (void)refreshAssetsGroups:(BOOL)force {
+- (void)refreshGroups:(BOOL)force {
     NSLog(@"DCGroupViewController refreshAssetsGroups");
-    DCAssetLibHelper *assetLibHelper = [DCAssetLibHelper defaultAssetLibHelper];
-    if (force || [assetLibHelper assetsGroupCount] == 0) {
+    if (force || [self.dataLibraryHelper groupsCount] == 0) {
         [self clearCache];
-        [assetLibHelper enumerateGroupsWithTypes:self.assetsGroupType];
+        [self.dataLibraryHelper enumGroups:self.enumDataGroupParam];
         [self.navigationItem setTitle:[self title]];
     }
 }
@@ -118,7 +125,7 @@
     }
 }
 
-- (NSArray *)getGroupPersistentIDsForCellAtIndexPath:(NSIndexPath *)indexPath {
+- (NSArray *)dataGroupUIDsForCellAtIndexPath:(NSIndexPath *)indexPath {
     NSMutableArray *result = [[[NSMutableArray alloc] init] autorelease];
     DCAssetLibHelper *assetLibHelper = [DCAssetLibHelper defaultAssetLibHelper];
     int maxIdx = MIN((indexPath.row + 1) * _itemCountInCell, [assetLibHelper assetsGroupCount]); 
@@ -130,13 +137,8 @@
 }
 
 - (NSString *)title {
-    if (self.assetsGroupType == (ALAssetsGroupAlbum | ALAssetsGroupSavedPhotos)) {
-        return [[[NSString alloc] initWithFormat:@"Photo Albums"] autorelease];
-    } else if (self.assetsGroupType == ALAssetsGroupPhotoStream) {
-        return [[[NSString alloc] initWithFormat:@"Photo Stream"] autorelease];
-    } else {
-        return [[[NSString alloc] initWithFormat:@"Photos"] autorelease];
-    }
+    // this funcation should override by 
+    return [[[NSString alloc] initWithFormat:@"Photos"] autorelease];
 }
 
 - (NSUInteger)calcFrameSize {
@@ -211,9 +213,6 @@
     [notificationCenter addObserver:self selector:@selector(notifyRefresh:) name:@"NotifyRefreshGroup" object:nil];
     [notificationCenter addObserver:self selector:@selector(actionForWillEnterForegroud:) name:@"applicationWillEnterForeground:" object:nil];
     
-    DCAssetLibHelper *assetLibHelper = [DCAssetLibHelper defaultAssetLibHelper];
-    [assetLibHelper createAssetLibHelper];
-    
     UIBarButtonItem *bbi = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(refresh:)] autorelease];
     [self.navigationItem setRightBarButtonItem:bbi];
     /*** *** ***/
@@ -222,7 +221,7 @@
 - (void)viewWillAppear:(BOOL)animated {
     NSLog(@"DCGroupViewController viewWillAppear:");
     [super viewWillAppear:animated];
-    self.assetsGroupType = (ALAssetsGroupAlbum | ALAssetsGroupSavedPhotos);
+    self.enumDataGroupParam = ((id)(ALAssetsGroupAlbum | ALAssetsGroupSavedPhotos));
     
     _frameSize = [self calcFrameSize];
     _itemCountInCell = [self calcItemCountInCell];
@@ -232,7 +231,7 @@
         [_groupViews removeAllObjects];
     }
     
-    [self refreshAssetsGroups:NO];
+    [self refreshGroups:NO];
     
     [self.tableView reloadData];
 }
@@ -252,8 +251,6 @@
     
     [self clearCache];
     
-    DCAssetLibHelper *assetLibHelper = [DCAssetLibHelper defaultAssetLibHelper];
-    [assetLibHelper releaseAssetLibHelper];
     /*** *** ***/
     [super viewDidUnload];
     // Release any retained subviews of the main view.
@@ -300,30 +297,29 @@
 {
     NSLog(@"DCGroupViewController tableView:numberOfRowsInSection:");
     // Return the number of rows in the section.
-    DCAssetLibHelper *assetLibHelper = [DCAssetLibHelper defaultAssetLibHelper];
     
     if (_itemCountInCell == 0) {
         [NSException raise:@"DCGroupViewController error" format:@"Reason: itemCountInCell == 0"];
     }
-    NSInteger assetsGroupCount = [assetLibHelper assetsGroupCount];
-    NSLog(@"assetsGroupCount = %d", assetsGroupCount);
+    NSInteger dataGroupCount = [self.dataLibraryHelper groupsCount];
+    NSLog(@"dataGroupCount = %d", dataGroupCount);
     NSInteger addLine = 0;
-    if (assetsGroupCount % _itemCountInCell != 0) {
+    if (dataGroupCount % _itemCountInCell != 0) {
         addLine = 1;
     }
-    return assetsGroupCount / _itemCountInCell + addLine;
+    return dataGroupCount / _itemCountInCell + addLine;
     //return 0;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSLog(@"DCGroupViewController tableView:cellForRowAtIndexPath: indexPath.row = %d", [indexPath row]);
-    NSArray *groupPersistentIDs = [self getGroupPersistentIDsForCellAtIndexPath:indexPath];
+    NSArray *dataGroupUIDs = [self dataGroupUIDsForCellAtIndexPath:indexPath];
     DCGroupViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"DCGroupViewCell"];
     if (cell == nil) {
-        cell = [[[DCGroupViewCell alloc] initWithGroupPersistentIDs:groupPersistentIDs cellSpace:_cellSpace cellTopBottomMargin:(_cellSpace / 2) frameSize:_frameSize andItemCount:_itemCountInCell] autorelease];
+        cell = [[[DCGroupViewCell alloc] initWithDataLibHelper:self.dataLibraryHelper dataGroupUIDs:dataGroupUIDs cellSpace:_cellSpace cellTopBottomMargin:(_cellSpace / 2) frameSize:_frameSize andItemCount:_itemCountInCell] autorelease];
     } else {
-        [cell initWithGroupPersistentIDs:groupPersistentIDs cellSpace:_cellSpace cellTopBottomMargin:(_cellSpace / 2) frameSize:_frameSize andItemCount:_itemCountInCell];
+        [cell initWithDataLibHelper:self.dataLibraryHelper dataGroupUIDs:dataGroupUIDs cellSpace:_cellSpace cellTopBottomMargin:(_cellSpace / 2) frameSize:_frameSize andItemCount:_itemCountInCell];
     }
     cell.delegate = self;
     cell.delegateForGroupView = self;

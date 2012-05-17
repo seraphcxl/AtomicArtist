@@ -16,7 +16,8 @@
 @synthesize cellTopBottomMargin = _cellTopBottomMargin;
 @synthesize frameSize = _frameSize;
 @synthesize itemCount = _itemCount;
-@synthesize groupPersistentIDs = _groupPersistentIDs;
+@synthesize dataGroupUIDs = _dataGroupUIDs;
+@synthesize dataLibraryHelper = _dataLibraryHelper;
 
 - (void)layoutSubviews {
     [super layoutSubviews];
@@ -24,16 +25,16 @@
     do {
         CGRect viewFrame = CGRectMake(self.cellSpace, self.cellTopBottomMargin, self.frameSize, self.frameSize);
         
-        for (NSString *groupPersistentID in self.groupPersistentIDs) {
+        for (NSString *dataGroupUID in self.dataGroupUIDs) {
             DCGroupView *view = nil;
             if (self.delegate) {
-                view = [self.delegate getGroupViewWithGroupPersistentID:groupPersistentID];
+                view = [self.delegate getGroupViewWithDataGroupUID:dataGroupUID];
             }
             
             if (!view) {
                 view = [[[DCGroupView alloc] initWithFrame:viewFrame] autorelease];
                 view.delegate = self.delegateForGroupView;
-                view.groupPersistentID = groupPersistentID;
+                view.groupPersistentID = dataGroupUID;
                 if (self.delegate) {
                     [self.delegate addGroupView:view];
                 }
@@ -46,7 +47,7 @@
     } while (NO);
 }
 
-- (id)initWithGroupPersistentIDs:(NSArray *)groupPersistentIDs cellSpace:(NSUInteger)cellSpace cellTopBottomMargin:(NSUInteger)cellTopBottomMargin frameSize:(NSUInteger)frameSize andItemCount:(NSUInteger)itemCount {
+- (id)initWithDataLibHelper:(id<DCDataLibraryHelper>)dataLibraryHelper dataGroupUIDs:(NSArray *)dataGroupUIDs cellSpace:(NSUInteger)cellSpace cellTopBottomMargin:(NSUInteger)cellTopBottomMargin frameSize:(NSUInteger)frameSize andItemCount:(NSUInteger)itemCount {
     self = [self initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"DCGroupViewCell"];
     if (self) {
         for (UIView *view in [self subviews]) {
@@ -55,7 +56,7 @@
             }
         }
         
-        self.groupPersistentIDs = groupPersistentIDs;
+        self.dataGroupUIDs = dataGroupUIDs;
         _cellSpace = cellSpace;
         _cellTopBottomMargin = cellTopBottomMargin;
         _frameSize = frameSize;
@@ -65,7 +66,7 @@
 }
 
 - (void)dealloc {
-    self.groupPersistentIDs = nil;
+    self.dataGroupUIDs = nil;
     
     [super dealloc];
 }

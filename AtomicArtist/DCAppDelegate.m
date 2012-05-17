@@ -10,6 +10,7 @@
 #import "DCGroupViewController.h"
 #import "DCAssetLibHelper.h"
 #import "DCDataModelHelper.h"
+#import "DCALAssetsLibraryHelper.h"
 
 @implementation DCAppDelegate
 
@@ -19,6 +20,7 @@
 {
     [DCAssetLibHelper staticRelease];
     [DCDataModelHelper staticRelease];
+    [DCALAssetsLibraryHelper staticRelease];
     [_window release];
     [super dealloc];
 }
@@ -29,7 +31,9 @@
     // Override point for customization after application launch.
     self.window.backgroundColor = [UIColor whiteColor];
     /*** *** ***/
-    DCGroupViewController *groupViewCtrl = [[[DCGroupViewController alloc] initWithStyle:UITableViewStylePlain] autorelease];
+    DCALAssetsLibraryHelper *alAssetsLibraryHelper = [DCALAssetsLibraryHelper defaultDataLibraryHelper];
+    [alAssetsLibraryHelper connect:nil];
+    DCGroupViewController *groupViewCtrl = [[[DCGroupViewController alloc] initWithDataLibHelper:alAssetsLibraryHelper] autorelease];
     
     UINavigationController *naviCtrl = [[[UINavigationController alloc] initWithRootViewController:groupViewCtrl] autorelease];
     [naviCtrl.navigationBar setBarStyle:UIBarStyleBlackTranslucent];
