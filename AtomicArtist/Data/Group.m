@@ -1,23 +1,23 @@
 //
-//  Album.m
+//  Group.m
 //  AtomicArtist
 //
-//  Created by XiaoLiang Chen on 5/6/12.
-//  Copyright (c) 2012 seraphCXL. All rights reserved.
+//  Created by Chen XiaoLiang on 12-5-17.
+//  Copyright (c) 2012年 __MyCompanyName__. All rights reserved.
 //
 
-#import "Album.h"
-#import "Asset.h"
+#import "Group.h"
+#import "Item.h"
 
 
-@implementation Album
+@implementation Group
 
-@dynamic posterAssetURLString;
+@dynamic inspectionRecord;
+@dynamic posterItemUID;
 @dynamic posterImage;
 @dynamic posterImageData;
-@dynamic urlString;
-@dynamic inspectionRecord;
-@dynamic assets;
+@dynamic uniqueID;
+@dynamic items;
 
 + (CGSize)posterImageSize {
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
@@ -25,7 +25,7 @@
     } else if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
         return CGSizeMake(POSTERIMAGE_SIZE_IPAD, POSTERIMAGE_SIZE_IPAD);
     } else {
-        [NSException raise:@"Album error" format:@"Reason: Current device type unknown"];
+        [NSException raise:@"Group error" format:@"Reason: Current device type unknown"];
         return CGSizeMake(0.0, 0.0);
     }
 }
@@ -45,28 +45,30 @@
 
 #pragma mark CoreDataGeneratedAccessors
 - (void)addAssets:(NSSet *)values {
-    self.assets = [self.assets setByAddingObjectsFromSet:values];
+    self.items = [self.items setByAddingObjectsFromSet:values];
 }
 
-- (void)addAssetsObject:(Asset *)value {
-    self.assets = [self.assets setByAddingObject:value];
+- (void)addAssetsObject:(Item *)value {
+    self.items = [self.items setByAddingObject:value];
 }
 
 - (void)removeAssets:(NSSet *)values {
-    NSMutableSet *tmpSet = [[[NSMutableSet alloc] initWithSet:self.assets] autorelease];
+    NSMutableSet *tmpSet = [[[NSMutableSet alloc] initWithSet:self.items] autorelease];
     
-    for (Asset *asset in values) {
-        [tmpSet removeObject:asset];
+    for (Item *item in values) {
+        [tmpSet removeObject:item];
     }
     
-    self.assets = [[tmpSet copy] autorelease];
+    self.items = [[tmpSet copy] autorelease];
 }
 
-- (void)removeAssetsObject:(Asset *)value {
-    NSMutableSet *tmpSet = [[[NSMutableSet alloc] initWithSet:self.assets] autorelease];
+- (void)removeAssetsObject:(Item *)value {
+    NSMutableSet *tmpSet = [[[NSMutableSet alloc] initWithSet:self.items] autorelease];
     
     [tmpSet removeObject:value];
     
-    self.assets = [[tmpSet copy] autorelease];
+    self.items = [[tmpSet copy] autorelease];
 }
+
+
 @end

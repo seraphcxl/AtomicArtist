@@ -21,10 +21,6 @@
 		1BF9F4D4156485C90015E004 /* DCPageScrollViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BF9F4D3156485C90015E004 /* DCPageScrollViewController.m */; };
 		1BF9F4D9156486910015E004 /* DCDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BF9F4D7156486910015E004 /* DCDetailViewController.m */; };
 		1BF9F4DA156486910015E004 /* DCDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1BF9F4D8156486910015E004 /* DCDetailViewController.xib */; };
-		1BF9F4E3156487470015E004 /* Album.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BF9F4DE156487470015E004 /* Album.m */; };
-		1BF9F4E4156487470015E004 /* Asset.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BF9F4E0156487470015E004 /* Asset.m */; };
-		1BF9F4E5156487470015E004 /* DataStore.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1BF9F4E1156487470015E004 /* DataStore.xcdatamodeld */; };
-		1BF9F4E81564876C0015E004 /* DCDataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BF9F4E71564876C0015E004 /* DCDataStore.m */; };
 		1BF9F4EE156488C70015E004 /* DCAssetLibHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BF9F4ED156488C60015E004 /* DCAssetLibHelper.m */; };
 		1BF9F4F1156489E00015E004 /* DCAssetsGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BF9F4F0156489DF0015E004 /* DCAssetsGroup.m */; };
 		1BF9F4F515648B730015E004 /* DCItemView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BF9F4F415648B730015E004 /* DCItemView.m */; };
@@ -35,6 +31,10 @@
 		1BF9F51C156493A50015E004 /* DCItemViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BF9F518156493A50015E004 /* DCItemViewCell.m */; };
 		1BF9F51D156493A50015E004 /* DCItemViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BF9F51A156493A50015E004 /* DCItemViewController.m */; };
 		1BF9F51E156493A50015E004 /* DCItemViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1BF9F51B156493A50015E004 /* DCItemViewController.xib */; };
+		1BF9F533156499900015E004 /* AtomicArtistModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1BF9F531156499900015E004 /* AtomicArtistModel.xcdatamodeld */; };
+		1BF9F53D15649ACD0015E004 /* Group.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BF9F53C15649ACD0015E004 /* Group.m */; };
+		1BF9F54415649BD80015E004 /* Item.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BF9F54315649BD80015E004 /* Item.m */; };
+		1BF9F54815649D530015E004 /* DCDataModelHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BF9F54715649D530015E004 /* DCDataModelHelper.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -61,13 +61,6 @@
 		1BF9F4D6156486910015E004 /* DCDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DCDetailViewController.h; path = DetailView/DCDetailViewController.h; sourceTree = "<group>"; };
 		1BF9F4D7156486910015E004 /* DCDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DCDetailViewController.m; path = DetailView/DCDetailViewController.m; sourceTree = "<group>"; };
 		1BF9F4D8156486910015E004 /* DCDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = DCDetailViewController.xib; path = DetailView/DCDetailViewController.xib; sourceTree = "<group>"; };
-		1BF9F4DD156487470015E004 /* Album.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Album.h; sourceTree = "<group>"; };
-		1BF9F4DE156487470015E004 /* Album.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Album.m; sourceTree = "<group>"; };
-		1BF9F4DF156487470015E004 /* Asset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Asset.h; sourceTree = "<group>"; };
-		1BF9F4E0156487470015E004 /* Asset.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Asset.m; sourceTree = "<group>"; };
-		1BF9F4E2156487470015E004 /* DataStore.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DataStore.xcdatamodel; sourceTree = "<group>"; };
-		1BF9F4E61564876C0015E004 /* DCDataStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCDataStore.h; sourceTree = "<group>"; };
-		1BF9F4E71564876C0015E004 /* DCDataStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCDataStore.m; sourceTree = "<group>"; };
 		1BF9F4EC156488C60015E004 /* DCAssetLibHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCAssetLibHelper.h; sourceTree = "<group>"; };
 		1BF9F4ED156488C60015E004 /* DCAssetLibHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCAssetLibHelper.m; sourceTree = "<group>"; };
 		1BF9F4EF156489DF0015E004 /* DCAssetsGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCAssetsGroup.h; sourceTree = "<group>"; };
@@ -86,6 +79,13 @@
 		1BF9F519156493A50015E004 /* DCItemViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DCItemViewController.h; path = ItemView/DCItemViewController.h; sourceTree = "<group>"; };
 		1BF9F51A156493A50015E004 /* DCItemViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DCItemViewController.m; path = ItemView/DCItemViewController.m; sourceTree = "<group>"; };
 		1BF9F51B156493A50015E004 /* DCItemViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = DCItemViewController.xib; path = ItemView/DCItemViewController.xib; sourceTree = "<group>"; };
+		1BF9F532156499900015E004 /* AtomicArtistModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = AtomicArtistModel.xcdatamodel; sourceTree = "<group>"; };
+		1BF9F53B15649ACD0015E004 /* Group.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Group.h; sourceTree = "<group>"; };
+		1BF9F53C15649ACD0015E004 /* Group.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Group.m; sourceTree = "<group>"; };
+		1BF9F54215649BD80015E004 /* Item.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Item.h; sourceTree = "<group>"; };
+		1BF9F54315649BD80015E004 /* Item.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Item.m; sourceTree = "<group>"; };
+		1BF9F54615649D530015E004 /* DCDataModelHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCDataModelHelper.h; sourceTree = "<group>"; };
+		1BF9F54715649D530015E004 /* DCDataModelHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCDataModelHelper.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -188,13 +188,7 @@
 		1BF9F4DC156487470015E004 /* Data */ = {
 			isa = PBXGroup;
 			children = (
-				1BF9F4DD156487470015E004 /* Album.h */,
-				1BF9F4DE156487470015E004 /* Album.m */,
-				1BF9F4DF156487470015E004 /* Asset.h */,
-				1BF9F4E0156487470015E004 /* Asset.m */,
-				1BF9F4E1156487470015E004 /* DataStore.xcdatamodeld */,
-				1BF9F4E61564876C0015E004 /* DCDataStore.h */,
-				1BF9F4E71564876C0015E004 /* DCDataStore.m */,
+				1BF9F5491564A2310015E004 /* DataModel */,
 				1BF9F4EF156489DF0015E004 /* DCAssetsGroup.h */,
 				1BF9F4F0156489DF0015E004 /* DCAssetsGroup.m */,
 				1BF9F4EC156488C60015E004 /* DCAssetLibHelper.h */,
@@ -229,6 +223,20 @@
 				1BF9F50015648F920015E004 /* DCGroupView.m */,
 			);
 			name = GroupView;
+			sourceTree = "<group>";
+		};
+		1BF9F5491564A2310015E004 /* DataModel */ = {
+			isa = PBXGroup;
+			children = (
+				1BF9F531156499900015E004 /* AtomicArtistModel.xcdatamodeld */,
+				1BF9F54215649BD80015E004 /* Item.h */,
+				1BF9F54315649BD80015E004 /* Item.m */,
+				1BF9F53B15649ACD0015E004 /* Group.h */,
+				1BF9F53C15649ACD0015E004 /* Group.m */,
+				1BF9F54615649D530015E004 /* DCDataModelHelper.h */,
+				1BF9F54715649D530015E004 /* DCDataModelHelper.m */,
+			);
+			name = DataModel;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -302,10 +310,6 @@
 				1BF9F4D0156485730015E004 /* DCPageView.m in Sources */,
 				1BF9F4D4156485C90015E004 /* DCPageScrollViewController.m in Sources */,
 				1BF9F4D9156486910015E004 /* DCDetailViewController.m in Sources */,
-				1BF9F4E3156487470015E004 /* Album.m in Sources */,
-				1BF9F4E4156487470015E004 /* Asset.m in Sources */,
-				1BF9F4E5156487470015E004 /* DataStore.xcdatamodeld in Sources */,
-				1BF9F4E81564876C0015E004 /* DCDataStore.m in Sources */,
 				1BF9F4EE156488C70015E004 /* DCAssetLibHelper.m in Sources */,
 				1BF9F4F1156489E00015E004 /* DCAssetsGroup.m in Sources */,
 				1BF9F4F515648B730015E004 /* DCItemView.m in Sources */,
@@ -314,6 +318,10 @@
 				1BF9F5151564939C0015E004 /* DCGroupViewController.m in Sources */,
 				1BF9F51C156493A50015E004 /* DCItemViewCell.m in Sources */,
 				1BF9F51D156493A50015E004 /* DCItemViewController.m in Sources */,
+				1BF9F533156499900015E004 /* AtomicArtistModel.xcdatamodeld in Sources */,
+				1BF9F53D15649ACD0015E004 /* Group.m in Sources */,
+				1BF9F54415649BD80015E004 /* Item.m in Sources */,
+				1BF9F54815649D530015E004 /* DCDataModelHelper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -422,13 +430,13 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
-		1BF9F4E1156487470015E004 /* DataStore.xcdatamodeld */ = {
+		1BF9F531156499900015E004 /* AtomicArtistModel.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				1BF9F4E2156487470015E004 /* DataStore.xcdatamodel */,
+				1BF9F532156499900015E004 /* AtomicArtistModel.xcdatamodel */,
 			);
-			currentVersion = 1BF9F4E2156487470015E004 /* DataStore.xcdatamodel */;
-			path = DataStore.xcdatamodeld;
+			currentVersion = 1BF9F532156499900015E004 /* AtomicArtistModel.xcdatamodel */;
+			path = AtomicArtistModel.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
 		};

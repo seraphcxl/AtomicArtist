@@ -9,7 +9,7 @@
 #import "DCAppDelegate.h"
 #import "DCGroupViewController.h"
 #import "DCAssetLibHelper.h"
-#import "DCDataStore.h"
+#import "DCDataModelHelper.h"
 
 @implementation DCAppDelegate
 
@@ -18,7 +18,7 @@
 - (void)dealloc
 {
     [DCAssetLibHelper staticRelease];
-    [DCDataStore staticRelease];
+    [DCDataModelHelper staticRelease];
     [_window release];
     [super dealloc];
 }
