@@ -48,13 +48,15 @@ typedef enum {
 
 - (NSUInteger)itemsCount;
 
-- (id)itemWithUID:(NSString *)uid;
+- (id <DCDataItem>)itemWithUID:(NSString *)uid;
 
 - (id)valueForProperty:(DATAGROUPPROPERTY)property;
 
 - (NSString *)itemUIDAtIndex:(NSUInteger)index;
 
 - (NSUInteger)indexForItemUID:(NSString *)itemUID;
+
+- (BOOL)isEnumerated;
 
 @end
 
@@ -72,7 +74,7 @@ typedef enum {
 
 - (NSUInteger)groupsCount;
 
-- (id)groupWithUID:(NSString *)uid;
+- (id <DCDataGroup>)groupWithUID:(NSString *)uid;
 
 - (NSString *)groupUIDAtIndex:(NSUInteger)index;
 
@@ -98,7 +100,7 @@ typedef enum {
 
 - (NSUInteger)groupsCount;
 
-- (id)groupWithUID:(NSString *)uid;
+- (id <DCDataGroup>)groupWithUID:(NSString *)uid;
 
 - (NSString *)groupUIDAtIndex:(NSUInteger)index;
 
@@ -112,11 +114,13 @@ typedef enum {
 
 - (NSUInteger)itemsCountInGroup:(NSString *) groupUID;
 
-- (id)itemWithUID:(NSString *)uid inGroup:(NSString *) groupUID;
+- (id <DCDataItem>)itemWithUID:(NSString *)uid inGroup:(NSString *) groupUID;
 
 - (NSString *)itemUIDAtIndex:(NSUInteger)index inGroup:(NSString *) groupUID;
 
 - (NSUInteger)indexForItemUID:(NSString *)itemUID inGroup:(NSString *) groupUID;
+
+- (BOOL)isGroupEnumerated:(NSString *) groupUID;
 
 @end
 

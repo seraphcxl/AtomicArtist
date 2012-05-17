@@ -7,7 +7,6 @@
 //
 
 #import "DCDetailViewController.h"
-#import "DCAssetLibHelper.h"
 #import "DCImageHelper.h"
 
 #define TIMEFORHIDEASSIST ((NSTimeInterval)2.0)
@@ -42,11 +41,12 @@
 
 @implementation DCDetailViewController
 
-@synthesize currentGroupPersistentID = _currentGroupPersistentID;
-@synthesize currentAssetURL = _currentAssetURL;
-@synthesize currentAssetIndexInGroup = _currentAssetIndexInGroup;
+@synthesize currentDataGroupUID = _currentDataGroupUID;
+@synthesize currentItemUID = _currentItemUID;
+@synthesize currentIndexInGroup = _currentIndexInGroupp;
 @synthesize imageView = _imageView;
 @synthesize imageScrollView = _imageScrollView;
+@synthesize dataLibraryHelper =_dataLibraryHelper;
 
 - (void)clearCurrentInfomation {
     if (_timerForHideAssist) {
@@ -70,60 +70,66 @@
         [_originImage release];
         _originImage = nil;
     }
-    self.currentGroupPersistentID = nil;
-    self.currentAssetURL = nil;
+    self.currentDataGroupUID = nil;
+    self.currentItemUID = nil;
 }
 
 - (void)next {
-    DCAssetLibHelper *assetLibHelper = [DCAssetLibHelper defaultAssetLibHelper];
-    NSUInteger count = [assetLibHelper assetCountForGroupWithPersistentID:self.currentGroupPersistentID];
-    if (self.currentAssetIndexInGroup < (count - 1)) {
-        NSString *currentGroupPersistentID = self.currentGroupPersistentID;
-        [currentGroupPersistentID retain];
-        NSUInteger currentIndex = ++self.currentAssetIndexInGroup;
-        // clear current information
-        [self clearCurrentInfomation];
-        // get next information
-        NSURL *currentAssetURL = [assetLibHelper getAssetURLForGoupPersistentID:currentGroupPersistentID atIndex:currentIndex];
-        [currentAssetURL retain];
-        
-        [self initWithGroupPersistentID:currentGroupPersistentID assetURL:currentAssetURL andAssetIndexInGroup:currentIndex];
-        
-        [currentAssetURL release];
-        currentAssetURL = nil;
-        [currentGroupPersistentID release];
-        currentGroupPersistentID = nil;
-        
-        [self relayout];
-        
+    if (self.dataLibraryHelper) {
+        NSUInteger count = [self.dataLibraryHelper itemsCountInGroup:self.currentDataGroupUID];
+        if (self.currentIndexInGroup < (count - 1)) {
+            NSString *currentDataGroupUID = self.currentDataGroupUID;
+            [currentDataGroupUID retain];
+            NSUInteger currentIndex = ++self.currentIndexInGroup;
+            // clear current information
+            [self clearCurrentInfomation];
+            // get next information
+            NSString *currentItemUID = [self.dataLibraryHelper itemUIDAtIndex:currentIndex inGroup:currentDataGroupUID];
+            [currentItemUID retain];
+            
+            [self initWithDataLibraryHelper:self.dataLibraryHelper dataGroupUID:currentDataGroupUID itemUID:currentItemUID andIndexInGroup:currentIndex];
+            
+            [currentItemUID release];
+            currentItemUID = nil;
+            [currentDataGroupUID release];
+            currentDataGroupUID = nil;
+            
+            [self relayout];
+            
+        } else {
+            NSLog(@"last asset in group");
+        }
     } else {
-        NSLog(@"last asset in group");
+        [NSException raise:@"DCDetailViewController error" format:@"Reason: self.dataLibraryHelper == nil"];
     }
 }
 
 - (void)previous {
-    DCAssetLibHelper *assetLibHelper = [DCAssetLibHelper defaultAssetLibHelper];
-    if (self.currentAssetIndexInGroup != 0) {
-        NSString *currentGroupPersistentID = self.currentGroupPersistentID;
-        [currentGroupPersistentID retain];
-        NSUInteger currentIndex = --self.currentAssetIndexInGroup;
-        // clear current information
-        [self clearCurrentInfomation];
-        // get next information
-        NSURL *currentAssetURL = [assetLibHelper getAssetURLForGoupPersistentID:currentGroupPersistentID atIndex:currentIndex];
-        [currentAssetURL retain];
-        
-        [self initWithGroupPersistentID:currentGroupPersistentID assetURL:currentAssetURL andAssetIndexInGroup:currentIndex];
-        
-        [currentAssetURL release];
-        currentAssetURL = nil;
-        [currentGroupPersistentID release];
-        currentGroupPersistentID = nil;
-        
-        [self relayout];
-        
+    if (self.dataLibraryHelper) {
+        if (self.currentIndexInGroup != 0) {
+            NSString *currentDataGroupUID = self.currentDataGroupUID;
+            [currentDataGroupUID retain];
+            NSUInteger currentIndex = --self.currentIndexInGroup;
+            // clear current information
+            [self clearCurrentInfomation];
+            // get prev information
+            NSString *currentItemUID = [self.dataLibraryHelper itemUIDAtIndex:currentIndex inGroup:currentDataGroupUID];
+            [currentItemUID retain];
+            
+            [self initWithDataLibraryHelper:self.dataLibraryHelper dataGroupUID:currentDataGroupUID itemUID:currentItemUID andIndexInGroup:currentIndex];
+            
+            [currentItemUID release];
+            currentItemUID = nil;
+            [currentDataGroupUID release];
+            currentDataGroupUID = nil;
+            
+            [self relayout];
+            
+        } else {
+            NSLog(@"last asset in group");
+        }
     } else {
-        NSLog(@"last asset in group");
+        [NSException raise:@"DCDetailViewController error" format:@"Reason: self.dataLibraryHelper == nil"];
     }
 }
 
@@ -154,16 +160,16 @@
         }
         
         if (!_originImage) {
-            if (self.currentAssetURL && self.currentGroupPersistentID) {
-                DCAssetLibHelper *assetLibHelper = [DCAssetLibHelper defaultAssetLibHelper];
-                ALAsset *asset = [assetLibHelper getALAssetForGoupPersistentID:self.currentGroupPersistentID forAssetURL:self.currentAssetURL];
-                if (asset) {
-                    ALAssetRepresentation *representation = [asset defaultRepresentation];
-                    if (representation) {
-                        _originImage = [[[UIImage alloc] initWithCGImage:[representation fullResolutionImage]] autorelease];
+            if (self.currentItemUID && self.currentDataGroupUID) {
+                if (self.dataLibraryHelper) {
+                    id <DCDataItem> item = [self.dataLibraryHelper itemWithUID:self.currentItemUID inGroup:self.currentDataGroupUID];
+                    if (item) {
+                        _originImage = (UIImage *)[item valueForProperty:DATAITEMPROPERTY_ORIGINIMAGE];
                         [_originImage retain];
                     }
-                }
+                } else {
+                    [NSException raise:@"DCDetailViewController error" format:@"Reason: self.dataLibraryHelper == nil"];
+                } 
             }
         }
         
@@ -198,8 +204,6 @@
     } else {
         [NSException raise:@"AADetailViewController error" format:@"Reason: _imageViewType unknown"];
     }
-    
-    
 }
 
 - (void)relayout {
@@ -239,19 +243,19 @@
     }
     
     if (!_fitInImage) {
-        if (self.currentAssetURL && self.currentGroupPersistentID) {
-            DCAssetLibHelper *assetLibHelper = [DCAssetLibHelper defaultAssetLibHelper];
-            ALAsset *asset = [assetLibHelper getALAssetForGoupPersistentID:self.currentGroupPersistentID forAssetURL:self.currentAssetURL];
-            if (asset) {
-                ALAssetRepresentation *representation = [asset defaultRepresentation];
-                if (representation) {
-                    UIImage *originImage = [[[UIImage alloc] initWithCGImage:[representation fullScreenImage]] autorelease];
-                    _fitInImage = [DCImageHelper image:originImage fitInSize:rect.size];
+        if (self.currentItemUID && self.currentDataGroupUID) {
+            if (self.dataLibraryHelper) {
+                id <DCDataItem> item = [self.dataLibraryHelper itemWithUID:self.currentItemUID inGroup:self.currentDataGroupUID];
+                if (item) {
+                    UIImage *fullScreemImage = (UIImage *)[item valueForProperty:DATAITEMPROPERTY_FULLSCREENIMAGE];
+                    _fitInImage = [DCImageHelper image:fullScreemImage fitInSize:rect.size];
                     [_fitInImage retain];
-                    NSString *fileName = [representation filename];
+                    NSString *fileName = (NSString *)[item valueForProperty:DATAITEMPROPERTY_FILENAME];
                     [self.navigationItem setTitle:fileName];
                 }
-            }
+            } else {
+                [NSException raise:@"DCDetailViewController error" format:@"Reason: self.dataLibraryHelper == nil"];
+            } 
         }
     }
     
@@ -302,12 +306,13 @@
     
 }
 
-- (id)initWithGroupPersistentID:(NSString *)groupPersistentID assetURL:(NSURL *)assetURL andAssetIndexInGroup:(NSUInteger)assetIndexInGroup {
+- (id)initWithDataLibraryHelper:(id<DCDataLibraryHelper>)dataLibraryHelper dataGroupUID:(NSString *)dataGroupUID itemUID:(NSString *)itemUID andIndexInGroup:(NSUInteger)indexInGroup {
     self = [self initWithNibName:nil bundle:nil];
     if (self) {
-        self.currentGroupPersistentID = groupPersistentID;
-        self.currentAssetURL = assetURL;
-        self.currentAssetIndexInGroup = assetIndexInGroup;
+        self.dataLibraryHelper = dataLibraryHelper;
+        self.currentDataGroupUID = dataGroupUID;
+        self.currentItemUID = itemUID;
+        self.currentIndexInGroup = indexInGroup;
         
         if (!_singleTapGestureRecognizer) {
             _singleTapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap:)];
@@ -436,6 +441,8 @@
     }
     
     [self clearCurrentInfomation];
+    
+    self.dataLibraryHelper = nil;
     
     [super dealloc];
 }

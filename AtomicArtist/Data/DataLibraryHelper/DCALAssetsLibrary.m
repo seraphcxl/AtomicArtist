@@ -117,7 +117,7 @@
     }
 }
 
-- (id)groupWithUID:(NSString *)uid {
+- (id <DCDataGroup>)groupWithUID:(NSString *)uid {
     DCALAssetsGroup *result = nil;
     if (_allALAssetsGroups) {
         result = [_allALAssetsGroups objectForKey:uid];

@@ -8,12 +8,13 @@
 
 #import <UIKit/UIKit.h>
 #import "DCItemView.h"
+#import "DCUniformDataProtocol.h"
 
 @protocol DCItemViewCellDelegate <NSObject>
 
 - (void)addItemView:(DCItemView *)itemView;
 
-- (DCItemView *)getItemViewWithAssetURL:(NSURL *)assetURL;
+- (DCItemView *)getItemViewWithItemUID:(NSString *)itemUID;
 
 @end
 
@@ -25,9 +26,10 @@
 @property (readonly, nonatomic) NSUInteger cellTopBottomMargin;
 @property (readonly, nonatomic) NSUInteger frameSize;
 @property (readonly, nonatomic) NSUInteger itemCount;
-@property (retain, nonatomic) NSArray *assetURLs;
-@property (readonly, nonatomic) NSString *groupPersistentID;
+@property (retain, nonatomic) NSArray *itemUIDs;
+@property (readonly, nonatomic) NSString *dataGroupUID;
+@property (assign, nonatomic) id <DCDataLibraryHelper> dataLibraryHelper;
 
-- (id)initWithAssetURLs:(NSArray *)assetURLs groupPersistentID:(NSString *)groupPersistentID cellSpace:(NSUInteger)cellSpace cellTopBottomMargin:(NSUInteger)cellTopBottomMargin frameSize:(NSUInteger)frameSize andItemCount:(NSUInteger)itemCount;
+- (id)initWithDataLibraryHelper:(id <DCDataLibraryHelper>)dataLibraryHelper itemUIDs:(NSArray *)itemUIDs dataGroupUID:(NSString *)dataGroupUID cellSpace:(NSUInteger)cellSpace cellTopBottomMargin:(NSUInteger)cellTopBottomMargin frameSize:(NSUInteger)frameSize andItemCount:(NSUInteger)itemCount;
 
 @end

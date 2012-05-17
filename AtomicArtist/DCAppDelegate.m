@@ -7,8 +7,7 @@
 //
 
 #import "DCAppDelegate.h"
-#import "DCGroupViewController.h"
-#import "DCAssetLibHelper.h"
+#import "DCALAssetGroupViewController.h"
 #import "DCDataModelHelper.h"
 #import "DCALAssetsLibraryHelper.h"
 
@@ -18,7 +17,6 @@
 
 - (void)dealloc
 {
-    [DCAssetLibHelper staticRelease];
     [DCDataModelHelper staticRelease];
     [DCALAssetsLibraryHelper staticRelease];
     [_window release];
@@ -33,7 +31,9 @@
     /*** *** ***/
     DCALAssetsLibraryHelper *alAssetsLibraryHelper = [DCALAssetsLibraryHelper defaultDataLibraryHelper];
     [alAssetsLibraryHelper connect:nil];
-    DCGroupViewController *groupViewCtrl = [[[DCGroupViewController alloc] initWithDataLibHelper:alAssetsLibraryHelper] autorelease];
+    DCALAssetGroupViewController *groupViewCtrl = [[[DCALAssetGroupViewController alloc] initWithDataLibHelper:alAssetsLibraryHelper] autorelease];
+    [groupViewCtrl setEnumDataGroupParam:(id)(ALAssetsGroupAlbum | ALAssetsGroupSavedPhotos)];
+    [groupViewCtrl setEnumDataItemParam:(id)ALAssetTypePhoto];
     
     UINavigationController *naviCtrl = [[[UINavigationController alloc] initWithRootViewController:groupViewCtrl] autorelease];
     [naviCtrl.navigationBar setBarStyle:UIBarStyleBlackTranslucent];

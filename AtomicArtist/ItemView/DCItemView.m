@@ -7,7 +7,6 @@
 //
 
 #import "DCItemView.h"
-#import "DCAssetLibHelper.h"
 
 @interface DCItemView () {
     UITapGestureRecognizer *_singleTapGestureRecognizer;
@@ -25,17 +24,18 @@
 @implementation DCItemView
 
 @synthesize delegate = _delegate;
-@synthesize assetURL = _assetURL;
+@synthesize itemUID = _itemUID;
 @synthesize thumbnailSize = _thumbnailSize;
 @synthesize titleFontSize = _titleFontSize;
 @synthesize thumbnail = _thumbnail;
-@synthesize groupPersistentID = _groupPersistentID;
+@synthesize dataGroupUID = _dataGroupUID;
+@synthesize dataLibraryHelper = _dataLibraryHelper;
 
 - (void)tap:(UITapGestureRecognizer *)gr {
     if (gr == _singleTapGestureRecognizer && gr.numberOfTapsRequired == 1) {
         NSLog(@"DCItemView tap:single");
-        if (self.delegate && self.assetURL) {
-            [self.delegate selectItem:self.assetURL];
+        if (self.delegate && self.itemUID) {
+            [self.delegate selectItem:self.itemUID];
         }
     }
 }
@@ -47,12 +47,13 @@
         _singleTapGestureRecognizer = nil;
     }
     
+    self.dataLibraryHelper = nil;
     self.thumbnail = nil;
-    self.assetURL = nil;
+    self.itemUID = nil;
     
-    if (_groupPersistentID) {
-        [_groupPersistentID release];
-        _groupPersistentID = nil;
+    if (_dataGroupUID) {
+        [_dataGroupUID release];
+        _dataGroupUID = nil;
     }
     
     [super dealloc];
@@ -84,35 +85,37 @@
     [super layoutSubviews];
     
     do {
-        if (self.thumbnailSize == 0 || !self.assetURL) {
+        if (self.thumbnailSize == 0 || !self.itemUID) {
             break;
         }
-        DCAssetLibHelper *assetLibHelper = [DCAssetLibHelper defaultAssetLibHelper];
-        ALAsset *asset = [assetLibHelper getALAssetForGoupPersistentID:self.groupPersistentID forAssetURL:self.assetURL];
-        if (!asset) {
-            break;
+        if (self.dataLibraryHelper) {
+            id <DCDataItem> item = [self.dataLibraryHelper itemWithUID:self.itemUID inGroup:self.dataGroupUID];
+            if (!item) {
+                break;
+            }
+            CGRect bounds = [self bounds];
+            CGRect imageViewFrame = CGRectMake(bounds.origin.x, bounds.origin.y, self.thumbnailSize, self.thumbnailSize);
+            UIImageView *imageView = [[[UIImageView alloc] initWithFrame:imageViewFrame] autorelease];
+            self.thumbnail = (UIImage *)[item valueForProperty:DATAITEMPROPERTY_THUMBNAIL];
+            [imageView setImage:self.thumbnail];
+            
+            [self addSubview:imageView];
+        } else {
+            [NSException raise:@"DCItemView error" format:@"Reason: self.dataLibraryHelper == nil"];
         }
-        CGRect bounds = [self bounds];
-        CGRect imageViewFrame = CGRectMake(bounds.origin.x, bounds.origin.y, self.thumbnailSize, self.thumbnailSize);
-        UIImageView *imageView = [[[UIImageView alloc] initWithFrame:imageViewFrame] autorelease];
-        self.thumbnail = [[[UIImage alloc] initWithCGImage:[asset thumbnail]] autorelease];
-        //        CGSize thumbnailSize = self.thumbnail.size;
-        [imageView setImage:self.thumbnail];
-        
-        [self addSubview:imageView];
     } while (NO);
 }
 
-- (id)InitWithGroupPersistentID:(NSString *)groupPersistentID andFrame:(CGRect)frame
-{
+- (id)InitWithDataLibraryHelper:(id<DCDataLibraryHelper>)dataLibraryHelper dataGroupUID:(NSString *)dataGroupUID andFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
         [self setBackgroundColor:[UIColor clearColor]];
         _thumbnailSize = [self calcThumbnailSize];
         _titleFontSize = [self calcTitleFontSize];
-        _groupPersistentID = groupPersistentID;
-        [_groupPersistentID retain];
+        _dataGroupUID = dataGroupUID;
+        [_dataGroupUID retain];
+        self.dataLibraryHelper = dataLibraryHelper;
         
         _singleTapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap:)];
         _singleTapGestureRecognizer.numberOfTapsRequired = 1;

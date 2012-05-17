@@ -28,7 +28,8 @@
 @property (readonly, nonatomic) NSUInteger itemCount;
 @property (retain, nonatomic) NSArray *dataGroupUIDs;
 @property (assign, nonatomic) id <DCDataLibraryHelper> dataLibraryHelper;
+@property (assign, nonatomic) id enumDataItemParam;
 
-- (id)initWithDataLibHelper:(id <DCDataLibraryHelper>)dataLibraryHelper dataGroupUIDs:(NSArray *)dataGroupUIDs cellSpace:(NSUInteger)cellSpace cellTopBottomMargin:(NSUInteger)cellTopBottomMargin frameSize:(NSUInteger)frameSize andItemCount:(NSUInteger)itemCount;
+- (id)initWithDataLibHelper:(id <DCDataLibraryHelper>)dataLibraryHelper dataGroupUIDs:(NSArray *)dataGroupUIDs enumDataItemParam:(id)enumDataItemParam cellSpace:(NSUInteger)cellSpace cellTopBottomMargin:(NSUInteger)cellTopBottomMargin frameSize:(NSUInteger)frameSize andItemCount:(NSUInteger)itemCount;
 
 @end

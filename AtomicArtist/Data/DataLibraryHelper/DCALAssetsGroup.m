@@ -20,6 +20,20 @@
 
 @synthesize alAssetsGroup = _alAssetsGroup;
 
+- (id)init {
+    self = [super init];
+    if (self) {
+        if (!_allAssetItems) {
+            _allAssetItems = [[NSMutableDictionary alloc] init];
+        }
+        
+        if (!_allAssetUIDs) {
+            _allAssetUIDs = [[NSMutableArray alloc] init];
+        }
+    }
+    return self;
+}
+
 - (void)clearCache {
     if (_allAssetUIDs) {
         [_allAssetUIDs removeAllObjects];
@@ -100,14 +114,14 @@
 }
 
 - (NSUInteger)itemsCount {
-    if (_allAssetItems) {
-        return [_allAssetItems count];
+    if (self.alAssetsGroup) {
+        return [self.alAssetsGroup numberOfAssets];
     } else {
         return 0;
     }
 }
 
-- (id)itemWithUID:(NSString *)uid {
+- (id <DCDataItem>)itemWithUID:(NSString *)uid {
     DCALAssetItem *item = nil;
     if (_allAssetItems) {
         item = [_allAssetItems objectForKey:uid];
@@ -188,6 +202,14 @@
     } else {
         [NSException raise:@"DCALAssetsGroup Error" format:@"Reason: itemUID is nil"];
         return 0;
+    }
+}
+
+- (BOOL)isEnumerated {
+    if (!_allAssetItems || [_allAssetItems count] == 0) {
+        return NO;
+    } else {
+        return YES;
     }
 }
 

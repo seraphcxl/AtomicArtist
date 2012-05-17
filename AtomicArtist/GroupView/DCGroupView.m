@@ -7,7 +7,6 @@
 //
 
 #import "DCGroupView.h"
-#import "DCAssetLibHelper.h"
 
 @interface DCGroupView () {
     UITapGestureRecognizer *tapGestureRecognizer;
@@ -24,23 +23,26 @@
 @implementation DCGroupView
 
 @synthesize delegate = _delegate;
-@synthesize groupPersistentID = _groupPersistentID;
+@synthesize dataGroupUID = _dataGroupUID;
 @synthesize posterImageSize = _posterImageSize;
 @synthesize titleFontSize = _titleFontSize;
 @synthesize posterImage = _posterImage;
+@synthesize dataLibraryHelper = _dataLibraryHelper;
+@synthesize enumDataItemParam = _enumDataItemParam;
 
-- (void)refreshAssets:(BOOL)force {
-    DCAssetLibHelper *assetLibHelper = [DCAssetLibHelper defaultAssetLibHelper];
-    if (force || [assetLibHelper assetCountForGroupWithPersistentID:self.groupPersistentID] == 0) {
-        [assetLibHelper cleaeCacheForGoupPersistentID:self.groupPersistentID];
-        [assetLibHelper enumerateAssetsForGoupPersistentID:self.groupPersistentID];
+- (void)refreshItems:(BOOL)force {
+    if (self.dataLibraryHelper) {
+        if (force || [self.dataLibraryHelper itemsCountInGroup:self.dataGroupUID] == 0) {
+            [self.dataLibraryHelper clearCacheInGroup:self.dataGroupUID];
+            [self.dataLibraryHelper enumItems:self.enumDataItemParam InGroup:self.dataGroupUID];
+        }
     }
 }
 
 - (void)tap:(UIPanGestureRecognizer *)gr {
     NSLog(@"DCGroupView tap:");
-    if (self.delegate && self.groupPersistentID) {
-        [self.delegate selectGroup:self.groupPersistentID];
+    if (self.delegate && self.dataGroupUID) {
+        [self.delegate selectGroup:self.dataGroupUID];
     }
 }
 
@@ -52,7 +54,10 @@
     }
     
     self.posterImage = nil;
-    self.groupPersistentID = nil;
+    self.dataGroupUID = nil;
+    self.enumDataItemParam = nil;
+    self.dataLibraryHelper = nil;
+    self.delegate = nil;
     
     [super dealloc];
 }
@@ -83,37 +88,36 @@
     [super layoutSubviews];
     
     do {
-        if (self.posterImageSize == 0 || !self.groupPersistentID) {
+        if (self.posterImageSize == 0 || !self.dataGroupUID || !self.dataLibraryHelper) {
             break;
         }
-        DCAssetLibHelper *assetLibHelper = [DCAssetLibHelper defaultAssetLibHelper];
-        ALAssetsGroup *group = [assetLibHelper getALGroupForGoupPersistentID:self.groupPersistentID];
+        id <DCDataGroup> group = [self.dataLibraryHelper groupWithUID:self.dataGroupUID];
         if (!group) {
             break;
         }
         CGRect bounds = [self bounds];
         CGRect imageViewFrame = CGRectMake(bounds.origin.x + ((GROUPVIEW_TITLELABEL_HEIGHT + GROUPVIEW_TITLELABEL_SPACE) / 2), bounds.origin.y, self.posterImageSize, self.posterImageSize);
         UIImageView *imageView = [[[UIImageView alloc] initWithFrame:imageViewFrame] autorelease];
-        self.posterImage = [[[UIImage alloc] initWithCGImage:[group posterImage]] autorelease];
+        self.posterImage = (UIImage *)[group valueForProperty:DATAGROUPPROPERTY_POSTERIMAGE];
         [imageView setImage:self.posterImage];
         
         CGRect titleLabelFrame = CGRectMake(bounds.origin.x, bounds.origin.y + self.posterImageSize + GROUPVIEW_TITLELABEL_SPACE, bounds.size.width, GROUPVIEW_TITLELABEL_HEIGHT);
         UILabel *titleLabel = [[[UILabel alloc] initWithFrame:titleLabelFrame] autorelease];
-        NSString *groupPropertyName = [group valueForProperty:ALAssetsGroupPropertyName];
+        NSString *groupName = (NSString *)[group valueForProperty:DATAGROUPPROPERTY_GROUPNAME];
         [titleLabel setBackgroundColor:[UIColor clearColor]];
 		[titleLabel setTextColor:[UIColor whiteColor]];
 		titleLabel.textAlignment = UITextAlignmentCenter;
 		titleLabel.font = [UIFont systemFontOfSize:self.titleFontSize];
-        [titleLabel setText:[[[NSString alloc] initWithFormat:@"%@", groupPropertyName] autorelease]];
+        [titleLabel setText:[[[NSString alloc] initWithFormat:@"%@", groupName] autorelease]];
         
         CGRect numberLabelFrame = CGRectMake(bounds.origin.x + bounds.size.width / 2.0, bounds.origin.y, bounds.size.width / 2.0, GROUPVIEW_TITLELABEL_HEIGHT);
         UILabel *numbereLabel = [[[UILabel alloc] initWithFrame:numberLabelFrame] autorelease];
-        NSInteger numberOfAssets = [group numberOfAssets];
+        NSInteger numberOfItems = [group itemsCount];
         [numbereLabel setBackgroundColor:[UIColor clearColor]];
 		[numbereLabel setTextColor:[UIColor whiteColor]];
 		numbereLabel.textAlignment = UITextAlignmentRight;
 		numbereLabel.font = [UIFont systemFontOfSize:self.titleFontSize];
-        [numbereLabel setText:[[[NSString alloc] initWithFormat:@"%d", numberOfAssets] autorelease]];
+        [numbereLabel setText:[[[NSString alloc] initWithFormat:@"%d", numberOfItems] autorelease]];
         
         [self addSubview:imageView];
         [self addSubview:titleLabel];

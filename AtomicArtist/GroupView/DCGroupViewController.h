@@ -10,13 +10,18 @@
 #import "DCGroupViewCell.h"
 #import "DCUniformDataProtocol.h"
 
-@interface DCGroupViewController : UITableViewController <DCGroupViewDelegate, DCGroupViewCellDelegate>
+@interface DCGroupViewController : UITableViewController <DCGroupViewDelegate, DCGroupViewCellDelegate> {
+    id _enumDataGroupParam;
+    id _enumDataItemParam;
+}
 
-@property (assign, nonatomic) id enumDataGroupParam;
 @property (assign, nonatomic) id <DCDataLibraryHelper> dataLibraryHelper;
 
 - (IBAction)refresh:(id)sender;
 
 - (id)initWithDataLibHelper:(id <DCDataLibraryHelper>)dataLibraryHelper;
+
+- (void)setEnumDataGroupParam:(id)enumDataGroupParam;
+- (void)setEnumDataItemParam:(id)enumDataItemParam;
 
 @end

@@ -16,30 +16,36 @@
 @synthesize cellTopBottomMargin = _cellTopBottomMargin;
 @synthesize frameSize = _frameSize;
 @synthesize itemCount = _itemCount;
-@synthesize assetURLs = _assetURLs;
-@synthesize groupPersistentID = _groupPersistentID;
+@synthesize itemUIDs = _itemUIDs;
+@synthesize dataGroupUID = _dataGroupUID;
+@synthesize dataLibraryHelper = _dataLibraryHelper;
 
 - (void)layoutSubviews {
     [super layoutSubviews];
     
     do {
-        if (!self.groupPersistentID) {
-            [NSException raise:@"AAItemViewCell error" format:@"self.groupPersistentID == nil"];
+        if (!self.dataGroupUID) {
+            [NSException raise:@"AAItemViewCell error" format:@"self.dataGroupUID == nil"];
+            break;
+        }
+        
+        if (!self.dataLibraryHelper) {
+            [NSException raise:@"AAItemViewCell error" format:@"self.dataLibraryHelper == nil"];
             break;
         }
         
         CGRect viewFrame = CGRectMake(self.cellSpace, self.cellTopBottomMargin, self.frameSize, self.frameSize);
         
-        for (NSURL *assetURL in self.assetURLs) {
+        for (NSString *itemUID in self.itemUIDs) {
             DCItemView *view = nil;
             if (self.delegate) {
-                view = [self.delegate getItemViewWithAssetURL:assetURL];
+                view = [self.delegate getItemViewWithItemUID:itemUID];
             }
             
             if (!view) {
-                view = [[[DCItemView alloc] InitWithGroupPersistentID:self.groupPersistentID andFrame:viewFrame] autorelease];
+                view = [[[DCItemView alloc] InitWithDataLibraryHelper:self.dataLibraryHelper dataGroupUID:self.dataGroupUID andFrame:viewFrame] autorelease];
                 view.delegate = self.delegateForItemView;
-                view.assetURL = assetURL;
+                view.itemUID = itemUID;
                 
                 if (self.delegate) {
                     [self.delegate addItemView:view];
@@ -53,7 +59,7 @@
     } while (NO);
 }
 
-- (id)initWithAssetURLs:(NSArray *)assetURLs groupPersistentID:(NSString *)groupPersistentID cellSpace:(NSUInteger)cellSpace cellTopBottomMargin:(NSUInteger)cellTopBottomMargin frameSize:(NSUInteger)frameSize andItemCount:(NSUInteger)itemCount {
+- (id)initWithDataLibraryHelper:(id<DCDataLibraryHelper>)dataLibraryHelper itemUIDs:(NSArray *)itemUIDs dataGroupUID:(NSString *)dataGroupUID cellSpace:(NSUInteger)cellSpace cellTopBottomMargin:(NSUInteger)cellTopBottomMargin frameSize:(NSUInteger)frameSize andItemCount:(NSUInteger)itemCount {
     self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"DCItemViewCell"];
     if (self) {
         for (UIView *view in [self subviews]) {
@@ -61,10 +67,10 @@
                 [view removeFromSuperview];
             }
         }
-        
-        self.assetURLs = assetURLs;
-        _groupPersistentID = groupPersistentID;
-        [_groupPersistentID retain];
+        self.dataLibraryHelper = dataLibraryHelper;
+        self.itemUIDs = itemUIDs;
+        _dataGroupUID = dataGroupUID;
+        [_dataGroupUID retain];
         _cellSpace = cellSpace;
         _cellTopBottomMargin = cellTopBottomMargin;
         _frameSize = frameSize;
@@ -74,11 +80,12 @@
 }
 
 - (void)dealloc {
-    self.assetURLs = nil;
+    self.dataLibraryHelper = nil;
+    self.itemUIDs = nil;
     
-    if (_groupPersistentID) {
-        [_groupPersistentID release];
-        _groupPersistentID = nil;
+    if (_dataGroupUID) {
+        [_dataGroupUID release];
+        _dataGroupUID = nil;
     }
     
     [super dealloc];

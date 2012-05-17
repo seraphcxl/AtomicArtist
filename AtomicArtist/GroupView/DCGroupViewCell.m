@@ -18,6 +18,7 @@
 @synthesize itemCount = _itemCount;
 @synthesize dataGroupUIDs = _dataGroupUIDs;
 @synthesize dataLibraryHelper = _dataLibraryHelper;
+@synthesize enumDataItemParam = _enumDataItemParam;
 
 - (void)layoutSubviews {
     [super layoutSubviews];
@@ -34,7 +35,9 @@
             if (!view) {
                 view = [[[DCGroupView alloc] initWithFrame:viewFrame] autorelease];
                 view.delegate = self.delegateForGroupView;
-                view.groupPersistentID = dataGroupUID;
+                view.dataGroupUID = dataGroupUID;
+                view.dataLibraryHelper = self.dataLibraryHelper;
+                view.enumDataItemParam = self.enumDataItemParam;
                 if (self.delegate) {
                     [self.delegate addGroupView:view];
                 }
@@ -47,7 +50,7 @@
     } while (NO);
 }
 
-- (id)initWithDataLibHelper:(id<DCDataLibraryHelper>)dataLibraryHelper dataGroupUIDs:(NSArray *)dataGroupUIDs cellSpace:(NSUInteger)cellSpace cellTopBottomMargin:(NSUInteger)cellTopBottomMargin frameSize:(NSUInteger)frameSize andItemCount:(NSUInteger)itemCount {
+- (id)initWithDataLibHelper:(id <DCDataLibraryHelper>)dataLibraryHelper dataGroupUIDs:(NSArray *)dataGroupUIDs enumDataItemParam:(id)enumDataItemParam cellSpace:(NSUInteger)cellSpace cellTopBottomMargin:(NSUInteger)cellTopBottomMargin frameSize:(NSUInteger)frameSize andItemCount:(NSUInteger)itemCount {
     self = [self initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"DCGroupViewCell"];
     if (self) {
         for (UIView *view in [self subviews]) {
@@ -55,7 +58,8 @@
                 [view removeFromSuperview];
             }
         }
-        
+        self.dataLibraryHelper = dataLibraryHelper;
+        self.enumDataItemParam = enumDataItemParam;
         self.dataGroupUIDs = dataGroupUIDs;
         _cellSpace = cellSpace;
         _cellTopBottomMargin = cellTopBottomMargin;
@@ -67,6 +71,10 @@
 
 - (void)dealloc {
     self.dataGroupUIDs = nil;
+    self.enumDataItemParam = nil;
+    self.dataLibraryHelper = nil;
+    self.delegate = nil;
+    self.delegateForGroupView = nil;
     
     [super dealloc];
 }

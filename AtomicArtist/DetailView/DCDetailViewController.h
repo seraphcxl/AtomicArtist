@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "DCUniformDataProtocol.h"
 
 enum DETAILIMAGEVIEWTYPE {
     DETAILIMAGEVIEWTYPE_FITIN = 0x00000000,
@@ -15,13 +16,14 @@ enum DETAILIMAGEVIEWTYPE {
 
 @interface DCDetailViewController : UIViewController
 
-@property (retain, nonatomic) NSString *currentGroupPersistentID;
-@property (retain, nonatomic) NSURL *currentAssetURL;
-@property (assign, nonatomic) NSUInteger currentAssetIndexInGroup;
+@property (retain, nonatomic) NSString *currentDataGroupUID;
+@property (retain, nonatomic) NSString *currentItemUID;
+@property (assign, nonatomic) NSUInteger currentIndexInGroup;
 @property (assign, nonatomic) UIScrollView *imageScrollView;
 @property (retain, nonatomic) UIImageView *imageView;
+@property (assign, nonatomic) id <DCDataLibraryHelper> dataLibraryHelper;
 
-- (id)initWithGroupPersistentID:(NSString *)groupPersistentID assetURL:(NSURL *)assetURL andAssetIndexInGroup:(NSUInteger) assetIndexInGroup;
+- (id)initWithDataLibraryHelper:(id <DCDataLibraryHelper>)dataLibraryHelper dataGroupUID:(NSString *)dataGroupUID itemUID:(NSString *)itemUID andIndexInGroup:(NSUInteger) indexInGroup;
 
 - (void)next;
 

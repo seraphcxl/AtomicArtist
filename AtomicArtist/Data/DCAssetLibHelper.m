@@ -27,7 +27,6 @@ static DCAssetLibHelper *staticDefaultAssetLibHelper = nil;
         if (assetsGroup) {
             return [assetsGroup getIndexForAssetURL:assetURL];
         } else {
-//            [NSException raise:@"DCAssetLibHelper error" format:@"Reason: assetsGroup for %@ not find", groupPersistentID];
             NSLog(@"Reason: assetsGroup for %@ not find", groupPersistentID);
             return 0;
         }

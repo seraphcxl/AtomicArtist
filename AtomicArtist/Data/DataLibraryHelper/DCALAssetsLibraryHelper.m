@@ -84,7 +84,7 @@ static DCALAssetsLibraryHelper *staticALAssetsLibraryHelper = nil;
     }
 }
 
-- (id)groupWithUID:(NSString *)uid {
+- (id <DCDataGroup>)groupWithUID:(NSString *)uid {
     if (_alAssetsLibrary) {
         return [_alAssetsLibrary groupWithUID:uid];
     } else {
@@ -161,7 +161,7 @@ static DCALAssetsLibraryHelper *staticALAssetsLibraryHelper = nil;
     }
 }
 
-- (id)itemWithUID:(NSString *)uid inGroup:(NSString *) groupUID {
+- (id <DCDataItem>)itemWithUID:(NSString *)uid inGroup:(NSString *) groupUID {
     if (_alAssetsLibrary) {
         DCALAssetsGroup *group = [_alAssetsLibrary groupWithUID:groupUID];
         if (group) {
@@ -203,6 +203,21 @@ static DCALAssetsLibraryHelper *staticALAssetsLibraryHelper = nil;
     } else {
         [NSException raise:@"DCALAssetsLibraryHelper error" format:@"Reason: _alAssetsLibrary == nil"];
         return 0;
+    }
+}
+
+- (BOOL)isGroupEnumerated:(NSString *) groupUID {
+    if (_alAssetsLibrary) {
+        DCALAssetsGroup *group = [_alAssetsLibrary groupWithUID:groupUID];
+        if (group) {
+            return [group isEnumerated];
+        } else {
+            [NSException raise:@"DCALAssetsLibraryHelper error" format:@"Reason: can not find group id == %@", groupUID];
+            return NO;
+        }
+    } else {
+        [NSException raise:@"DCALAssetsLibraryHelper error" format:@"Reason: _alAssetsLibrary == nil"];
+        return NO;
     }
 }
 

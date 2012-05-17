@@ -7,21 +7,24 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "DCUniformDataProtocol.h"
 
 @protocol DCGroupViewDelegate <NSObject>
 
-- (void)selectGroup:(NSString *)groupPersistentID;
+- (void)selectGroup:(NSString *)dataGroupUID;
 
 @end
 
 @interface DCGroupView : UIView
 
 @property (assign, nonatomic) id <DCGroupViewDelegate> delegate;
-@property (retain, nonatomic) NSString *groupPersistentID;
+@property (retain, nonatomic) NSString *dataGroupUID;
 @property (readonly, nonatomic) NSUInteger posterImageSize;
 @property (readonly, nonatomic) NSUInteger titleFontSize;
 @property (retain, nonatomic) UIImage *posterImage;
+@property (assign, nonatomic) id <DCDataLibraryHelper> dataLibraryHelper;
+@property (assign, nonatomic) id enumDataItemParam;
 
-- (void)refreshAssets:(BOOL)force;
+- (void)refreshItems:(BOOL)force;
 
 @end

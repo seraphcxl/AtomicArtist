@@ -7,7 +7,6 @@
 //
 
 #import "DCItemViewController.h"
-#import "DCAssetLibHelper.h"
 #import "DCItemViewCell.h"
 #import "DCAssetsGroup.h"
 #import "DCDetailViewController.h"
@@ -30,38 +29,43 @@
 
 - (NSUInteger)calcFrameSize;
 
-- (void)refreshAssets:(BOOL)force;
+- (void)refreshItems:(BOOL)force;
 
 - (void)clearCache;
+
+- (NSArray *)getItemUIDsForCellAtIndexPath:(NSIndexPath *)indexPath;
 
 @end
 
 @implementation DCItemViewController
 
-@synthesize groupPersistentID = _groupPersistentID;
+@synthesize dataGroupUID = _dataGroupUID;
 @synthesize groupTitle = _groupTitle;
+@synthesize dataLibraryHelper = _dataLibraryHelper;
+@synthesize enumDataItemParam = _enumDataItemParam;
 
 - (void)clearCache {
     if (_itemViews) {
         [_itemViews removeAllObjects];
     }
     
-    DCAssetLibHelper *assetLibHelper = [DCAssetLibHelper defaultAssetLibHelper];
-    [assetLibHelper cleaeCacheForGoupPersistentID:self.groupPersistentID];
+    if (self.dataLibraryHelper) {
+        [self.dataLibraryHelper clearCacheInGroup:self.dataGroupUID];
+    }
 }
 
 - (void)addItemView:(DCItemView *)itemView {
     if (itemView && _itemViews) {
-        NSURL *assetURL = itemView.assetURL;
-        [_itemViews setObject:itemView forKey:assetURL.absoluteString];
+        NSString *itemUID = itemView.itemUID;
+        [_itemViews setObject:itemView forKey:itemUID];
     }
 }
 
-- (DCItemView *)getItemViewWithAssetURL:(NSURL *)assetURL {
+- (DCItemView *)getItemViewWithItemUID:(NSString *)itemUID {
     DCItemView *result = nil;
     do {
         if (_itemViews) {
-            result = [_itemViews objectForKey:assetURL.absoluteString];
+            result = [_itemViews objectForKey:itemUID];
         }
     } while (NO);
     return result;
@@ -80,7 +84,8 @@
         _itemViews = nil;
     }
     
-    self.groupPersistentID = nil;
+    self.dataGroupUID = nil;
+    self.enumDataItemParam = nil;
     
     if (_groupTitle) {
         [_groupTitle release];
@@ -91,59 +96,64 @@
 }
 
 - (IBAction)refresh:(id)sender {
-    DCAssetLibHelper *assetLibHelper = [DCAssetLibHelper defaultAssetLibHelper];
-    ALAssetsGroup *group = [assetLibHelper getALGroupForGoupPersistentID:self.groupPersistentID];
-    NSLog(@"groupID:%@ assets count = %d", self.groupPersistentID, [group numberOfAssets]);
-    if ([group numberOfAssets] == 0) {
-        [self.navigationController popViewControllerAnimated:YES];
-        NSNotification *note = [NSNotification notificationWithName:@"NotifyRefreshGroup" object:self];
-        [[NSNotificationCenter defaultCenter] postNotification:note];
+    if (self.dataLibraryHelper) {
+        id <DCDataGroup> group = [self.dataLibraryHelper groupWithUID:self.dataGroupUID];
+        NSLog(@"groupID:%@ items count = %d", self.dataGroupUID, [group itemsCount]);
+        if ([group itemsCount] == 0) {
+            [self.navigationController popViewControllerAnimated:YES];
+            NSNotification *note = [NSNotification notificationWithName:@"NotifyRefreshGroup" object:self];
+            [[NSNotificationCenter defaultCenter] postNotification:note];
+        } else {
+            [self refreshItems:YES];
+        }
     } else {
-        [self refreshAssets:YES];
+        [NSException raise:@"DCItemViewController error" format:@"Reason: self.dataLibraryHelper == nil"];
     }
 }
 
-- (void)refreshAssets:(BOOL)force {
+- (void)refreshItems:(BOOL)force {
     NSLog(@"DCItemViewController refreshAssets");
-    DCAssetLibHelper *assetLibHelper = [DCAssetLibHelper defaultAssetLibHelper];
-    if (force || [assetLibHelper assetCountForGroupWithPersistentID:self.groupPersistentID] == 0) {
-        [self clearCache];
-        [assetLibHelper enumerateAssetsForGoupPersistentID:self.groupPersistentID];
+    if (self.dataLibraryHelper) {
+        if (force || ![self.dataLibraryHelper isGroupEnumerated:self.dataGroupUID]) {
+            [self clearCache];
+            [self.dataLibraryHelper enumItems:self.enumDataItemParam InGroup:self.dataGroupUID];
+        }
+        
+        id <DCDataGroup> group = [self.dataLibraryHelper groupWithUID:self.dataGroupUID];
+        if (!group) {
+            [NSException raise:@"DCItemViewController error" format:@"Reason: self.dataLibraryHelper groupWithUID:%@ error", self.dataGroupUID];
+            return;
+        }
+        NSString *groupName = [group valueForProperty:DATAGROUPPROPERTY_GROUPNAME];
+        NSInteger numberOfItems = [group itemsCount];
+        
+        _groupTitle = [[[NSString alloc] initWithFormat:@"%@ (%d)", groupName, numberOfItems] autorelease];
+        [_groupTitle retain];
+        
+        [self.navigationItem setTitle:self.groupTitle];
     }
-    
-    ALAssetsGroup *group = [assetLibHelper getALGroupForGoupPersistentID:self.groupPersistentID];
-    if (!group) {
-        [NSException raise:@"DCItemViewController error" format:@"Reason: assetLibHelper getALGroupForGoupPersistentID:%@ error", self.groupPersistentID];
-        return;
-    }
-    NSString *groupPropertyName = [group valueForProperty:ALAssetsGroupPropertyName];
-    NSInteger numberOfAssets = [group numberOfAssets];
-    
-    _groupTitle = [[[NSString alloc] initWithFormat:@"%@ (%d)", groupPropertyName, numberOfAssets] autorelease];
-    [_groupTitle retain];
-    
-    [self.navigationItem setTitle:self.groupTitle];
 }
 
-- (void)selectItem:(NSURL *)assetURL {
-    if (assetURL && self.groupPersistentID) {
-        DCAssetLibHelper *assetLibHelper = [DCAssetLibHelper defaultAssetLibHelper];
-        NSUInteger index = [assetLibHelper getIndexInGoupPersistentID:self.groupPersistentID forAssetURL:assetURL];
-        DCDetailViewController *detailViewCtrl = [[[DCDetailViewController alloc] initWithGroupPersistentID:self.groupPersistentID assetURL:assetURL andAssetIndexInGroup:index] autorelease];
+- (void)selectItem:(NSString *)itemUID {
+    if (itemUID && self.dataGroupUID && self.dataLibraryHelper) {
+        NSUInteger index = [self.dataLibraryHelper indexForItemUID:itemUID inGroup:self.dataGroupUID];
+        
+        DCDetailViewController *detailViewCtrl = [[[DCDetailViewController alloc] initWithDataLibraryHelper:self.dataLibraryHelper dataGroupUID:self.dataGroupUID itemUID:itemUID andIndexInGroup:index] autorelease];
         
         [self.navigationController pushViewController:detailViewCtrl animated:YES];
     } else {
-        [NSException raise:@"DCItemViewController Error" format:@"Reason: assetURL is nil or self.groupPersistentID is nil"];
+        [NSException raise:@"DCItemViewController Error" format:@"Reason: assetURL is nil or self.groupPersistentID is nil or self.dataLibraryHelper is nil"];
     }
 }
 
-- (NSArray *)getassetURLsForCellAtIndexPath:(NSIndexPath *)indexPath {
+- (NSArray *)getItemUIDsForCellAtIndexPath:(NSIndexPath *)indexPath {
     NSMutableArray *result = [[[NSMutableArray alloc] init] autorelease];
-    DCAssetLibHelper *assetLibHelper = [DCAssetLibHelper defaultAssetLibHelper];
-    int maxIdx = MIN((indexPath.row + 1) * _itemCountInCell, [assetLibHelper assetCountForGroupWithPersistentID:self.groupPersistentID]); 
-    for (int idx = 0 + indexPath.row * _itemCountInCell; idx < maxIdx; ++idx) {
-        [result addObject:[assetLibHelper getAssetURLForGoupPersistentID:self.groupPersistentID atIndex:idx]];
-        NSLog(@"Get AssetURLStr: %@ at index: %d", [[assetLibHelper getAssetURLForGoupPersistentID:self.groupPersistentID atIndex:idx] absoluteString], idx);
+    if (self.dataLibraryHelper) {
+        int maxIdx = MIN((indexPath.row + 1) * _itemCountInCell, [self.dataLibraryHelper itemsCountInGroup:self.dataGroupUID]); 
+        for (int idx = 0 + indexPath.row * _itemCountInCell; idx < maxIdx; ++idx) {
+            [result addObject:[self.dataLibraryHelper itemUIDAtIndex:idx inGroup:self.dataGroupUID]];
+            NSLog(@"Get itemUID: %@ at index: %d", [self.dataLibraryHelper itemUIDAtIndex:idx inGroup:self.dataGroupUID], idx);
+        }
     }
     return result;
 }
@@ -182,14 +192,13 @@
     return (NSUInteger)((bounds.size.width - _itemCountInCell * _frameSize) / (_itemCountInCell + 1));
 }
 
-- (id)initWithStyle:(UITableViewStyle)style
+- (id)initWithDataLibraryHelper:(id<DCDataLibraryHelper>)dataLibraryHelper
 {
-    self = [super initWithStyle:style];
+    self = [super initWithStyle:UITableViewStylePlain];
     if (self) {
         // Custom initialization
-        //        frameSize = [self calcFrameSize];
-        //        itemCountInCell = [self calcItemCountInCell];
-        //        cellSpace = [self calcCellSpace];
+        
+        self.dataLibraryHelper = dataLibraryHelper;
         
         if (!_itemViews) {
             _itemViews = [[NSMutableDictionary alloc] init];
@@ -208,9 +217,13 @@
     
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    NSLog(@"DCItemViewController viewWillAppear:");
+    [super viewWillAppear:animated];
     
     [self.tableView setBackgroundColor:[UIColor blackColor]];
-    //    [self.tableView setAlpha:0.6];
     [self.tableView setSeparatorColor:[UIColor clearColor]];
     [self.tableView setAllowsSelection:NO];
     
@@ -220,11 +233,6 @@
     
     UIBarButtonItem *bbi = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(refresh:)] autorelease];
     [self.navigationItem setRightBarButtonItem:bbi];
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-    NSLog(@"DCItemViewController viewWillAppear:");
-    [super viewWillAppear:animated];
     
     _frameSize = [self calcFrameSize];
     _itemCountInCell = [self calcItemCountInCell];
@@ -234,7 +242,7 @@
         [_itemViews removeAllObjects];
     }
     
-    [self refreshAssets:NO];
+    [self refreshItems:NO];
     
     [self.tableView reloadData];
 }
@@ -296,19 +304,22 @@
 {
     NSLog(@"DCItemViewController tableView:numberOfRowsInSection:");
     // Return the number of rows in the section.
-    DCAssetLibHelper *assetLibHelper = [DCAssetLibHelper defaultAssetLibHelper];
-    
     if (_itemCountInCell == 0) {
         [NSException raise:@"DCItemViewController error" format:@"Reason: itemCountInCell == 0"];
     }
-    NSInteger assetCount = [assetLibHelper assetCountForGroupWithPersistentID:self.groupPersistentID];
-    NSLog(@"assetCount = %d", assetCount);
-    NSInteger addLine = 0;
-    if (assetCount % _itemCountInCell != 0) {
-        addLine = 1;
+    
+    if (self.dataLibraryHelper) {
+        NSInteger itemsCount = [self.dataLibraryHelper itemsCountInGroup:self.dataGroupUID];
+        NSLog(@"itemsCount = %d", itemsCount);
+        NSInteger addLine = 0;
+        if (itemsCount % _itemCountInCell != 0) {
+            addLine = 1;
+        }
+        return itemsCount / _itemCountInCell + addLine;
+    } else {
+        [NSException raise:@"DCItemViewController error" format:@"Reason: self.dataLibraryHelper == nil"];
+        return 0;
     }
-    return assetCount / _itemCountInCell + addLine;
-    //return 0;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -316,10 +327,11 @@
     
     NSLog(@"DCItemViewController tableView:cellForRowAtIndexPath:");
     DCItemViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"AAItemViewCell"];
+    NSArray *itemUIDs = [self getItemUIDsForCellAtIndexPath:indexPath];
     if (cell == nil) {
-        cell = [[[DCItemViewCell alloc] initWithAssetURLs:[self getassetURLsForCellAtIndexPath:indexPath] groupPersistentID:self.groupPersistentID cellSpace:_cellSpace cellTopBottomMargin:(_cellSpace / 2) frameSize:_frameSize andItemCount:_itemCountInCell] autorelease];
+        cell = [[[DCItemViewCell alloc] initWithDataLibraryHelper:self.dataLibraryHelper itemUIDs:itemUIDs dataGroupUID:self.dataGroupUID cellSpace:_cellSpace cellTopBottomMargin:(_cellSpace / 2) frameSize:_frameSize andItemCount:_itemCountInCell] autorelease];
     } else {
-        [cell initWithAssetURLs:[self getassetURLsForCellAtIndexPath:indexPath] groupPersistentID:self.groupPersistentID cellSpace:_cellSpace cellTopBottomMargin:(_cellSpace / 2) frameSize:_frameSize andItemCount:_itemCountInCell];
+        [cell initWithDataLibraryHelper:self.dataLibraryHelper itemUIDs:itemUIDs dataGroupUID:self.dataGroupUID cellSpace:_cellSpace cellTopBottomMargin:(_cellSpace / 2) frameSize:_frameSize andItemCount:_itemCountInCell];
     }
     cell.delegate = self;
     cell.delegateForItemView = self;

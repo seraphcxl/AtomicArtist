@@ -9,12 +9,17 @@
 #import <UIKit/UIKit.h>
 #import "DCItemView.h"
 #import "DCItemViewCell.h"
+#import "DCUniformDataProtocol.h"
 
 @interface DCItemViewController : UITableViewController <DCItemViewDelegate, DCItemViewCellDelegate>
 
-@property (retain, nonatomic) NSString *groupPersistentID;
+@property (retain, nonatomic) NSString *dataGroupUID;
 @property (readonly, nonatomic) NSString *groupTitle;
+@property (assign, nonatomic) id <DCDataLibraryHelper> dataLibraryHelper;
+@property (assign, nonatomic) id enumDataItemParam;
 
 - (IBAction)refresh:(id)sender;
+
+- (id)initWithDataLibraryHelper:(id <DCDataLibraryHelper>)dataLibraryHelper;
 
 @end
