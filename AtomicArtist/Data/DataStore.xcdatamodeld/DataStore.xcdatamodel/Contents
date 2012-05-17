@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model name="" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="1171" systemVersion="11D50" minimumToolsVersion="Xcode 4.1" macOSVersion="Automatic" iOSVersion="Automatic">
+    <entity name="Album" representedClassName="Album" syncable="YES">
+        <attribute name="inspectionRecord" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="posterAssetURLString" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="posterImage" optional="YES" transient="YES" syncable="YES"/>
+        <attribute name="posterImageData" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="urlString" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="assets" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Asset" inverseName="album" inverseEntity="Asset" syncable="YES"/>
+    </entity>
+    <entity name="Asset" representedClassName="Asset" syncable="YES">
+        <attribute name="inspectionRecord" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="thumbnail" optional="YES" transient="YES" syncable="YES"/>
+        <attribute name="thumbnailData" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="urlString" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="album" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Album" inverseName="assets" inverseEntity="Album" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="Album" positionX="160" positionY="192" width="128" height="135"/>
+        <element name="Asset" positionX="160" positionY="192" width="128" height="120"/>
+    </elements>
+</model>
