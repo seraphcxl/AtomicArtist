@@ -1,0 +1,390 @@
+//
+//  DCGroupViewController.m
+//  AtomicArtist
+//
+//  Created by Chen XiaoLiang on 12-5-17.
+//  Copyright (c) 2012年 __MyCompanyName__. All rights reserved.
+//
+
+#import "DCGroupViewController.h"
+#import "DCAssetLibHelper.h"
+#import "DCItemViewController.h"
+
+@interface DCGroupViewController () {
+    NSUInteger _itemCountInCell;
+    NSUInteger _frameSize;
+    NSUInteger _cellSpace;
+    
+    NSMutableDictionary *_groupViews;
+}
+
+- (void)reloadTableView:(NSNotification *)note;
+
+- (void)notifyRefresh:(NSNotification *)note;
+
+- (void)actionForWillEnterForegroud:(NSNotification *)note;
+
+- (NSUInteger)calcCellSpace;
+
+- (NSUInteger)calcItemCountInCell;
+
+- (NSUInteger)calcFrameSize;
+
+- (NSArray *)getGroupPersistentIDsForCellAtIndexPath:(NSIndexPath *)indexPath;
+
+- (void)refreshAssetsGroups:(BOOL)force;
+
+- (void)clearCache;
+
+- (NSString *)title;
+
+@end
+
+@interface DCGroupViewController ()
+
+@end
+
+@implementation DCGroupViewController
+
+@synthesize assetsGroupType = _assetsGroupType;
+//@synthesize interfaceOrientation = _interfaceOrientation;
+
+- (void)dealloc {
+    if (_groupViews) {
+        [_groupViews removeAllObjects];
+        [_groupViews release];
+        _groupViews = nil;
+    }
+    
+    [super dealloc];
+}
+
+- (void)clearCache {
+    if (_groupViews) {
+        [_groupViews removeAllObjects];
+    }
+    DCAssetLibHelper *assetLibHelper = [DCAssetLibHelper defaultAssetLibHelper];
+    [assetLibHelper cleaeCache];
+}
+
+- (void)addGroupView:(DCGroupView *)groupView {
+    if (groupView && _groupViews) {
+        [_groupViews setObject:groupView forKey:groupView.groupPersistentID];
+    }
+}
+
+- (DCGroupView *)getGroupViewWithGroupPersistentID:(NSString *)groupPersistentID {
+    DCGroupView *result = nil;
+    do {
+        if (_groupViews) {
+            result = [_groupViews objectForKey:groupPersistentID];
+        }
+    } while (NO);
+    return result;
+}
+
+- (void)actionForWillEnterForegroud:(NSNotification *)note {
+    if (self.navigationController.topViewController == self) {
+        [self refreshAssetsGroups:YES];
+    }
+}
+
+- (void)notifyRefresh:(NSNotification *)note {
+    [self refreshAssetsGroups:YES];
+}
+
+- (IBAction)refresh:(id)sender {
+    [self refreshAssetsGroups:YES];
+}
+
+- (void)refreshAssetsGroups:(BOOL)force {
+    NSLog(@"DCGroupViewController refreshAssetsGroups");
+    DCAssetLibHelper *assetLibHelper = [DCAssetLibHelper defaultAssetLibHelper];
+    if (force || [assetLibHelper assetsGroupCount] == 0) {
+        [self clearCache];
+        [assetLibHelper enumerateGroupsWithTypes:self.assetsGroupType];
+        [self.navigationItem setTitle:[self title]];
+    }
+}
+
+- (void)selectGroup:(NSString *)groupPersistentID {
+    if (groupPersistentID) {
+        DCItemViewController *itemViewController = [[[DCItemViewController alloc] initWithStyle:UITableViewStylePlain] autorelease];
+        itemViewController.groupPersistentID = groupPersistentID;
+        
+        [self.navigationController pushViewController:itemViewController animated:YES];
+    } else {
+        [NSException raise:@"DCGroupViewController error" format:@"Reason: groupPersistentID == nil"];
+    }
+}
+
+- (NSArray *)getGroupPersistentIDsForCellAtIndexPath:(NSIndexPath *)indexPath {
+    NSMutableArray *result = [[[NSMutableArray alloc] init] autorelease];
+    DCAssetLibHelper *assetLibHelper = [DCAssetLibHelper defaultAssetLibHelper];
+    int maxIdx = MIN((indexPath.row + 1) * _itemCountInCell, [assetLibHelper assetsGroupCount]); 
+    for (int idx = 0 + indexPath.row * _itemCountInCell; idx < maxIdx; ++idx) {
+        [result addObject:[assetLibHelper getGoupPersistentIDAtIndex:idx]];
+        NSLog(@"Get GoupPersistentID: %@ at index: %d", [assetLibHelper getGoupPersistentIDAtIndex:idx], idx);
+    }
+    return result;
+}
+
+- (NSString *)title {
+    if (self.assetsGroupType == (ALAssetsGroupAlbum | ALAssetsGroupSavedPhotos)) {
+        return [[[NSString alloc] initWithFormat:@"Photo Albums"] autorelease];
+    } else if (self.assetsGroupType == ALAssetsGroupPhotoStream) {
+        return [[[NSString alloc] initWithFormat:@"Photo Stream"] autorelease];
+    } else {
+        return [[[NSString alloc] initWithFormat:@"Photos"] autorelease];
+    }
+}
+
+- (NSUInteger)calcFrameSize {
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+        return GROUPVIEW_SIZE_FRAME_IPHONE;
+    } else if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+        return GROUPVIEW_SIZE_FRAME_IPAD;
+    } else {
+        [NSException raise:@"DCGroupViewController error" format:@"Reason: Current device type unknown"];
+        return 0;
+    }
+}
+
+- (NSUInteger)calcItemCountInCell {
+    if (_frameSize == 0) {
+        [NSException raise:@"DCGroupViewController error" format:@"Reason: frameSize == 0"];
+    }
+    CGRect bounds = [self.tableView bounds];
+    return (NSUInteger)(bounds.size.width / _frameSize);
+}
+
+- (NSUInteger)calcCellSpace {
+    if (_frameSize == 0) {
+        [NSException raise:@"DCGroupViewController error" format:@"Reason: frameSize == 0"];
+    }
+    if (_itemCountInCell == 0) {
+        [NSException raise:@"DCGroupViewController error" format:@"Reason: itemCountInCell == 0"];
+    }
+    CGRect bounds = [self.tableView bounds];
+    return (NSUInteger)((bounds.size.width - _itemCountInCell * _frameSize) / (_itemCountInCell + 1));
+}
+
+- (void)reloadTableView:(NSNotification *)note {
+    [self.tableView reloadData];
+}
+
+- (id)initWithStyle:(UITableViewStyle)style
+{
+    self = [super initWithStyle:style];
+    if (self) {
+        // Custom initialization
+        _frameSize = [self calcFrameSize];
+        _itemCountInCell = [self calcItemCountInCell];
+        _cellSpace = [self calcCellSpace];
+        
+        if (!_groupViews) {
+            _groupViews = [[NSMutableDictionary alloc] init];
+        }
+    }
+    return self;
+}
+
+- (void)viewDidLoad
+{
+    NSLog(@"DCGroupViewController viewDidLoad:");
+    [super viewDidLoad];
+    
+    // Uncomment the following line to preserve selection between presentations.
+    // self.clearsSelectionOnViewWillAppear = NO;
+    
+    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
+    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    
+    /*** *** ***/
+    [self.tableView setBackgroundColor:[UIColor blackColor]];
+    //    [self.tableView setAlpha:0.6];
+    [self.tableView setSeparatorColor:[UIColor clearColor]];
+    [self.tableView setAllowsSelection:NO];
+    
+    NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+    [notificationCenter addObserver:self selector:@selector(reloadTableView:) name:@"ALGroupAdded" object:nil];
+    [notificationCenter addObserver:self selector:@selector(notifyRefresh:) name:@"NotifyRefreshGroup" object:nil];
+    [notificationCenter addObserver:self selector:@selector(actionForWillEnterForegroud:) name:@"applicationWillEnterForeground:" object:nil];
+    
+    DCAssetLibHelper *assetLibHelper = [DCAssetLibHelper defaultAssetLibHelper];
+    [assetLibHelper createAssetLibHelper];
+    
+    UIBarButtonItem *bbi = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(refresh:)] autorelease];
+    [self.navigationItem setRightBarButtonItem:bbi];
+    /*** *** ***/
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    NSLog(@"DCGroupViewController viewWillAppear:");
+    [super viewWillAppear:animated];
+    self.assetsGroupType = (ALAssetsGroupAlbum | ALAssetsGroupSavedPhotos);
+    
+    _frameSize = [self calcFrameSize];
+    _itemCountInCell = [self calcItemCountInCell];
+    _cellSpace = [self calcCellSpace];
+    
+    if (_groupViews) {
+        [_groupViews removeAllObjects];
+    }
+    
+    [self refreshAssetsGroups:NO];
+    
+    [self.tableView reloadData];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    NSLog(@"DCGroupViewController viewWillDisappear:");
+    
+    [super viewWillDisappear:animated];
+}
+
+- (void)viewDidUnload
+{
+    NSLog(@"DCGroupViewController viewDidUnload:");
+    /*** *** ***/
+    NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+    [notificationCenter removeObserver:self];
+    
+    [self clearCache];
+    
+    DCAssetLibHelper *assetLibHelper = [DCAssetLibHelper defaultAssetLibHelper];
+    [assetLibHelper releaseAssetLibHelper];
+    /*** *** ***/
+    [super viewDidUnload];
+    // Release any retained subviews of the main view.
+    // e.g. self.myOutlet = nil;
+    
+    
+}
+
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+{
+    NSLog(@"DCGroupViewController shouldAutorotateToInterfaceOrientation:");
+    BOOL result = NO;
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+        result = (interfaceOrientation == UIInterfaceOrientationPortrait || interfaceOrientation == UIInterfaceOrientationLandscapeLeft || interfaceOrientation == UIInterfaceOrientationLandscapeRight);
+    } else if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+        result = YES;
+    } else {
+        [NSException raise:@"DCGroupViewController error" format:@"Reason: Current device type unknown"];
+    }
+    
+    _frameSize = [self calcFrameSize];
+    _itemCountInCell = [self calcItemCountInCell];
+    _cellSpace = [self calcCellSpace];
+    
+    if (_groupViews) {
+        [_groupViews removeAllObjects];
+    }
+    
+    [self.tableView reloadData];
+    
+    return result;
+}
+
+#pragma mark - Table view data source
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    // Return the number of sections.
+    NSLog(@"DCGroupViewController numberOfSectionsInTableView:");
+    return 1;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    NSLog(@"DCGroupViewController tableView:numberOfRowsInSection:");
+    // Return the number of rows in the section.
+    DCAssetLibHelper *assetLibHelper = [DCAssetLibHelper defaultAssetLibHelper];
+    
+    if (_itemCountInCell == 0) {
+        [NSException raise:@"DCGroupViewController error" format:@"Reason: itemCountInCell == 0"];
+    }
+    NSInteger assetsGroupCount = [assetLibHelper assetsGroupCount];
+    NSLog(@"assetsGroupCount = %d", assetsGroupCount);
+    NSInteger addLine = 0;
+    if (assetsGroupCount % _itemCountInCell != 0) {
+        addLine = 1;
+    }
+    return assetsGroupCount / _itemCountInCell + addLine;
+    //return 0;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSLog(@"DCGroupViewController tableView:cellForRowAtIndexPath: indexPath.row = %d", [indexPath row]);
+    NSArray *groupPersistentIDs = [self getGroupPersistentIDsForCellAtIndexPath:indexPath];
+    DCGroupViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"DCGroupViewCell"];
+    if (cell == nil) {
+        cell = [[[DCGroupViewCell alloc] initWithGroupPersistentIDs:groupPersistentIDs cellSpace:_cellSpace cellTopBottomMargin:(_cellSpace / 2) frameSize:_frameSize andItemCount:_itemCountInCell] autorelease];
+    } else {
+        [cell initWithGroupPersistentIDs:groupPersistentIDs cellSpace:_cellSpace cellTopBottomMargin:(_cellSpace / 2) frameSize:_frameSize andItemCount:_itemCountInCell];
+    }
+    cell.delegate = self;
+    cell.delegateForGroupView = self;
+    return cell;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return (_frameSize + _cellSpace);
+}
+
+/*
+ // Override to support conditional editing of the table view.
+ - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+ {
+ // Return NO if you do not want the specified item to be editable.
+ return YES;
+ }
+ */
+
+/*
+ // Override to support editing the table view.
+ - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+ {
+ if (editingStyle == UITableViewCellEditingStyleDelete) {
+ // Delete the row from the data source
+ [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+ }   
+ else if (editingStyle == UITableViewCellEditingStyleInsert) {
+ // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
+ }   
+ }
+ */
+
+/*
+ // Override to support rearranging the table view.
+ - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
+ {
+ }
+ */
+
+/*
+ // Override to support conditional rearranging of the table view.
+ - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
+ {
+ // Return NO if you do not want the item to be re-orderable.
+ return YES;
+ }
+ */
+
+#pragma mark - Table view delegate
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    // Navigation logic may go here. Create and push another view controller.
+    /*
+     <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
+     // ...
+     // Pass the selected object to the new view controller.
+     [self.navigationController pushViewController:detailViewController animated:YES];
+     [detailViewController release];
+     */
+}
+
+@end

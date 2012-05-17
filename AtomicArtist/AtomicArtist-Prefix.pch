@@ -14,5 +14,5 @@
     #import <CoreData/CoreData.h>
     #import <AssetsLibrary/AssetsLibrary.h>
 
-    #import "CommDef.h"
+    #import "CommonDefine.h"
 #endif

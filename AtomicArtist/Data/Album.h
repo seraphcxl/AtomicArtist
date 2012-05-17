@@ -3,7 +3,7 @@
 //  AtomicArtist
 //
 //  Created by XiaoLiang Chen on 5/6/12.
-//  Copyright (c) 2012 ZheJiang University. All rights reserved.
+//  Copyright (c) 2012 seraphCXL. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
