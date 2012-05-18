@@ -211,6 +211,14 @@
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
     /*** *** ***/
+    [self.tableView setBackgroundColor:[UIColor blackColor]];
+    [self.tableView setSeparatorColor:[UIColor clearColor]];
+    [self.tableView setAllowsSelection:NO];
+    
+    _frameSize = [self calcFrameSize];
+    _itemCountInCell = [self calcItemCountInCell];
+    _cellSpace = [self calcCellSpace];
+    
     NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
     [notificationCenter addObserver:self selector:@selector(reloadTableView:) name:@"ALGroupAdded" object:nil];
     [notificationCenter addObserver:self selector:@selector(notifyRefresh:) name:@"NotifyRefreshGroup" object:nil];
@@ -221,14 +229,6 @@
 - (void)viewWillAppear:(BOOL)animated {
     NSLog(@"DCGroupViewController viewWillAppear:");
     [super viewWillAppear:animated];
-    
-    [self.tableView setBackgroundColor:[UIColor blackColor]];
-    [self.tableView setSeparatorColor:[UIColor clearColor]];
-    [self.tableView setAllowsSelection:NO];
-    
-    _frameSize = [self calcFrameSize];
-    _itemCountInCell = [self calcItemCountInCell];
-    _cellSpace = [self calcCellSpace];
     
     if (_groupViews) {
         [_groupViews removeAllObjects];

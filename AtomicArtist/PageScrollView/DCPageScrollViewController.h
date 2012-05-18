@@ -12,27 +12,37 @@
 
 #define NUMBEROFPAGEINSCROLLVIEW ((int)3)
 
-const NSString *pageID_current = @"current";
-const NSString *pageID_previous = @"previous";
-const NSString *pageID_next = @"next";
+extern NSString * const pageID_current;
+extern NSString * const pageID_previous;
+extern NSString * const pageID_next;
+
+@class DCPageScrollViewController;
+
+@protocol DCPageScrollViewControllerDelegate <NSObject>
+
+- (void)pageScrollViewCtrl:(DCPageScrollViewController *)pageScrollViewCtrl doNextActionWithCurrentViewCtrl:(UIViewController *)currentViewCtrl nextViewCtrl:(UIViewController *)nextViewCtrl;
+- (void)pageScrollViewCtrl:(DCPageScrollViewController *)pageScrollViewCtrl doPreviousActionWithCurrentViewCtrl:(UIViewController *)currentViewCtrl previousViewCtrl:(UIViewController *)previousViewCtrl;
+
+@end
 
 @interface DCPageScrollViewController : UIViewController <UIScrollViewDelegate>
 
+@property (assign, nonatomic) id <DCPageScrollViewControllerDelegate> delegate;
 @property (retain, nonatomic) UIScrollView *pageScrollView;
 @property (retain, nonatomic) UIView *contextView;
 @property (retain, nonatomic) NSMutableDictionary *pageViews;
-@property (retain, nonatomic) NSMutableDictionary *pageViewCtrls;
+@property (retain, nonatomic) NSMutableDictionary *viewCtrls;
 @property (assign, nonatomic) BOOL scrollEnabled;
 
 - (DCPageView *)currentPageView;
 - (DCPageView *)previousPageView;
 - (DCPageView *)nextPageView;
 
-- (UIViewController *)currentPageViewCtrl;
-- (UIViewController *)previousPageViewCtrl;
-- (UIViewController *)nextPageViewCtrl;
+- (UIViewController *)currentViewCtrl;
+- (UIViewController *)previousViewCtrl;
+- (UIViewController *)nextViewCtrl;
 
-- (void)setPageViewCtrlsWithCurrent:(UIViewController *)current previous:(UIViewController *)previous andNext:(UIViewController *)next;
+- (void)setViewCtrlsWithCurrent:(UIViewController *)current previous:(UIViewController *)previous andNext:(UIViewController *)next;
 
 - (void)reloadPageViews;
 - (void)reloadPageViewWithID:(const NSString *)pageID;

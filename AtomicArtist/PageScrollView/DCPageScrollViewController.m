@@ -9,13 +9,17 @@
 #import "DCPageScrollViewController.h"
 #import "DCPageView.h"
 
+NSString * const pageID_current = @"current";
+NSString * const pageID_previous = @"previous";
+NSString * const pageID_next = @"next";
+
 @interface DCPageScrollViewController () {
-    UIInterfaceOrientation _interfaceOrientation;
+//    UIInterfaceOrientation _interfaceOrientation;
 }
 
 - (DCPageView *)pageViewWithID:(const NSString *)pageID;
 
-- (UIViewController *)pageViewCtrlWithID:(const NSString *)pageID;
+- (UIViewController *)viewCtrlWithID:(const NSString *)pageID;
 
 - (void)previous;
 
@@ -30,20 +34,31 @@
 
 @implementation DCPageScrollViewController
 
+@synthesize delegate = _delegate;
 @synthesize pageScrollView = _pageScrollView;
 @synthesize contextView = _contextView;
 @synthesize pageViews = _pageViews;
-@synthesize pageViewCtrls = _pageViewCtrls;
+@synthesize viewCtrls = _viewCtrls;
 @synthesize scrollEnabled = _scrollEnabled;
 
 - (void)setScrollEnabled:(BOOL)scrollEnabled {
     _scrollEnabled = scrollEnabled;
     if (self.pageScrollView) {
-        self.pageScrollView.scrollEnabled = scrollEnabled;
+//        self.pageScrollView.scrollEnabled = scrollEnabled;
     }
 }
 
 - (void)initPageViews {
+    if (!self.contextView) {
+        [NSException raise:@"DCPageScrollViewController error" format:@"self.contextView == nil"];
+    }
+    if (self.contextView) {
+        for (DCPageView *pageView in self.contextView.subviews) {
+            if ([pageView isMemberOfClass:[DCPageView class]]) {
+                [pageView removeFromSuperview];
+            }
+        }
+    }
     if (self.pageViews) {
         [self.pageViews removeAllObjects];
     }
@@ -61,6 +76,10 @@
     rectForPageView.origin.x += rectForPageView.size.width;
     DCPageView *next = [[[DCPageView alloc] initWithFrame:rectForPageView] autorelease];
     [self.pageViews setObject:next forKey:pageID_next];
+    
+    [self.contextView addSubview:prev];
+    [self.contextView addSubview:current];
+    [self.contextView addSubview:next];
 }
 
 - (void)clearUI {
@@ -73,36 +92,64 @@
 
 - (void)previous {
     // do action for prev, need override by derived class
+    
+    if (self.delegate) {
+        [self.delegate pageScrollViewCtrl:self doPreviousActionWithCurrentViewCtrl:[self currentViewCtrl] previousViewCtrl:[self previousViewCtrl]];
+    }
 }
 
 - (void)next {
     // do action for next, need override by derived class
+    
+    if (self.delegate) {
+        [self.delegate pageScrollViewCtrl:self doNextActionWithCurrentViewCtrl:[self currentViewCtrl] nextViewCtrl:[self nextViewCtrl]];
+    }
+}
+
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
+    NSLog(@"DCPageScrollViewController scrollViewWillBeginDragging:");
+//    [[self previousViewCtrl] viewWillAppear:YES];
+//    [[self nextViewCtrl] viewWillAppear:YES];
+}
+
+- (void)scrollViewWillBeginDecelerating:(UIScrollView *)scrollView {
+    NSLog(@"DCPageScrollViewController scrollViewWillBeginDecelerating:");
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
     NSLog(@"DCPageScrollViewController scrollViewDidEndDecelerating:");
     // do action for prev or next
+    CGPoint offset = [scrollView contentOffset];
+    CGPoint prevPageViewOffset = [[self previousPageView] frame].origin;
+    CGPoint nextPageViewOffset = [[self nextPageView] frame].origin;
+    if (offset.x == prevPageViewOffset.x && offset.y == prevPageViewOffset.y) {
+        [self previous];
+    } else if (offset.x == nextPageViewOffset.x && offset.y == nextPageViewOffset.y) {
+        [self next];
+    } else {
+        NSLog(@"Warning");
+    }
 }
 
-- (void)setPageViewCtrlsWithCurrent:(UIViewController *)current previous:(UIViewController *)previous andNext:(UIViewController *)next {
-    if (self.pageViewCtrls) {
-        [self.pageViewCtrls removeAllObjects];
+- (void)setViewCtrlsWithCurrent:(UIViewController *)current previous:(UIViewController *)previous andNext:(UIViewController *)next {
+    if (self.viewCtrls) {
+        [self.viewCtrls removeAllObjects];
         
-        [self.pageViewCtrls setObject:previous forKey:pageID_previous];
-        [self.pageViewCtrls setObject:current forKey:pageID_current];
-        [self.pageViewCtrls setObject:next forKey:pageID_next];
+        [self.viewCtrls setObject:previous forKey:pageID_previous];
+        [self.viewCtrls setObject:current forKey:pageID_current];
+        [self.viewCtrls setObject:next forKey:pageID_next];
     } else {
-        [NSException raise:@"DCPageScrollViewController error" format:@"Reason: self.pageViewCtrls == nil"];
+        [NSException raise:@"DCPageScrollViewController error" format:@"Reason: self.viewCtrls == nil"];
     }
 }
 
 - (void)reloadPageViewWithID:(const NSString *)pageID {
-    if (!self.pageViews || !self.pageViewCtrls) {
-        [NSException raise:@"DCPageScrollViewController error" format:@"Reason: self.pageViews == nil or self.pageViewCtrls == nil"];
+    if (!self.pageViews || !self.viewCtrls) {
+        [NSException raise:@"DCPageScrollViewController error" format:@"Reason: self.pageViews == nil or self.viewCtrls == nil"];
         return;
     }
     DCPageView *pageView = [self pageViewWithID:pageID];
-    UIViewController *pageViewCtrl = [self pageViewCtrlWithID:pageID];
+    UIViewController *pageViewCtrl = [self viewCtrlWithID:pageID];
     if (!pageView) {
         [NSException raise:@"DCPageScrollViewController error" format:@"Reason: pageView for ID: %@", pageID];
         return;
@@ -120,6 +167,10 @@
         }
     }
     if (needChangeView) {
+        CGRect rect = pageView.frame;
+        rect.origin.x = 0;
+        rect.origin.y = 0;
+        [pageViewCtrl.view setFrame:rect];
         [pageView addSubview:pageViewCtrl.view];
     }
 }
@@ -134,6 +185,20 @@
     }
 }
 
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
+    self = [super initWithNibName:nil bundle:nil];
+    if (self) {
+        if (!self.pageViews) {
+            self.pageViews = [[[NSMutableDictionary alloc] init] autorelease];
+        }
+        
+        if (!self.viewCtrls) {
+            self.viewCtrls = [[[NSMutableDictionary alloc] init] autorelease];
+        }
+    }
+    return self;
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -142,6 +207,34 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    
+    CGRect rectForScrollView = [self.view bounds];
+    self.pageScrollView = [[[UIScrollView alloc] initWithFrame:rectForScrollView] autorelease];
+    CGRect rectForContextView;
+    rectForContextView.origin = rectForScrollView.origin;
+    rectForContextView.size.width = rectForScrollView.size.width * NUMBEROFPAGEINSCROLLVIEW;
+    rectForContextView.size.height = rectForScrollView.size.height;
+    self.contextView = [[[UIView alloc] initWithFrame:rectForContextView] autorelease];
+    [self.contextView setBackgroundColor:[UIColor clearColor]];
+    [self initPageViews];
+    
+    [self reloadPageViews];
+    
+    [[self currentViewCtrl] viewWillAppear:animated];
+//    NSArray *allViewCtrls = [self.viewCtrls allValues];
+//    for (UIViewController *viewCtrl in allViewCtrls) {
+//        [viewCtrl viewWillAppear:animated];
+//    };
+    
+    [self.pageScrollView addSubview:self.contextView];
+    [self.pageScrollView setContentSize:rectForContextView.size];
+    DCPageView *currentPageView = [self currentPageView];
+    CGPoint offset = currentPageView.frame.origin;
+    [self.pageScrollView setContentOffset:offset animated:NO];
+//    self.pageScrollView.scrollEnabled = self.scrollEnabled;
+    self.pageScrollView.pagingEnabled = YES;
+    [self.pageScrollView setDelegate:self];
+    [self.view addSubview:self.pageScrollView];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -165,15 +258,20 @@
     } else {
         [NSException raise:@"DCPageScrollViewController error" format:@"Reason: Current device type unknown"];
     }
-    
-    if (interfaceOrientation != _interfaceOrientation) {
-        _interfaceOrientation = interfaceOrientation;
+    BOOL needRotate = NO;
+    if (self.pageScrollView) {
+        CGRect rectForScrollView = [self.pageScrollView bounds];
+        CGRect rectForView = [self.view bounds];
+        if (rectForView.size.width != rectForScrollView.size.width) {
+            needRotate = YES;
+        }
+    } else {
+        needRotate = YES;
+    }
+    if (needRotate) {
+//        _interfaceOrientation = interfaceOrientation;
         // do action for interface rotate
         [self clearUI];
-        
-        for (UIViewController * viewCtrl in self.pageViewCtrls) {
-            [viewCtrl shouldAutorotateToInterfaceOrientation:interfaceOrientation];
-        };
         
         CGRect rectForScrollView = [self.view bounds];
         self.pageScrollView = [[[UIScrollView alloc] initWithFrame:rectForScrollView] autorelease];
@@ -182,42 +280,49 @@
         rectForContextView.size.width = rectForScrollView.size.width * NUMBEROFPAGEINSCROLLVIEW;
         rectForContextView.size.height = rectForScrollView.size.height;
         self.contextView = [[[UIView alloc] initWithFrame:rectForContextView] autorelease];
-        
+        [self.contextView setBackgroundColor:[UIColor clearColor]];
         [self initPageViews];
         
         [self reloadPageViews];
+        
+        NSArray *allViewCtrls = [self.viewCtrls allValues];
+        for (UIViewController *viewCtrl in allViewCtrls) {
+            [viewCtrl shouldAutorotateToInterfaceOrientation:interfaceOrientation];
+        };
         
         [self.pageScrollView addSubview:self.contextView];
         [self.pageScrollView setContentSize:rectForContextView.size];
         DCPageView *currentPageView = [self currentPageView];
         CGPoint offset = currentPageView.frame.origin;
         [self.pageScrollView setContentOffset:offset animated:NO];
-        self.pageScrollView.scrollEnabled = self.scrollEnabled;
+//        self.pageScrollView.scrollEnabled = self.scrollEnabled;
+        self.pageScrollView.pagingEnabled = YES;
+        [self.pageScrollView setDelegate:self];
         [self.view addSubview:self.pageScrollView];
     }
     
     return result;
 }
 
-- (UIViewController *)pageViewCtrlWithID:(const NSString *)pageID {
-    if (self.pageViewCtrls && pageID) {
-        return [self.pageViewCtrls objectForKey:pageID];
+- (UIViewController *)viewCtrlWithID:(const NSString *)pageID {
+    if (self.viewCtrls && pageID) {
+        return [self.viewCtrls objectForKey:pageID];
     } else {
-        [NSException raise:@"DCPageScrollViewController error" format:@"Reason: self.pageViewCtrls == nil or pageID == nil"];
+        [NSException raise:@"DCPageScrollViewController error" format:@"Reason: self.viewCtrls == nil or pageID == nil"];
         return nil;
     }
 }
 
-- (UIViewController *)currentPageViewCtrl {
-    return [self pageViewCtrlWithID:pageID_current];
+- (UIViewController *)currentViewCtrl {
+    return [self viewCtrlWithID:pageID_current];
 }
 
-- (UIViewController *)previousPageViewCtrl {
-    return [self pageViewCtrlWithID:pageID_previous];
+- (UIViewController *)previousViewCtrl {
+    return [self viewCtrlWithID:pageID_previous];
 }
 
-- (UIViewController *)nextPageViewCtrl {
-    return [self pageViewCtrlWithID:pageID_next];
+- (UIViewController *)nextViewCtrl {
+    return [self viewCtrlWithID:pageID_next];
 }
 
 - (DCPageView *)pageViewWithID:(NSString *)pageID {
@@ -240,14 +345,4 @@
 - (DCPageView *)nextPageView {
     return [self pageViewWithID:pageID_next];
 }
-
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
-
 @end

@@ -43,6 +43,14 @@
 @synthesize dataLibraryHelper = _dataLibraryHelper;
 @synthesize enumDataItemParam = _enumDataItemParam;
 
+- (void)pageScrollViewCtrl:(DCPageScrollViewController *)pageScrollViewCtrl doNextActionWithCurrentViewCtrl:(UIViewController *)currentViewCtrl nextViewCtrl:(UIViewController *)nextViewCtrl {
+    NSLog(@"DCItemViewController pageScrollViewCtrl:doNextActionWithCurrentViewCtrl:nextViewCtrl:");
+}
+
+- (void)pageScrollViewCtrl:(DCPageScrollViewController *)pageScrollViewCtrl doPreviousActionWithCurrentViewCtrl:(UIViewController *)currentViewCtrl previousViewCtrl:(UIViewController *)previousViewCtrl {
+    NSLog(@"DCItemViewController pageScrollViewCtrl:doPreviousActionWithCurrentViewCtrl:previousViewCtrl:");
+}
+
 - (void)clearCache {
     if (_itemViews) {
         [_itemViews removeAllObjects];
@@ -135,11 +143,37 @@
 
 - (void)selectItem:(NSString *)itemUID {
     if (itemUID && self.dataGroupUID && self.dataLibraryHelper) {
-        NSUInteger index = [self.dataLibraryHelper indexForItemUID:itemUID inGroup:self.dataGroupUID];
+//        NSUInteger index = [self.dataLibraryHelper indexForItemUID:itemUID inGroup:self.dataGroupUID];
+//        
+//        DCDetailViewController *detailViewCtrl = [[[DCDetailViewController alloc] initWithDataLibraryHelper:self.dataLibraryHelper dataGroupUID:self.dataGroupUID itemUID:itemUID andIndexInGroup:index] autorelease];
+//        
+//        [self.navigationController pushViewController:detailViewCtrl animated:YES];
+        /*** *** ***/
+        DCDetailViewController *currentDetailViewCtrl = nil;
+        DCDetailViewController *prevDetailViewCtrl = nil;
+        DCDetailViewController *nextDetailViewCtrl = nil;
         
-        DCDetailViewController *detailViewCtrl = [[[DCDetailViewController alloc] initWithDataLibraryHelper:self.dataLibraryHelper dataGroupUID:self.dataGroupUID itemUID:itemUID andIndexInGroup:index] autorelease];
+        NSUInteger currentIndex = [self.dataLibraryHelper indexForItemUID:itemUID inGroup:self.dataGroupUID];
+        currentDetailViewCtrl = [[[DCDetailViewController alloc] initWithDataLibraryHelper:self.dataLibraryHelper dataGroupUID:self.dataGroupUID itemUID:itemUID andIndexInGroup:currentIndex] autorelease];
         
-        [self.navigationController pushViewController:detailViewCtrl animated:YES];
+        
+        if (currentIndex != 0) {
+            NSUInteger prevIndex = currentIndex - 1;
+            NSString *prevItemUID = [self.dataLibraryHelper itemUIDAtIndex:prevIndex inGroup:self.dataGroupUID];
+            prevDetailViewCtrl = [[[DCDetailViewController alloc] initWithDataLibraryHelper:self.dataLibraryHelper dataGroupUID:self.dataGroupUID itemUID:prevItemUID andIndexInGroup:prevIndex] autorelease];
+        }
+        
+        if (currentIndex < [self.dataLibraryHelper itemsCountInGroup:self.dataGroupUID] - 1) {
+            NSUInteger nextIndex = currentIndex + 1;
+            NSString *nextItemUID = [self.dataLibraryHelper itemUIDAtIndex:nextIndex inGroup:self.dataGroupUID];
+            nextDetailViewCtrl = [[[DCDetailViewController alloc] initWithDataLibraryHelper:self.dataLibraryHelper dataGroupUID:self.dataGroupUID itemUID:nextItemUID andIndexInGroup:nextIndex] autorelease];
+        }
+        
+        DCPageScrollViewController *pageScrollViewCtrl = [[DCPageScrollViewController alloc] initWithNibName:nil bundle:nil];
+        [pageScrollViewCtrl setViewCtrlsWithCurrent:currentDetailViewCtrl previous:prevDetailViewCtrl andNext:nextDetailViewCtrl];
+        [pageScrollViewCtrl setDelegate:self];
+        [pageScrollViewCtrl setScrollEnabled:YES];
+        [self.navigationController pushViewController:pageScrollViewCtrl animated:YES];
     } else {
         [NSException raise:@"DCItemViewController Error" format:@"Reason: assetURL is nil or self.groupPersistentID is nil or self.dataLibraryHelper is nil"];
     }
@@ -219,6 +253,14 @@
     
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    [self.tableView setBackgroundColor:[UIColor blackColor]];
+    [self.tableView setSeparatorColor:[UIColor clearColor]];
+    [self.tableView setAllowsSelection:NO];
+    
+    _frameSize = [self calcFrameSize];
+    _itemCountInCell = [self calcItemCountInCell];
+    _cellSpace = [self calcCellSpace];
+    
     NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
     [notificationCenter addObserver:self selector:@selector(reloadTableView:) name:@"ALAssetAdded" object:nil];
     [notificationCenter addObserver:self selector:@selector(actionForWillEnterForegroud:) name:@"applicationWillEnterForeground:" object:nil];
@@ -228,14 +270,6 @@
 - (void)viewWillAppear:(BOOL)animated {
     NSLog(@"DCItemViewController viewWillAppear:");
     [super viewWillAppear:animated];
-    
-    [self.tableView setBackgroundColor:[UIColor blackColor]];
-    [self.tableView setSeparatorColor:[UIColor clearColor]];
-    [self.tableView setAllowsSelection:NO];
-    
-    _frameSize = [self calcFrameSize];
-    _itemCountInCell = [self calcItemCountInCell];
-    _cellSpace = [self calcCellSpace];
     
     if (_itemViews) {
         [_itemViews removeAllObjects];

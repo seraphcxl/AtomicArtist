@@ -16,8 +16,8 @@
     
     UITapGestureRecognizer *_singleTapGestureRecognizer;
     UITapGestureRecognizer *_doubleTapGestureRecognizer;
-    UISwipeGestureRecognizer *_swipeRightGestureRecognizer;
-    UISwipeGestureRecognizer *_swipeLeftGestureRecognizer;
+//    UISwipeGestureRecognizer *_swipeRightGestureRecognizer;
+//    UISwipeGestureRecognizer *_swipeLeftGestureRecognizer;
     
     enum DETAILIMAGEVIEWTYPE _imageViewType;
     
@@ -135,21 +135,21 @@
 
 - (void)swipe:(UISwipeGestureRecognizer *)gr {
     NSLog(@"AADetailViewController swipes:");
-    if (gr == _swipeRightGestureRecognizer) {
-        if ([gr direction] == UISwipeGestureRecognizerDirectionRight) {
-            [self previous];
-        } else {
-            [NSException raise:@"AADetailViewController error" format:@"Reason: direction not supported"];
-        }
-    } else if (gr == _swipeLeftGestureRecognizer) {
-        if ([gr direction] == UISwipeGestureRecognizerDirectionLeft) {
-            [self next];
-        } else {
-            [NSException raise:@"AADetailViewController error" format:@"Reason: direction not supported"];
-        }
-    } else {
-        [NSException raise:@"AADetailViewController error" format:@"Reason: direction not supported"];
-    }
+//    if (gr == _swipeRightGestureRecognizer) {
+//        if ([gr direction] == UISwipeGestureRecognizerDirectionRight) {
+//            [self previous];
+//        } else {
+//            [NSException raise:@"AADetailViewController error" format:@"Reason: direction not supported"];
+//        }
+//    } else if (gr == _swipeLeftGestureRecognizer) {
+//        if ([gr direction] == UISwipeGestureRecognizerDirectionLeft) {
+//            [self next];
+//        } else {
+//            [NSException raise:@"AADetailViewController error" format:@"Reason: direction not supported"];
+//        }
+//    } else {
+//        [NSException raise:@"AADetailViewController error" format:@"Reason: direction not supported"];
+//    }
 }
 
 - (void)showOriginImage {
@@ -189,16 +189,16 @@
         } else {
             [NSException raise:@"AADetailViewController error" format:@"Reason: self.imageScrollView is nil when show origin image"];
         }
-        if (_swipeRightGestureRecognizer) {
-            [self.view removeGestureRecognizer:_swipeRightGestureRecognizer];
-            [_swipeRightGestureRecognizer release];
-            _swipeRightGestureRecognizer = nil;
-        }
-        if (_swipeLeftGestureRecognizer) {
-            [self.view removeGestureRecognizer:_swipeLeftGestureRecognizer];
-            [_swipeLeftGestureRecognizer release];
-            _swipeLeftGestureRecognizer = nil;
-        }
+//        if (_swipeRightGestureRecognizer) {
+//            [self.view removeGestureRecognizer:_swipeRightGestureRecognizer];
+//            [_swipeRightGestureRecognizer release];
+//            _swipeRightGestureRecognizer = nil;
+//        }
+//        if (_swipeLeftGestureRecognizer) {
+//            [self.view removeGestureRecognizer:_swipeLeftGestureRecognizer];
+//            [_swipeLeftGestureRecognizer release];
+//            _swipeLeftGestureRecognizer = nil;
+//        }
     } else if (_imageViewType == DETAILIMAGEVIEWTYPE_ORIGIN) {
         [self relayout];
     } else {
@@ -264,16 +264,16 @@
     [self.imageScrollView addSubview:self.imageView];
     _imageViewType = DETAILIMAGEVIEWTYPE_FITIN;
     
-    if (!_swipeRightGestureRecognizer) {
-        _swipeRightGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipe:)];
-        _swipeRightGestureRecognizer.direction = UISwipeGestureRecognizerDirectionRight;
-        [self.view addGestureRecognizer:_swipeRightGestureRecognizer];
-    }
-    if (!_swipeLeftGestureRecognizer) {
-        _swipeLeftGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipe:)];
-        _swipeLeftGestureRecognizer.direction = UISwipeGestureRecognizerDirectionLeft;
-        [self.view addGestureRecognizer:_swipeLeftGestureRecognizer];
-    }
+//    if (!_swipeRightGestureRecognizer) {
+//        _swipeRightGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipe:)];
+//        _swipeRightGestureRecognizer.direction = UISwipeGestureRecognizerDirectionRight;
+//        [self.view addGestureRecognizer:_swipeRightGestureRecognizer];
+//    }
+//    if (!_swipeLeftGestureRecognizer) {
+//        _swipeLeftGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipe:)];
+//        _swipeLeftGestureRecognizer.direction = UISwipeGestureRecognizerDirectionLeft;
+//        [self.view addGestureRecognizer:_swipeLeftGestureRecognizer];
+//    }
 }
 
 - (void)hideAssist:(NSTimer *)timer {
@@ -326,16 +326,16 @@
             [self.view addGestureRecognizer:_doubleTapGestureRecognizer];
         }
         
-        if (!_swipeRightGestureRecognizer) {
-            _swipeRightGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipe:)];
-            _swipeRightGestureRecognizer.direction = UISwipeGestureRecognizerDirectionRight;
-            [self.view addGestureRecognizer:_swipeRightGestureRecognizer];
-        }
-        if (!_swipeLeftGestureRecognizer) {
-            _swipeLeftGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipe:)];
-            _swipeLeftGestureRecognizer.direction = UISwipeGestureRecognizerDirectionLeft;
-            [self.view addGestureRecognizer:_swipeLeftGestureRecognizer];
-        }
+//        if (!_swipeRightGestureRecognizer) {
+//            _swipeRightGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipe:)];
+//            _swipeRightGestureRecognizer.direction = UISwipeGestureRecognizerDirectionRight;
+//            [self.view addGestureRecognizer:_swipeRightGestureRecognizer];
+//        }
+//        if (!_swipeLeftGestureRecognizer) {
+//            _swipeLeftGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipe:)];
+//            _swipeLeftGestureRecognizer.direction = UISwipeGestureRecognizerDirectionLeft;
+//            [self.view addGestureRecognizer:_swipeLeftGestureRecognizer];
+//        }
     }
     return self;
 }
@@ -354,13 +354,18 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    [self.navigationController.navigationBar setHidden:YES];
+    [self.view setBackgroundColor:[UIColor blackColor]];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    [self.navigationController.navigationBar setHidden:YES];
-    [self.view setBackgroundColor:[UIColor blackColor]];
+
+    [self relayout];
     
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
     if (_fitInImage) {
         [_fitInImage release];
         _fitInImage = nil;
@@ -370,12 +375,6 @@
         [_originImage release];
         _originImage = nil;
     }
-    
-    [self relayout];
-    
-}
-
-- (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
 }
 
@@ -399,34 +398,43 @@
         [NSException raise:@"AADetailViewController error" format:@"Reason: Current device type unknown"];
         result =  NO;
     }
-    
-    if (_fitInImage) {
-        [_fitInImage release];
-        _fitInImage = nil;
+    BOOL needRotate = NO;
+    if (self.imageScrollView) {
+        CGRect rectForScrollView = [self.imageScrollView bounds];
+        CGRect rectForView = [self.view bounds];
+        if (rectForView.size.width != rectForScrollView.size.width) {
+            needRotate = YES;
+        }
     }
-    
-    if (_originImage) {
-        [_originImage release];
-        _originImage = nil;
+    if (needRotate) {
+        if (_fitInImage) {
+            [_fitInImage release];
+            _fitInImage = nil;
+        }
+        
+        if (_originImage) {
+            [_originImage release];
+            _originImage = nil;
+        }
+        
+        [self relayout];
     }
-    
-    [self relayout];
     
     return result;
 }
 
 - (void)dealloc {
-    if (_swipeRightGestureRecognizer) {
-        [self.view removeGestureRecognizer:_swipeRightGestureRecognizer];
-        [_swipeRightGestureRecognizer release];
-        _swipeRightGestureRecognizer = nil;
-    }
-    
-    if (_swipeLeftGestureRecognizer) {
-        [self.view removeGestureRecognizer:_swipeLeftGestureRecognizer];
-        [_swipeLeftGestureRecognizer release];
-        _swipeLeftGestureRecognizer = nil;
-    }
+//    if (_swipeRightGestureRecognizer) {
+//        [self.view removeGestureRecognizer:_swipeRightGestureRecognizer];
+//        [_swipeRightGestureRecognizer release];
+//        _swipeRightGestureRecognizer = nil;
+//    }
+//    
+//    if (_swipeLeftGestureRecognizer) {
+//        [self.view removeGestureRecognizer:_swipeLeftGestureRecognizer];
+//        [_swipeLeftGestureRecognizer release];
+//        _swipeLeftGestureRecognizer = nil;
+//    }
     
     if (_doubleTapGestureRecognizer) {
         [self.view removeGestureRecognizer:_doubleTapGestureRecognizer];

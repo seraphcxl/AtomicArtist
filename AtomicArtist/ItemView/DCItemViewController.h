@@ -10,8 +10,9 @@
 #import "DCItemView.h"
 #import "DCItemViewCell.h"
 #import "DCUniformDataProtocol.h"
+#import "DCPageScrollViewController.h"
 
-@interface DCItemViewController : UITableViewController <DCItemViewDelegate, DCItemViewCellDelegate>
+@interface DCItemViewController : UITableViewController <DCItemViewDelegate, DCItemViewCellDelegate, DCPageScrollViewControllerDelegate>
 
 @property (retain, nonatomic) NSString *dataGroupUID;
 @property (readonly, nonatomic) NSString *groupTitle;
