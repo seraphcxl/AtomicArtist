@@ -96,14 +96,16 @@
             break;
         }
         CGRect bounds = [self bounds];
-        CGRect imageViewFrame = CGRectMake(bounds.origin.x + ((GROUPVIEW_TITLELABEL_HEIGHT + GROUPVIEW_TITLELABEL_SPACE) / 2), bounds.origin.y, self.posterImageSize, self.posterImageSize);
+        
+        self.posterImage = (UIImage *)[group valueForProperty:kDATAGROUPPROPERTY_POSTERIMAGE withOptions:nil];
+        CGSize posterImageSize = [self.posterImage size];
+        CGRect imageViewFrame = CGRectMake(bounds.origin.x + ((GROUPVIEW_TITLELABEL_HEIGHT + GROUPVIEW_TITLELABEL_SPACE) / 2) + ((self.posterImageSize - posterImageSize.width) / 2), bounds.origin.y + ((self.posterImageSize - posterImageSize.height) / 2), posterImageSize.width, posterImageSize.height);
         UIImageView *imageView = [[[UIImageView alloc] initWithFrame:imageViewFrame] autorelease];
-        self.posterImage = (UIImage *)[group valueForProperty:DATAGROUPPROPERTY_POSTERIMAGE];
         [imageView setImage:self.posterImage];
         
         CGRect titleLabelFrame = CGRectMake(bounds.origin.x, bounds.origin.y + self.posterImageSize + GROUPVIEW_TITLELABEL_SPACE, bounds.size.width, GROUPVIEW_TITLELABEL_HEIGHT);
         UILabel *titleLabel = [[[UILabel alloc] initWithFrame:titleLabelFrame] autorelease];
-        NSString *groupName = (NSString *)[group valueForProperty:DATAGROUPPROPERTY_GROUPNAME];
+        NSString *groupName = (NSString *)[group valueForProperty:kDATAGROUPPROPERTY_GROUPNAME withOptions:nil];
         [titleLabel setBackgroundColor:[UIColor clearColor]];
 		[titleLabel setTextColor:[UIColor whiteColor]];
 		titleLabel.textAlignment = UITextAlignmentCenter;

@@ -129,39 +129,29 @@
     return item;
 }
 
-- (id)valueForProperty:(DATAGROUPPROPERTY)property {
-    if (!self.alAssetsGroup) {
-        [NSException raise:@"DCALAssetsGroup error" format:@"Reason: self.alAssetsGroup == nil"];
-    }
-    switch (property) {
-        case DATAGROUPPROPERTY_UID: {
-            return [self.alAssetsGroup valueForProperty:ALAssetsGroupPropertyPersistentID];
-        }
+- (id)valueForProperty:(NSString *)property withOptions:(NSDictionary *)options {
+    id result = nil;
+    do {
+        if (!self.alAssetsGroup) {
+            [NSException raise:@"DCALAssetsGroup error" format:@"Reason: self.alAssetsGroup == nil"];
             break;
-        case DATAGROUPPROPERTY_GROUPNAME: {
-            return [self.alAssetsGroup valueForProperty:ALAssetsGroupPropertyName];
         }
-            break;
-        case DATAGROUPPROPERTY_URL: {
-            return [self.alAssetsGroup valueForProperty:ALAssetsGroupPropertyURL];
+        
+        if ([property isEqualToString:kDATAGROUPPROPERTY_UID]) {
+            result = [self.alAssetsGroup valueForProperty:ALAssetsGroupPropertyPersistentID];
+        } else if ([property isEqualToString:kDATAGROUPPROPERTY_GROUPNAME]) {
+            result = [self.alAssetsGroup valueForProperty:ALAssetsGroupPropertyName];
+        } else if ([property isEqualToString:kDATAGROUPPROPERTY_URL]) {
+            result = [self.alAssetsGroup valueForProperty:ALAssetsGroupPropertyURL];
+        } else if ([property isEqualToString:kDATAGROUPPROPERTY_TYPE]) {
+            result = [self.alAssetsGroup valueForProperty:ALAssetsGroupPropertyType];
+        } else if ([property isEqualToString:kDATAGROUPPROPERTY_POSTERIMAGE]) {
+            result = [[[UIImage alloc] initWithCGImage:[self.alAssetsGroup posterImage]] autorelease];
+        } else {
+            [NSException raise:@"DCALAssetsGroup error" format:@"Reason: unknown property"];
         }
-            break;
-        case DATAGROUPPROPERTY_TYPE: {
-            return [self.alAssetsGroup valueForProperty:ALAssetsGroupPropertyType];
-        }
-            break;
-        case DATAGROUPPROPERTY_POSTERIMAGE: {
-            UIImage *posterImage = [[[UIImage alloc] initWithCGImage:[self.alAssetsGroup posterImage]] autorelease];
-            return posterImage;
-        }
-            break;
-            
-        default: {
-            [NSException raise:@"DCALAssetsGroup error" format:@"Reason: property error"];
-            return nil;
-        }
-            break;
-    }
+    } while (NO);
+    return result;
 }
 
 - (NSString *)itemUIDAtIndex:(NSUInteger)index {

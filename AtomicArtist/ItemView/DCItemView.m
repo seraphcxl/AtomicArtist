@@ -94,9 +94,11 @@
                 break;
             }
             CGRect bounds = [self bounds];
-            CGRect imageViewFrame = CGRectMake(bounds.origin.x, bounds.origin.y, self.thumbnailSize, self.thumbnailSize);
+            
+            self.thumbnail = (UIImage *)[item valueForProperty:kDATAITEMPROPERTY_THUMBNAIL withOptions:nil];
+            CGSize thimbnailSize = [self.thumbnail size];
+            CGRect imageViewFrame = CGRectMake(bounds.origin.x + ((self.thumbnailSize - thimbnailSize.width) / 2.0), bounds.origin.y + ((self.thumbnailSize - thimbnailSize.height) / 2.0), thimbnailSize.width, thimbnailSize.height);
             UIImageView *imageView = [[[UIImageView alloc] initWithFrame:imageViewFrame] autorelease];
-            self.thumbnail = (UIImage *)[item valueForProperty:DATAITEMPROPERTY_THUMBNAIL];
             [imageView setImage:self.thumbnail];
             
             [self addSubview:imageView];

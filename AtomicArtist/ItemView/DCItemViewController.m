@@ -124,7 +124,7 @@
             [NSException raise:@"DCItemViewController error" format:@"Reason: self.dataLibraryHelper groupWithUID:%@ error", self.dataGroupUID];
             return;
         }
-        NSString *groupName = [group valueForProperty:DATAGROUPPROPERTY_GROUPNAME];
+        NSString *groupName = [group valueForProperty:kDATAGROUPPROPERTY_GROUPNAME withOptions:nil];
         NSInteger numberOfItems = [group itemsCount];
         
         _groupTitle = [[[NSString alloc] initWithFormat:@"%@ (%d)", groupName, numberOfItems] autorelease];
@@ -203,6 +203,9 @@
         if (!_itemViews) {
             _itemViews = [[NSMutableDictionary alloc] init];
         }
+        
+        UIBarButtonItem *bbi = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(refresh:)] autorelease];
+        [self.navigationItem setRightBarButtonItem:bbi];
     }
     return self;
 }
@@ -217,6 +220,10 @@
     
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+    [notificationCenter addObserver:self selector:@selector(reloadTableView:) name:@"ALAssetAdded" object:nil];
+    [notificationCenter addObserver:self selector:@selector(actionForWillEnterForegroud:) name:@"applicationWillEnterForeground:" object:nil];
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -226,13 +233,6 @@
     [self.tableView setBackgroundColor:[UIColor blackColor]];
     [self.tableView setSeparatorColor:[UIColor clearColor]];
     [self.tableView setAllowsSelection:NO];
-    
-    NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
-    [notificationCenter addObserver:self selector:@selector(reloadTableView:) name:@"ALAssetAdded" object:nil];
-    [notificationCenter addObserver:self selector:@selector(actionForWillEnterForegroud:) name:@"applicationWillEnterForeground:" object:nil];
-    
-    UIBarButtonItem *bbi = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(refresh:)] autorelease];
-    [self.navigationItem setRightBarButtonItem:bbi];
     
     _frameSize = [self calcFrameSize];
     _itemCountInCell = [self calcItemCountInCell];

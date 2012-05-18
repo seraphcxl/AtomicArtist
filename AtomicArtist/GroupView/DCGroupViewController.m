@@ -68,6 +68,9 @@
         if (!_groupViews) {
             _groupViews = [[NSMutableDictionary alloc] init];
         }
+        
+        UIBarButtonItem *bbi = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(refresh:)] autorelease];
+        [self.navigationItem setRightBarButtonItem:bbi];
     }
     return self;
 }
@@ -208,24 +211,20 @@
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
     /*** *** ***/
-    [self.tableView setBackgroundColor:[UIColor blackColor]];
-    //    [self.tableView setAlpha:0.6];
-    [self.tableView setSeparatorColor:[UIColor clearColor]];
-    [self.tableView setAllowsSelection:NO];
-    
     NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
     [notificationCenter addObserver:self selector:@selector(reloadTableView:) name:@"ALGroupAdded" object:nil];
     [notificationCenter addObserver:self selector:@selector(notifyRefresh:) name:@"NotifyRefreshGroup" object:nil];
     [notificationCenter addObserver:self selector:@selector(actionForWillEnterForegroud:) name:@"applicationWillEnterForeground:" object:nil];
-    
-    UIBarButtonItem *bbi = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(refresh:)] autorelease];
-    [self.navigationItem setRightBarButtonItem:bbi];
     /*** *** ***/
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     NSLog(@"DCGroupViewController viewWillAppear:");
     [super viewWillAppear:animated];
+    
+    [self.tableView setBackgroundColor:[UIColor blackColor]];
+    [self.tableView setSeparatorColor:[UIColor clearColor]];
+    [self.tableView setAllowsSelection:NO];
     
     _frameSize = [self calcFrameSize];
     _itemCountInCell = [self calcItemCountInCell];

@@ -2,41 +2,38 @@
 //  DCUniformDataProtocol.h
 //  AtomicArtist
 //
-//  Created by Chen XiaoLiang on 12-5-17.
+//  Created by Chen XiaoLiang on 12-5-18.
 //  Copyright (c) 2012年 __MyCompanyName__. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 
 #pragma mark DCDataItem
-typedef enum {
-    DATAITEMPROPERTY_UID,
-    DATAITEMPROPERTY_FILENAME,
-    DATAITEMPROPERTY_URL,
-    DATAITEMPROPERTY_TYPE,
-    DATAITEMPROPERTY_DATE,
-    DATAITEMPROPERTY_ORIENTATION,
-    DATAITEMPROPERTY_THUMBNAIL,
-    DATAITEMPROPERTY_ORIGINIMAGE,
-    DATAITEMPROPERTY_FULLSCREENIMAGE,
-} DATAITEMPROPERTY;
+extern NSString * const kDATAITEMPROPERTY_UID;
+extern NSString * const kDATAITEMPROPERTY_FILENAME;
+extern NSString * const kDATAITEMPROPERTY_URL;
+extern NSString * const kDATAITEMPROPERTY_TYPE;
+extern NSString * const kDATAITEMPROPERTY_DATE;
+extern NSString * const kDATAITEMPROPERTY_ORIENTATION;
+extern NSString * const kDATAITEMPROPERTY_THUMBNAIL;
+extern NSString * const kDATAITEMPROPERTY_ORIGINIMAGE;
+extern NSString * const kDATAITEMPROPERTY_FULLSCREENIMAGE;
 
 @protocol DCDataItem <NSObject>
 
 - (NSString *)uniqueID;
 
-- (id)valueForProperty:(DATAITEMPROPERTY)property;
+- (id)valueForProperty:(NSString *)property withOptions:(NSDictionary *)options;
 
 @end
 
 #pragma mark DCDataGroup
-typedef enum {
-    DATAGROUPPROPERTY_UID,
-    DATAGROUPPROPERTY_GROUPNAME,
-    DATAGROUPPROPERTY_URL,
-    DATAGROUPPROPERTY_TYPE,
-    DATAGROUPPROPERTY_POSTERIMAGE,
-} DATAGROUPPROPERTY;
+
+extern NSString * const kDATAGROUPPROPERTY_UID;
+extern NSString * const kDATAGROUPPROPERTY_GROUPNAME;
+extern NSString * const kDATAGROUPPROPERTY_URL;
+extern NSString * const kDATAGROUPPROPERTY_TYPE;
+extern NSString * const kDATAGROUPPROPERTY_POSTERIMAGE;
 
 @protocol DCDataGroup <NSObject>
 
@@ -50,7 +47,7 @@ typedef enum {
 
 - (id <DCDataItem>)itemWithUID:(NSString *)uid;
 
-- (id)valueForProperty:(DATAGROUPPROPERTY)property;
+- (id)valueForProperty:(NSString *)property withOptions:(NSDictionary *)options;
 
 - (NSString *)itemUIDAtIndex:(NSUInteger)index;
 
@@ -124,3 +121,8 @@ typedef enum {
 
 @end
 
+/*** *** ***/ /*** *** ***/ /*** *** ***/
+
+//@interface DCUniformDataProtocol : NSObject
+//
+//@end

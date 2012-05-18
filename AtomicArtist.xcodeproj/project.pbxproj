@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1B8EFA5C1565D9A100E66552 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B8EFA5B1565D9A100E66552 /* ImageIO.framework */; };
+		1B8EFA601565DB5600E66552 /* DCUniformDataProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B8EFA5F1565DB5600E66552 /* DCUniformDataProtocol.m */; };
 		1BBFAD8C1565246500D5FC76 /* DCALAssetGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BBFAD8B1565246500D5FC76 /* DCALAssetGroupViewController.m */; };
 		1BBFAD97156525A400D5FC76 /* DCALAssetItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BBFAD8F156525A400D5FC76 /* DCALAssetItem.m */; };
 		1BBFAD98156525A400D5FC76 /* DCALAssetsGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BBFAD91156525A400D5FC76 /* DCALAssetsGroup.m */; };
@@ -43,6 +45,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1B8EFA5B1565D9A100E66552 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
+		1B8EFA5E1565DB5600E66552 /* DCUniformDataProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCUniformDataProtocol.h; sourceTree = "<group>"; };
+		1B8EFA5F1565DB5600E66552 /* DCUniformDataProtocol.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCUniformDataProtocol.m; sourceTree = "<group>"; };
 		1BBFAD8A1565246500D5FC76 /* DCALAssetGroupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DCALAssetGroupViewController.h; path = GroupView/ALAssetGroupView/DCALAssetGroupViewController.h; sourceTree = "<group>"; };
 		1BBFAD8B1565246500D5FC76 /* DCALAssetGroupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DCALAssetGroupViewController.m; path = GroupView/ALAssetGroupView/DCALAssetGroupViewController.m; sourceTree = "<group>"; };
 		1BBFAD8E156525A400D5FC76 /* DCALAssetItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCALAssetItem.h; sourceTree = "<group>"; };
@@ -53,7 +58,6 @@
 		1BBFAD93156525A400D5FC76 /* DCALAssetsLibrary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCALAssetsLibrary.m; sourceTree = "<group>"; };
 		1BBFAD94156525A400D5FC76 /* DCALAssetsLibraryHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCALAssetsLibraryHelper.h; sourceTree = "<group>"; };
 		1BBFAD95156525A400D5FC76 /* DCALAssetsLibraryHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCALAssetsLibraryHelper.m; sourceTree = "<group>"; };
-		1BBFAD96156525A400D5FC76 /* DCUniformDataProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCUniformDataProtocol.h; sourceTree = "<group>"; };
 		1BBFAD9D156525B500D5FC76 /* AtomicArtistModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = AtomicArtistModel.xcdatamodel; sourceTree = "<group>"; };
 		1BBFAD9E156525B500D5FC76 /* DCDataModelHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCDataModelHelper.h; sourceTree = "<group>"; };
 		1BBFAD9F156525B500D5FC76 /* DCDataModelHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCDataModelHelper.m; sourceTree = "<group>"; };
@@ -109,6 +113,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1B8EFA5C1565D9A100E66552 /* ImageIO.framework in Frameworks */,
 				1BF9F4C9156483E70015E004 /* CoreData.framework in Frameworks */,
 				1BF9F4C7156483DC0015E004 /* AssetsLibrary.framework in Frameworks */,
 				1BF9F4C5156483D40015E004 /* QuartzCore.framework in Frameworks */,
@@ -141,7 +146,8 @@
 				1BBFAD93156525A400D5FC76 /* DCALAssetsLibrary.m */,
 				1BBFAD94156525A400D5FC76 /* DCALAssetsLibraryHelper.h */,
 				1BBFAD95156525A400D5FC76 /* DCALAssetsLibraryHelper.m */,
-				1BBFAD96156525A400D5FC76 /* DCUniformDataProtocol.h */,
+				1B8EFA5E1565DB5600E66552 /* DCUniformDataProtocol.h */,
+				1B8EFA5F1565DB5600E66552 /* DCUniformDataProtocol.m */,
 			);
 			path = DataLibraryHelper;
 			sourceTree = "<group>";
@@ -180,6 +186,7 @@
 		1BF9F4AC156483AE0015E004 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				1B8EFA5B1565D9A100E66552 /* ImageIO.framework */,
 				1BF9F4C8156483E70015E004 /* CoreData.framework */,
 				1BF9F4C6156483DC0015E004 /* AssetsLibrary.framework */,
 				1BF9F4C4156483D40015E004 /* QuartzCore.framework */,
@@ -370,6 +377,7 @@
 				1BBFADA5156525B500D5FC76 /* DCDataModelHelper.m in Sources */,
 				1BBFADA6156525B500D5FC76 /* Group.m in Sources */,
 				1BBFADA7156525B500D5FC76 /* Item.m in Sources */,
+				1B8EFA601565DB5600E66552 /* DCUniformDataProtocol.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
