@@ -32,8 +32,6 @@
 		1BF9F4D4156485C90015E004 /* DCPageScrollViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BF9F4D3156485C90015E004 /* DCPageScrollViewController.m */; };
 		1BF9F4D9156486910015E004 /* DCDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BF9F4D7156486910015E004 /* DCDetailViewController.m */; };
 		1BF9F4DA156486910015E004 /* DCDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1BF9F4D8156486910015E004 /* DCDetailViewController.xib */; };
-		1BF9F4EE156488C70015E004 /* DCAssetLibHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BF9F4ED156488C60015E004 /* DCAssetLibHelper.m */; };
-		1BF9F4F1156489E00015E004 /* DCAssetsGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BF9F4F0156489DF0015E004 /* DCAssetsGroup.m */; };
 		1BF9F4F515648B730015E004 /* DCItemView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BF9F4F415648B730015E004 /* DCItemView.m */; };
 		1BF9F50115648F920015E004 /* DCGroupView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BF9F50015648F920015E004 /* DCGroupView.m */; };
 		1BF9F5141564939C0015E004 /* DCGroupViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BF9F5101564939C0015E004 /* DCGroupViewCell.m */; };
@@ -88,10 +86,6 @@
 		1BF9F4D6156486910015E004 /* DCDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DCDetailViewController.h; path = DetailView/DCDetailViewController.h; sourceTree = "<group>"; };
 		1BF9F4D7156486910015E004 /* DCDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DCDetailViewController.m; path = DetailView/DCDetailViewController.m; sourceTree = "<group>"; };
 		1BF9F4D8156486910015E004 /* DCDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = DCDetailViewController.xib; path = DetailView/DCDetailViewController.xib; sourceTree = "<group>"; };
-		1BF9F4EC156488C60015E004 /* DCAssetLibHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCAssetLibHelper.h; sourceTree = "<group>"; };
-		1BF9F4ED156488C60015E004 /* DCAssetLibHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCAssetLibHelper.m; sourceTree = "<group>"; };
-		1BF9F4EF156489DF0015E004 /* DCAssetsGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCAssetsGroup.h; sourceTree = "<group>"; };
-		1BF9F4F0156489DF0015E004 /* DCAssetsGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCAssetsGroup.m; sourceTree = "<group>"; };
 		1BF9F4F315648B730015E004 /* DCItemView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DCItemView.h; path = ItemView/DCItemView.h; sourceTree = "<group>"; };
 		1BF9F4F415648B730015E004 /* DCItemView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DCItemView.m; path = ItemView/DCItemView.m; sourceTree = "<group>"; };
 		1BF9F4FF15648F920015E004 /* DCGroupView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DCGroupView.h; path = GroupView/DCGroupView.h; sourceTree = "<group>"; };
@@ -252,10 +246,6 @@
 			children = (
 				1BBFAD9B156525B500D5FC76 /* DataModel */,
 				1BBFAD8D156525A400D5FC76 /* DataLibraryHelper */,
-				1BF9F4EF156489DF0015E004 /* DCAssetsGroup.h */,
-				1BF9F4F0156489DF0015E004 /* DCAssetsGroup.m */,
-				1BF9F4EC156488C60015E004 /* DCAssetLibHelper.h */,
-				1BF9F4ED156488C60015E004 /* DCAssetLibHelper.m */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -360,8 +350,6 @@
 				1BF9F4D0156485730015E004 /* DCPageView.m in Sources */,
 				1BF9F4D4156485C90015E004 /* DCPageScrollViewController.m in Sources */,
 				1BF9F4D9156486910015E004 /* DCDetailViewController.m in Sources */,
-				1BF9F4EE156488C70015E004 /* DCAssetLibHelper.m in Sources */,
-				1BF9F4F1156489E00015E004 /* DCAssetsGroup.m in Sources */,
 				1BF9F4F515648B730015E004 /* DCItemView.m in Sources */,
 				1BF9F50115648F920015E004 /* DCGroupView.m in Sources */,
 				1BF9F5141564939C0015E004 /* DCGroupViewCell.m in Sources */,

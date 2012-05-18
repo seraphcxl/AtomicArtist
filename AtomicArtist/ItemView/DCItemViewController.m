@@ -8,7 +8,6 @@
 
 #import "DCItemViewController.h"
 #import "DCItemViewCell.h"
-#import "DCAssetsGroup.h"
 #import "DCDetailViewController.h"
 
 @interface DCItemViewController () {
