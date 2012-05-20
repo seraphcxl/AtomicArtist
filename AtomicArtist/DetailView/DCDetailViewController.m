@@ -27,15 +27,13 @@
 
 - (void)tap:(UITapGestureRecognizer *)gr;
 
-- (void)swipe:(UIPanGestureRecognizer *)gr;
-
 - (void)hideAssist:(NSTimer *)timer;
 
 - (void)relayout;
 
 - (void)changeDetailImageViewType;
 
-- (void)clearCurrentInfomation;
+- (void)clearUI;
 
 @end
 
@@ -49,7 +47,7 @@
 @synthesize imageScrollView = _imageScrollView;
 @synthesize dataLibraryHelper =_dataLibraryHelper;
 
-- (void)clearCurrentInfomation {
+- (void)clearUI {
     if (_timerForHideAssist) {
         [_timerForHideAssist invalidate];
         [_timerForHideAssist release];
@@ -71,86 +69,6 @@
         [_originImage release];
         _originImage = nil;
     }
-    self.currentDataGroupUID = nil;
-    self.currentItemUID = nil;
-}
-
-- (void)next {
-    if (self.dataLibraryHelper) {
-        NSUInteger count = [self.dataLibraryHelper itemsCountInGroup:self.currentDataGroupUID];
-        if (self.currentIndexInGroup < (count - 1)) {
-            NSString *currentDataGroupUID = self.currentDataGroupUID;
-            [currentDataGroupUID retain];
-            NSUInteger currentIndex = ++self.currentIndexInGroup;
-            // clear current information
-            [self clearCurrentInfomation];
-            // get next information
-            NSString *currentItemUID = [self.dataLibraryHelper itemUIDAtIndex:currentIndex inGroup:currentDataGroupUID];
-            [currentItemUID retain];
-            
-            [self initWithDataLibraryHelper:self.dataLibraryHelper dataGroupUID:currentDataGroupUID itemUID:currentItemUID andIndexInGroup:currentIndex];
-            
-            [currentItemUID release];
-            currentItemUID = nil;
-            [currentDataGroupUID release];
-            currentDataGroupUID = nil;
-            
-            [self relayout];
-            
-        } else {
-            NSLog(@"last asset in group");
-        }
-    } else {
-        [NSException raise:@"DCDetailViewController error" format:@"Reason: self.dataLibraryHelper == nil"];
-    }
-}
-
-- (void)previous {
-    if (self.dataLibraryHelper) {
-        if (self.currentIndexInGroup != 0) {
-            NSString *currentDataGroupUID = self.currentDataGroupUID;
-            [currentDataGroupUID retain];
-            NSUInteger currentIndex = --self.currentIndexInGroup;
-            // clear current information
-            [self clearCurrentInfomation];
-            // get prev information
-            NSString *currentItemUID = [self.dataLibraryHelper itemUIDAtIndex:currentIndex inGroup:currentDataGroupUID];
-            [currentItemUID retain];
-            
-            [self initWithDataLibraryHelper:self.dataLibraryHelper dataGroupUID:currentDataGroupUID itemUID:currentItemUID andIndexInGroup:currentIndex];
-            
-            [currentItemUID release];
-            currentItemUID = nil;
-            [currentDataGroupUID release];
-            currentDataGroupUID = nil;
-            
-            [self relayout];
-            
-        } else {
-            NSLog(@"last asset in group");
-        }
-    } else {
-        [NSException raise:@"DCDetailViewController error" format:@"Reason: self.dataLibraryHelper == nil"];
-    }
-}
-
-- (void)swipe:(UISwipeGestureRecognizer *)gr {
-    NSLog(@"AADetailViewController swipes:");
-//    if (gr == _swipeRightGestureRecognizer) {
-//        if ([gr direction] == UISwipeGestureRecognizerDirectionRight) {
-//            [self previous];
-//        } else {
-//            [NSException raise:@"AADetailViewController error" format:@"Reason: direction not supported"];
-//        }
-//    } else if (gr == _swipeLeftGestureRecognizer) {
-//        if ([gr direction] == UISwipeGestureRecognizerDirectionLeft) {
-//            [self next];
-//        } else {
-//            [NSException raise:@"AADetailViewController error" format:@"Reason: direction not supported"];
-//        }
-//    } else {
-//        [NSException raise:@"AADetailViewController error" format:@"Reason: direction not supported"];
-//    }
 }
 
 - (void)changeDetailImageViewType {
@@ -380,13 +298,12 @@
         [_originImage release];
         _originImage = nil;
     }
+    [self clearUI];
     [super viewWillDisappear:animated];
 }
 
 - (void)viewDidUnload
 {
-    [self clearCurrentInfomation];
-    
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
@@ -453,8 +370,10 @@
         _singleTapGestureRecognizer = nil;
     }
     
-    [self clearCurrentInfomation];
+    [self clearUI];
     
+    self.currentDataGroupUID = nil;
+    self.currentItemUID = nil;
     self.dataLibraryHelper = nil;
     
     [super dealloc];

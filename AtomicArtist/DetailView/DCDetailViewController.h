@@ -32,8 +32,4 @@ typedef enum {
 
 - (id)initWithDataLibraryHelper:(id <DCDataLibraryHelper>)dataLibraryHelper dataGroupUID:(NSString *)dataGroupUID itemUID:(NSString *)itemUID andIndexInGroup:(NSUInteger) indexInGroup;
 
-- (void)next;
-
-- (void)previous;
-
 @end

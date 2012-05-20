@@ -46,4 +46,6 @@ extern NSString * const pageID_next;
 - (void)reloadPageViews;
 - (void)reloadPageViewWithID:(const NSString *)pageID;
 
+- (void)scrollToCurrentPageView;
+
 @end

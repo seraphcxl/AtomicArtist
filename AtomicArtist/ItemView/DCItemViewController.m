@@ -45,10 +45,56 @@
 
 - (void)pageScrollViewCtrl:(DCPageScrollViewController *)pageScrollViewCtrl doNextActionWithCurrentViewCtrl:(UIViewController *)currentViewCtrl nextViewCtrl:(UIViewController *)nextViewCtrl {
     NSLog(@"DCItemViewController pageScrollViewCtrl:doNextActionWithCurrentViewCtrl:nextViewCtrl:");
+    DCDetailViewController *currentDetailViewCtrl = (DCDetailViewController *)nextViewCtrl;
+    [currentDetailViewCtrl retain];
+    DCDetailViewController *prevDetailViewCtrl = (DCDetailViewController *)currentViewCtrl;
+    [prevDetailViewCtrl retain];
+    DCDetailViewController *nextDetailViewCtrl = nil;
+    if (currentDetailViewCtrl.currentIndexInGroup == ([self.dataLibraryHelper itemsCountInGroup:self.dataGroupUID] - 1)) {
+        ;
+    } else {
+        NSUInteger nextIndex = currentDetailViewCtrl.currentIndexInGroup + 1;
+        NSString *nextItemUID = [self.dataLibraryHelper itemUIDAtIndex:nextIndex inGroup:self.dataGroupUID];
+        nextDetailViewCtrl = [[[DCDetailViewController alloc] initWithDataLibraryHelper:self.dataLibraryHelper dataGroupUID:self.dataGroupUID itemUID:nextItemUID andIndexInGroup:nextIndex] autorelease];
+        [nextDetailViewCtrl setDelegate:pageScrollViewCtrl];
+        
+        [pageScrollViewCtrl setViewCtrlsWithCurrent:currentDetailViewCtrl previous:prevDetailViewCtrl andNext:nextDetailViewCtrl];
+        
+        [currentDetailViewCtrl release];
+        currentDetailViewCtrl = nil;
+        [prevDetailViewCtrl release];
+        prevDetailViewCtrl = nil;
+        
+        [pageScrollViewCtrl reloadPageViews];
+        [pageScrollViewCtrl scrollToCurrentPageView];
+    }
 }
 
 - (void)pageScrollViewCtrl:(DCPageScrollViewController *)pageScrollViewCtrl doPreviousActionWithCurrentViewCtrl:(UIViewController *)currentViewCtrl previousViewCtrl:(UIViewController *)previousViewCtrl {
     NSLog(@"DCItemViewController pageScrollViewCtrl:doPreviousActionWithCurrentViewCtrl:previousViewCtrl:");
+    DCDetailViewController *currentDetailViewCtrl = (DCDetailViewController *)previousViewCtrl;
+    [currentDetailViewCtrl retain];
+    DCDetailViewController *prevDetailViewCtrl = nil;
+    DCDetailViewController *nextDetailViewCtrl = (DCDetailViewController *)currentViewCtrl;
+    [nextDetailViewCtrl retain];
+    if (currentDetailViewCtrl.currentIndexInGroup == 0) {
+        ;
+    } else {
+        NSUInteger prevIndex = currentDetailViewCtrl.currentIndexInGroup - 1;
+        NSString *prevItemUID = [self.dataLibraryHelper itemUIDAtIndex:prevIndex inGroup:self.dataGroupUID];
+        prevDetailViewCtrl = [[[DCDetailViewController alloc] initWithDataLibraryHelper:self.dataLibraryHelper dataGroupUID:self.dataGroupUID itemUID:prevItemUID andIndexInGroup:prevIndex] autorelease];
+        [prevDetailViewCtrl setDelegate:pageScrollViewCtrl];
+        
+        [pageScrollViewCtrl setViewCtrlsWithCurrent:currentDetailViewCtrl previous:prevDetailViewCtrl andNext:nextDetailViewCtrl];
+        
+        [currentDetailViewCtrl release];
+        currentDetailViewCtrl = nil;
+        [nextDetailViewCtrl release];
+        nextDetailViewCtrl = nil;
+        
+        [pageScrollViewCtrl reloadPageViews];
+        [pageScrollViewCtrl scrollToCurrentPageView];
+    }
 }
 
 - (void)clearCache {

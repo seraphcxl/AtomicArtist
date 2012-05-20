@@ -57,6 +57,21 @@ typedef enum {
 @synthesize viewCtrls = _viewCtrls;
 @synthesize scrollEnabled = _scrollEnabled;
 
+- (void)scrollToCurrentPageView {
+    DCPageView *currentPageView = [self currentPageView];
+    if (currentPageView) {
+        scrollViewOffset = currentPageView.frame.origin;
+        [self.pageScrollView setContentOffset:scrollViewOffset animated:NO];
+        if (needCallViewWillAppear[PAGEINDEX_CURRENT]) {
+            [[self currentViewCtrl] viewWillAppear:YES];
+            [self setView:PAGEINDEX_CURRENT appearFlag:NO];
+        }
+    } else {
+        [NSException raise:@"DCPageScrollViewController error" format:@"Reason: currentPageView == nil"];
+    }
+    
+}
+
 - (void)detailImageViewTypeChanged:(DETAILIMAGEVIEWTYPE)type {
     if (type == DETAILIMAGEVIEWTYPE_FITIN) {
         [self setScrollEnabled:YES];
@@ -236,20 +251,45 @@ typedef enum {
     if (self.viewCtrls) {
         [self.viewCtrls removeAllObjects];
         
+        NSUInteger pageCount = 0;
+
         if (previous) {
             [self.viewCtrls setObject:previous forKey:pageID_previous];
             [self setView:PAGEINDEX_PREVIOUS appearFlag:YES];
             enableViews[PAGEINDEX_PREVIOUS] = YES;
+            ++pageCount;
         }
         if (current) {
             [self.viewCtrls setObject:current forKey:pageID_current];
             [self setView:PAGEINDEX_CURRENT appearFlag:YES];
             enableViews[PAGEINDEX_CURRENT] = YES;
+            ++pageCount;
         }
         if (next) {
             [self.viewCtrls setObject:next forKey:pageID_next];
             [self setView:PAGEINDEX_NEXT appearFlag:YES];
             enableViews[PAGEINDEX_NEXT] = YES;
+            ++pageCount;
+        }
+        
+        if ([self.pageViews count] != 0 && [self.pageViews count] != pageCount) {
+            [self clearUI];
+            CGRect rectForScrollView = [self.view bounds];
+            self.pageScrollView = [[[UIScrollView alloc] initWithFrame:rectForScrollView] autorelease];
+            CGRect rectForContextView;
+            rectForContextView.origin = rectForScrollView.origin;
+            rectForContextView.size.width = rectForScrollView.size.width * [self.viewCtrls count];
+            rectForContextView.size.height = rectForScrollView.size.height;
+            self.contextView = [[[UIView alloc] initWithFrame:rectForContextView] autorelease];
+            [self.contextView setBackgroundColor:[UIColor clearColor]];
+            [self initPageViews];
+            [self.pageScrollView addSubview:self.contextView];
+            [self.pageScrollView setContentSize:rectForContextView.size];
+            self.pageScrollView.scrollEnabled = self.scrollEnabled;
+            self.pageScrollView.pagingEnabled = YES;
+            self.pageScrollView.bounces = NO;
+            [self.pageScrollView setDelegate:self];
+            [self.view addSubview:self.pageScrollView];
         }
     } else {
         [NSException raise:@"DCPageScrollViewController error" format:@"Reason: self.viewCtrls == nil"];
