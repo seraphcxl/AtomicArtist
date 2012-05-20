@@ -9,13 +9,20 @@
 #import <UIKit/UIKit.h>
 #import "DCUniformDataProtocol.h"
 
-enum DETAILIMAGEVIEWTYPE {
+typedef enum {
     DETAILIMAGEVIEWTYPE_FITIN = 0x00000000,
     DETAILIMAGEVIEWTYPE_ORIGIN = 0x000000001,
-    };
+} DETAILIMAGEVIEWTYPE;
+
+@protocol DCDetailViewControllerDelegate <NSObject>
+
+-(void)detailImageViewTypeChanged:(DETAILIMAGEVIEWTYPE)type;
+
+@end
 
 @interface DCDetailViewController : UIViewController
 
+@property (assign, nonatomic) id <DCDetailViewControllerDelegate> delegate;
 @property (retain, nonatomic) NSString *currentDataGroupUID;
 @property (retain, nonatomic) NSString *currentItemUID;
 @property (assign, nonatomic) NSUInteger currentIndexInGroup;

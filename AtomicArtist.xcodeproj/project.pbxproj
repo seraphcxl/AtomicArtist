@@ -63,6 +63,7 @@
 		1BBFADA1156525B500D5FC76 /* Group.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Group.m; sourceTree = "<group>"; };
 		1BBFADA2156525B500D5FC76 /* Item.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Item.h; sourceTree = "<group>"; };
 		1BBFADA3156525B500D5FC76 /* Item.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Item.m; sourceTree = "<group>"; };
+		1BD5CACC15690F1600C9133D /* CommonDefine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonDefine.h; sourceTree = "<group>"; };
 		1BF9F4A9156483AE0015E004 /* AtomicArtist.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AtomicArtist.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1BF9F4AD156483AE0015E004 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		1BF9F4AF156483AE0015E004 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -78,7 +79,6 @@
 		1BF9F4C8156483E70015E004 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		1BF9F4CA156484160015E004 /* DCImageHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCImageHelper.h; sourceTree = "<group>"; };
 		1BF9F4CB156484160015E004 /* DCImageHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCImageHelper.m; sourceTree = "<group>"; };
-		1BF9F4CD156484B30015E004 /* CommonDefine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonDefine.h; sourceTree = "<group>"; };
 		1BF9F4CE156485730015E004 /* DCPageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DCPageView.h; path = PageScrollView/DCPageView.h; sourceTree = "<group>"; };
 		1BF9F4CF156485730015E004 /* DCPageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DCPageView.m; path = PageScrollView/DCPageView.m; sourceTree = "<group>"; };
 		1BF9F4D2156485C90015E004 /* DCPageScrollViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DCPageScrollViewController.h; path = PageScrollView/DCPageScrollViewController.h; sourceTree = "<group>"; };
@@ -204,7 +204,7 @@
 				1BF9F4BD156483AE0015E004 /* DCAppDelegate.m */,
 				1BF9F4CA156484160015E004 /* DCImageHelper.h */,
 				1BF9F4CB156484160015E004 /* DCImageHelper.m */,
-				1BF9F4CD156484B30015E004 /* CommonDefine.h */,
+				1BD5CACC15690F1600C9133D /* CommonDefine.h */,
 			);
 			path = AtomicArtist;
 			sourceTree = "<group>";

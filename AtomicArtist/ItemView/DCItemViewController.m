@@ -149,27 +149,30 @@
 //        
 //        [self.navigationController pushViewController:detailViewCtrl animated:YES];
         /*** *** ***/
+        DCPageScrollViewController *pageScrollViewCtrl = [[DCPageScrollViewController alloc] initWithNibName:nil bundle:nil];
+        
         DCDetailViewController *currentDetailViewCtrl = nil;
         DCDetailViewController *prevDetailViewCtrl = nil;
         DCDetailViewController *nextDetailViewCtrl = nil;
         
         NSUInteger currentIndex = [self.dataLibraryHelper indexForItemUID:itemUID inGroup:self.dataGroupUID];
         currentDetailViewCtrl = [[[DCDetailViewController alloc] initWithDataLibraryHelper:self.dataLibraryHelper dataGroupUID:self.dataGroupUID itemUID:itemUID andIndexInGroup:currentIndex] autorelease];
-        
+        [currentDetailViewCtrl setDelegate:pageScrollViewCtrl];
         
         if (currentIndex != 0) {
             NSUInteger prevIndex = currentIndex - 1;
             NSString *prevItemUID = [self.dataLibraryHelper itemUIDAtIndex:prevIndex inGroup:self.dataGroupUID];
             prevDetailViewCtrl = [[[DCDetailViewController alloc] initWithDataLibraryHelper:self.dataLibraryHelper dataGroupUID:self.dataGroupUID itemUID:prevItemUID andIndexInGroup:prevIndex] autorelease];
+            [prevDetailViewCtrl setDelegate:pageScrollViewCtrl];
         }
         
         if (currentIndex < [self.dataLibraryHelper itemsCountInGroup:self.dataGroupUID] - 1) {
             NSUInteger nextIndex = currentIndex + 1;
             NSString *nextItemUID = [self.dataLibraryHelper itemUIDAtIndex:nextIndex inGroup:self.dataGroupUID];
             nextDetailViewCtrl = [[[DCDetailViewController alloc] initWithDataLibraryHelper:self.dataLibraryHelper dataGroupUID:self.dataGroupUID itemUID:nextItemUID andIndexInGroup:nextIndex] autorelease];
+            [nextDetailViewCtrl setDelegate:pageScrollViewCtrl];
         }
         
-        DCPageScrollViewController *pageScrollViewCtrl = [[DCPageScrollViewController alloc] initWithNibName:nil bundle:nil];
         [pageScrollViewCtrl setViewCtrlsWithCurrent:currentDetailViewCtrl previous:prevDetailViewCtrl andNext:nextDetailViewCtrl];
         [pageScrollViewCtrl setDelegate:self];
         [pageScrollViewCtrl setScrollEnabled:YES];

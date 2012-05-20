@@ -7,10 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "DCDetailViewController.h"
 
 @class DCPageView;
-
-#define NUMBEROFPAGEINSCROLLVIEW ((int)3)
 
 extern NSString * const pageID_current;
 extern NSString * const pageID_previous;
@@ -25,7 +24,7 @@ extern NSString * const pageID_next;
 
 @end
 
-@interface DCPageScrollViewController : UIViewController <UIScrollViewDelegate>
+@interface DCPageScrollViewController : UIViewController <UIScrollViewDelegate, DCDetailViewControllerDelegate>
 
 @property (assign, nonatomic) id <DCPageScrollViewControllerDelegate> delegate;
 @property (retain, nonatomic) UIScrollView *pageScrollView;

@@ -19,7 +19,7 @@
 //    UISwipeGestureRecognizer *_swipeRightGestureRecognizer;
 //    UISwipeGestureRecognizer *_swipeLeftGestureRecognizer;
     
-    enum DETAILIMAGEVIEWTYPE _imageViewType;
+    DETAILIMAGEVIEWTYPE _imageViewType;
     
     UIImage *_fitInImage;
     UIImage *_originImage;
@@ -33,7 +33,7 @@
 
 - (void)relayout;
 
-- (void)showOriginImage;
+- (void)changeDetailImageViewType;
 
 - (void)clearCurrentInfomation;
 
@@ -41,6 +41,7 @@
 
 @implementation DCDetailViewController
 
+@synthesize delegate = _delegate;
 @synthesize currentDataGroupUID = _currentDataGroupUID;
 @synthesize currentItemUID = _currentItemUID;
 @synthesize currentIndexInGroup = _currentIndexInGroupp;
@@ -152,7 +153,7 @@
 //    }
 }
 
-- (void)showOriginImage {
+- (void)changeDetailImageViewType {
     if (_imageViewType == DETAILIMAGEVIEWTYPE_FITIN) {
         if (self.imageView) {
             [self.imageView removeFromSuperview];
@@ -189,6 +190,7 @@
         } else {
             [NSException raise:@"AADetailViewController error" format:@"Reason: self.imageScrollView is nil when show origin image"];
         }
+        
 //        if (_swipeRightGestureRecognizer) {
 //            [self.view removeGestureRecognizer:_swipeRightGestureRecognizer];
 //            [_swipeRightGestureRecognizer release];
@@ -203,6 +205,10 @@
         [self relayout];
     } else {
         [NSException raise:@"AADetailViewController error" format:@"Reason: _imageViewType unknown"];
+    }
+    
+    if (self.delegate) {
+        [self.delegate detailImageViewTypeChanged:_imageViewType];
     }
 }
 
@@ -223,7 +229,6 @@
         self.imageScrollView = [[[UIScrollView alloc] initWithFrame:rect] autorelease];
         self.imageScrollView.showsHorizontalScrollIndicator = NO;
         self.imageScrollView.showsVerticalScrollIndicator = NO;
-        //        self.imageScrollView.pagingEnabled = NO;
         [self.view addSubview:self.imageScrollView];
     }
     
@@ -298,7 +303,7 @@
         [_timerForHideAssist retain];
     } else if (gr == _doubleTapGestureRecognizer && gr.numberOfTapsRequired == 2) {
         NSLog(@"AADetailViewController tap:double");
-        [self showOriginImage];
+        [self changeDetailImageViewType];
     } else {
         ;
     }

@@ -96,8 +96,17 @@
             CGRect bounds = [self bounds];
             
             self.thumbnail = (UIImage *)[item valueForProperty:kDATAITEMPROPERTY_THUMBNAIL withOptions:nil];
-            CGSize thimbnailSize = [self.thumbnail size];
-            CGRect imageViewFrame = CGRectMake(bounds.origin.x + ((self.thumbnailSize - thimbnailSize.width) / 2.0), bounds.origin.y + ((self.thumbnailSize - thimbnailSize.height) / 2.0), thimbnailSize.width, thimbnailSize.height);
+            CGSize thumbnailSize = [self.thumbnail size];
+            
+            CGRect imageViewFrame;
+            if (thumbnailSize.width >= self.thumbnailSize && thumbnailSize.width > thumbnailSize.height) {
+                imageViewFrame = CGRectMake(bounds.origin.x + ((GROUPVIEW_TITLELABEL_HEIGHT + GROUPVIEW_TITLELABEL_SPACE) / 2.0), bounds.origin.y + ((self.thumbnailSize * (1.0 - thumbnailSize.height / thumbnailSize.width)) / 2.0), self.thumbnailSize, (thumbnailSize.height / thumbnailSize.width * self.thumbnailSize));
+            } else if (thumbnailSize.height >= self.thumbnailSize) {
+                imageViewFrame = CGRectMake(bounds.origin.x + ((GROUPVIEW_TITLELABEL_HEIGHT + GROUPVIEW_TITLELABEL_SPACE) / 2.0)+ ((self.thumbnailSize * (1.0 - thumbnailSize.width / thumbnailSize.height)) / 2.0), bounds.origin.y, (thumbnailSize.width / thumbnailSize.height * self.thumbnailSize), self.thumbnailSize);
+            } else {
+                imageViewFrame = CGRectMake(bounds.origin.x + ((GROUPVIEW_TITLELABEL_HEIGHT + GROUPVIEW_TITLELABEL_SPACE) / 2.0) + ((self.thumbnailSize - thumbnailSize.width) / 2.0), bounds.origin.y + ((self.thumbnailSize - thumbnailSize.height) / 2.0), thumbnailSize.width, thumbnailSize.height);
+            }
+            
             UIImageView *imageView = [[[UIImageView alloc] initWithFrame:imageViewFrame] autorelease];
             [imageView setImage:self.thumbnail];
             

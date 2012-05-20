@@ -99,7 +99,16 @@
         
         self.posterImage = (UIImage *)[group valueForProperty:kDATAGROUPPROPERTY_POSTERIMAGE withOptions:nil];
         CGSize posterImageSize = [self.posterImage size];
-        CGRect imageViewFrame = CGRectMake(bounds.origin.x + ((GROUPVIEW_TITLELABEL_HEIGHT + GROUPVIEW_TITLELABEL_SPACE) / 2) + ((self.posterImageSize - posterImageSize.width) / 2), bounds.origin.y + ((self.posterImageSize - posterImageSize.height) / 2), posterImageSize.width, posterImageSize.height);
+        
+        CGRect imageViewFrame;
+        if (posterImageSize.width >= self.posterImageSize && posterImageSize.width > posterImageSize.height) {
+            imageViewFrame = CGRectMake(bounds.origin.x + ((GROUPVIEW_TITLELABEL_HEIGHT + GROUPVIEW_TITLELABEL_SPACE) / 2.0), bounds.origin.y + ((self.posterImageSize * (1.0 - posterImageSize.height / posterImageSize.width)) / 2.0), self.posterImageSize, (posterImageSize.height / posterImageSize.width * self.posterImageSize));
+        } else if (posterImageSize.height >= self.posterImageSize) {
+            imageViewFrame = CGRectMake(bounds.origin.x + ((GROUPVIEW_TITLELABEL_HEIGHT + GROUPVIEW_TITLELABEL_SPACE) / 2.0)+ ((self.posterImageSize * (1.0 - posterImageSize.width / posterImageSize.height)) / 2.0), bounds.origin.y, (posterImageSize.width / posterImageSize.height * self.posterImageSize), self.posterImageSize);
+        } else {
+            imageViewFrame = CGRectMake(bounds.origin.x + ((GROUPVIEW_TITLELABEL_HEIGHT + GROUPVIEW_TITLELABEL_SPACE) / 2.0) + ((self.posterImageSize - posterImageSize.width) / 2.0), bounds.origin.y + ((self.posterImageSize - posterImageSize.height) / 2.0), posterImageSize.width, posterImageSize.height);
+        }
+        
         UIImageView *imageView = [[[UIImageView alloc] initWithFrame:imageViewFrame] autorelease];
         [imageView setImage:self.posterImage];
         

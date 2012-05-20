@@ -27,7 +27,7 @@
 {
     self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
     // Override point for customization after application launch.
-    self.window.backgroundColor = [UIColor whiteColor];
+    self.window.backgroundColor = [UIColor clearColor];
     /*** *** ***/
     DCALAssetsLibraryHelper *alAssetsLibraryHelper = [DCALAssetsLibraryHelper defaultDataLibraryHelper];
     [alAssetsLibraryHelper connect:nil];
