@@ -9,6 +9,8 @@
 #import "DCPageScrollViewController.h"
 #import "DCPageView.h"
 
+#define TIMEFORHIDEASSIST ((NSTimeInterval)2.0)
+
 NSString * const pageID_current = @"current";
 NSString * const pageID_previous = @"previous";
 NSString * const pageID_next = @"next";
@@ -28,6 +30,9 @@ typedef enum {
     BOOL needCallViewRotate[PAGEINDEX_COUNT];
     
     CGPoint scrollViewOffset;
+    
+    UITapGestureRecognizer *_singleTapGestureRecognizer;
+    NSTimer *_timerForHideAssist;
 }
 
 - (DCPageView *)pageViewWithID:(const NSString *)pageID;
@@ -46,6 +51,10 @@ typedef enum {
 
 - (void)setView:(PAGEINDEX)index rotateFlag:(BOOL)flag;
 
+- (void)tap:(UITapGestureRecognizer *)gr;
+
+- (void)hideAssist:(NSTimer *)timer;
+
 @end
 
 @implementation DCPageScrollViewController
@@ -56,6 +65,25 @@ typedef enum {
 @synthesize pageViews = _pageViews;
 @synthesize viewCtrls = _viewCtrls;
 @synthesize scrollEnabled = _scrollEnabled;
+@synthesize hideNavigationBarEnabled = _hideNavigationBarEnabled;
+
+- (void)tap:(UITapGestureRecognizer *)gr {
+    if (gr == _singleTapGestureRecognizer && gr.numberOfTapsRequired == 1) {
+        NSLog(@"AADetailViewController tap:single");
+        if (self.hideNavigationBarEnabled) {
+            [self.navigationController.navigationBar setHidden:NO];
+        }
+        if (_timerForHideAssist) {
+            [_timerForHideAssist invalidate];
+            [_timerForHideAssist release];
+            _timerForHideAssist = nil;
+        }
+        _timerForHideAssist = [NSTimer scheduledTimerWithTimeInterval:TIMEFORHIDEASSIST target:self selector:@selector(hideAssist:) userInfo:nil repeats:NO];
+        [_timerForHideAssist retain];
+    } else {
+        ;
+    }
+}
 
 - (void)scrollToCurrentPageView {
     DCPageView *currentPageView = [self currentPageView];
@@ -154,7 +182,21 @@ typedef enum {
     }
 }
 
+- (void)hideAssist:(NSTimer *)timer {
+    NSLog(@"AADetailViewController hideAssist:");
+    if (_timerForHideAssist == timer) {
+        if (self.hideNavigationBarEnabled) {
+            [self.navigationController.navigationBar setHidden:YES];
+        }
+    }
+}
+
 - (void)clearUI {
+    if (_timerForHideAssist) {
+        [_timerForHideAssist invalidate];
+        [_timerForHideAssist release];
+        _timerForHideAssist = nil;
+    }
     if (self.pageViews) {
         [self.pageViews removeAllObjects];
     }
@@ -355,6 +397,12 @@ typedef enum {
         if (!self.viewCtrls) {
             self.viewCtrls = [[[NSMutableDictionary alloc] init] autorelease];
         }
+        
+        if (!_singleTapGestureRecognizer) {
+            _singleTapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap:)];
+            _singleTapGestureRecognizer.numberOfTapsRequired = 1;
+            [self.view addGestureRecognizer:_singleTapGestureRecognizer];
+        }
     }
     return self;
 }
@@ -363,11 +411,14 @@ typedef enum {
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
+    if (self.hideNavigationBarEnabled) {
+        [self.navigationController.navigationBar setHidden:YES];
+    }
     CGRect rectForScrollView = [self.view bounds];
     self.pageScrollView = [[[UIScrollView alloc] initWithFrame:rectForScrollView] autorelease];
     CGRect rectForContextView;
@@ -401,8 +452,30 @@ typedef enum {
 
 - (void)viewDidUnload
 {
+    
     [super viewDidUnload];
     // Release any retained subviews of the main view.
+}
+
+- (void)dealloc {
+    if (_singleTapGestureRecognizer) {
+        [self.view removeGestureRecognizer:_singleTapGestureRecognizer];
+        [_singleTapGestureRecognizer release];
+        _singleTapGestureRecognizer = nil;
+    }
+    
+    [self clearUI];
+    
+    if (self.pageViews) {
+        self.pageViews = nil;
+    }
+    
+    if (self.viewCtrls) {
+        [self.viewCtrls removeAllObjects];
+        self.viewCtrls = nil;
+    }
+    
+    [super dealloc];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation

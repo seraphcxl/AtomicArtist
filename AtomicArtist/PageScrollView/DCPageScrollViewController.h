@@ -27,11 +27,12 @@ extern NSString * const pageID_next;
 @interface DCPageScrollViewController : UIViewController <UIScrollViewDelegate, DCDetailViewControllerDelegate>
 
 @property (assign, nonatomic) id <DCPageScrollViewControllerDelegate> delegate;
-@property (retain, nonatomic) UIScrollView *pageScrollView;
+@property (retain, nonatomic) IBOutlet UIScrollView *pageScrollView;
 @property (retain, nonatomic) UIView *contextView;
 @property (retain, nonatomic) NSMutableDictionary *pageViews;
 @property (retain, nonatomic) NSMutableDictionary *viewCtrls;
 @property (assign, nonatomic) BOOL scrollEnabled;
+@property (assign, nonatomic) BOOL hideNavigationBarEnabled;
 
 - (DCPageView *)currentPageView;
 - (DCPageView *)previousPageView;

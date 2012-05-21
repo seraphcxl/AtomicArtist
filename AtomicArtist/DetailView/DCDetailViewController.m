@@ -9,12 +9,7 @@
 #import "DCDetailViewController.h"
 #import "DCImageHelper.h"
 
-#define TIMEFORHIDEASSIST ((NSTimeInterval)2.0)
-
 @interface DCDetailViewController () {
-    NSTimer *_timerForHideAssist;
-    
-    UITapGestureRecognizer *_singleTapGestureRecognizer;
     UITapGestureRecognizer *_doubleTapGestureRecognizer;
 //    UISwipeGestureRecognizer *_swipeRightGestureRecognizer;
 //    UISwipeGestureRecognizer *_swipeLeftGestureRecognizer;
@@ -26,8 +21,6 @@
 }
 
 - (void)tap:(UITapGestureRecognizer *)gr;
-
-- (void)hideAssist:(NSTimer *)timer;
 
 - (void)relayout;
 
@@ -48,11 +41,6 @@
 @synthesize dataLibraryHelper =_dataLibraryHelper;
 
 - (void)clearUI {
-    if (_timerForHideAssist) {
-        [_timerForHideAssist invalidate];
-        [_timerForHideAssist release];
-        _timerForHideAssist = nil;
-    }
     if (self.imageView) {
         [self.imageView removeFromSuperview];
         self.imageView = nil;
@@ -199,34 +187,13 @@
 //    }
 }
 
-- (void)hideAssist:(NSTimer *)timer {
-    NSLog(@"AADetailViewController hideAssist:");
-    if (_timerForHideAssist == timer) {
-        [self.navigationController.navigationBar setHidden:YES];
-    }
-}
-
 - (void)tap:(UITapGestureRecognizer *)gr {
-    if (gr == _singleTapGestureRecognizer && gr.numberOfTapsRequired == 1) {
-        NSLog(@"AADetailViewController tap:single");
-        
-        [self.navigationController.navigationBar setHidden:NO];
-        
-        if (_timerForHideAssist) {
-            [_timerForHideAssist invalidate];
-            [_timerForHideAssist release];
-            _timerForHideAssist = nil;
-        }
-        _timerForHideAssist = [NSTimer scheduledTimerWithTimeInterval:TIMEFORHIDEASSIST target:self selector:@selector(hideAssist:) userInfo:nil repeats:NO];
-        [_timerForHideAssist retain];
-    } else if (gr == _doubleTapGestureRecognizer && gr.numberOfTapsRequired == 2) {
+    if (gr == _doubleTapGestureRecognizer && gr.numberOfTapsRequired == 2) {
         NSLog(@"AADetailViewController tap:double");
         [self changeDetailImageViewType];
     } else {
         ;
     }
-    
-    
 }
 
 - (id)initWithDataLibraryHelper:(id<DCDataLibraryHelper>)dataLibraryHelper dataGroupUID:(NSString *)dataGroupUID itemUID:(NSString *)itemUID andIndexInGroup:(NSUInteger)indexInGroup {
@@ -236,12 +203,6 @@
         self.currentDataGroupUID = dataGroupUID;
         self.currentItemUID = itemUID;
         self.currentIndexInGroup = indexInGroup;
-        
-        if (!_singleTapGestureRecognizer) {
-            _singleTapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap:)];
-            _singleTapGestureRecognizer.numberOfTapsRequired = 1;
-            [self.view addGestureRecognizer:_singleTapGestureRecognizer];
-        }
         
         if (!_doubleTapGestureRecognizer) {
             _doubleTapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap:)];
@@ -277,7 +238,7 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-    [self.navigationController.navigationBar setHidden:YES];
+    
     [self.view setBackgroundColor:[UIColor blackColor]];
 }
 
@@ -362,12 +323,6 @@
         [self.view removeGestureRecognizer:_doubleTapGestureRecognizer];
         [_doubleTapGestureRecognizer release];
         _doubleTapGestureRecognizer = nil;
-    }
-    
-    if (_singleTapGestureRecognizer) {
-        [self.view removeGestureRecognizer:_singleTapGestureRecognizer];
-        [_singleTapGestureRecognizer release];
-        _singleTapGestureRecognizer = nil;
     }
     
     [self clearUI];

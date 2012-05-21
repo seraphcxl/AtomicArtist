@@ -222,6 +222,7 @@
         [pageScrollViewCtrl setViewCtrlsWithCurrent:currentDetailViewCtrl previous:prevDetailViewCtrl andNext:nextDetailViewCtrl];
         [pageScrollViewCtrl setDelegate:self];
         [pageScrollViewCtrl setScrollEnabled:YES];
+        [pageScrollViewCtrl setHideNavigationBarEnabled:NO];
         [self.navigationController pushViewController:pageScrollViewCtrl animated:YES];
     } else {
         [NSException raise:@"DCItemViewController Error" format:@"Reason: assetURL is nil or self.groupPersistentID is nil or self.dataLibraryHelper is nil"];
@@ -319,6 +320,8 @@
 - (void)viewWillAppear:(BOOL)animated {
     NSLog(@"DCItemViewController viewWillAppear:");
     [super viewWillAppear:animated];
+    
+    CGRect rect = [self.view bounds];
     
     if (_itemViews) {
         [_itemViews removeAllObjects];
