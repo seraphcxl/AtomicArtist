@@ -38,6 +38,7 @@
 
 @implementation DCItemViewController
 
+@synthesize delegate = _delegate;
 @synthesize delegateForItemView = _delegateForItemView;
 @synthesize dataGroupUID = _dataGroupUID;
 @synthesize groupTitle = _groupTitle;
@@ -185,7 +186,9 @@
         _groupTitle = [[[NSString alloc] initWithFormat:@"%@ (%d)", groupName, numberOfItems] autorelease];
         [_groupTitle retain];
         
-        [self.navigationItem setTitle:self.groupTitle];
+        if (self.delegate) {
+            [self.delegate itemViewCtrl:self setGroupTitle:self.groupTitle];
+        }
     }
 }
 

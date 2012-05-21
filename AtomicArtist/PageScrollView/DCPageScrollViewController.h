@@ -24,10 +24,12 @@ extern NSString * const pageID_next;
 
 @end
 
-@interface DCPageScrollViewController : UIViewController <UIScrollViewDelegate, DCDetailViewControllerDelegate>
+@interface DCPageScrollViewController : UIViewController <UIScrollViewDelegate, DCDetailViewControllerDelegate> {
+    CGPoint scrollViewOffset;
+}
 
 @property (assign, nonatomic) id <DCPageScrollViewControllerDelegate> delegate;
-@property (retain, nonatomic) IBOutlet UIScrollView *pageScrollView;
+@property (retain, nonatomic) UIScrollView *pageScrollView;
 @property (retain, nonatomic) UIView *contextView;
 @property (retain, nonatomic) NSMutableDictionary *pageViews;
 @property (retain, nonatomic) NSMutableDictionary *viewCtrls;

@@ -12,8 +12,17 @@
 #import "DCUniformDataProtocol.h"
 #import "DCPageScrollViewController.h"
 
+@class DCItemViewController;
+
+@protocol DCItemViewControllerDelegate <NSObject>
+
+- (void)itemViewCtrl:(DCItemViewController *)viewCtrl setGroupTitle:(NSString *)title;
+
+@end
+
 @interface DCItemViewController : UITableViewController <DCItemViewCellDelegate, DCPageScrollViewControllerDelegate>
 
+@property (assign, nonatomic) id <DCItemViewControllerDelegate> delegate;
 @property (assign, nonatomic) id <DCItemViewDelegate> delegateForItemView;
 @property (retain, nonatomic) NSString *dataGroupUID;
 @property (assign, nonatomic) NSUInteger dataGroupIndex;

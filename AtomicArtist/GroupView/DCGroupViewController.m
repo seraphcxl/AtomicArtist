@@ -223,6 +223,7 @@
         currentItemViewCtrl.dataGroupIndex = currentIndex;
         currentItemViewCtrl.enumDataItemParam = _enumDataItemParam;
         currentItemViewCtrl.delegateForItemView = pageScrollViewCtrl;
+        currentItemViewCtrl.delegate = pageScrollViewCtrl;
         
         if (currentIndex != 0) {
             NSUInteger prevIndex = currentIndex - 1;
@@ -232,6 +233,7 @@
             prevItemViewCtrl.dataGroupIndex = prevIndex;
             prevItemViewCtrl.enumDataItemParam = _enumDataItemParam;
             prevItemViewCtrl.delegateForItemView = pageScrollViewCtrl;
+            prevItemViewCtrl.delegate = pageScrollViewCtrl;
         }
         
         if (currentIndex < [self.dataLibraryHelper groupsCount] - 1) {
@@ -242,6 +244,7 @@
             nextItemViewCtrl.dataGroupIndex = nextIndex;
             nextItemViewCtrl.enumDataItemParam = _enumDataItemParam;
             nextItemViewCtrl.delegateForItemView = pageScrollViewCtrl;
+            nextItemViewCtrl.delegate = pageScrollViewCtrl;
         }
         
         [pageScrollViewCtrl setViewCtrlsWithCurrent:currentItemViewCtrl previous:prevItemViewCtrl andNext:nextItemViewCtrl];

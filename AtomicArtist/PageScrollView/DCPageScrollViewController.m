@@ -29,8 +29,6 @@ typedef enum {
     BOOL needCallViewWillAppear[PAGEINDEX_COUNT];
     BOOL needCallViewRotate[PAGEINDEX_COUNT];
     
-    CGPoint scrollViewOffset;
-    
     UITapGestureRecognizer *_singleTapGestureRecognizer;
     NSTimer *_timerForHideAssist;
 }

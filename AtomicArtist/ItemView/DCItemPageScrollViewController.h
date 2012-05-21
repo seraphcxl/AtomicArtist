@@ -8,7 +8,8 @@
 
 #import "DCPageScrollViewController.h"
 #import "DCItemView.h"
+#import "DCItemViewController.h"
 
-@interface DCItemPageScrollViewController : DCPageScrollViewController <DCItemViewDelegate>
+@interface DCItemPageScrollViewController : DCPageScrollViewController <DCItemViewDelegate, DCItemViewControllerDelegate>
 
 @end
