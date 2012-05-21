@@ -12,4 +12,6 @@
 
 @interface DCItemPageScrollViewController : DCPageScrollViewController <DCItemViewDelegate, DCItemViewControllerDelegate>
 
+- (IBAction)refresh:(id)sender;
+
 @end

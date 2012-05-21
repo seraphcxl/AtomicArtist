@@ -20,6 +20,9 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
+        
+        UIBarButtonItem *bbi = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(refresh:)] autorelease];
+        [self.navigationItem setRightBarButtonItem:bbi];
     }
     return self;
 }
@@ -39,6 +42,11 @@
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     return [super shouldAutorotateToInterfaceOrientation:interfaceOrientation];
+}
+
+- (IBAction)refresh:(id)sender {
+    DCItemViewController *itemViewCtrl = (DCItemViewController *)[self currentViewCtrl];
+    [itemViewCtrl refresh:sender];
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {

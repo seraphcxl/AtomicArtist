@@ -283,8 +283,8 @@
             _itemViews = [[NSMutableDictionary alloc] init];
         }
         
-        UIBarButtonItem *bbi = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(refresh:)] autorelease];
-        [self.navigationItem setRightBarButtonItem:bbi];
+//        UIBarButtonItem *bbi = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(refresh:)] autorelease];
+//        [self.navigationItem setRightBarButtonItem:bbi];
     }
     return self;
 }
