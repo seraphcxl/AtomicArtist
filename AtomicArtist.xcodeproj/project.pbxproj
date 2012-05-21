@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		1B8EFA5C1565D9A100E66552 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B8EFA5B1565D9A100E66552 /* ImageIO.framework */; };
 		1B8EFA601565DB5600E66552 /* DCUniformDataProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B8EFA5F1565DB5600E66552 /* DCUniformDataProtocol.m */; };
+		1BB122281569EB5300644586 /* DCItemPageScrollViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BB122271569EB5300644586 /* DCItemPageScrollViewController.m */; };
 		1BBFAD8C1565246500D5FC76 /* DCALAssetGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BBFAD8B1565246500D5FC76 /* DCALAssetGroupViewController.m */; };
 		1BBFAD97156525A400D5FC76 /* DCALAssetItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BBFAD8F156525A400D5FC76 /* DCALAssetItem.m */; };
 		1BBFAD98156525A400D5FC76 /* DCALAssetsGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BBFAD91156525A400D5FC76 /* DCALAssetsGroup.m */; };
@@ -46,6 +47,8 @@
 		1B8EFA5B1565D9A100E66552 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 		1B8EFA5E1565DB5600E66552 /* DCUniformDataProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCUniformDataProtocol.h; sourceTree = "<group>"; };
 		1B8EFA5F1565DB5600E66552 /* DCUniformDataProtocol.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCUniformDataProtocol.m; sourceTree = "<group>"; };
+		1BB122261569EB5300644586 /* DCItemPageScrollViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DCItemPageScrollViewController.h; path = ItemView/DCItemPageScrollViewController.h; sourceTree = "<group>"; };
+		1BB122271569EB5300644586 /* DCItemPageScrollViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DCItemPageScrollViewController.m; path = ItemView/DCItemPageScrollViewController.m; sourceTree = "<group>"; };
 		1BBFAD8A1565246500D5FC76 /* DCALAssetGroupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DCALAssetGroupViewController.h; path = GroupView/ALAssetGroupView/DCALAssetGroupViewController.h; sourceTree = "<group>"; };
 		1BBFAD8B1565246500D5FC76 /* DCALAssetGroupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DCALAssetGroupViewController.m; path = GroupView/ALAssetGroupView/DCALAssetGroupViewController.m; sourceTree = "<group>"; };
 		1BBFAD8E156525A400D5FC76 /* DCALAssetItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCALAssetItem.h; sourceTree = "<group>"; };
@@ -260,6 +263,8 @@
 				1BF9F518156493A50015E004 /* DCItemViewCell.m */,
 				1BF9F4F315648B730015E004 /* DCItemView.h */,
 				1BF9F4F415648B730015E004 /* DCItemView.m */,
+				1BB122261569EB5300644586 /* DCItemPageScrollViewController.h */,
+				1BB122271569EB5300644586 /* DCItemPageScrollViewController.m */,
 			);
 			name = ItemView;
 			sourceTree = "<group>";
@@ -366,6 +371,7 @@
 				1BBFADA6156525B500D5FC76 /* Group.m in Sources */,
 				1BBFADA7156525B500D5FC76 /* Item.m in Sources */,
 				1B8EFA601565DB5600E66552 /* DCUniformDataProtocol.m in Sources */,
+				1BB122281569EB5300644586 /* DCItemPageScrollViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

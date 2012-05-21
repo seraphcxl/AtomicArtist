@@ -12,8 +12,9 @@
 #import "DCUniformDataProtocol.h"
 #import "DCPageScrollViewController.h"
 
-@interface DCItemViewController : UITableViewController <DCItemViewDelegate, DCItemViewCellDelegate, DCPageScrollViewControllerDelegate>
+@interface DCItemViewController : UITableViewController <DCItemViewCellDelegate, DCPageScrollViewControllerDelegate>
 
+@property (assign, nonatomic) id <DCItemViewDelegate> delegateForItemView;
 @property (retain, nonatomic) NSString *dataGroupUID;
 @property (assign, nonatomic) NSUInteger dataGroupIndex;
 @property (readonly, nonatomic) NSString *groupTitle;
@@ -23,5 +24,7 @@
 - (IBAction)refresh:(id)sender;
 
 - (id)initWithDataLibraryHelper:(id <DCDataLibraryHelper>)dataLibraryHelper;
+
+- (void)selectItem:(NSString *)itemUID showInPageScrollViewController:(DCPageScrollViewController *)pageScrollViewCtrl;
 
 @end

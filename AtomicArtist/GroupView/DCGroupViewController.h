@@ -9,8 +9,9 @@
 #import <UIKit/UIKit.h>
 #import "DCGroupViewCell.h"
 #import "DCUniformDataProtocol.h"
+#import "DCPageScrollViewController.h"
 
-@interface DCGroupViewController : UITableViewController <DCGroupViewDelegate, DCGroupViewCellDelegate> {
+@interface DCGroupViewController : UITableViewController <DCGroupViewDelegate, DCGroupViewCellDelegate, DCPageScrollViewControllerDelegate> {
     id _enumDataGroupParam;
     id _enumDataItemParam;
 }

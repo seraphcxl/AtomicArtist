@@ -38,6 +38,7 @@
 
 @implementation DCItemViewController
 
+@synthesize delegateForItemView = _delegateForItemView;
 @synthesize dataGroupUID = _dataGroupUID;
 @synthesize groupTitle = _groupTitle;
 @synthesize dataLibraryHelper = _dataLibraryHelper;
@@ -188,16 +189,8 @@
     }
 }
 
-- (void)selectItem:(NSString *)itemUID {
-    if (itemUID && self.dataGroupUID && self.dataLibraryHelper) {
-//        NSUInteger index = [self.dataLibraryHelper indexForItemUID:itemUID inGroup:self.dataGroupUID];
-//        
-//        DCDetailViewController *detailViewCtrl = [[[DCDetailViewController alloc] initWithDataLibraryHelper:self.dataLibraryHelper dataGroupUID:self.dataGroupUID itemUID:itemUID andIndexInGroup:index] autorelease];
-//        
-//        [self.navigationController pushViewController:detailViewCtrl animated:YES];
-        /*** *** ***/
-        DCPageScrollViewController *pageScrollViewCtrl = [[DCPageScrollViewController alloc] initWithNibName:nil bundle:nil];
-        
+- (void)selectItem:(NSString *)itemUID showInPageScrollViewController:(DCPageScrollViewController *)pageScrollViewCtrl {
+    if (itemUID && pageScrollViewCtrl && self.dataGroupUID && self.dataLibraryHelper) {
         DCDetailViewController *currentDetailViewCtrl = nil;
         DCDetailViewController *prevDetailViewCtrl = nil;
         DCDetailViewController *nextDetailViewCtrl = nil;
@@ -223,10 +216,9 @@
         [pageScrollViewCtrl setViewCtrlsWithCurrent:currentDetailViewCtrl previous:prevDetailViewCtrl andNext:nextDetailViewCtrl];
         [pageScrollViewCtrl setDelegate:self];
         [pageScrollViewCtrl setScrollEnabled:YES];
-        [pageScrollViewCtrl setHideNavigationBarEnabled:NO];
-        [self.navigationController pushViewController:pageScrollViewCtrl animated:YES];
+        [pageScrollViewCtrl setHideNavigationBarEnabled:YES];
     } else {
-        [NSException raise:@"DCItemViewController Error" format:@"Reason: assetURL is nil or self.groupPersistentID is nil or self.dataLibraryHelper is nil"];
+        [NSException raise:@"DCItemViewController Error" format:@"Reason: assetURL is nil or self.groupPersistentID is nil or self.dataLibraryHelper is nil or pageScrollViewCtrl is nil"];
     }
 }
 
@@ -316,6 +308,7 @@
     [notificationCenter addObserver:self selector:@selector(reloadTableView:) name:@"ALAssetAdded" object:nil];
     [notificationCenter addObserver:self selector:@selector(actionForWillEnterForegroud:) name:@"applicationWillEnterForeground:" object:nil];
     
+    [self refreshItems:NO];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -418,7 +411,7 @@
         [cell initWithDataLibraryHelper:self.dataLibraryHelper itemUIDs:itemUIDs dataGroupUID:self.dataGroupUID cellSpace:_cellSpace cellTopBottomMargin:(_cellSpace / 2) frameSize:_frameSize andItemCount:_itemCountInCell];
     }
     cell.delegate = self;
-    cell.delegateForItemView = self;
+    cell.delegateForItemView = self.delegateForItemView;
     return cell;
 }
 

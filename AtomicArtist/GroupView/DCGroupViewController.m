@@ -8,7 +8,7 @@
 
 #import "DCGroupViewController.h"
 #import "DCItemViewController.h"
-#import "DCPageScrollViewController.h"
+#import "DCItemPageScrollViewController.h"
 
 @interface DCGroupViewController () {
     NSUInteger _itemCountInCell;
@@ -48,6 +48,74 @@
 
 @synthesize dataLibraryHelper = _dataLibraryHelper;
 //@synthesize interfaceOrientation = _interfaceOrientation;
+
+- (void)pageScrollViewCtrl:(DCPageScrollViewController *)pageScrollViewCtrl doNextActionWithCurrentViewCtrl:(UIViewController *)currentViewCtrl nextViewCtrl:(UIViewController *)nextViewCtrl {
+    NSLog(@"DCGroupViewController pageScrollViewCtrl:doNextActionWithCurrentViewCtrl:nextViewCtrl:");
+    if (![pageScrollViewCtrl isMemberOfClass:[DCItemPageScrollViewController class]]) {
+        [NSException raise:@"DCGroupViewController error" format:@"Reason: pageScrollViewCtrl class: %@", [pageScrollViewCtrl class]];
+        return;
+    }
+    DCItemViewController *currentItemViewCtrl = (DCItemViewController *)nextViewCtrl;
+    [currentItemViewCtrl retain];
+    DCItemViewController *prevItemViewCtrl = (DCItemViewController *)currentViewCtrl;
+    [prevItemViewCtrl retain];
+    DCItemViewController *nextItemViewCtrl = nil;
+    if (currentItemViewCtrl.dataGroupIndex == ([self.dataLibraryHelper groupsCount] - 1)) {
+        ;
+    } else {
+        NSUInteger nextIndex = currentItemViewCtrl.dataGroupIndex + 1;
+        NSString *nextItemUID = [self.dataLibraryHelper groupUIDAtIndex:nextIndex];
+        nextItemViewCtrl = [[[DCItemViewController alloc] initWithDataLibraryHelper:self.dataLibraryHelper] autorelease];
+        nextItemViewCtrl.dataGroupUID = nextItemUID;
+        nextItemViewCtrl.dataGroupIndex = nextIndex;
+        nextItemViewCtrl.enumDataItemParam = _enumDataItemParam;
+        nextItemViewCtrl.delegateForItemView = (DCItemPageScrollViewController *)pageScrollViewCtrl;
+        
+        [pageScrollViewCtrl setViewCtrlsWithCurrent:currentItemViewCtrl previous:prevItemViewCtrl andNext:nextItemViewCtrl];
+        
+        [currentItemViewCtrl release];
+        currentItemViewCtrl = nil;
+        [prevItemViewCtrl release];
+        prevItemViewCtrl = nil;
+        
+        [pageScrollViewCtrl reloadPageViews];
+        [pageScrollViewCtrl scrollToCurrentPageView];
+    }
+}
+
+- (void)pageScrollViewCtrl:(DCPageScrollViewController *)pageScrollViewCtrl doPreviousActionWithCurrentViewCtrl:(UIViewController *)currentViewCtrl previousViewCtrl:(UIViewController *)previousViewCtrl {
+    NSLog(@"DCItemViewController pageScrollViewCtrl:doPreviousActionWithCurrentViewCtrl:previousViewCtrl:");
+    if (![pageScrollViewCtrl isMemberOfClass:[DCItemPageScrollViewController class]]) {
+        [NSException raise:@"DCGroupViewController error" format:@"Reason: pageScrollViewCtrl class: %@", [pageScrollViewCtrl class]];
+        return;
+    }
+    DCItemViewController *currentItemViewCtrl = (DCItemViewController *)previousViewCtrl;
+    [currentItemViewCtrl retain];
+    DCItemViewController *prevItemViewCtrl = nil;
+    DCItemViewController *nextItemViewCtrl = (DCItemViewController *)currentViewCtrl;
+    [nextItemViewCtrl retain];
+    if (currentItemViewCtrl.dataGroupIndex == 0) {
+        ;
+    } else {
+        NSUInteger prevIndex = currentItemViewCtrl.dataGroupIndex - 1;
+        NSString *prevItemUID = [self.dataLibraryHelper groupUIDAtIndex:prevIndex];
+        prevItemViewCtrl = [[[DCItemViewController alloc] initWithDataLibraryHelper:self.dataLibraryHelper] autorelease];
+        prevItemViewCtrl.dataGroupUID = prevItemUID;
+        prevItemViewCtrl.dataGroupIndex = prevIndex;
+        prevItemViewCtrl.enumDataItemParam = _enumDataItemParam;
+        prevItemViewCtrl.delegateForItemView = (DCItemPageScrollViewController *)pageScrollViewCtrl;
+        
+        [pageScrollViewCtrl setViewCtrlsWithCurrent:currentItemViewCtrl previous:prevItemViewCtrl andNext:nextItemViewCtrl];
+        
+        [currentItemViewCtrl release];
+        currentItemViewCtrl = nil;
+        [nextItemViewCtrl release];
+        nextItemViewCtrl = nil;
+        
+        [pageScrollViewCtrl reloadPageViews];
+        [pageScrollViewCtrl scrollToCurrentPageView];
+    }
+}
 
 - (void)setEnumDataGroupParam:(id)enumDataGroupParam {
     NSLog(@"need override");
@@ -137,12 +205,50 @@
 
 - (void)selectGroup:(NSString *)dataGroupUID {
     if (dataGroupUID && self.dataLibraryHelper) {
-        NSUInteger index = [self.dataLibraryHelper indexForGroupUID:dataGroupUID];
-        DCItemViewController *itemViewController = [[[DCItemViewController alloc] initWithDataLibraryHelper:self.dataLibraryHelper] autorelease];
-        itemViewController.dataGroupUID = dataGroupUID;
-        itemViewController.dataGroupIndex = index;
-        itemViewController.enumDataItemParam = _enumDataItemParam;
-        [self.navigationController pushViewController:itemViewController animated:YES];
+//        NSUInteger index = [self.dataLibraryHelper indexForGroupUID:dataGroupUID];
+//        DCItemViewController *itemViewController = [[[DCItemViewController alloc] initWithDataLibraryHelper:self.dataLibraryHelper] autorelease];
+//        itemViewController.dataGroupUID = dataGroupUID;
+//        itemViewController.dataGroupIndex = index;
+//        itemViewController.enumDataItemParam = _enumDataItemParam;
+//        [self.navigationController pushViewController:itemViewController animated:YES];
+        DCItemPageScrollViewController *pageScrollViewCtrl = [[DCItemPageScrollViewController alloc] initWithNibName:nil bundle:nil];
+        
+        DCItemViewController *currentItemViewCtrl = nil;
+        DCItemViewController *prevItemViewCtrl = nil;
+        DCItemViewController *nextItemViewCtrl = nil;
+        
+        NSUInteger currentIndex = [self.dataLibraryHelper indexForGroupUID:dataGroupUID];
+        currentItemViewCtrl = [[[DCItemViewController alloc] initWithDataLibraryHelper:self.dataLibraryHelper] autorelease];
+        currentItemViewCtrl.dataGroupUID = dataGroupUID;
+        currentItemViewCtrl.dataGroupIndex = currentIndex;
+        currentItemViewCtrl.enumDataItemParam = _enumDataItemParam;
+        currentItemViewCtrl.delegateForItemView = pageScrollViewCtrl;
+        
+        if (currentIndex != 0) {
+            NSUInteger prevIndex = currentIndex - 1;
+            NSString *prevItemUID = [self.dataLibraryHelper groupUIDAtIndex:prevIndex];
+            prevItemViewCtrl = [[[DCItemViewController alloc] initWithDataLibraryHelper:self.dataLibraryHelper] autorelease];
+            prevItemViewCtrl.dataGroupUID = prevItemUID;
+            prevItemViewCtrl.dataGroupIndex = prevIndex;
+            prevItemViewCtrl.enumDataItemParam = _enumDataItemParam;
+            prevItemViewCtrl.delegateForItemView = pageScrollViewCtrl;
+        }
+        
+        if (currentIndex < [self.dataLibraryHelper groupsCount] - 1) {
+            NSUInteger nextIndex = currentIndex + 1;
+            NSString *nextItemUID = [self.dataLibraryHelper groupUIDAtIndex:nextIndex];
+            nextItemViewCtrl = [[[DCItemViewController alloc] initWithDataLibraryHelper:self.dataLibraryHelper] autorelease];
+            nextItemViewCtrl.dataGroupUID = nextItemUID;
+            nextItemViewCtrl.dataGroupIndex = nextIndex;
+            nextItemViewCtrl.enumDataItemParam = _enumDataItemParam;
+            nextItemViewCtrl.delegateForItemView = pageScrollViewCtrl;
+        }
+        
+        [pageScrollViewCtrl setViewCtrlsWithCurrent:currentItemViewCtrl previous:prevItemViewCtrl andNext:nextItemViewCtrl];
+        [pageScrollViewCtrl setDelegate:self];
+        [pageScrollViewCtrl setScrollEnabled:YES];
+        [pageScrollViewCtrl setHideNavigationBarEnabled:NO];
+        [self.navigationController pushViewController:pageScrollViewCtrl animated:YES];
     } else {
         [NSException raise:@"DCGroupViewController error" format:@"Reason: dataGroupUID == nil"];
     }
