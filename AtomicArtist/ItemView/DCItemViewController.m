@@ -42,6 +42,7 @@
 @synthesize groupTitle = _groupTitle;
 @synthesize dataLibraryHelper = _dataLibraryHelper;
 @synthesize enumDataItemParam = _enumDataItemParam;
+@synthesize dataGroupIndex = _dataGroupIndex;
 
 - (void)pageScrollViewCtrl:(DCPageScrollViewController *)pageScrollViewCtrl doNextActionWithCurrentViewCtrl:(UIViewController *)currentViewCtrl nextViewCtrl:(UIViewController *)nextViewCtrl {
     NSLog(@"DCItemViewController pageScrollViewCtrl:doNextActionWithCurrentViewCtrl:nextViewCtrl:");
@@ -320,8 +321,6 @@
 - (void)viewWillAppear:(BOOL)animated {
     NSLog(@"DCItemViewController viewWillAppear:");
     [super viewWillAppear:animated];
-    
-    CGRect rect = [self.view bounds];
     
     if (_itemViews) {
         [_itemViews removeAllObjects];

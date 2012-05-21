@@ -8,6 +8,7 @@
 
 #import "DCGroupViewController.h"
 #import "DCItemViewController.h"
+#import "DCPageScrollViewController.h"
 
 @interface DCGroupViewController () {
     NSUInteger _itemCountInCell;
@@ -135,9 +136,11 @@
 }
 
 - (void)selectGroup:(NSString *)dataGroupUID {
-    if (dataGroupUID) {
+    if (dataGroupUID && self.dataLibraryHelper) {
+        NSUInteger index = [self.dataLibraryHelper indexForGroupUID:dataGroupUID];
         DCItemViewController *itemViewController = [[[DCItemViewController alloc] initWithDataLibraryHelper:self.dataLibraryHelper] autorelease];
         itemViewController.dataGroupUID = dataGroupUID;
+        itemViewController.dataGroupIndex = index;
         itemViewController.enumDataItemParam = _enumDataItemParam;
         [self.navigationController pushViewController:itemViewController animated:YES];
     } else {

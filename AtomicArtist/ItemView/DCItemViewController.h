@@ -15,6 +15,7 @@
 @interface DCItemViewController : UITableViewController <DCItemViewDelegate, DCItemViewCellDelegate, DCPageScrollViewControllerDelegate>
 
 @property (retain, nonatomic) NSString *dataGroupUID;
+@property (assign, nonatomic) NSUInteger dataGroupIndex;
 @property (readonly, nonatomic) NSString *groupTitle;
 @property (assign, nonatomic) id <DCDataLibraryHelper> dataLibraryHelper;
 @property (assign, nonatomic) id enumDataItemParam;
