@@ -13,7 +13,8 @@
 @interface DCGroupViewController () {
     NSUInteger _itemCountInCell;
     NSUInteger _frameSize;
-    NSUInteger _cellSpace;
+    double _cellSpace;
+    NSUInteger _tableViewMargin;
     
     NSMutableDictionary *_groupViews;
 }
@@ -24,11 +25,13 @@
 
 - (void)actionForWillEnterForegroud:(NSNotification *)note;
 
-- (NSUInteger)calcCellSpace;
+- (double)calcCellSpaceWithFrameSize:(NSUInteger)frameSize tableViewMargin:(NSUInteger)tableViewMargin andItemCountInCell:(NSUInteger)itemCountInCell;
 
-- (NSUInteger)calcItemCountInCell;
+- (NSUInteger)calcItemCountInCellWithFrameSize:(NSUInteger)frameSize andTableViewMargin:(NSUInteger)tableViewMargin;
 
 - (NSUInteger)calcFrameSize;
+
+- (NSUInteger)calcTableViewMargin;
 
 - (NSArray *)dataGroupUIDsForCellAtIndexPath:(NSIndexPath *)indexPath;
 
@@ -130,9 +133,9 @@
     if (self) {
         self.dataLibraryHelper = dataLibraryHelper;
         
-        _frameSize = [self calcFrameSize];
-        _itemCountInCell = [self calcItemCountInCell];
-        _cellSpace = [self calcCellSpace];
+//        _frameSize = [self calcFrameSize];
+//        _itemCountInCell = [self calcItemCountInCellWithFrameSize:_frameSize];
+//        _cellSpace = [self calcCellSpaceWithFrameSize:_frameSize andItemCountInCell:_itemCountInCell];
         
         if (!_groupViews) {
             _groupViews = [[NSMutableDictionary alloc] init];
@@ -288,23 +291,39 @@
     }
 }
 
-- (NSUInteger)calcItemCountInCell {
-    if (_frameSize == 0) {
+- (NSUInteger)calcTableViewMargin {
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+        return GROUPVIEW_TABLEVIEW_MARGIN_IPHONE;
+    } else if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+        return GROUPVIEW_TABLEVIEW_MARGIN_IPAD;
+    } else {
+        [NSException raise:@"DCGroupViewController error" format:@"Reason: Current device type unknown"];
+        return 0;
+    }
+}
+
+- (NSUInteger)calcItemCountInCellWithFrameSize:(NSUInteger)frameSize andTableViewMargin:(NSUInteger)tableViewMargin {
+    if (frameSize == 0) {
         [NSException raise:@"DCGroupViewController error" format:@"Reason: frameSize == 0"];
     }
     CGRect bounds = [self.tableView bounds];
-    return (NSUInteger)(bounds.size.width / _frameSize);
+    if ((NSUInteger)(bounds.size.width - (tableViewMargin * 2)) % (NSUInteger)frameSize < (frameSize / 4)) {
+        return (NSUInteger)(((bounds.size.width - (tableViewMargin * 2)) / frameSize) - 1);
+    } else {
+        return (NSUInteger)((bounds.size.width - (tableViewMargin * 2)) / frameSize);
+    }
+    
 }
 
-- (NSUInteger)calcCellSpace {
-    if (_frameSize == 0) {
+- (double)calcCellSpaceWithFrameSize:(NSUInteger)frameSize tableViewMargin:(NSUInteger)tableViewMargin andItemCountInCell:(NSUInteger)itemCountInCell {
+    if (frameSize == 0) {
         [NSException raise:@"DCGroupViewController error" format:@"Reason: frameSize == 0"];
     }
-    if (_itemCountInCell == 0) {
+    if (itemCountInCell == 0) {
         [NSException raise:@"DCGroupViewController error" format:@"Reason: itemCountInCell == 0"];
     }
     CGRect bounds = [self.tableView bounds];
-    return (NSUInteger)((bounds.size.width - _itemCountInCell * _frameSize) / (_itemCountInCell + 1));
+    return ((bounds.size.width - (tableViewMargin * 2) - (itemCountInCell * frameSize)) * 1.0 / (itemCountInCell - 1));
 }
 
 - (void)reloadTableView:(NSNotification *)note {
@@ -327,10 +346,6 @@
     [self.tableView setSeparatorColor:[UIColor clearColor]];
     [self.tableView setAllowsSelection:NO];
     
-    _frameSize = [self calcFrameSize];
-    _itemCountInCell = [self calcItemCountInCell];
-    _cellSpace = [self calcCellSpace];
-    
     NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
     [notificationCenter addObserver:self selector:@selector(reloadTableView:) name:@"ALGroupAdded" object:nil];
     [notificationCenter addObserver:self selector:@selector(notifyRefresh:) name:@"NotifyRefreshGroup" object:nil];
@@ -341,6 +356,11 @@
 - (void)viewWillAppear:(BOOL)animated {
     NSLog(@"DCGroupViewController viewWillAppear:");
     [super viewWillAppear:animated];
+    
+    _frameSize = [self calcFrameSize];
+    _tableViewMargin = [self calcTableViewMargin];
+    _itemCountInCell = [self calcItemCountInCellWithFrameSize:_frameSize andTableViewMargin:_tableViewMargin];
+    _cellSpace = [self calcCellSpaceWithFrameSize:_frameSize tableViewMargin:_tableViewMargin andItemCountInCell:_itemCountInCell];
     
     if (_groupViews) {
         [_groupViews removeAllObjects];
@@ -386,15 +406,23 @@
         [NSException raise:@"DCGroupViewController error" format:@"Reason: Current device type unknown"];
     }
     
-    _frameSize = [self calcFrameSize];
-    _itemCountInCell = [self calcItemCountInCell];
-    _cellSpace = [self calcCellSpace];
+    NSUInteger tmpFrameSize = [self calcFrameSize];
+    NSUInteger tmpTableViewMargin = [self calcTableViewMargin];
+    NSUInteger tmpItemCountInCell = [self calcItemCountInCellWithFrameSize:tmpFrameSize andTableViewMargin:tmpTableViewMargin];
+    double tmpCellSpace = [self calcCellSpaceWithFrameSize:tmpFrameSize tableViewMargin:tmpTableViewMargin andItemCountInCell:tmpItemCountInCell];
     
-    if (_groupViews) {
-        [_groupViews removeAllObjects];
+    if (_frameSize != tmpFrameSize || _tableViewMargin != tmpTableViewMargin || _itemCountInCell != tmpItemCountInCell || _cellSpace != tmpCellSpace) {
+        _frameSize = tmpFrameSize;
+        _tableViewMargin = tmpTableViewMargin;
+        _itemCountInCell = tmpItemCountInCell;
+        _cellSpace = tmpCellSpace;
+        
+        if (_groupViews) {
+            [_groupViews removeAllObjects];
+        }
+        
+        [self.tableView reloadData];
     }
-    
-    [self.tableView reloadData];
     
     return result;
 }
@@ -414,7 +442,7 @@
     // Return the number of rows in the section.
     
     if (_itemCountInCell == 0) {
-        [NSException raise:@"DCGroupViewController error" format:@"Reason: itemCountInCell == 0"];
+        return 0;
     }
     if (self.dataLibraryHelper) {
         NSInteger dataGroupCount = [self.dataLibraryHelper groupsCount];
@@ -436,9 +464,9 @@
     NSArray *dataGroupUIDs = [self dataGroupUIDsForCellAtIndexPath:indexPath];
     DCGroupViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"DCGroupViewCell"];
     if (cell == nil) {
-        cell = [[[DCGroupViewCell alloc] initWithDataLibHelper:self.dataLibraryHelper dataGroupUIDs:dataGroupUIDs enumDataItemParam:_enumDataItemParam cellSpace:_cellSpace cellTopBottomMargin:(_cellSpace / 2) frameSize:_frameSize andItemCount:_itemCountInCell] autorelease];
+        cell = [[[DCGroupViewCell alloc] initWithDataLibHelper:self.dataLibraryHelper dataGroupUIDs:dataGroupUIDs enumDataItemParam:_enumDataItemParam cellSpace:_cellSpace cellTopBottomMargin:(_cellSpace / 2) tableViewMargin:_tableViewMargin frameSize:_frameSize andItemCount:_itemCountInCell] autorelease];
     } else {
-        [cell initWithDataLibHelper:self.dataLibraryHelper dataGroupUIDs:dataGroupUIDs enumDataItemParam:_enumDataItemParam cellSpace:_cellSpace cellTopBottomMargin:(_cellSpace / 2) frameSize:_frameSize andItemCount:_itemCountInCell];
+        [cell initWithDataLibHelper:self.dataLibraryHelper dataGroupUIDs:dataGroupUIDs enumDataItemParam:_enumDataItemParam cellSpace:_cellSpace cellTopBottomMargin:(_cellSpace / 2) tableViewMargin:_tableViewMargin frameSize:_frameSize andItemCount:_itemCountInCell];
     }
     cell.delegate = self;
     cell.delegateForGroupView = self;

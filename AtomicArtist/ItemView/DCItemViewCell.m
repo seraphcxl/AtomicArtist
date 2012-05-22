@@ -15,6 +15,7 @@
 @synthesize cellSpace = _cellSpace;
 @synthesize cellTopBottomMargin = _cellTopBottomMargin;
 @synthesize frameSize = _frameSize;
+@synthesize tableViewMargin = _tableViewMargin;
 @synthesize itemCount = _itemCount;
 @synthesize itemUIDs = _itemUIDs;
 @synthesize dataGroupUID = _dataGroupUID;
@@ -34,7 +35,7 @@
             break;
         }
         
-        CGRect viewFrame = CGRectMake(self.cellSpace, self.cellTopBottomMargin, self.frameSize, self.frameSize);
+        CGRect viewFrame = CGRectMake(self.tableViewMargin, self.cellTopBottomMargin, self.frameSize, self.frameSize);
         
         for (NSString *itemUID in self.itemUIDs) {
             DCItemView *view = nil;
@@ -59,7 +60,7 @@
     } while (NO);
 }
 
-- (id)initWithDataLibraryHelper:(id<DCDataLibraryHelper>)dataLibraryHelper itemUIDs:(NSArray *)itemUIDs dataGroupUID:(NSString *)dataGroupUID cellSpace:(NSUInteger)cellSpace cellTopBottomMargin:(NSUInteger)cellTopBottomMargin frameSize:(NSUInteger)frameSize andItemCount:(NSUInteger)itemCount {
+- (id)initWithDataLibraryHelper:(id<DCDataLibraryHelper>)dataLibraryHelper itemUIDs:(NSArray *)itemUIDs dataGroupUID:(NSString *)dataGroupUID cellSpace:(double)cellSpace cellTopBottomMargin:(double)cellTopBottomMargin tableViewMargin:(NSUInteger)tableViewMargin frameSize:(NSUInteger)frameSize andItemCount:(NSUInteger)itemCount {
     self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"DCItemViewCell"];
     if (self) {
         for (UIView *view in [self subviews]) {
@@ -73,6 +74,7 @@
         [_dataGroupUID retain];
         _cellSpace = cellSpace;
         _cellTopBottomMargin = cellTopBottomMargin;
+        _tableViewMargin = tableViewMargin;
         _frameSize = frameSize;
         _itemCount = itemCount;
     }
