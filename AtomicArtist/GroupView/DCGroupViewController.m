@@ -307,12 +307,8 @@
         [NSException raise:@"DCGroupViewController error" format:@"Reason: frameSize == 0"];
     }
     CGRect bounds = [self.tableView bounds];
-    if ((NSUInteger)(bounds.size.width - (tableViewMargin * 2)) % (NSUInteger)frameSize < (frameSize / 4)) {
-        return (NSUInteger)(((bounds.size.width - (tableViewMargin * 2)) / frameSize) - 1);
-    } else {
-        return (NSUInteger)((bounds.size.width - (tableViewMargin * 2)) / frameSize);
-    }
-    
+    double width = bounds.size.width - (tableViewMargin * 2);
+    return (NSUInteger)((width - frameSize) / ((1 + 1.0 / 16) * frameSize) + 1.0);
 }
 
 - (double)calcCellSpaceWithFrameSize:(NSUInteger)frameSize tableViewMargin:(NSUInteger)tableViewMargin andItemCountInCell:(NSUInteger)itemCountInCell {

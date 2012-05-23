@@ -278,9 +278,9 @@ typedef enum {
     scrollViewOffset = [scrollView contentOffset];
     CGPoint prevPageViewOffset = [[self previousPageView] frame].origin;
     CGPoint nextPageViewOffset = [[self nextPageView] frame].origin;
-    if (scrollViewOffset.x == prevPageViewOffset.x) {
+    if ([self previousViewCtrl] && scrollViewOffset.x == prevPageViewOffset.x) {
         [self previous];
-    } else if (scrollViewOffset.x == nextPageViewOffset.x) {
+    } else if ([self nextViewCtrl] && scrollViewOffset.x == nextPageViewOffset.x) {
         [self next];
     } else {
         NSLog(@"Warning");

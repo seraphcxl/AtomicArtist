@@ -57,11 +57,11 @@
     CGPoint currentPageViewOffset = [[self currentPageView] frame].origin;
     CGPoint nextPageViewOffset = [[self nextPageView] frame].origin;
     DCItemViewController *itemViewCtrl = nil;
-    if (scrollViewOffset.x == prevPageViewOffset.x) {
+    if ([self previousViewCtrl] && scrollViewOffset.x == prevPageViewOffset.x) {
         itemViewCtrl = (DCItemViewController *)[self previousViewCtrl];
-    } else if (scrollViewOffset.x == currentPageViewOffset.x) {
+    } else if ([self currentViewCtrl] && scrollViewOffset.x == currentPageViewOffset.x) {
         itemViewCtrl = (DCItemViewController *)[self currentViewCtrl];
-    } else if (scrollViewOffset.x == nextPageViewOffset.x) {
+    } else if ([self nextViewCtrl] && scrollViewOffset.x == nextPageViewOffset.x) {
         itemViewCtrl = (DCItemViewController *)[self nextViewCtrl];
     } else {
         NSLog(@"Warning");
