@@ -44,31 +44,31 @@
 }
 
 #pragma mark CoreDataGeneratedAccessors
-- (void)addAssets:(NSSet *)values {
-    self.items = [self.items setByAddingObjectsFromSet:values];
-}
-
-- (void)addAssetsObject:(Item *)value {
-    self.items = [self.items setByAddingObject:value];
-}
-
-- (void)removeAssets:(NSSet *)values {
-    NSMutableSet *tmpSet = [[[NSMutableSet alloc] initWithSet:self.items] autorelease];
-    
-    for (Item *item in values) {
-        [tmpSet removeObject:item];
-    }
-    
-    self.items = [[tmpSet copy] autorelease];
-}
-
-- (void)removeAssetsObject:(Item *)value {
-    NSMutableSet *tmpSet = [[[NSMutableSet alloc] initWithSet:self.items] autorelease];
-    
-    [tmpSet removeObject:value];
-    
-    self.items = [[tmpSet copy] autorelease];
-}
+//- (void)addAssets:(NSSet *)values {
+//    self.items = [self.items setByAddingObjectsFromSet:values];
+//}
+//
+//- (void)addAssetsObject:(Item *)value {
+//    self.items = [self.items setByAddingObject:value];
+//}
+//
+//- (void)removeAssets:(NSSet *)values {
+//    NSMutableSet *tmpSet = [[[NSMutableSet alloc] initWithSet:self.items] autorelease];
+//    
+//    for (Item *item in values) {
+//        [tmpSet removeObject:item];
+//    }
+//    
+//    self.items = [[tmpSet copy] autorelease];
+//}
+//
+//- (void)removeAssetsObject:(Item *)value {
+//    NSMutableSet *tmpSet = [[[NSMutableSet alloc] initWithSet:self.items] autorelease];
+//    
+//    [tmpSet removeObject:value];
+//    
+//    self.items = [[tmpSet copy] autorelease];
+//}
 
 
 @end

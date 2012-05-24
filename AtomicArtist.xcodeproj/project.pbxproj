@@ -10,6 +10,8 @@
 		1B8EFA5C1565D9A100E66552 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B8EFA5B1565D9A100E66552 /* ImageIO.framework */; };
 		1B8EFA601565DB5600E66552 /* DCUniformDataProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B8EFA5F1565DB5600E66552 /* DCUniformDataProtocol.m */; };
 		1BB122281569EB5300644586 /* DCItemPageScrollViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BB122271569EB5300644586 /* DCItemPageScrollViewController.m */; };
+		1BBB2069156E2D09003BE51C /* DCDataLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BBB2066156E2D09003BE51C /* DCDataLoader.m */; };
+		1BBB206A156E2D09003BE51C /* DCLoadThumbnailForALAssetItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BBB2068156E2D09003BE51C /* DCLoadThumbnailForALAssetItem.m */; };
 		1BBFAD8C1565246500D5FC76 /* DCALAssetGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BBFAD8B1565246500D5FC76 /* DCALAssetGroupViewController.m */; };
 		1BBFAD97156525A400D5FC76 /* DCALAssetItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BBFAD8F156525A400D5FC76 /* DCALAssetItem.m */; };
 		1BBFAD98156525A400D5FC76 /* DCALAssetsGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BBFAD91156525A400D5FC76 /* DCALAssetsGroup.m */; };
@@ -49,6 +51,10 @@
 		1B8EFA5F1565DB5600E66552 /* DCUniformDataProtocol.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCUniformDataProtocol.m; sourceTree = "<group>"; };
 		1BB122261569EB5300644586 /* DCItemPageScrollViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DCItemPageScrollViewController.h; path = ItemView/DCItemPageScrollViewController.h; sourceTree = "<group>"; };
 		1BB122271569EB5300644586 /* DCItemPageScrollViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DCItemPageScrollViewController.m; path = ItemView/DCItemPageScrollViewController.m; sourceTree = "<group>"; };
+		1BBB2065156E2D09003BE51C /* DCDataLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCDataLoader.h; sourceTree = "<group>"; };
+		1BBB2066156E2D09003BE51C /* DCDataLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCDataLoader.m; sourceTree = "<group>"; };
+		1BBB2067156E2D09003BE51C /* DCLoadThumbnailForALAssetItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCLoadThumbnailForALAssetItem.h; sourceTree = "<group>"; };
+		1BBB2068156E2D09003BE51C /* DCLoadThumbnailForALAssetItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCLoadThumbnailForALAssetItem.m; sourceTree = "<group>"; };
 		1BBFAD8A1565246500D5FC76 /* DCALAssetGroupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DCALAssetGroupViewController.h; path = GroupView/ALAssetGroupView/DCALAssetGroupViewController.h; sourceTree = "<group>"; };
 		1BBFAD8B1565246500D5FC76 /* DCALAssetGroupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DCALAssetGroupViewController.m; path = GroupView/ALAssetGroupView/DCALAssetGroupViewController.m; sourceTree = "<group>"; };
 		1BBFAD8E156525A400D5FC76 /* DCALAssetItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCALAssetItem.h; sourceTree = "<group>"; };
@@ -123,6 +129,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1BBB2064156E2D09003BE51C /* DataLoader */ = {
+			isa = PBXGroup;
+			children = (
+				1BBB2065156E2D09003BE51C /* DCDataLoader.h */,
+				1BBB2066156E2D09003BE51C /* DCDataLoader.m */,
+				1BBB2067156E2D09003BE51C /* DCLoadThumbnailForALAssetItem.h */,
+				1BBB2068156E2D09003BE51C /* DCLoadThumbnailForALAssetItem.m */,
+			);
+			path = DataLoader;
+			sourceTree = "<group>";
+		};
 		1BBFAD881565241E00D5FC76 /* ALAsseetGroupView */ = {
 			isa = PBXGroup;
 			children = (
@@ -247,6 +264,7 @@
 		1BF9F4DC156487470015E004 /* Data */ = {
 			isa = PBXGroup;
 			children = (
+				1BBB2064156E2D09003BE51C /* DataLoader */,
 				1BBFAD9B156525B500D5FC76 /* DataModel */,
 				1BBFAD8D156525A400D5FC76 /* DataLibraryHelper */,
 			);
@@ -372,6 +390,8 @@
 				1BBFADA7156525B500D5FC76 /* Item.m in Sources */,
 				1B8EFA601565DB5600E66552 /* DCUniformDataProtocol.m in Sources */,
 				1BB122281569EB5300644586 /* DCItemPageScrollViewController.m in Sources */,
+				1BBB2069156E2D09003BE51C /* DCDataLoader.m in Sources */,
+				1BBB206A156E2D09003BE51C /* DCLoadThumbnailForALAssetItem.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

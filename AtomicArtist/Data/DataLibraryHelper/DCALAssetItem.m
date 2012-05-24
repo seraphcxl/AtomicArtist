@@ -56,6 +56,8 @@
             result = [self.alAsset valueForProperty:ALAssetPropertyOrientation];
         } else if ([property isEqualToString:kDATAITEMPROPERTY_THUMBNAIL]) {
             result = [[[UIImage alloc] initWithCGImage:[self.alAsset thumbnail]] autorelease];
+        } else if ([property isEqualToString:kDATAITEMPROPERTY_CACHETHUMBNAIL]) {
+            result = nil;
         } else if ([property isEqualToString:kDATAITEMPROPERTY_ORIGINIMAGE]) {
             result = [[[UIImage alloc] initWithCGImage:[representation fullResolutionImage]] autorelease];
         } else if ([property isEqualToString:kDATAITEMPROPERTY_FULLSCREENIMAGE]) {

@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "DCUniformDataProtocol.h"
+#import "DCLoadThumbnailForALAssetItem.h"
 
 @protocol DCItemViewDelegate <NSObject>
 
@@ -18,13 +19,14 @@
 @interface DCItemView : UIView
 
 @property (assign, nonatomic) id <DCItemViewDelegate> delegate;
-@property (retain, nonatomic) NSString *itemUID;
+@property (readonly, nonatomic) NSString *itemUID;
 @property (readonly, nonatomic) NSUInteger thumbnailSize;
 @property (readonly, nonatomic) NSUInteger titleFontSize;
 @property (retain, nonatomic) UIImage *thumbnail;
 @property (readonly, nonatomic) NSString *dataGroupUID;
 @property (assign, nonatomic) id <DCDataLibraryHelper> dataLibraryHelper;
+@property (retain, nonatomic) DCLoadThumbnailForALAssetItem *operationForLoadThumbnail;
 
-- (id)InitWithDataLibraryHelper:(id <DCDataLibraryHelper>)dataLibraryHelper dataGroupUID:(NSString *)dataGroupUID andFrame:(CGRect)frame;
+- (id)InitWithDataLibraryHelper:(id <DCDataLibraryHelper>)dataLibraryHelper itemUID:(NSString *)itemUID dataGroupUID:(NSString *)dataGroupUID andFrame:(CGRect)frame;
 
 @end

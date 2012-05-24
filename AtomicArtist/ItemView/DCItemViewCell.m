@@ -44,9 +44,8 @@
             }
             
             if (!view) {
-                view = [[[DCItemView alloc] InitWithDataLibraryHelper:self.dataLibraryHelper dataGroupUID:self.dataGroupUID andFrame:viewFrame] autorelease];
+                view = [[[DCItemView alloc] InitWithDataLibraryHelper:self.dataLibraryHelper itemUID:itemUID dataGroupUID:self.dataGroupUID andFrame:viewFrame] autorelease];
                 view.delegate = self.delegateForItemView;
-                view.itemUID = itemUID;
                 
                 if (self.delegate) {
                     [self.delegate addItemView:view];
