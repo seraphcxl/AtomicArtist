@@ -7,21 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "DCUniformDataProtocol.h"
-
-@class DCLoadThumbnailForALAssetItem;
-
-@protocol DCLoadThumbnailForALAssetItemDeleGate <NSObject>
-
-- (void)notifySuceed:(DCLoadThumbnailForALAssetItem *)operation;
-
-@end
 
 @interface DCLoadThumbnailForALAssetItem : NSOperation
 
-@property (assign, nonatomic) id <DCLoadThumbnailForALAssetItemDeleGate> delegate;
-@property (retain, nonatomic) id <DCDataItem> dataItem;
+@property (retain, nonatomic) ALAsset *alAsset;
+@property (retain, nonatomic) UIImage *thumbnail;
 
-- (id)initWithDataItem:(id <DCDataItem>)dataItem;
+- (id)initWithALAsset:(ALAsset *)alAsset;
 
 @end

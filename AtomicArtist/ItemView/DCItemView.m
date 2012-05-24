@@ -7,6 +7,8 @@
 //
 
 #import "DCItemView.h"
+#import "DCDataModelHelper.h"
+#import "Item.h"
 #import "DCDataLoader.h"
 
 @interface DCItemView () {
@@ -31,7 +33,7 @@
 @synthesize thumbnail = _thumbnail;
 @synthesize dataGroupUID = _dataGroupUID;
 @synthesize dataLibraryHelper = _dataLibraryHelper;
-@synthesize operationForLoadThumbnail = _operationForLoadThumbnail;
+@synthesize operation = _operation;
 
 - (void)tap:(UITapGestureRecognizer *)gr {
     if (gr == _singleTapGestureRecognizer && gr.numberOfTapsRequired == 1) {
@@ -48,7 +50,8 @@
         [_singleTapGestureRecognizer release];
         _singleTapGestureRecognizer = nil;
     }
-    self.operationForLoadThumbnail = nil;
+    
+    self.operation = nil;
     self.dataLibraryHelper = nil;
     self.thumbnail = nil;
     
@@ -100,13 +103,30 @@
             }
             CGRect bounds = [self bounds];
             
-            self.thumbnail = (UIImage *)[item valueForProperty:kDATAITEMPROPERTY_CACHETHUMBNAIL withOptions:nil];
-            if (!self.thumbnail) {
-                
-                [[DCDataLoader defaultDataLoader] addOperation:self.operationForLoadThumbnail];
-                
-                self.thumbnail = (UIImage *)[item valueForProperty:kDATAITEMPROPERTY_THUMBNAIL withOptions:nil];
+            BOOL needRunOperation = NO;
+            
+            Item *dataModelItem = [[DCDataModelHelper defaultDataModelHelper] getItemWithUID:self.itemUID];
+            if (!dataModelItem) {
+                needRunOperation = YES;
+            } else {
+                self.thumbnail = dataModelItem.thumbnail;
+                if (!self.thumbnail) {
+                    needRunOperation = YES;
+                }
             }
+            if (needRunOperation) {
+                self.thumbnail = (UIImage *)[item valueForProperty:kDATAITEMPROPERTY_THUMBNAIL withOptions:nil];
+                
+                if (self.operation) {
+                    [self.operation start];
+                } else {
+                    self.operation = [item createOperationForLoadCacheThumbnail];
+                    
+                    [[DCDataLoader defaultDataLoader] addOperation:self.operation];
+                }
+                
+            }
+            
             
             CGSize thumbnailSize = [self.thumbnail size];
             
@@ -148,13 +168,6 @@
         _singleTapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap:)];
         _singleTapGestureRecognizer.numberOfTapsRequired = 1;
         [self addGestureRecognizer:_singleTapGestureRecognizer];
-        
-        id <DCDataItem> item = [self.dataLibraryHelper itemWithUID:self.itemUID inGroup:self.dataGroupUID];
-        if (!item) {
-            [NSException raise:@"DCItemView error" format:@"Reason: !item"];
-        }
-        
-        self.operationForLoadThumbnail = [[[DCLoadThumbnailForALAssetItem alloc] initWithDataItem:item] autorelease];
         
     }
     return self;

@@ -105,6 +105,11 @@
 
 - (void)clearCache {
     if (_itemViews) {
+        for (DCItemView *itemView in _itemViews) {
+            if (![itemView.operation isFinished]) {
+                [itemView.operation cancel];
+            }
+        }
         [_itemViews removeAllObjects];
     }
     

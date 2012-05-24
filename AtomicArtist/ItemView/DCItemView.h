@@ -8,7 +8,6 @@
 
 #import <UIKit/UIKit.h>
 #import "DCUniformDataProtocol.h"
-#import "DCLoadThumbnailForALAssetItem.h"
 
 @protocol DCItemViewDelegate <NSObject>
 
@@ -25,7 +24,7 @@
 @property (retain, nonatomic) UIImage *thumbnail;
 @property (readonly, nonatomic) NSString *dataGroupUID;
 @property (assign, nonatomic) id <DCDataLibraryHelper> dataLibraryHelper;
-@property (retain, nonatomic) DCLoadThumbnailForALAssetItem *operationForLoadThumbnail;
+@property (retain, nonatomic) NSOperation *operation;
 
 - (id)InitWithDataLibraryHelper:(id <DCDataLibraryHelper>)dataLibraryHelper itemUID:(NSString *)itemUID dataGroupUID:(NSString *)dataGroupUID andFrame:(CGRect)frame;
 

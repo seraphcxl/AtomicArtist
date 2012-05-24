@@ -39,11 +39,15 @@ static DCDataModelHelper *staticDefaultDataModelHelper = nil;
         [NSException raise:@"DCDataModelHelper error" format:@"Reason: %@", [err localizedDescription]];
     }
     
-    if ([result count] != 1) {
-        [NSException raise:@"DCDataModelHelper error" format:@"Reason: The result count for get asset from AtomicArtistModel != 1"];
+    if ([result count] == 0) {
+        return nil;
+    } else {
+        if ([result count] != 1) {
+            [NSException raise:@"DCDataModelHelper error" format:@"Reason: The result count for get asset from AtomicArtistModel != 1"];
+        }
+        
+        return [result objectAtIndex:0];
     }
-    
-    return [result objectAtIndex:0];
 }
 
 - (void)createItemWithUID:(NSString *)itemUID andThumbnail:(UIImage *)thumbnail {
@@ -72,11 +76,15 @@ static DCDataModelHelper *staticDefaultDataModelHelper = nil;
         [NSException raise:@"DCDataModelHelper error" format:@"Reason: %@", [err localizedDescription]];
     }
     
-    if ([result count] != 1) {
-        [NSException raise:@"DCDataModelHelper error" format:@"Reason: The result count for get album from AtomicArtistModel != 1"];
+    if ([result count] == 0) {
+        return nil;
+    } else {
+        if ([result count] != 1) {
+            [NSException raise:@"DCDataModelHelper error" format:@"Reason: The result count for get album from AtomicArtistModel != 1"];
+        }
+        
+        return [result objectAtIndex:0];
     }
-    
-    return [result objectAtIndex:0];
 }
 
 - (void)createGroupWithUID:(NSString *)groupUID posterItemUID:(NSString *)posterItemUID andPosterImage:(UIImage *)posterImage {

@@ -16,7 +16,6 @@ extern NSString * const kDATAITEMPROPERTY_TYPE;
 extern NSString * const kDATAITEMPROPERTY_DATE;
 extern NSString * const kDATAITEMPROPERTY_ORIENTATION;
 extern NSString * const kDATAITEMPROPERTY_THUMBNAIL;
-extern NSString * const kDATAITEMPROPERTY_CACHETHUMBNAIL;
 extern NSString * const kDATAITEMPROPERTY_ORIGINIMAGE;
 extern NSString * const kDATAITEMPROPERTY_FULLSCREENIMAGE;
 
@@ -25,6 +24,8 @@ extern NSString * const kDATAITEMPROPERTY_FULLSCREENIMAGE;
 - (NSString *)uniqueID;
 
 - (id)valueForProperty:(NSString *)property withOptions:(NSDictionary *)options;
+
+- (NSOperation *)createOperationForLoadCacheThumbnail;
 
 @end
 
