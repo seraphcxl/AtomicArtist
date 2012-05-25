@@ -35,7 +35,8 @@
 //        CGSize tmpSize = image.size;
         CGSize thumbnailSize;
         thumbnailSize.width = thumbnailSize.height = [DCLoadPosterImageForALAssetsGroup calcPosterImageSize];
-        self.thumbnail = [DCImageHelper image:image fillSize:thumbnailSize];
+        UIImage *tmpImage = [DCImageHelper image:image fillSize:thumbnailSize];
+        self.thumbnail = [DCImageHelper bezierImage:tmpImage withRadius:5.0 needCropSquare:YES];
 //        CGSize tmpSize1 = self.thumbnail.size;
         [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_POSTERIMAGELOADEDFORALASSETSGROUP object:self];
     } while (NO);
