@@ -141,7 +141,7 @@
     }
 }
 
-- (NSUInteger)indexForGroupUID:(NSString *)groupUID {
+- (NSInteger)indexForGroupUID:(NSString *)groupUID {
     if (groupUID) {
         NSUInteger index = 0;
         NSUInteger count = [_allALAssetsGroupPersistentIDs count];

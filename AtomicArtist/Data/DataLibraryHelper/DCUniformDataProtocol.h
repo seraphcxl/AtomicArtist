@@ -53,7 +53,7 @@ extern NSString * const kDATAGROUPPROPERTY_POSTERIMAGE;
 
 - (NSString *)itemUIDAtIndex:(NSUInteger)index;
 
-- (NSUInteger)indexForItemUID:(NSString *)itemUID;
+- (NSInteger)indexForItemUID:(NSString *)itemUID;
 
 - (BOOL)isEnumerated;
 
@@ -79,7 +79,7 @@ extern NSString * const kDATAGROUPPROPERTY_POSTERIMAGE;
 
 - (NSString *)groupUIDAtIndex:(NSUInteger)index;
 
-- (NSUInteger)indexForGroupUID:(NSString *)groupUID;
+- (NSInteger)indexForGroupUID:(NSString *)groupUID;
 
 @end
 
@@ -105,7 +105,7 @@ extern NSString * const kDATAGROUPPROPERTY_POSTERIMAGE;
 
 - (NSString *)groupUIDAtIndex:(NSUInteger)index;
 
-- (NSUInteger)indexForGroupUID:(NSString *)groupUID;
+- (NSInteger)indexForGroupUID:(NSString *)groupUID;
 
 /*** *** ***/
 
@@ -119,7 +119,7 @@ extern NSString * const kDATAGROUPPROPERTY_POSTERIMAGE;
 
 - (NSString *)itemUIDAtIndex:(NSUInteger)index inGroup:(NSString *) groupUID;
 
-- (NSUInteger)indexForItemUID:(NSString *)itemUID inGroup:(NSString *) groupUID;
+- (NSInteger)indexForItemUID:(NSString *)itemUID inGroup:(NSString *) groupUID;
 
 - (BOOL)isGroupEnumerated:(NSString *) groupUID;
 

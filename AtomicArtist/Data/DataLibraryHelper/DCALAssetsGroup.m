@@ -182,7 +182,7 @@
     }
 }
 
-- (NSUInteger)indexForItemUID:(NSString *)itemUID {
+- (NSInteger)indexForItemUID:(NSString *)itemUID {
     if (itemUID) {
         NSUInteger index = 0;
         NSUInteger count = [_allAssetUIDs count];
@@ -200,12 +200,13 @@
         if (find) {
             return index;
         } else {
-            [NSException raise:@"DCALAssetsGroup Error" format:@"Reason: itemUID: %@ not find", itemUID];
-            return 0;
+            NSLog(@"itemUID: %@ not find", itemUID);
+//            [NSException raise:@"DCALAssetsGroup Error" format:@"Reason: itemUID: %@ not find", itemUID];
+            return -1;
         }
     } else {
         [NSException raise:@"DCALAssetsGroup Error" format:@"Reason: itemUID is nil"];
-        return 0;
+        return -1;
     }
 }
 

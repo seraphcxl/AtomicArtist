@@ -102,7 +102,7 @@ static DCALAssetsLibraryHelper *staticALAssetsLibraryHelper = nil;
     }
 }
 
-- (NSUInteger)indexForGroupUID:(NSString *)groupUID {
+- (NSInteger)indexForGroupUID:(NSString *)groupUID {
     if (_alAssetsLibrary) {
         return [_alAssetsLibrary indexForGroupUID:groupUID];
     } else {
@@ -191,7 +191,7 @@ static DCALAssetsLibraryHelper *staticALAssetsLibraryHelper = nil;
     }
 }
 
-- (NSUInteger)indexForItemUID:(NSString *)itemUID inGroup:(NSString *) groupUID {
+- (NSInteger)indexForItemUID:(NSString *)itemUID inGroup:(NSString *) groupUID {
     if (_alAssetsLibrary) {
         DCALAssetsGroup *group = [_alAssetsLibrary groupWithUID:groupUID];
         if (group) {
