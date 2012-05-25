@@ -21,6 +21,8 @@
 
 - (void)tap:(UITapGestureRecognizer *)gr;
 
+- (void)RunOperation;
+
 @end
 
 
@@ -89,6 +91,20 @@
     }
 }
 
+- (void)RunOperation {
+    if (self.operation) {
+        [self.operation start];
+    } else {
+        id <DCDataItem> item = [self.dataLibraryHelper itemWithUID:self.itemUID inGroup:self.dataGroupUID];
+        if (!item) {
+            return;
+        }
+        self.operation = [item createOperationForLoadCacheThumbnail];
+        
+        [[DCDataLoader defaultDataLoader] addOperation:self.operation];
+    }
+}
+
 - (void)layoutSubviews {
     [super layoutSubviews];
     
@@ -104,29 +120,24 @@
             CGRect bounds = [self bounds];
             
             BOOL needRunOperation = NO;
-            
-            Item *dataModelItem = [[DCDataModelHelper defaultDataModelHelper] getItemWithUID:self.itemUID];
-            if (!dataModelItem) {
-                needRunOperation = YES;
-            } else {
-                self.thumbnail = dataModelItem.thumbnail;
-                if (!self.thumbnail) {
+            if (!self.thumbnail) {
+                Item *dataModelItem = [[DCDataModelHelper defaultDataModelHelper] getItemWithUID:self.itemUID];
+                if (!dataModelItem) {
                     needRunOperation = YES;
-                }
-            }
-            if (needRunOperation) {
-                self.thumbnail = (UIImage *)[item valueForProperty:kDATAITEMPROPERTY_THUMBNAIL withOptions:nil];
-                
-                if (self.operation) {
-                    [self.operation start];
                 } else {
-                    self.operation = [item createOperationForLoadCacheThumbnail];
-                    
-                    [[DCDataLoader defaultDataLoader] addOperation:self.operation];
+                    self.thumbnail = dataModelItem.thumbnail;
+                    if (!self.thumbnail) {
+                        needRunOperation = YES;
+                    }
                 }
-                
+                if (needRunOperation) {
+                    self.thumbnail = (UIImage *)[item valueForProperty:kDATAITEMPROPERTY_THUMBNAIL withOptions:nil];
+//                    [self performSelectorInBackground:@selector(RunOperation) withObject:nil];
+                    [self performSelectorOnMainThread:@selector(RunOperation) withObject:nil waitUntilDone:NO];
+                }
+            } else {
+                int i = 0;
             }
-            
             
             CGSize thumbnailSize = [self.thumbnail size];
             
@@ -143,9 +154,7 @@
             [imageView setImage:self.thumbnail];
             
             [self addSubview:imageView];
-            
-            
-            
+
         } else {
             [NSException raise:@"DCItemView error" format:@"Reason: self.dataLibraryHelper == nil"];
         }

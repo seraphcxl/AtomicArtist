@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1B8160FF156F17F400E40084 /* DCLoadThumbnailOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B8160FE156F17F300E40084 /* DCLoadThumbnailOperation.m */; };
 		1B8EFA5C1565D9A100E66552 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B8EFA5B1565D9A100E66552 /* ImageIO.framework */; };
 		1B8EFA601565DB5600E66552 /* DCUniformDataProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B8EFA5F1565DB5600E66552 /* DCUniformDataProtocol.m */; };
 		1BB122281569EB5300644586 /* DCItemPageScrollViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BB122271569EB5300644586 /* DCItemPageScrollViewController.m */; };
@@ -45,6 +46,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1B8160FD156F17F300E40084 /* DCLoadThumbnailOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCLoadThumbnailOperation.h; sourceTree = "<group>"; };
+		1B8160FE156F17F300E40084 /* DCLoadThumbnailOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCLoadThumbnailOperation.m; sourceTree = "<group>"; };
 		1B8EFA5B1565D9A100E66552 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 		1B8EFA5E1565DB5600E66552 /* DCUniformDataProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCUniformDataProtocol.h; sourceTree = "<group>"; };
 		1B8EFA5F1565DB5600E66552 /* DCUniformDataProtocol.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCUniformDataProtocol.m; sourceTree = "<group>"; };
@@ -134,6 +137,8 @@
 				1BBB2066156E2D09003BE51C /* DCDataLoader.m */,
 				1BBB2067156E2D09003BE51C /* DCLoadThumbnailForALAssetItem.h */,
 				1BBB2068156E2D09003BE51C /* DCLoadThumbnailForALAssetItem.m */,
+				1B8160FD156F17F300E40084 /* DCLoadThumbnailOperation.h */,
+				1B8160FE156F17F300E40084 /* DCLoadThumbnailOperation.m */,
 			);
 			path = DataLoader;
 			sourceTree = "<group>";
@@ -388,6 +393,7 @@
 				1BB122281569EB5300644586 /* DCItemPageScrollViewController.m in Sources */,
 				1BBB2069156E2D09003BE51C /* DCDataLoader.m in Sources */,
 				1BBB206A156E2D09003BE51C /* DCLoadThumbnailForALAssetItem.m in Sources */,
+				1B8160FF156F17F400E40084 /* DCLoadThumbnailOperation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -7,12 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "DCLoadThumbnailOperation.h"
 
-@interface DCLoadThumbnailForALAssetItem : NSOperation
+@interface DCLoadThumbnailForALAssetItem : DCLoadThumbnailOperation
 
 @property (retain, nonatomic) ALAsset *alAsset;
-@property (retain, nonatomic) UIImage *thumbnail;
 
-- (id)initWithALAsset:(ALAsset *)alAsset;
+- (id)initWithItemUID:(NSString *)itemUID andALAsset:(ALAsset *)alAsset;
 
 @end

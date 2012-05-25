@@ -15,6 +15,7 @@ static DCDataModelHelper *staticDefaultDataModelHelper = nil;
 @interface DCDataModelHelper () {
     NSManagedObjectContext *_context;
     NSManagedObjectModel *_model;
+    NSLock *_lockForDataModel;
 }
 
 @end
@@ -30,11 +31,14 @@ static DCDataModelHelper *staticDefaultDataModelHelper = nil;
     
     [request setSortDescriptors:nil];
     
+    NSString *predicateStr = [[NSString alloc] initWithFormat:@"uniqueID like %@", itemUID];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"uniqueID like %@", itemUID];
     [request setPredicate:predicate];
     
     NSError *err = nil;
+    [_lockForDataModel lock];
     NSArray *result = [_context executeFetchRequest:request error:&err];
+    [_lockForDataModel unlock];
     if (!result) {
         [NSException raise:@"DCDataModelHelper error" format:@"Reason: %@", [err localizedDescription]];
     }
@@ -43,7 +47,8 @@ static DCDataModelHelper *staticDefaultDataModelHelper = nil;
         return nil;
     } else {
         if ([result count] != 1) {
-            [NSException raise:@"DCDataModelHelper error" format:@"Reason: The result count for get asset from AtomicArtistModel != 1"];
+            NSLog(@"count = %d", [result count]);
+//            [NSException raise:@"DCDataModelHelper error" format:@"Reason: The result count for get asset from AtomicArtistModel != 1 count = %d", [result count]];
         }
         
         return [result objectAtIndex:0];
@@ -51,11 +56,15 @@ static DCDataModelHelper *staticDefaultDataModelHelper = nil;
 }
 
 - (void)createItemWithUID:(NSString *)itemUID andThumbnail:(UIImage *)thumbnail {
-    Item *item = [NSEntityDescription insertNewObjectForEntityForName:@"Item" inManagedObjectContext:_context];
-    
-    item.uniqueID = itemUID;
-    item.thumbnail = thumbnail;
-    item.thumbnailData = UIImagePNGRepresentation(thumbnail);
+    if ([self getItemWithUID:itemUID] == nil) {
+        [_lockForDataModel lock];
+        Item *item = [NSEntityDescription insertNewObjectForEntityForName:@"Item" inManagedObjectContext:_context];
+        
+        item.uniqueID = itemUID;
+        item.thumbnail = thumbnail;
+        item.thumbnailData = UIImagePNGRepresentation(thumbnail);
+        [_lockForDataModel unlock];
+    }
 }
 
 #pragma mark group
@@ -71,7 +80,9 @@ static DCDataModelHelper *staticDefaultDataModelHelper = nil;
     [request setPredicate:predicate];
     
     NSError *err = nil;
+    [_lockForDataModel lock];
     NSArray *result = [_context executeFetchRequest:request error:&err];
+    [_lockForDataModel unlock];
     if (!result) {
         [NSException raise:@"DCDataModelHelper error" format:@"Reason: %@", [err localizedDescription]];
     }
@@ -88,28 +99,36 @@ static DCDataModelHelper *staticDefaultDataModelHelper = nil;
 }
 
 - (void)createGroupWithUID:(NSString *)groupUID posterItemUID:(NSString *)posterItemUID andPosterImage:(UIImage *)posterImage {
-    Group *group = [NSEntityDescription insertNewObjectForEntityForName:@"Group" inManagedObjectContext:_context];
-    
-    group.uniqueID = groupUID;
-    group.posterItemUID = posterItemUID;
-    group.posterImage = posterImage;
-    group.posterImageData = UIImagePNGRepresentation(posterImage);
+    if ([self getGroupWithUID:groupUID] == nil) {
+        [_lockForDataModel lock];
+        Group *group = [NSEntityDescription insertNewObjectForEntityForName:@"Group" inManagedObjectContext:_context];
+        
+        group.uniqueID = groupUID;
+        group.posterItemUID = posterItemUID;
+        group.posterImage = posterImage;
+        group.posterImageData = UIImagePNGRepresentation(posterImage);
+        [_lockForDataModel unlock];
+    }
 }
 
 - (void)updateGroupWithUID:(NSString *)groupUID posterItemUID:(NSString *)posterItemUID andPosterImage:(UIImage *)posterImage {
     Group *group = [self getGroupWithUID:groupUID];
     if (group) {
+        [_lockForDataModel lock];
         group.posterItemUID = posterItemUID;
         group.posterImage = posterImage;
         group.posterImageData = UIImagePNGRepresentation(posterImage);
         group.inspectionRecord = [NSDate date];
+        [_lockForDataModel unlock];
     } else {
+        [_lockForDataModel lock];
         group = [NSEntityDescription insertNewObjectForEntityForName:@"Group" inManagedObjectContext:_context];
         
         group.uniqueID = groupUID;
         group.posterItemUID = posterItemUID;
         group.posterImage = posterImage;
         group.posterImageData = UIImagePNGRepresentation(posterImage);
+        [_lockForDataModel unlock];
     }
 }
 
@@ -124,6 +143,7 @@ static DCDataModelHelper *staticDefaultDataModelHelper = nil;
 
 + (void)staticRelease {
     if (staticDefaultDataModelHelper) {
+        [staticDefaultDataModelHelper saveChanges];
         [staticDefaultDataModelHelper release];
         staticDefaultDataModelHelper = nil;
     }
@@ -133,9 +153,32 @@ static DCDataModelHelper *staticDefaultDataModelHelper = nil;
     return [self defaultDataModelHelper];
 }
 
+- (void)dealloc {
+    
+    if (_context) {
+        [_context release];
+        _context = nil;
+    }
+    
+    if (_model) {
+        [_model release];
+        _model = nil;
+    }
+    
+    if (_lockForDataModel) {
+        [_lockForDataModel release];
+        _lockForDataModel = nil;
+    }
+    [super dealloc];
+}
+
 - (id)init {
     self = [super init];
-    if (self) {                
+    if (self) {
+        if (!_lockForDataModel) {
+            _lockForDataModel = [[NSLock alloc] init];
+        }
+        
         // Read in Homepwner.xcdatamodeld
         _model = [NSManagedObjectModel mergedModelFromBundles:nil];
         // NSLog(@"model = %@", model);
@@ -174,7 +217,9 @@ static DCDataModelHelper *staticDefaultDataModelHelper = nil;
 
 - (BOOL)saveChanges {
     NSError *err = nil;
+    [_lockForDataModel lock];
     BOOL successful = [_context save:&err];
+    [_lockForDataModel unlock];
     if (!successful) {
         NSLog(@"Error saving: %@", [err localizedDescription]);
     }

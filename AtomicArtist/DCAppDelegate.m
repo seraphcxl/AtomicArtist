@@ -17,6 +17,7 @@
 
 - (void)dealloc
 {
+    [[DCDataModelHelper defaultDataModelHelper] saveChanges];
     [DCDataModelHelper staticRelease];
     [DCALAssetsLibraryHelper staticRelease];
     [_window release];
@@ -29,6 +30,9 @@
     // Override point for customization after application launch.
     self.window.backgroundColor = [UIColor clearColor];
     /*** *** ***/
+    
+    [DCDataModelHelper defaultDataModelHelper];
+    
     DCALAssetsLibraryHelper *alAssetsLibraryHelper = [DCALAssetsLibraryHelper defaultDataLibraryHelper];
     [alAssetsLibraryHelper connect:nil];
     DCALAssetGroupViewController *groupViewCtrl = [[[DCALAssetGroupViewController alloc] initWithDataLibHelper:alAssetsLibraryHelper] autorelease];

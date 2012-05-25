@@ -9,6 +9,8 @@
 #import "DCItemViewController.h"
 #import "DCItemViewCell.h"
 #import "DCDetailViewController.h"
+#import "DCLoadThumbnailOperation.h"
+#import "DCDataModelHelper.h"
 
 @interface DCItemViewController () {
     NSUInteger _itemCountInCell;
@@ -22,6 +24,8 @@
 - (void)reloadTableView:(NSNotification *)note;
 
 - (void)actionForWillEnterForegroud:(NSNotification *)note;
+
+- (void)actionForItemThumbnailLoaded:(NSNotification *)note;
 
 - (double)calcCellSpaceWithFrameSize:(NSUInteger)frameSize tableViewMargin:(NSUInteger)tableViewMargin andItemCountInCell:(NSUInteger)itemCountInCell;
 
@@ -106,7 +110,7 @@
 - (void)clearCache {
     if (_itemViews) {
         for (DCItemView *itemView in _itemViews) {
-            if (![itemView.operation isFinished]) {
+            if (![itemView.operation isFinished] || ![itemView.operation isCancelled]) {
                 [itemView.operation cancel];
             }
         }
@@ -138,6 +142,16 @@
 - (void)actionForWillEnterForegroud:(NSNotification *)note {
     if (self.navigationController.topViewController == self) {
         [self refresh:nil];
+    }
+}
+
+- (void)actionForItemThumbnailLoaded:(NSNotification *)note {
+    DCLoadThumbnailOperation *operation = (DCLoadThumbnailOperation *)[note object];
+    [[DCDataModelHelper defaultDataModelHelper] createItemWithUID:operation.itemUID andThumbnail:operation.thumbnail];
+    if (_itemViews) {
+        DCItemView *itemView = [_itemViews objectForKey:operation.itemUID];
+        itemView.thumbnail = operation.thumbnail;
+        [itemView setNeedsLayout];
     }
 }
 
@@ -311,7 +325,7 @@
 
 - (void)viewDidLoad
 {
-    NSLog(@"DCItemViewController viewDidLoad:");
+    NSLog(@"DCItemViewController %@ viewDidLoad:", self);
     [super viewDidLoad];
     
     // Uncomment the following line to preserve selection between presentations.
@@ -326,12 +340,13 @@
     NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
     [notificationCenter addObserver:self selector:@selector(reloadTableView:) name:@"ALAssetAdded" object:nil];
     [notificationCenter addObserver:self selector:@selector(actionForWillEnterForegroud:) name:@"applicationWillEnterForeground:" object:nil];
+     [notificationCenter addObserver:self selector:@selector(actionForItemThumbnailLoaded:) name:NOTIFY_THUMBNAILLOADEDFORALASSET object:nil];
     
-    [self refreshItems:NO];
+//    [self refreshItems:NO];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-    NSLog(@"DCItemViewController viewWillAppear:");
+    NSLog(@"DCItemViewController %@ viewWillAppear:", self);
     [super viewWillAppear:animated];
     
     _frameSize = [self calcFrameSize];
@@ -349,14 +364,14 @@
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
-    NSLog(@"DCItemViewController viewWillDisappear:");
+    NSLog(@"DCItemViewController %@ viewWillDisappear:", self);
     
     [super viewWillDisappear:animated];
 }
 
 - (void)viewDidUnload
 {
-    NSLog(@"DCItemViewController viewDidUnload:");
+    NSLog(@"DCItemViewController %@ viewDidUnload:", self);
     NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
     [notificationCenter removeObserver:self];
     
@@ -404,26 +419,30 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     // Return the number of sections.
-    NSLog(@"DCItemViewController numberOfSectionsInTableView:");
+    NSLog(@"DCItemViewController %@ numberOfSectionsInTableView:", self);
     return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    NSLog(@"DCItemViewController tableView:numberOfRowsInSection:");
+    NSLog(@"DCItemViewController %@ tableView:numberOfRowsInSection:", self);
     // Return the number of rows in the section.
     if (_itemCountInCell == 0) {
         return 0;
     }
     
     if (self.dataLibraryHelper) {
-        NSInteger itemsCount = [self.dataLibraryHelper itemsCountInGroup:self.dataGroupUID];
-        NSLog(@"itemsCount = %d", itemsCount);
-        NSInteger addLine = 0;
-        if (itemsCount % _itemCountInCell != 0) {
-            addLine = 1;
+        if ([self.dataLibraryHelper isGroupEnumerated:self.dataGroupUID]) {
+            NSInteger itemsCount = [self.dataLibraryHelper itemsCountInGroup:self.dataGroupUID];
+            NSLog(@"itemsCount = %d", itemsCount);
+            NSInteger addLine = 0;
+            if (itemsCount % _itemCountInCell != 0) {
+                addLine = 1;
+            }
+            return itemsCount / _itemCountInCell + addLine;
+        } else {
+            return 0;
         }
-        return itemsCount / _itemCountInCell + addLine;
     } else {
         [NSException raise:@"DCItemViewController error" format:@"Reason: self.dataLibraryHelper == nil"];
         return 0;
@@ -432,8 +451,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
-    NSLog(@"DCItemViewController tableView:cellForRowAtIndexPath:");
+    NSLog(@"DCItemViewController %@ tableView:cellForRowAtIndexPath:", self);
     DCItemViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"AAItemViewCell"];
     NSArray *itemUIDs = [self getItemUIDsForCellAtIndexPath:indexPath];
     if (cell == nil) {

@@ -18,7 +18,7 @@
     NSOperation *result = nil;
     do {
         if (self.alAsset) {
-            result = [[[DCLoadThumbnailForALAssetItem alloc] initWithALAsset:self.alAsset] autorelease];
+            result = [[[DCLoadThumbnailForALAssetItem alloc] initWithItemUID:[self uniqueID] andALAsset:self.alAsset] autorelease];
         }
     } while (NO);
     return result;

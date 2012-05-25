@@ -8,6 +8,7 @@
 
 #import "DCLoadThumbnailForALAssetItem.h"
 #import "DCImageHelper.h"
+#import "DCDataLoader.h"
 
 @interface DCLoadThumbnailForALAssetItem () {
 }
@@ -19,7 +20,6 @@
 @implementation DCLoadThumbnailForALAssetItem
 
 @synthesize alAsset = _alAsset;
-@synthesize thumbnail = _thumbnail;
 
 - (void)main {
     NSLog(@"DCLoadThumbnailForALAssetItem main enter");
@@ -32,12 +32,13 @@
             [NSException raise:@"DCALAssetItem error" format:@"Reason: representation == nil"];
             break;
         }
-        UIImage *image = [[[UIImage alloc] initWithCGImage:[representation fullResolutionImage]] autorelease];
+        UIImage *image = [[[UIImage alloc] initWithCGImage:[representation fullScreenImage]] autorelease];
+        CGSize tmpSize = image.size;
         CGSize thumbnailSize;
         thumbnailSize.width = thumbnailSize.height = [self calcThumbnailSize];
         self.thumbnail = [DCImageHelper image:image fitInSize:thumbnailSize];
-        CGSize tmpSize = self.thumbnail.size;
-        int i = 0;
+        CGSize tmpSize1 = self.thumbnail.size;
+        [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_THUMBNAILLOADEDFORALASSET object:self];
     } while (NO);
     NSLog(@"DCLoadThumbnailForALAssetItem main exit");
 }
@@ -53,8 +54,8 @@
     }
 }
 
-- (id)initWithALAsset:(ALAsset *)alAsset{
-    self = [super init];
+- (id)initWithItemUID:(NSString *)itemUID andALAsset:(ALAsset *)alAsset {
+    self = [super initWithItemUID:itemUID];
     if (self) {
         self.alAsset = alAsset;
     }
@@ -63,7 +64,7 @@
 
 - (void)dealloc {
     self.alAsset = nil;
-    self.thumbnail = nil;
+    
     [super dealloc];
 }
 
