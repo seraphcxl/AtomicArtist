@@ -37,6 +37,14 @@
 @synthesize dataLibraryHelper = _dataLibraryHelper;
 @synthesize loadThumbnailOperation = _loadThumbnailOperation;
 
+- (void)cancelLoadThumbnailOperation {
+    if (self.loadThumbnailOperation) {
+        if (![self.loadThumbnailOperation isFinished] || ![self.loadThumbnailOperation isCancelled]) {
+            [self.loadThumbnailOperation cancel];
+        }
+    }
+}
+
 - (void)tap:(UITapGestureRecognizer *)gr {
     if (gr == _singleTapGestureRecognizer && gr.numberOfTapsRequired == 1) {
         NSLog(@"DCItemView tap:single");

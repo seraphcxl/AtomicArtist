@@ -28,4 +28,6 @@
 
 - (id)InitWithDataLibraryHelper:(id <DCDataLibraryHelper>)dataLibraryHelper itemUID:(NSString *)itemUID dataGroupUID:(NSString *)dataGroupUID andFrame:(CGRect)frame;
 
+- (void)cancelLoadThumbnailOperation;
+
 @end

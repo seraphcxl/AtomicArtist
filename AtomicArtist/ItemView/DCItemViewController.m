@@ -109,14 +109,6 @@
 
 - (void)clearCache {
     if (_itemViews) {
-        for (DCItemView *itemView in _itemViews) {
-            if (itemView.loadThumbnailOperation) {
-                if (![itemView.loadThumbnailOperation isFinished] || ![itemView.loadThumbnailOperation isCancelled]) {
-                    [itemView.loadThumbnailOperation cancel];
-                }
-
-            }
-        }
         [_itemViews removeAllObjects];
     }
     
@@ -369,16 +361,9 @@
 - (void)viewWillDisappear:(BOOL)animated {
     NSLog(@"DCItemViewController %@ viewWillDisappear:", self);
     
-//    if (_itemViews) {
-//        for (DCItemView *itemView in _itemViews) {
-//            if (itemView.loadThumbnailOperation) {
-//                if (![itemView.loadThumbnailOperation isFinished] || ![itemView.loadThumbnailOperation isCancelled]) {
-//                    [itemView.loadThumbnailOperation cancel];
-//                }
-//                
-//            }
-//        }
-//    }
+    if (_itemViews) {
+        [_itemViews removeAllObjects];
+    }
     
     [super viewWillDisappear:animated];
 }

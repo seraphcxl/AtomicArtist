@@ -166,13 +166,6 @@
 
 - (void)clearCache {
     if (_groupViews) {
-        for (DCGroupView *groupView in _groupViews) {
-            if (groupView.loadPosterImageOperation) {
-                if (![groupView.loadPosterImageOperation isFinished] || ![groupView.loadPosterImageOperation isCancelled]) {
-                    [groupView.loadPosterImageOperation cancel];
-                }
-            }
-        }
         [_groupViews removeAllObjects];
     }
     
@@ -393,15 +386,9 @@
 - (void)viewWillDisappear:(BOOL)animated {
     NSLog(@"DCGroupViewController viewWillDisappear:");
     
-//    if (_groupViews) {
-//        for (DCGroupView *groupView in _groupViews) {
-//            if (groupView.loadPosterImageOperation) {
-//                if (![groupView.loadPosterImageOperation isFinished] || ![groupView.loadPosterImageOperation isCancelled]) {
-//                    [groupView.loadPosterImageOperation cancel];
-//                }
-//            }
-//        }
-//    }
+    if (_groupViews) {
+        [_groupViews removeAllObjects];
+    }
     
     [super viewWillDisappear:animated];
 }

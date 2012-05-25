@@ -38,6 +38,14 @@
 @synthesize enumDataItemParam = _enumDataItemParam;
 @synthesize loadPosterImageOperation = _loadPosterImageOperation;
 
+- (void)cancelLoadPosterImageOperation {
+    if (self.loadPosterImageOperation) {
+        if (![self.loadPosterImageOperation isFinished] || ![self.loadPosterImageOperation isCancelled]) {
+            [self.loadPosterImageOperation cancel];
+        }
+    }
+}
+
 - (void)refreshItems:(BOOL)force {
     if (self.dataLibraryHelper) {
         if (force || [self.dataLibraryHelper isGroupEnumerated:self.dataGroupUID] == 0) {

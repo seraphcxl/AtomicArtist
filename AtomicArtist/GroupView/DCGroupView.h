@@ -28,4 +28,6 @@
 
 - (void)refreshItems:(BOOL)force;
 
+- (void)cancelLoadPosterImageOperation;
+
 @end
