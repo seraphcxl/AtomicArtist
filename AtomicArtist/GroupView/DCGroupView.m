@@ -7,6 +7,9 @@
 //
 
 #import "DCGroupView.h"
+#import "DCDataModelHelper.h"
+#import "Group.h"
+#import "DCDataLoader.h"
 
 @interface DCGroupView () {
     UITapGestureRecognizer *tapGestureRecognizer;
@@ -17,6 +20,10 @@
 - (NSInteger)calcTitleFontSize;
 
 - (void)tap:(UIPanGestureRecognizer *)gr;
+
+- (void)preparePosterImageInfo;
+
+- (void)runOperation:(NSNotification *)note;
 
 @end
 
@@ -29,10 +36,11 @@
 @synthesize posterImage = _posterImage;
 @synthesize dataLibraryHelper = _dataLibraryHelper;
 @synthesize enumDataItemParam = _enumDataItemParam;
+@synthesize loadPosterImageOperation = _loadPosterImageOperation;
 
 - (void)refreshItems:(BOOL)force {
     if (self.dataLibraryHelper) {
-        if (force || [self.dataLibraryHelper itemsCountInGroup:self.dataGroupUID] == 0) {
+        if (force || [self.dataLibraryHelper isGroupEnumerated:self.dataGroupUID] == 0) {
             [self.dataLibraryHelper clearCacheInGroup:self.dataGroupUID];
             [self.dataLibraryHelper enumItems:self.enumDataItemParam InGroup:self.dataGroupUID];
         }
@@ -47,10 +55,20 @@
 }
 
 - (void)dealloc {
+    
+    NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+    [notificationCenter removeObserver:self];
+    
     if (tapGestureRecognizer) {
         [self removeGestureRecognizer:tapGestureRecognizer];
         [tapGestureRecognizer release];
         tapGestureRecognizer = nil;
+    }
+    
+    if (_loadPosterImageOperation) {
+        [_loadPosterImageOperation cancel];
+        [_loadPosterImageOperation release];
+        _loadPosterImageOperation = nil;
     }
     
     self.posterImage = nil;
@@ -84,6 +102,35 @@
     }
 }
 
+- (void)preparePosterImageInfo {
+    if (self.loadPosterImageOperation) {
+        [self.loadPosterImageOperation start];
+    } else {
+        if (self.dataLibraryHelper) {
+            [self refreshItems:NO];
+            
+        } else {
+            [NSException raise:@"DCGroupView error" format:@"Reason: self.dataLibraryHelper == nil"];
+        }
+    }
+}
+
+- (void)runOperation:(NSNotification *)note {
+    if (note) {
+        NSString *dataGroupUID = (NSString *)[note object];
+        if ([dataGroupUID isEqualToString:self.dataGroupUID]) {
+            NSString *itemUID = [self.dataLibraryHelper itemUIDAtIndex:0 inGroup:self.dataGroupUID];
+            id <DCDataGroup> group = [self.dataLibraryHelper groupWithUID:self.dataGroupUID];
+            if (!group) {
+                return;
+            }
+            _loadPosterImageOperation = [group createOperationForLoadCachePosterImageWithItemUID:itemUID];
+            [_loadPosterImageOperation retain];
+            [[DCDataLoader defaultDataLoader] addOperation:self.loadPosterImageOperation];
+        }
+    }
+}
+
 - (void)layoutSubviews {
     [super layoutSubviews];
     
@@ -97,7 +144,25 @@
         }
         CGRect bounds = [self bounds];
         
-        self.posterImage = (UIImage *)[group valueForProperty:kDATAGROUPPROPERTY_POSTERIMAGE withOptions:nil];
+        BOOL needRunOperation = NO;
+        if (!self.posterImage) {
+            Group *dataModelGroup = [[DCDataModelHelper defaultDataModelHelper] getGroupWithUID:self.dataGroupUID];
+            if (!dataModelGroup) {
+                needRunOperation = YES;
+            } else {
+                self.posterImage = dataModelGroup.posterImage;
+                if (!self.posterImage) {
+                    needRunOperation = YES;
+                }
+            }
+            if (needRunOperation) {
+                self.posterImage = (UIImage *)[group valueForProperty:kDATAGROUPPROPERTY_POSTERIMAGE withOptions:nil];
+                [self performSelectorOnMainThread:@selector(preparePosterImageInfo) withObject:nil waitUntilDone:NO];
+            }
+        } else {
+            NSLog(@"self.posterImage already loaded");
+        }
+        
         CGSize posterImageSize = [self.posterImage size];
         
         CGRect imageViewFrame;
@@ -147,6 +212,9 @@
         
         tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap:)];
         [self addGestureRecognizer:tapGestureRecognizer];
+        
+        NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+        [notificationCenter addObserver:self selector:@selector(runOperation:) name:@"ALAssetAddedForPosterImage" object:nil];
     }
     return self;
 }

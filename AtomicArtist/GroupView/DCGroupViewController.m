@@ -9,6 +9,8 @@
 #import "DCGroupViewController.h"
 #import "DCItemViewController.h"
 #import "DCItemPageScrollViewController.h"
+#import "DCLoadPosterImageOperation.h"
+#import "DCDataModelHelper.h"
 
 @interface DCGroupViewController () {
     NSUInteger _itemCountInCell;
@@ -24,6 +26,8 @@
 - (void)notifyRefresh:(NSNotification *)note;
 
 - (void)actionForWillEnterForegroud:(NSNotification *)note;
+
+- (void)actionForGroupPosterImageLoaded:(NSNotification *)note;
 
 - (double)calcCellSpaceWithFrameSize:(NSUInteger)frameSize tableViewMargin:(NSUInteger)tableViewMargin andItemCountInCell:(NSUInteger)itemCountInCell;
 
@@ -162,8 +166,16 @@
 
 - (void)clearCache {
     if (_groupViews) {
+        for (DCGroupView *groupView in _groupViews) {
+            if (groupView.loadPosterImageOperation) {
+                if (![groupView.loadPosterImageOperation isFinished] || ![groupView.loadPosterImageOperation isCancelled]) {
+                    [groupView.loadPosterImageOperation cancel];
+                }
+            }
+        }
         [_groupViews removeAllObjects];
     }
+    
     [self.dataLibraryHelper clearCache];
 }
 
@@ -186,6 +198,16 @@
 - (void)actionForWillEnterForegroud:(NSNotification *)note {
     if (self.navigationController.topViewController == self) {
         [self refreshGroups:YES];
+    }
+}
+
+- (void)actionForGroupPosterImageLoaded:(NSNotification *)note {
+    DCLoadPosterImageOperation *operation = (DCLoadPosterImageOperation *)[note object];
+    [[DCDataModelHelper defaultDataModelHelper] createGroupWithUID:operation.dataGroupUID posterItemUID:operation.itemUID andPosterImage:operation.thumbnail];
+    if (_groupViews) {
+        DCGroupView *groupView = [_groupViews objectForKey:operation.dataGroupUID];
+        groupView.posterImage = operation.thumbnail;
+        [groupView setNeedsLayout];
     }
 }
 
@@ -346,6 +368,7 @@
     [notificationCenter addObserver:self selector:@selector(reloadTableView:) name:@"ALGroupAdded" object:nil];
     [notificationCenter addObserver:self selector:@selector(notifyRefresh:) name:@"NotifyRefreshGroup" object:nil];
     [notificationCenter addObserver:self selector:@selector(actionForWillEnterForegroud:) name:@"applicationWillEnterForeground:" object:nil];
+    [notificationCenter addObserver:self selector:@selector(actionForGroupPosterImageLoaded:) name:NOTIFY_POSTERIMAGELOADEDFORALASSETSGROUP object:nil];
     /*** *** ***/
 }
 
@@ -369,6 +392,16 @@
 
 - (void)viewWillDisappear:(BOOL)animated {
     NSLog(@"DCGroupViewController viewWillDisappear:");
+    
+//    if (_groupViews) {
+//        for (DCGroupView *groupView in _groupViews) {
+//            if (groupView.loadPosterImageOperation) {
+//                if (![groupView.loadPosterImageOperation isFinished] || ![groupView.loadPosterImageOperation isCancelled]) {
+//                    [groupView.loadPosterImageOperation cancel];
+//                }
+//            }
+//        }
+//    }
     
     [super viewWillDisappear:animated];
 }

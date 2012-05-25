@@ -110,8 +110,11 @@
 - (void)clearCache {
     if (_itemViews) {
         for (DCItemView *itemView in _itemViews) {
-            if (![itemView.operation isFinished] || ![itemView.operation isCancelled]) {
-                [itemView.operation cancel];
+            if (itemView.loadThumbnailOperation) {
+                if (![itemView.loadThumbnailOperation isFinished] || ![itemView.loadThumbnailOperation isCancelled]) {
+                    [itemView.loadThumbnailOperation cancel];
+                }
+
             }
         }
         [_itemViews removeAllObjects];
@@ -340,7 +343,7 @@
     NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
     [notificationCenter addObserver:self selector:@selector(reloadTableView:) name:@"ALAssetAdded" object:nil];
     [notificationCenter addObserver:self selector:@selector(actionForWillEnterForegroud:) name:@"applicationWillEnterForeground:" object:nil];
-     [notificationCenter addObserver:self selector:@selector(actionForItemThumbnailLoaded:) name:NOTIFY_THUMBNAILLOADEDFORALASSET object:nil];
+    [notificationCenter addObserver:self selector:@selector(actionForItemThumbnailLoaded:) name:NOTIFY_THUMBNAILLOADEDFORALASSET object:nil];
     
 //    [self refreshItems:NO];
 }
@@ -365,6 +368,17 @@
 
 - (void)viewWillDisappear:(BOOL)animated {
     NSLog(@"DCItemViewController %@ viewWillDisappear:", self);
+    
+//    if (_itemViews) {
+//        for (DCItemView *itemView in _itemViews) {
+//            if (itemView.loadThumbnailOperation) {
+//                if (![itemView.loadThumbnailOperation isFinished] || ![itemView.loadThumbnailOperation isCancelled]) {
+//                    [itemView.loadThumbnailOperation cancel];
+//                }
+//                
+//            }
+//        }
+//    }
     
     [super viewWillDisappear:animated];
 }

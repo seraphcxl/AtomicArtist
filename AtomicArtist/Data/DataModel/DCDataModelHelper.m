@@ -31,7 +31,6 @@ static DCDataModelHelper *staticDefaultDataModelHelper = nil;
     
     [request setSortDescriptors:nil];
     
-    NSString *predicateStr = [[NSString alloc] initWithFormat:@"uniqueID like %@", itemUID];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"uniqueID like %@", itemUID];
     [request setPredicate:predicate];
     

@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		1B8160FF156F17F400E40084 /* DCLoadThumbnailOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B8160FE156F17F300E40084 /* DCLoadThumbnailOperation.m */; };
+		1B816111156F563400E40084 /* DCLoadPosterImageForALAssetsGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B816110156F563300E40084 /* DCLoadPosterImageForALAssetsGroup.m */; };
+		1B816115156F59BD00E40084 /* DCLoadPosterImageOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B816114156F59BD00E40084 /* DCLoadPosterImageOperation.m */; };
 		1B8EFA5C1565D9A100E66552 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B8EFA5B1565D9A100E66552 /* ImageIO.framework */; };
 		1B8EFA601565DB5600E66552 /* DCUniformDataProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B8EFA5F1565DB5600E66552 /* DCUniformDataProtocol.m */; };
 		1BB122281569EB5300644586 /* DCItemPageScrollViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BB122271569EB5300644586 /* DCItemPageScrollViewController.m */; };
@@ -48,6 +50,10 @@
 /* Begin PBXFileReference section */
 		1B8160FD156F17F300E40084 /* DCLoadThumbnailOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCLoadThumbnailOperation.h; sourceTree = "<group>"; };
 		1B8160FE156F17F300E40084 /* DCLoadThumbnailOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCLoadThumbnailOperation.m; sourceTree = "<group>"; };
+		1B81610F156F563300E40084 /* DCLoadPosterImageForALAssetsGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCLoadPosterImageForALAssetsGroup.h; sourceTree = "<group>"; };
+		1B816110156F563300E40084 /* DCLoadPosterImageForALAssetsGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCLoadPosterImageForALAssetsGroup.m; sourceTree = "<group>"; };
+		1B816113156F59BD00E40084 /* DCLoadPosterImageOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCLoadPosterImageOperation.h; sourceTree = "<group>"; };
+		1B816114156F59BD00E40084 /* DCLoadPosterImageOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCLoadPosterImageOperation.m; sourceTree = "<group>"; };
 		1B8EFA5B1565D9A100E66552 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 		1B8EFA5E1565DB5600E66552 /* DCUniformDataProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCUniformDataProtocol.h; sourceTree = "<group>"; };
 		1B8EFA5F1565DB5600E66552 /* DCUniformDataProtocol.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCUniformDataProtocol.m; sourceTree = "<group>"; };
@@ -139,6 +145,10 @@
 				1BBB2068156E2D09003BE51C /* DCLoadThumbnailForALAssetItem.m */,
 				1B8160FD156F17F300E40084 /* DCLoadThumbnailOperation.h */,
 				1B8160FE156F17F300E40084 /* DCLoadThumbnailOperation.m */,
+				1B81610F156F563300E40084 /* DCLoadPosterImageForALAssetsGroup.h */,
+				1B816110156F563300E40084 /* DCLoadPosterImageForALAssetsGroup.m */,
+				1B816113156F59BD00E40084 /* DCLoadPosterImageOperation.h */,
+				1B816114156F59BD00E40084 /* DCLoadPosterImageOperation.m */,
 			);
 			path = DataLoader;
 			sourceTree = "<group>";
@@ -394,6 +404,8 @@
 				1BBB2069156E2D09003BE51C /* DCDataLoader.m in Sources */,
 				1BBB206A156E2D09003BE51C /* DCLoadThumbnailForALAssetItem.m in Sources */,
 				1B8160FF156F17F400E40084 /* DCLoadThumbnailOperation.m in Sources */,
+				1B816111156F563400E40084 /* DCLoadPosterImageForALAssetsGroup.m in Sources */,
+				1B816115156F59BD00E40084 /* DCLoadPosterImageOperation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

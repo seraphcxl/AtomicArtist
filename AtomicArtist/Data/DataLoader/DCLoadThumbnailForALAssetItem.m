@@ -13,7 +13,7 @@
 @interface DCLoadThumbnailForALAssetItem () {
 }
 
-- (NSUInteger)calcThumbnailSize;
++ (NSUInteger)calcThumbnailSize;
 
 @end
 
@@ -33,17 +33,17 @@
             break;
         }
         UIImage *image = [[[UIImage alloc] initWithCGImage:[representation fullScreenImage]] autorelease];
-        CGSize tmpSize = image.size;
+//        CGSize tmpSize = image.size;
         CGSize thumbnailSize;
-        thumbnailSize.width = thumbnailSize.height = [self calcThumbnailSize];
+        thumbnailSize.width = thumbnailSize.height = [DCLoadThumbnailForALAssetItem calcThumbnailSize];
         self.thumbnail = [DCImageHelper image:image fitInSize:thumbnailSize];
-        CGSize tmpSize1 = self.thumbnail.size;
+//        CGSize tmpSize1 = self.thumbnail.size;
         [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_THUMBNAILLOADEDFORALASSET object:self];
     } while (NO);
     NSLog(@"DCLoadThumbnailForALAssetItem main exit");
 }
 
-- (NSUInteger)calcThumbnailSize {
++ (NSUInteger)calcThumbnailSize {
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
         return THUMBNAIL_SIZE_IPHONE;
     } else if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {

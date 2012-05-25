@@ -57,6 +57,8 @@ extern NSString * const kDATAGROUPPROPERTY_POSTERIMAGE;
 
 - (BOOL)isEnumerated;
 
+- (NSOperation *)createOperationForLoadCachePosterImageWithItemUID:(NSString *)itemUID;
+
 @end
 
 #pragma mark DCDataLibrary

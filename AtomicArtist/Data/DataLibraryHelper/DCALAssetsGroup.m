@@ -8,6 +8,7 @@
 
 #import "DCALAssetsGroup.h"
 #import "DCALAssetItem.h"
+#import "DCLoadPosterImageForALAssetsGroup.h"
 
 @interface DCALAssetsGroup () {
     NSMutableArray *_allAssetUIDs;
@@ -19,6 +20,17 @@
 @implementation DCALAssetsGroup
 
 @synthesize alAssetsGroup = _alAssetsGroup;
+
+- (NSOperation *)createOperationForLoadCachePosterImageWithItemUID:(NSString *)itemUID {
+    NSOperation *result = nil;
+    do {
+        if (itemUID && _allAssetItems) {
+            DCALAssetItem *alLAssetItem = (DCALAssetItem *)[_allAssetItems objectForKey:itemUID];
+            result = [[DCLoadPosterImageForALAssetsGroup alloc] initWithItemUID:itemUID dataGroupUID:[self uniqueID] andALAsset:alLAssetItem.alAsset];
+        }
+    } while (NO);
+    return result;
+}
 
 - (id)init {
     self = [super init];
@@ -93,8 +105,10 @@
                         [_allAssetItems setObject:item forKey:assetURLStr];
                         [_allAssetUIDs insertObject:assetURLStr atIndex:index];
                         
-                        NSNotification *note = [NSNotification notificationWithName:@"ALAssetAdded" object:self];
-                        [[NSNotificationCenter defaultCenter] postNotification:note];
+                        [[NSNotificationCenter defaultCenter] postNotificationName:@"ALAssetAdded" object:[self uniqueID]];
+                        if (index == 0) {
+                            [[NSNotificationCenter defaultCenter] postNotificationName:@"ALAssetAddedForPosterImage" object:[self uniqueID]];
+                        }
                     } else {
                         NSLog(@"Result not %@", param);
                     }

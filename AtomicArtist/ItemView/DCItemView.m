@@ -21,7 +21,7 @@
 
 - (void)tap:(UITapGestureRecognizer *)gr;
 
-- (void)RunOperation;
+- (void)runOperation;
 
 @end
 
@@ -35,7 +35,7 @@
 @synthesize thumbnail = _thumbnail;
 @synthesize dataGroupUID = _dataGroupUID;
 @synthesize dataLibraryHelper = _dataLibraryHelper;
-@synthesize operation = _operation;
+@synthesize loadThumbnailOperation = _loadThumbnailOperation;
 
 - (void)tap:(UITapGestureRecognizer *)gr {
     if (gr == _singleTapGestureRecognizer && gr.numberOfTapsRequired == 1) {
@@ -53,7 +53,12 @@
         _singleTapGestureRecognizer = nil;
     }
     
-    self.operation = nil;
+    if (_loadThumbnailOperation) {
+        [_loadThumbnailOperation cancel];
+        [_loadThumbnailOperation release];
+        _loadThumbnailOperation = nil;
+    }
+    
     self.dataLibraryHelper = nil;
     self.thumbnail = nil;
     
@@ -91,17 +96,17 @@
     }
 }
 
-- (void)RunOperation {
-    if (self.operation) {
-        [self.operation start];
+- (void)runOperation {
+    if (self.loadThumbnailOperation) {
+        [self.loadThumbnailOperation start];
     } else {
         id <DCDataItem> item = [self.dataLibraryHelper itemWithUID:self.itemUID inGroup:self.dataGroupUID];
         if (!item) {
             return;
         }
-        self.operation = [item createOperationForLoadCacheThumbnail];
-        
-        [[DCDataLoader defaultDataLoader] addOperation:self.operation];
+        _loadThumbnailOperation = [item createOperationForLoadCacheThumbnail];
+        [_loadThumbnailOperation retain];
+        [[DCDataLoader defaultDataLoader] addOperation:self.loadThumbnailOperation];
     }
 }
 
@@ -132,11 +137,10 @@
                 }
                 if (needRunOperation) {
                     self.thumbnail = (UIImage *)[item valueForProperty:kDATAITEMPROPERTY_THUMBNAIL withOptions:nil];
-//                    [self performSelectorInBackground:@selector(RunOperation) withObject:nil];
-                    [self performSelectorOnMainThread:@selector(RunOperation) withObject:nil waitUntilDone:NO];
+                    [self performSelectorOnMainThread:@selector(runOperation) withObject:nil waitUntilDone:NO];
                 }
             } else {
-                int i = 0;
+                NSLog(@"self.thumbnail already loaded");
             }
             
             CGSize thumbnailSize = [self.thumbnail size];
