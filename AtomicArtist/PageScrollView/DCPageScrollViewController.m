@@ -298,18 +298,27 @@ typedef enum {
             [self setView:PAGEINDEX_PREVIOUS appearFlag:YES];
             enableViews[PAGEINDEX_PREVIOUS] = YES;
             ++pageCount;
+        } else {
+            [self setView:PAGEINDEX_PREVIOUS appearFlag:NO];
+            enableViews[PAGEINDEX_PREVIOUS] = NO;
         }
         if (current) {
             [self.viewCtrls setObject:current forKey:pageID_current];
             [self setView:PAGEINDEX_CURRENT appearFlag:YES];
             enableViews[PAGEINDEX_CURRENT] = YES;
             ++pageCount;
+        } else {
+            [self setView:PAGEINDEX_CURRENT appearFlag:NO];
+            enableViews[PAGEINDEX_CURRENT] = NO;
         }
         if (next) {
             [self.viewCtrls setObject:next forKey:pageID_next];
             [self setView:PAGEINDEX_NEXT appearFlag:YES];
             enableViews[PAGEINDEX_NEXT] = YES;
             ++pageCount;
+        } else {
+            [self setView:PAGEINDEX_NEXT appearFlag:NO];
+            enableViews[PAGEINDEX_NEXT] = NO;
         }
         
         if ([self.pageViews count] != 0 && [self.pageViews count] != pageCount) {

@@ -77,17 +77,16 @@
         nextItemViewCtrl.dataGroupIndex = nextIndex;
         nextItemViewCtrl.enumDataItemParam = _enumDataItemParam;
         nextItemViewCtrl.delegateForItemView = (DCItemPageScrollViewController *)pageScrollViewCtrl;
-        
-        [pageScrollViewCtrl setViewCtrlsWithCurrent:currentItemViewCtrl previous:prevItemViewCtrl andNext:nextItemViewCtrl];
-        
-        [currentItemViewCtrl release];
-        currentItemViewCtrl = nil;
-        [prevItemViewCtrl release];
-        prevItemViewCtrl = nil;
-        
-        [pageScrollViewCtrl reloadPageViews];
-        [pageScrollViewCtrl scrollToCurrentPageView];
     }
+    [pageScrollViewCtrl setViewCtrlsWithCurrent:currentItemViewCtrl previous:prevItemViewCtrl andNext:nextItemViewCtrl];
+    
+    [currentItemViewCtrl release];
+    currentItemViewCtrl = nil;
+    [prevItemViewCtrl release];
+    prevItemViewCtrl = nil;
+    
+    [pageScrollViewCtrl reloadPageViews];
+    [pageScrollViewCtrl scrollToCurrentPageView];
 }
 
 - (void)pageScrollViewCtrl:(DCPageScrollViewController *)pageScrollViewCtrl doPreviousActionWithCurrentViewCtrl:(UIViewController *)currentViewCtrl previousViewCtrl:(UIViewController *)previousViewCtrl {
@@ -111,17 +110,16 @@
         prevItemViewCtrl.dataGroupIndex = prevIndex;
         prevItemViewCtrl.enumDataItemParam = _enumDataItemParam;
         prevItemViewCtrl.delegateForItemView = (DCItemPageScrollViewController *)pageScrollViewCtrl;
-        
-        [pageScrollViewCtrl setViewCtrlsWithCurrent:currentItemViewCtrl previous:prevItemViewCtrl andNext:nextItemViewCtrl];
-        
-        [currentItemViewCtrl release];
-        currentItemViewCtrl = nil;
-        [nextItemViewCtrl release];
-        nextItemViewCtrl = nil;
-        
-        [pageScrollViewCtrl reloadPageViews];
-        [pageScrollViewCtrl scrollToCurrentPageView];
     }
+    [pageScrollViewCtrl setViewCtrlsWithCurrent:currentItemViewCtrl previous:prevItemViewCtrl andNext:nextItemViewCtrl];
+    
+    [currentItemViewCtrl release];
+    currentItemViewCtrl = nil;
+    [nextItemViewCtrl release];
+    nextItemViewCtrl = nil;
+    
+    [pageScrollViewCtrl reloadPageViews];
+    [pageScrollViewCtrl scrollToCurrentPageView];
 }
 
 - (void)setEnumDataGroupParam:(id)enumDataGroupParam {
