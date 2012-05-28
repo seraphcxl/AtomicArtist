@@ -214,7 +214,7 @@
     NSLog(@"DCGroupViewController refreshAssetsGroups");
     if (force || [self.dataLibraryHelper groupsCount] == 0) {
         [self clearCache];
-        [self.dataLibraryHelper enumGroups:_enumDataGroupParam];
+        [self.dataLibraryHelper enumGroups:_enumDataGroupParam notifyWithFrequency:_itemCountInCell];
         [self.navigationItem setTitle:[self title]];
     }
 }
@@ -356,7 +356,7 @@
     [self.tableView setAllowsSelection:NO];
     
     NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
-    [notificationCenter addObserver:self selector:@selector(reloadTableView:) name:@"ALGroupAdded" object:nil];
+    [notificationCenter addObserver:self selector:@selector(reloadTableView:) name:NOTIFY_DATAGROUP_ADDED object:nil];
     [notificationCenter addObserver:self selector:@selector(notifyRefresh:) name:@"NotifyRefreshGroup" object:nil];
     [notificationCenter addObserver:self selector:@selector(actionForWillEnterForegroud:) name:@"applicationWillEnterForeground:" object:nil];
     [notificationCenter addObserver:self selector:@selector(actionForGroupPosterImageLoaded:) name:NOTIFY_POSTERIMAGELOADEDFORALASSETSGROUP object:nil];

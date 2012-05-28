@@ -46,11 +46,12 @@
     }
 }
 
-- (void)refreshItems:(BOOL)force {
+- (void)refreshItemsForPosterImage:(BOOL)force {
     if (self.dataLibraryHelper) {
         if (force || [self.dataLibraryHelper isGroupEnumerated:self.dataGroupUID] == 0) {
             [self.dataLibraryHelper clearCacheInGroup:self.dataGroupUID];
-            [self.dataLibraryHelper enumItems:self.enumDataItemParam InGroup:self.dataGroupUID];
+            NSIndexSet *indexSet = [[NSIndexSet alloc] initWithIndex:0];
+            [self.dataLibraryHelper enumItemAtIndexes:indexSet withParam:self.enumDataItemParam inGroup:self.dataGroupUID notifyWithFrequency:1];
         }
     }
 }
@@ -115,7 +116,7 @@
         [self.loadPosterImageOperation start];
     } else {
         if (self.dataLibraryHelper) {
-            [self refreshItems:NO];
+            [self refreshItemsForPosterImage:NO];
             
         } else {
             [NSException raise:@"DCGroupView error" format:@"Reason: self.dataLibraryHelper == nil"];
@@ -222,7 +223,7 @@
         [self addGestureRecognizer:tapGestureRecognizer];
         
         NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
-        [notificationCenter addObserver:self selector:@selector(runOperation:) name:@"ALAssetAddedForPosterImage" object:nil];
+        [notificationCenter addObserver:self selector:@selector(runOperation:) name:NOTIFY_DATAITEMFORPOSTERIMAGE_ADDED object:nil];
     }
     return self;
 }

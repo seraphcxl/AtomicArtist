@@ -67,9 +67,9 @@ static DCALAssetsLibraryHelper *staticALAssetsLibraryHelper = nil;
     }
 }
 
-- (void)enumGroups:(id)param {
+- (void)enumGroups:(id)param notifyWithFrequency:(NSUInteger)frequency {
     if (_alAssetsLibrary) {
-        [_alAssetsLibrary enumGroups:param];
+        [_alAssetsLibrary enumGroups:param notifyWithFrequency:frequency];
     } else {
         [NSException raise:@"DCALAssetsLibraryHelper error" format:@"Reason: _alAssetsLibrary == nil"];
     }
@@ -133,11 +133,24 @@ static DCALAssetsLibraryHelper *staticALAssetsLibraryHelper = nil;
     }
 }
 
-- (void)enumItems:(id)param InGroup:(NSString *) groupUID {
+- (void)enumItems:(id)param inGroup:(NSString *)groupUID notifyWithFrequency:(NSUInteger)frequency {
     if (_alAssetsLibrary) {
         DCALAssetsGroup *group = [_alAssetsLibrary groupWithUID:groupUID];
         if (group) {
-            [group enumItems:param];
+            [group enumItems:param notifyWithFrequency:frequency];
+        } else {
+            [NSException raise:@"DCALAssetsLibraryHelper error" format:@"Reason: can not find group id == %@", groupUID];
+        }
+    } else {
+        [NSException raise:@"DCALAssetsLibraryHelper error" format:@"Reason: _alAssetsLibrary == nil"];
+    }
+}
+
+- (void)enumItemAtIndexes:(NSIndexSet *)indexSet withParam:(id)param inGroup:(NSString *)groupUID notifyWithFrequency:(NSUInteger)frequency {
+    if (_alAssetsLibrary) {
+        DCALAssetsGroup *group = [_alAssetsLibrary groupWithUID:groupUID];
+        if (group) {
+            [group enumItemAtIndexes:indexSet withParam:param notifyWithFrequency:frequency];
         } else {
             [NSException raise:@"DCALAssetsLibraryHelper error" format:@"Reason: can not find group id == %@", groupUID];
         }

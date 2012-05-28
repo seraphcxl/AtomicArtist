@@ -187,7 +187,7 @@
     if (self.dataLibraryHelper) {
         if (force || ![self.dataLibraryHelper isGroupEnumerated:self.dataGroupUID]) {
             [self clearCache];
-            [self.dataLibraryHelper enumItems:self.enumDataItemParam InGroup:self.dataGroupUID];
+            [self.dataLibraryHelper enumItems:self.enumDataItemParam inGroup:self.dataGroupUID notifyWithFrequency:_itemCountInCell];
         }
         
         id <DCDataGroup> group = [self.dataLibraryHelper groupWithUID:self.dataGroupUID];
@@ -331,7 +331,7 @@
     [self.tableView setAllowsSelection:NO];
     
     NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
-    [notificationCenter addObserver:self selector:@selector(reloadTableView:) name:@"ALAssetAdded" object:nil];
+    [notificationCenter addObserver:self selector:@selector(reloadTableView:) name:NOTIFY_DATAITEM_ADDED object:nil];
     [notificationCenter addObserver:self selector:@selector(actionForWillEnterForegroud:) name:@"applicationWillEnterForeground:" object:nil];
     [notificationCenter addObserver:self selector:@selector(actionForItemThumbnailLoaded:) name:NOTIFY_THUMBNAILLOADEDFORALASSET object:nil];
     

@@ -1,5 +1,5 @@
 //
-//  DCALAssetsGroup.h
+//  DCALAssetItem.h
 //  AtomicArtist
 //
 //  Created by Chen XiaoLiang on 12-5-17.
@@ -9,8 +9,10 @@
 #import <Foundation/Foundation.h>
 #import "DCUniformDataProtocol.h"
 
-@interface DCALAssetsGroup : NSObject <DCDataGroup>
+@interface DCALAssetItem : NSObject <DCDataItem>
 
-@property (retain, nonatomic) ALAssetsGroup *alAssetsGroup;
+@property (readonly, nonatomic) ALAsset *alAsset;
+
+- (id)initWithALAsset:(ALAsset *)alAsset;
 
 @end

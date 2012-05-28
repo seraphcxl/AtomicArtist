@@ -13,11 +13,22 @@
 @interface DCALAssetsGroup () {
     NSMutableArray *_allAssetUIDs;
     NSMutableDictionary *_allAssetItems; // Key:(NSString *)assetUID Value:(DCALAssetItem *)item
+    NSUInteger _frequency;
+    NSUInteger _enumCount;
 }
 
 @end
 
 @implementation DCALAssetsGroup
+
+- (id)initWithALAssetsGroup:(ALAssetsGroup *)alAssetsGroup {
+    self = [super init];
+    if (self) {
+        _alAssetsGroup = alAssetsGroup;
+        [_alAssetsGroup retain];
+    }
+    return self;
+}
 
 @synthesize alAssetsGroup = _alAssetsGroup;
 
@@ -57,7 +68,10 @@
 }
 
 - (void)dealloc {
-    self.alAssetsGroup = nil;
+    if (_alAssetsGroup) {
+        [_alAssetsGroup release];
+        _alAssetsGroup = nil;
+    }
     
     [self clearCache];
     
@@ -82,15 +96,13 @@
     }
 }
 
-- (void)enumItems:(id)param {
+- (void)enumItems:(id)param notifyWithFrequency:(NSUInteger)frequency {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     
     if (self.alAssetsGroup) {
-        if (_allAssetItems) {
+        if (_allAssetItems && _allAssetUIDs && frequency != 0) {
             
-            if (_allAssetItems) {
-                [_allAssetItems removeAllObjects];
-            }
+            [self clearCache];
             
             void (^ALAssetsGroupEnumerationResultsBlock)(ALAsset *result, NSUInteger index, BOOL *stop) = ^(ALAsset *result, NSUInteger index, BOOL *stop) {
                 if (result != nil) {
@@ -99,29 +111,87 @@
                         NSURL *url = [representation url];
                         NSString *assetURLStr = [url absoluteString];
                         
-                        DCALAssetItem *item = [[[DCALAssetItem alloc] init] autorelease];
-                        item.alAsset = result;
+                        DCALAssetItem *item = [[[DCALAssetItem alloc] initWithALAsset:result] autorelease];
                         
                         [_allAssetItems setObject:item forKey:assetURLStr];
                         [_allAssetUIDs insertObject:assetURLStr atIndex:index];
-                        
-                        [[NSNotificationCenter defaultCenter] postNotificationName:@"ALAssetAdded" object:[self uniqueID]];
-                        if (index == 0) {
-                            [[NSNotificationCenter defaultCenter] postNotificationName:@"ALAssetAddedForPosterImage" object:[self uniqueID]];
+                        ++_enumCount;
+                        if (_enumCount == _frequency) {
+                            [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_DATAITEM_ADDED object:[self uniqueID]];
+                            _enumCount = 0;
                         }
                     } else {
                         NSLog(@"Result not %@", param);
                     }
+                } else {
+                    if (_enumCount != 0) {
+                        [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_DATAITEM_ADDED object:[self uniqueID]];
+                    }
                 }
             };
-            
+            _frequency = frequency;
+            _enumCount = 0;
             [self.alAssetsGroup enumerateAssetsUsingBlock:ALAssetsGroupEnumerationResultsBlock];
             
         } else {
-            [NSException raise:@"DCALAssetsGroup Error" format:@"Reason: allAssets is nil"];
+            [NSException raise:@"DCALAssetsGroup Error" format:@"Reason: _allAssetItems == nil or _allAssetUIDs == nil or frequency == 0"];
         }
     } else {
-        [NSException raise:@"DCALAssetsGroup Error" format:@"Reason: self.assetsGroup is nil"];
+        [NSException raise:@"DCALAssetsGroup Error" format:@"Reason: self.assetsGroup == nil"];
+    }
+    
+    [pool drain];
+}
+
+- (void)enumItemAtIndexes:(NSIndexSet *)indexSet withParam:(id)param notifyWithFrequency:(NSUInteger)frequency {
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    
+    if (self.alAssetsGroup) {
+        if (_allAssetItems && _allAssetUIDs && frequency != 0) {
+            
+            [self clearCache];
+            
+            void (^ALAssetsGroupEnumerationResultsBlock)(ALAsset *result, NSUInteger index, BOOL *stop) = ^(ALAsset *result, NSUInteger index, BOOL *stop) {
+                if (result != nil) {
+                    if ([[result valueForProperty:ALAssetPropertyType] isEqualToString:(NSString *)param]) {
+                        ALAssetRepresentation *representation = [result defaultRepresentation];
+                        NSURL *url = [representation url];
+                        NSString *assetURLStr = [url absoluteString];
+                        
+                        DCALAssetItem *item = [[[DCALAssetItem alloc] initWithALAsset:result] autorelease];
+                        
+                        [_allAssetItems setObject:item forKey:assetURLStr];
+                        [_allAssetUIDs insertObject:assetURLStr atIndex:index];
+
+                        if (index == 0) {
+                            [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_DATAITEMFORPOSTERIMAGE_ADDED object:[self uniqueID]];
+                        }
+                        
+                        if (_enumCount == _frequency) {
+                            [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_DATAITEM_ADDED object:[self uniqueID]];
+                            _enumCount = 0;
+                        } else {
+                            ++_enumCount;
+                        }
+                        
+                    } else {
+                        NSLog(@"Result not %@", param);
+                    }
+                } else {
+                    if (_enumCount != 0) {
+                        [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_DATAITEM_ADDED object:[self uniqueID]];
+                    }
+                }
+            };
+            _frequency = frequency;
+            _enumCount = 0;
+            [self.alAssetsGroup enumerateAssetsAtIndexes:indexSet options:NSEnumerationConcurrent usingBlock:ALAssetsGroupEnumerationResultsBlock];
+            
+        } else {
+            [NSException raise:@"DCALAssetsGroup Error" format:@"Reason: _allAssetItems == nil or _allAssetUIDs == nil or frequency == 0"];
+        }
+    } else {
+        [NSException raise:@"DCALAssetsGroup Error" format:@"Reason: self.assetsGroup == nil"];
     }
     
     [pool drain];

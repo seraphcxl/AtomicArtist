@@ -37,13 +37,19 @@ extern NSString * const kDATAGROUPPROPERTY_URL;
 extern NSString * const kDATAGROUPPROPERTY_TYPE;
 extern NSString * const kDATAGROUPPROPERTY_POSTERIMAGE;
 
+extern NSString * const NOTIFY_DATAITEM_ADDED;
+extern NSString * const NOTIFY_DATAITEMFORPOSTERIMAGE_ADDED;
+extern NSString * const NOTIFY_DATAGROUP_ADDED;
+
 @protocol DCDataGroup <NSObject>
 
 - (NSString *)uniqueID;
 
 - (void)clearCache;
 
-- (void)enumItems:(id)param;
+- (void)enumItems:(id)param notifyWithFrequency:(NSUInteger)frequency;
+
+- (void)enumItemAtIndexes:(NSIndexSet *)indexSet withParam:(id)param notifyWithFrequency:(NSUInteger)frequency;
 
 - (NSUInteger)itemsCount;
 
@@ -71,7 +77,7 @@ extern NSString * const kDATAGROUPPROPERTY_POSTERIMAGE;
 
 - (void)clearCache;
 
-- (void)enumGroups:(id)param;
+- (void)enumGroups:(id)param notifyWithFrequency:(NSUInteger)frequency;
 
 - (NSUInteger)groupsCount;
 
@@ -97,7 +103,7 @@ extern NSString * const kDATAGROUPPROPERTY_POSTERIMAGE;
 
 - (void)clearCache;
 
-- (void)enumGroups:(id)param;
+- (void)enumGroups:(id)param notifyWithFrequency:(NSUInteger)frequency;
 
 - (NSUInteger)groupsCount;
 
@@ -111,7 +117,9 @@ extern NSString * const kDATAGROUPPROPERTY_POSTERIMAGE;
 
 - (void)clearCacheInGroup:(NSString *) groupUID;
 
-- (void)enumItems:(id)param InGroup:(NSString *) groupUID;
+- (void)enumItems:(id)param inGroup:(NSString *) groupUID notifyWithFrequency:(NSUInteger)frequency;
+
+- (void)enumItemAtIndexes:(NSIndexSet *)indexSet withParam:(id)param inGroup:(NSString *) groupUID notifyWithFrequency:(NSUInteger)frequency;
 
 - (NSUInteger)itemsCountInGroup:(NSString *) groupUID;
 

@@ -26,7 +26,7 @@
 @property (assign, nonatomic) id enumDataItemParam;
 @property (readonly, nonatomic) NSOperation *loadPosterImageOperation;
 
-- (void)refreshItems:(BOOL)force;
+- (void)refreshItemsForPosterImage:(BOOL)force;
 
 - (void)cancelLoadPosterImageOperation;
 

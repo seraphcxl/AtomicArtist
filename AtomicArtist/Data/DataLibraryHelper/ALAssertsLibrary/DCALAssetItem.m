@@ -14,6 +14,15 @@
 
 @synthesize alAsset = _alAsset;
 
+- (id)initWithALAsset:(ALAsset *)alAsset {
+    self = [super init];
+    if (self) {
+        _alAsset = alAsset;
+        [_alAsset retain];
+    }
+return self;
+}
+
 - (NSOperation *)createOperationForLoadCacheThumbnail {
     NSOperation *result = nil;
     do {
@@ -25,7 +34,10 @@
 }
 
 - (void)dealloc {
-    self.alAsset = nil;
+    if (_alAsset) {
+        [_alAsset release];
+        _alAsset = nil;
+    }
     
     [super dealloc];
 }

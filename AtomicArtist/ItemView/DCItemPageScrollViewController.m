@@ -78,15 +78,16 @@
     NSInteger index = -1;
     index = [itemViewCtrl.dataLibraryHelper indexForItemUID:itemUID inGroup:itemViewCtrl.dataGroupUID];
     if (index == -1) {
-        itemViewCtrl = (DCItemViewController *)[self previousViewCtrl];
-        index = [itemViewCtrl.dataLibraryHelper indexForItemUID:itemUID inGroup:itemViewCtrl.dataGroupUID];
-        if (index == -1) {
-            itemViewCtrl = (DCItemViewController *)[self nextViewCtrl];
-            index = [itemViewCtrl.dataLibraryHelper indexForItemUID:itemUID inGroup:itemViewCtrl.dataGroupUID];
-            if (index == -1) {
-                [NSException raise:@"DCPageScrollViewController error" format:@"item:%@ not find", itemUID];
-            }
-        }
+        [NSException raise:@"DCPageScrollViewController error" format:@"item:%@ not find", itemUID];
+//        itemViewCtrl = (DCItemViewController *)[self previousViewCtrl];
+//        index = [itemViewCtrl.dataLibraryHelper indexForItemUID:itemUID inGroup:itemViewCtrl.dataGroupUID];
+//        if (index == -1) {
+//            itemViewCtrl = (DCItemViewController *)[self nextViewCtrl];
+//            index = [itemViewCtrl.dataLibraryHelper indexForItemUID:itemUID inGroup:itemViewCtrl.dataGroupUID];
+//            if (index == -1) {
+//                
+//            }
+//        }
     }
     [itemViewCtrl selectItem:itemUID showInPageScrollViewController:pageScrollViewCtrl];
     [self.navigationController pushViewController:pageScrollViewCtrl animated:YES];

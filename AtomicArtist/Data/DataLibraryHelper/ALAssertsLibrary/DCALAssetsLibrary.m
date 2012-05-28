@@ -11,7 +11,9 @@
 
 @interface DCALAssetsLibrary () {
     NSMutableArray *_allALAssetsGroupPersistentIDs;
-    NSMutableDictionary *_allALAssetsGroups; // Key:(NSSString *)groupPersistentID Value:(DCALAssetsGroup *)assetsGroup
+    NSMutableDictionary *_allALAssetsGroups; // Key:(NSString *)groupPersistentID Value:(DCALAssetsGroup *)assetsGroup
+    NSUInteger _frequency;
+    NSUInteger _enumCount;
 }
 
 @end
@@ -65,7 +67,7 @@
     }
 }
 
-- (void)enumGroups:(id)param {
+- (void)enumGroups:(id)param notifyWithFrequency:(NSUInteger)frequency {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     
     void (^ALAssetsLibraryGroupsEnumerationResultsBlock)(ALAssetsGroup *group, BOOL *stop) = ^(ALAssetsGroup *group, BOOL *stop) {
@@ -73,17 +75,24 @@
 			NSString *groupPersistentID = [group valueForProperty:ALAssetsGroupPropertyPersistentID];
             ALAssetsGroup *result = [_allALAssetsGroups objectForKey:groupPersistentID];
             if (result == nil) {
-                DCALAssetsGroup *alAssetsGroup = [[[DCALAssetsGroup alloc] init] autorelease];
-                alAssetsGroup.alAssetsGroup = group;
+                DCALAssetsGroup *alAssetsGroup = [[[DCALAssetsGroup alloc] initWithALAssetsGroup:group] autorelease];
                 NSUInteger index = [_allALAssetsGroupPersistentIDs count];
                 [_allALAssetsGroupPersistentIDs insertObject:groupPersistentID atIndex:index];
                 [_allALAssetsGroups setObject:alAssetsGroup forKey:groupPersistentID];
             }
 			//Don't mark this NSLog, it is a must. Otherwise, some thing bad would happen. HAHA~~
 			NSLog(@"Add group id: %@, count = %d", groupPersistentID, [group numberOfAssets]);
-		}
-		NSNotification *note = [NSNotification notificationWithName:@"ALGroupAdded" object:self];
-        [[NSNotificationCenter defaultCenter] postNotification:note];
+            ++_enumCount;
+            if (_enumCount == _frequency) {
+                [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_DATAGROUP_ADDED object:self];
+                _enumCount = 0;
+            }
+		} else {
+            if (_enumCount != 0) {
+                [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_DATAGROUP_ADDED object:self];
+            }
+        }
+		
 	};
     
     void (^ALAssetsLibraryAccessFailureBlock)(NSError *error) = ^(NSError *error) {
@@ -96,14 +105,14 @@
         }
     };
     
-    if (_allALAssetsGroups) {
-        [_allALAssetsGroups removeAllObjects];
-    }
+    [self clearCache];
     
-    if (_assetsLibrary) {
+    if (_assetsLibrary && frequency != 0) {
+        _frequency = frequency;
+        _enumCount = 0;
         [_assetsLibrary enumerateGroupsWithTypes:(ALAssetsGroupType)param usingBlock:ALAssetsLibraryGroupsEnumerationResultsBlock failureBlock:ALAssetsLibraryAccessFailureBlock];
     } else {
-        [NSException raise:@"DCALAssetsLibrary error" format:@"Reason: _assetsLibrary is nil"];
+        [NSException raise:@"DCALAssetsLibrary error" format:@"Reason: _assetsLibrary is nil or frequency == 0"];
     }
     
     [pool drain];
