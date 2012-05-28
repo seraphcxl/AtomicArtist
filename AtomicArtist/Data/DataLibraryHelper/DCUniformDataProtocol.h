@@ -113,6 +113,8 @@ extern NSString * const NOTIFY_DATAGROUP_ADDED;
 
 - (NSInteger)indexForGroupUID:(NSString *)groupUID;
 
+- (UIImage *)defaultPosterImage;
+
 /*** *** ***/
 
 - (void)clearCacheInGroup:(NSString *) groupUID;
@@ -130,6 +132,8 @@ extern NSString * const NOTIFY_DATAGROUP_ADDED;
 - (NSInteger)indexForItemUID:(NSString *)itemUID inGroup:(NSString *) groupUID;
 
 - (BOOL)isGroupEnumerated:(NSString *) groupUID;
+
+- (UIImage *)defaultThumbnail;
 
 @end
 

@@ -16,8 +16,6 @@ static DCALAssetsLibraryHelper *staticALAssetsLibraryHelper = nil;
     DCALAssetsLibrary *_alAssetsLibrary;
 }
 
-- (DCALAssetsGroup *)alAssetsGroupWithUID:(NSString *)uid;
-
 @end
 
 @implementation DCALAssetsLibraryHelper
@@ -111,18 +109,9 @@ static DCALAssetsLibraryHelper *staticALAssetsLibraryHelper = nil;
     }
 }
 
-- (DCALAssetsGroup *)alAssetsGroupWithUID:(NSString *)uid {
-    if (_alAssetsLibrary) {
-        return [_alAssetsLibrary groupWithUID:uid];
-    } else {
-        [NSException raise:@"DCALAssetsLibraryHelper error" format:@"Reason: _alAssetsLibrary == nil"];
-        return nil;
-    }
-}
-
 - (void)clearCacheInGroup:(NSString *) groupUID {
     if (_alAssetsLibrary) {
-        DCALAssetsGroup *group = [_alAssetsLibrary groupWithUID:groupUID];
+        id <DCDataGroup> group = [_alAssetsLibrary groupWithUID:groupUID];
         if (group) {
             [group clearCache];
         } else {
@@ -135,7 +124,7 @@ static DCALAssetsLibraryHelper *staticALAssetsLibraryHelper = nil;
 
 - (void)enumItems:(id)param inGroup:(NSString *)groupUID notifyWithFrequency:(NSUInteger)frequency {
     if (_alAssetsLibrary) {
-        DCALAssetsGroup *group = [_alAssetsLibrary groupWithUID:groupUID];
+        id <DCDataGroup> group = [_alAssetsLibrary groupWithUID:groupUID];
         if (group) {
             [group enumItems:param notifyWithFrequency:frequency];
         } else {
@@ -148,7 +137,7 @@ static DCALAssetsLibraryHelper *staticALAssetsLibraryHelper = nil;
 
 - (void)enumItemAtIndexes:(NSIndexSet *)indexSet withParam:(id)param inGroup:(NSString *)groupUID notifyWithFrequency:(NSUInteger)frequency {
     if (_alAssetsLibrary) {
-        DCALAssetsGroup *group = [_alAssetsLibrary groupWithUID:groupUID];
+        id <DCDataGroup> group = [_alAssetsLibrary groupWithUID:groupUID];
         if (group) {
             [group enumItemAtIndexes:indexSet withParam:param notifyWithFrequency:frequency];
         } else {
@@ -161,7 +150,7 @@ static DCALAssetsLibraryHelper *staticALAssetsLibraryHelper = nil;
 
 - (NSUInteger)itemsCountInGroup:(NSString *) groupUID {
     if (_alAssetsLibrary) {
-        DCALAssetsGroup *group = [_alAssetsLibrary groupWithUID:groupUID];
+        id <DCDataGroup> group = [_alAssetsLibrary groupWithUID:groupUID];
         if (group) {
             return [group itemsCount];
         } else {
@@ -176,7 +165,7 @@ static DCALAssetsLibraryHelper *staticALAssetsLibraryHelper = nil;
 
 - (id <DCDataItem>)itemWithUID:(NSString *)uid inGroup:(NSString *) groupUID {
     if (_alAssetsLibrary) {
-        DCALAssetsGroup *group = [_alAssetsLibrary groupWithUID:groupUID];
+        id <DCDataGroup> group = [_alAssetsLibrary groupWithUID:groupUID];
         if (group) {
             return [group itemWithUID:uid];
         } else {
@@ -191,7 +180,7 @@ static DCALAssetsLibraryHelper *staticALAssetsLibraryHelper = nil;
 
 - (NSString *)itemUIDAtIndex:(NSUInteger)index inGroup:(NSString *) groupUID {
     if (_alAssetsLibrary) {
-        DCALAssetsGroup *group = [_alAssetsLibrary groupWithUID:groupUID];
+        id <DCDataGroup> group = [_alAssetsLibrary groupWithUID:groupUID];
         if (group) {
             return [group itemUIDAtIndex:index];
         } else {
@@ -206,7 +195,7 @@ static DCALAssetsLibraryHelper *staticALAssetsLibraryHelper = nil;
 
 - (NSInteger)indexForItemUID:(NSString *)itemUID inGroup:(NSString *) groupUID {
     if (_alAssetsLibrary) {
-        DCALAssetsGroup *group = [_alAssetsLibrary groupWithUID:groupUID];
+        id <DCDataGroup> group = [_alAssetsLibrary groupWithUID:groupUID];
         if (group) {
             return [group indexForItemUID:itemUID];
         } else {
@@ -221,7 +210,7 @@ static DCALAssetsLibraryHelper *staticALAssetsLibraryHelper = nil;
 
 - (BOOL)isGroupEnumerated:(NSString *) groupUID {
     if (_alAssetsLibrary) {
-        DCALAssetsGroup *group = [_alAssetsLibrary groupWithUID:groupUID];
+        id <DCDataGroup> group = [_alAssetsLibrary groupWithUID:groupUID];
         if (group) {
             return [group isEnumerated];
         } else {
@@ -232,6 +221,14 @@ static DCALAssetsLibraryHelper *staticALAssetsLibraryHelper = nil;
         [NSException raise:@"DCALAssetsLibraryHelper error" format:@"Reason: _alAssetsLibrary == nil"];
         return NO;
     }
+}
+
+- (UIImage *)defaultPosterImage {
+    return nil;
+}
+
+- (UIImage *)defaultThumbnail {
+    return nil;
 }
 
 @end
