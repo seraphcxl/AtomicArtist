@@ -11,7 +11,7 @@
 
 @interface DCLoadThumbnailForALAssetItem : DCLoadThumbnailOperation
 
-@property (retain, nonatomic) ALAsset *alAsset;
+@property (readonly, nonatomic) ALAsset *alAsset;
 
 - (id)initWithItemUID:(NSString *)itemUID andALAsset:(ALAsset *)alAsset;
 

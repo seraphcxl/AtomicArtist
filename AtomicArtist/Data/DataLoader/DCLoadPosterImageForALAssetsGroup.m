@@ -57,13 +57,17 @@
 - (id)initWithItemUID:(NSString *)itemUID dataGroupUID:(NSString *)dataGroupUID andALAsset:(ALAsset *)alAsset {
     self = [super initWithItemUID:itemUID dataGroupUID:dataGroupUID];
     if (self) {
-        self.alAsset = alAsset;
+        _alAsset = alAsset;
+        [_alAsset retain];
     }
     return self;
 }
 
 - (void)dealloc {
-    self.alAsset = nil;
+    if (_alAsset) {
+        [_alAsset release];
+        _alAsset = nil;
+    }
     
     [super dealloc];
 }

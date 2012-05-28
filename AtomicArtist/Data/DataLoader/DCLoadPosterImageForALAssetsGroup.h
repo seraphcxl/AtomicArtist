@@ -10,7 +10,7 @@
 
 @interface DCLoadPosterImageForALAssetsGroup : DCLoadPosterImageOperation
 
-@property (retain, nonatomic) ALAsset *alAsset;
+@property (readonly, nonatomic) ALAsset *alAsset;
 
 - (id)initWithItemUID:(NSString *)itemUID dataGroupUID:(NSString *)dataGroupUID andALAsset:(ALAsset *)alAsset;
 
