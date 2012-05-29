@@ -19,6 +19,10 @@
 
 @synthesize sourceSwitch;
 
+- (NSString *)title {
+    return [self.sourceSwitch titleForSegmentAtIndex:self.sourceSwitch.selectedSegmentIndex];
+}
+
 - (void)actionForGroupEmpty:(NSNotification *)note {
     if (_enumDataGroupParam == (id)(ALAssetsGroupPhotoStream)) {
         NSLog(@"PhotoStream is empty");
