@@ -186,6 +186,9 @@ typedef enum {
         if (self.hideNavigationBarEnabled) {
             [self.navigationController.navigationBar setHidden:YES];
         }
+        [_timerForHideAssist invalidate];
+        [_timerForHideAssist release];
+        _timerForHideAssist = nil;
     }
 }
 
