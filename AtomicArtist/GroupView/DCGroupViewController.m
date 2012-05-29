@@ -359,7 +359,7 @@
     [notificationCenter addObserver:self selector:@selector(reloadTableView:) name:NOTIFY_DATAGROUP_ADDED object:nil];
     [notificationCenter addObserver:self selector:@selector(notifyRefresh:) name:@"NotifyRefreshGroup" object:nil];
     [notificationCenter addObserver:self selector:@selector(actionForWillEnterForegroud:) name:@"applicationWillEnterForeground:" object:nil];
-    [notificationCenter addObserver:self selector:@selector(actionForGroupPosterImageLoaded:) name:NOTIFY_POSTERIMAGELOADEDFORALASSETSGROUP object:nil];
+    [notificationCenter addObserver:self selector:@selector(actionForGroupPosterImageLoaded:) name:NOTIFY_POSTERIMAGELOADED object:nil];
     /*** *** ***/
 }
 

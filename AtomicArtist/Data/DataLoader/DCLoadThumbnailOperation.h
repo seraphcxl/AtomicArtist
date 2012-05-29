@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-extern NSString * const NOTIFY_THUMBNAILLOADEDFORALASSET;
+extern NSString * const NOTIFY_THUMBNAILLOADED;
 
 @interface DCLoadThumbnailOperation : NSOperation
 

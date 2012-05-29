@@ -38,7 +38,7 @@
         thumbnailSize.width = thumbnailSize.height = [DCLoadThumbnailForALAssetItem calcThumbnailSize];
         self.thumbnail = [DCImageHelper image:image fitInSize:thumbnailSize];
 //        CGSize tmpSize1 = self.thumbnail.size;
-        [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_THUMBNAILLOADEDFORALASSET object:self];
+        [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_THUMBNAILLOADED object:self];
     } while (NO);
     NSLog(@"DCLoadThumbnailForALAssetItem main exit");
 }

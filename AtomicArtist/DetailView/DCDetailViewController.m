@@ -7,7 +7,7 @@
 //
 
 #import "DCDetailViewController.h"
-#import "DCImageHelper.h"
+#import "ImageHelper.h"
 
 @interface DCDetailViewController () {
     UITapGestureRecognizer *_doubleTapGestureRecognizer;
@@ -159,7 +159,7 @@
                 id <DCDataItem> item = [self.dataLibraryHelper itemWithUID:self.currentItemUID inGroup:self.currentDataGroupUID];
                 if (item) {
                     UIImage *fullScreemImage = (UIImage *)[item valueForProperty:kDATAITEMPROPERTY_FULLSCREENIMAGE withOptions:nil];
-                    _fitInImage = [DCImageHelper image:fullScreemImage fitInSize:rect.size];
+                    _fitInImage = [ImageHelper image:fullScreemImage fitInSize:rect.size];
                     [_fitInImage retain];
                     NSString *fileName = (NSString *)[item valueForProperty:kDATAITEMPROPERTY_FILENAME withOptions:nil];
                     [self.navigationItem setTitle:fileName];

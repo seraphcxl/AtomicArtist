@@ -38,7 +38,7 @@
         UIImage *tmpImage = [DCImageHelper image:image fillSize:thumbnailSize];
         self.thumbnail = [DCImageHelper bezierImage:tmpImage withRadius:5.0 needCropSquare:YES];
 //        CGSize tmpSize1 = self.thumbnail.size;
-        [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_POSTERIMAGELOADEDFORALASSETSGROUP object:self];
+        [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_POSTERIMAGELOADED object:self];
     } while (NO);
     NSLog(@"DCLoadPosterImageForALAssetsGroup main exit");
 }

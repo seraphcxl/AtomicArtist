@@ -8,7 +8,7 @@
 
 #import "DCLoadThumbnailOperation.h"
 
-extern NSString * const NOTIFY_POSTERIMAGELOADEDFORALASSETSGROUP;
+extern NSString * const NOTIFY_POSTERIMAGELOADED;
 
 @interface DCLoadPosterImageOperation : DCLoadThumbnailOperation
 

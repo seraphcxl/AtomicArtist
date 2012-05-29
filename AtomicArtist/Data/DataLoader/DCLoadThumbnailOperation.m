@@ -8,7 +8,7 @@
 
 #import "DCLoadThumbnailOperation.h"
 
-NSString * const NOTIFY_THUMBNAILLOADEDFORALASSET = @"NOTIFY_THUMBNAILLOADEDFORALASSET";
+NSString * const NOTIFY_THUMBNAILLOADED = @"NOTIFY_THUMBNAILLOADED";
 
 @implementation DCLoadThumbnailOperation
 

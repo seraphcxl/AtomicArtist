@@ -15,6 +15,7 @@
     NSMutableDictionary *_allAssetItems; // Key:(NSString *)assetUID Value:(DCALAssetItem *)item
     NSUInteger _frequency;
     NSUInteger _enumCount;
+    BOOL _enumerated;
 }
 
 @end
@@ -24,8 +25,18 @@
 - (id)initWithALAssetsGroup:(ALAssetsGroup *)alAssetsGroup {
     self = [super init];
     if (self) {
+        if (!_allAssetItems) {
+            _allAssetItems = [[NSMutableDictionary alloc] init];
+        }
+        
+        if (!_allAssetUIDs) {
+            _allAssetUIDs = [[NSMutableArray alloc] init];
+        }
+        
         _alAssetsGroup = alAssetsGroup;
         [_alAssetsGroup retain];
+        
+        _enumerated = NO;
     }
     return self;
 }
@@ -43,20 +54,6 @@
     return result;
 }
 
-- (id)init {
-    self = [super init];
-    if (self) {
-        if (!_allAssetItems) {
-            _allAssetItems = [[NSMutableDictionary alloc] init];
-        }
-        
-        if (!_allAssetUIDs) {
-            _allAssetUIDs = [[NSMutableArray alloc] init];
-        }
-    }
-    return self;
-}
-
 - (void)clearCache {
     if (_allAssetUIDs) {
         [_allAssetUIDs removeAllObjects];
@@ -65,6 +62,8 @@
     if (_allAssetItems) {
         [_allAssetItems removeAllObjects];
     }
+    
+    _enumerated = NO;
 }
 
 - (void)dealloc {
@@ -132,7 +131,7 @@
             _frequency = frequency;
             _enumCount = 0;
             [self.alAssetsGroup enumerateAssetsUsingBlock:ALAssetsGroupEnumerationResultsBlock];
-            
+            _enumerated = YES;
         } else {
             [NSException raise:@"DCALAssetsGroup Error" format:@"Reason: _allAssetItems == nil or _allAssetUIDs == nil or frequency == 0"];
         }
@@ -281,11 +280,7 @@
 }
 
 - (BOOL)isEnumerated {
-    if (!_allAssetItems || [_allAssetItems count] == 0) {
-        return NO;
-    } else {
-        return YES;
-    }
+    return _enumerated;
 }
 
 @end
