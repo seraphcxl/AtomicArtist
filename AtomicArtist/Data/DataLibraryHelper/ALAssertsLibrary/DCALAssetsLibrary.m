@@ -90,6 +90,11 @@
 		} else {
             if (_enumCount != 0) {
                 [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_DATAGROUP_ADDED object:self];
+            } else {
+                if ([_allALAssetsGroups count] == 0) {
+                    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_DATAGROUP_ADDED object:self];
+                    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_DATAGROUP_EMPTY object:self];
+                }
             }
         }
 		

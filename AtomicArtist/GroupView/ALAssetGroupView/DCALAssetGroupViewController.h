@@ -10,4 +10,8 @@
 
 @interface DCALAssetGroupViewController : DCGroupViewController
 
+@property (retain, nonatomic) IBOutlet UISegmentedControl *sourceSwitch;
+
+- (IBAction)sourceSwitchValueChanged:(id)sender;
+
 @end

@@ -27,6 +27,8 @@ extern NSString * const kDATAITEMPROPERTY_FULLSCREENIMAGE;
 
 - (NSOperation *)createOperationForLoadCacheThumbnail;
 
+- (void)save:(NSString *)filePath;
+
 @end
 
 #pragma mark DCDataGroup
@@ -40,6 +42,7 @@ extern NSString * const kDATAGROUPPROPERTY_POSTERIMAGE;
 extern NSString * const NOTIFY_DATAITEM_ADDED;
 extern NSString * const NOTIFY_DATAITEMFORPOSTERIMAGE_ADDED;
 extern NSString * const NOTIFY_DATAGROUP_ADDED;
+extern NSString * const NOTIFY_DATAGROUP_EMPTY;
 
 @protocol DCDataGroup <NSObject>
 
