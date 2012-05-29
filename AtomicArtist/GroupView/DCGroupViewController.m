@@ -11,6 +11,7 @@
 #import "DCItemPageScrollViewController.h"
 #import "DCLoadPosterImageOperation.h"
 #import "DCDataModelHelper.h"
+#import "DCDataLoader.h"
 
 @interface DCGroupViewController () {
     NSUInteger _itemCountInCell;
@@ -227,7 +228,7 @@
 //        itemViewController.dataGroupIndex = index;
 //        itemViewController.enumDataItemParam = _enumDataItemParam;
 //        [self.navigationController pushViewController:itemViewController animated:YES];
-        DCItemPageScrollViewController *pageScrollViewCtrl = [[DCItemPageScrollViewController alloc] initWithNibName:nil bundle:nil];
+        DCItemPageScrollViewController *pageScrollViewCtrl = [[[DCItemPageScrollViewController alloc] initWithNibName:nil bundle:nil] autorelease];
         
         DCItemViewController *currentItemViewCtrl = nil;
         DCItemViewController *prevItemViewCtrl = nil;

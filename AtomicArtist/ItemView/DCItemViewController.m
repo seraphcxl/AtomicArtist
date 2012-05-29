@@ -41,6 +41,8 @@
 
 - (NSArray *)getItemUIDsForCellAtIndexPath:(NSIndexPath *)indexPath;
 
+- (NSString *)pathInDocumentDirectory:(NSString *)fileName;
+
 @end
 
 @implementation DCItemViewController
@@ -52,6 +54,14 @@
 @synthesize dataLibraryHelper = _dataLibraryHelper;
 @synthesize enumDataItemParam = _enumDataItemParam;
 @synthesize dataGroupIndex = _dataGroupIndex;
+
+- (NSString *)pathInDocumentDirectory:(NSString *)fileName {
+    NSArray *documentDirectories = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    
+    NSString *documentDirectory = [documentDirectories objectAtIndex:0];
+    
+    return [documentDirectory stringByAppendingPathComponent:fileName];
+}
 
 - (void)pageScrollViewCtrl:(DCPageScrollViewController *)pageScrollViewCtrl doNextActionWithCurrentViewCtrl:(UIViewController *)currentViewCtrl nextViewCtrl:(UIViewController *)nextViewCtrl {
     NSLog(@"DCItemViewController pageScrollViewCtrl:doNextActionWithCurrentViewCtrl:nextViewCtrl:");
@@ -198,8 +208,7 @@
         NSString *groupName = [group valueForProperty:kDATAGROUPPROPERTY_GROUPNAME withOptions:nil];
         NSInteger numberOfItems = [group itemsCount];
         
-        _groupTitle = [[[NSString alloc] initWithFormat:@"%@ (%d)", groupName, numberOfItems] autorelease];
-        [_groupTitle retain];
+        _groupTitle = [[NSString alloc] initWithFormat:@"%@ (%d)", groupName, numberOfItems];
         
         if (self.delegate) {
             [self.delegate itemViewCtrl:self setGroupTitle:self.groupTitle];
@@ -209,6 +218,8 @@
 
 - (void)selectItem:(NSString *)itemUID showInPageScrollViewController:(DCPageScrollViewController *)pageScrollViewCtrl {
     if (itemUID && pageScrollViewCtrl && self.dataGroupUID && self.dataLibraryHelper) {
+        /*** *** ***/ /*** *** ***/ /*** *** ***/ /*** *** ***/ /*** *** ***/ /*** *** ***/
+        
         DCDetailViewController *currentDetailViewCtrl = nil;
         DCDetailViewController *prevDetailViewCtrl = nil;
         DCDetailViewController *nextDetailViewCtrl = nil;

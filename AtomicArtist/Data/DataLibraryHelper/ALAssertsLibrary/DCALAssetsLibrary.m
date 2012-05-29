@@ -103,10 +103,8 @@
     void (^ALAssetsLibraryAccessFailureBlock)(NSError *error) = ^(NSError *error) {
         NSInteger errCode = error.code;						 
         if (errCode == ALAssetsLibraryAccessGloballyDeniedError || errCode == ALAssetsLibraryAccessUserDeniedError) {
-            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Enum ALGroup failed" message:@"AccessGloballyDeniedError or AccessUserDeniedError" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            UIAlertView *alertView = [[[UIAlertView alloc] initWithTitle:@"Enum ALGroup failed" message:@"AccessGloballyDeniedError or AccessUserDeniedError" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil] autorelease];
             [alertView show];
-            [alertView release];
-            alertView = nil;
         }
     };
     
@@ -121,6 +119,8 @@
     }
     
     [pool drain];
+    [pool release];
+    pool = nil;
 }
 
 - (NSUInteger)groupsCount {

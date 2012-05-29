@@ -8,7 +8,7 @@
 
 #import "DCDataLoader.h"
 
-#define OPERATIONQUEUE_DEFAULTCONCURRENTCOUNT ((NSInteger)4)
+#define OPERATIONQUEUE_DEFAULTCONCURRENTCOUNT ((NSInteger)2)
 
 static DCDataLoader *staticDCDataLoader = nil;
 

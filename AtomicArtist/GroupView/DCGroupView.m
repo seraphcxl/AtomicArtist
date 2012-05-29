@@ -12,7 +12,7 @@
 #import "DCDataLoader.h"
 
 @interface DCGroupView () {
-    UITapGestureRecognizer *tapGestureRecognizer;
+    UITapGestureRecognizer *_tapGestureRecognizer;
 }
 
 - (NSInteger)calcPosterImageSize;
@@ -50,7 +50,7 @@
     if (self.dataLibraryHelper) {
         if (force || [self.dataLibraryHelper isGroupEnumerated:self.dataGroupUID] == 0) {
             [self.dataLibraryHelper clearCacheInGroup:self.dataGroupUID];
-            NSIndexSet *indexSet = [[NSIndexSet alloc] initWithIndex:0];
+            NSIndexSet *indexSet = [[[NSIndexSet alloc] initWithIndex:0] autorelease];
             [self.dataLibraryHelper enumItemAtIndexes:indexSet withParam:self.enumDataItemParam inGroup:self.dataGroupUID notifyWithFrequency:1];
         }
     }
@@ -68,10 +68,10 @@
     NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
     [notificationCenter removeObserver:self];
     
-    if (tapGestureRecognizer) {
-        [self removeGestureRecognizer:tapGestureRecognizer];
-        [tapGestureRecognizer release];
-        tapGestureRecognizer = nil;
+    if (_tapGestureRecognizer) {
+        [self removeGestureRecognizer:_tapGestureRecognizer];
+        [_tapGestureRecognizer release];
+        _tapGestureRecognizer = nil;
     }
     
     if (_loadPosterImageOperation) {
@@ -204,6 +204,12 @@
 		numbereLabel.font = [UIFont systemFontOfSize:self.titleFontSize];
         [numbereLabel setText:[[[NSString alloc] initWithFormat:@"%d", numberOfItems] autorelease]];
         
+        for (UIView *view in self.subviews) {
+            if ([view isMemberOfClass:[UIImageView class]] || [view isMemberOfClass:[UILabel class]]) {
+                [view removeFromSuperview];
+            }
+        }
+        
         [self addSubview:imageView];
         [self addSubview:titleLabel];
         [self addSubview:numbereLabel];
@@ -219,8 +225,8 @@
         _posterImageSize = [self calcPosterImageSize];
         _titleFontSize = [self calcTitleFontSize];
         
-        tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap:)];
-        [self addGestureRecognizer:tapGestureRecognizer];
+        _tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap:)];
+        [self addGestureRecognizer:_tapGestureRecognizer];
         
         NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
         [notificationCenter addObserver:self selector:@selector(runOperation:) name:NOTIFY_DATAITEMFORPOSTERIMAGE_ADDED object:nil];

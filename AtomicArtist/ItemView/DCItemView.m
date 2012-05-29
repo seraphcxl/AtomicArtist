@@ -165,6 +165,12 @@
             UIImageView *imageView = [[[UIImageView alloc] initWithFrame:imageViewFrame] autorelease];
             [imageView setImage:self.thumbnail];
             
+            for (UIView *view in self.subviews) {
+                if ([view isMemberOfClass:[UIImageView class]]) {
+                    [view removeFromSuperview];
+                }
+            }
+            
             [self addSubview:imageView];
 
         } else {

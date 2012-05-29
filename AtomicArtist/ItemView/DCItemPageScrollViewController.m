@@ -73,7 +73,7 @@
 }
 
 - (void)selectItem:(NSString *)itemUID {
-    DCPageScrollViewController *pageScrollViewCtrl = [[DCPageScrollViewController alloc] initWithNibName:nil bundle:nil];
+    DCPageScrollViewController *pageScrollViewCtrl = [[[DCPageScrollViewController alloc] initWithNibName:nil bundle:nil] autorelease];
     DCItemViewController *itemViewCtrl = (DCItemViewController *)[self currentViewCtrl];
     NSInteger index = -1;
     index = [itemViewCtrl.dataLibraryHelper indexForItemUID:itemUID inGroup:itemViewCtrl.dataGroupUID];

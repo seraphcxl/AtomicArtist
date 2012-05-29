@@ -48,7 +48,7 @@
     do {
         if (itemUID && _allAssetItems) {
             DCALAssetItem *alLAssetItem = (DCALAssetItem *)[_allAssetItems objectForKey:itemUID];
-            result = [[DCLoadPosterImageForALAssetsGroup alloc] initWithItemUID:itemUID dataGroupUID:[self uniqueID] andALAsset:alLAssetItem.alAsset];
+            result = [[[DCLoadPosterImageForALAssetsGroup alloc] initWithItemUID:itemUID dataGroupUID:[self uniqueID] andALAsset:alLAssetItem.alAsset] autorelease];
         }
     } while (NO);
     return result;
@@ -140,6 +140,8 @@
     }
     
     [pool drain];
+    [pool release];
+    pool = nil;
 }
 
 - (void)enumItemAtIndexes:(NSIndexSet *)indexSet withParam:(id)param notifyWithFrequency:(NSUInteger)frequency {
@@ -194,6 +196,8 @@
     }
     
     [pool drain];
+    [pool release];
+    pool = nil;
 }
 
 - (NSUInteger)itemsCount {
