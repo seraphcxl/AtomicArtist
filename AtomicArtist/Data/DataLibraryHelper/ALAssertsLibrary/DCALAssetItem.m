@@ -14,6 +14,9 @@
 
 @synthesize alAsset = _alAsset;
 
+- (void)save:(NSString *)filePath {
+}
+
 - (id)initWithALAsset:(ALAsset *)alAsset {
     self = [super init];
     if (self) {

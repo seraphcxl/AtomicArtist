@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1B14208D1574A6B90058199E /* DCALAssetGroupViewNaviTitle.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1B14208C1574A6B90058199E /* DCALAssetGroupViewNaviTitle.xib */; };
+		1B14209B1574ABD00058199E /* DCALAssetGroupViewNaviTitle.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1B14209A1574ABD00058199E /* DCALAssetGroupViewNaviTitle.xib */; };
 		1B8160FF156F17F400E40084 /* DCLoadThumbnailOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B8160FE156F17F300E40084 /* DCLoadThumbnailOperation.m */; };
 		1B816111156F563400E40084 /* DCLoadPosterImageForALAssetsGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B816110156F563300E40084 /* DCLoadPosterImageForALAssetsGroup.m */; };
 		1B816115156F59BD00E40084 /* DCLoadPosterImageOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B816114156F59BD00E40084 /* DCLoadPosterImageOperation.m */; };
@@ -49,7 +49,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		1B14208C1574A6B90058199E /* DCALAssetGroupViewNaviTitle.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DCALAssetGroupViewNaviTitle.xib; sourceTree = "<group>"; };
+		1B14209A1574ABD00058199E /* DCALAssetGroupViewNaviTitle.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = DCALAssetGroupViewNaviTitle.xib; path = GroupView/ALAssetGroupView/DCALAssetGroupViewNaviTitle.xib; sourceTree = "<group>"; };
 		1B8160FD156F17F300E40084 /* DCLoadThumbnailOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCLoadThumbnailOperation.h; sourceTree = "<group>"; };
 		1B8160FE156F17F300E40084 /* DCLoadThumbnailOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCLoadThumbnailOperation.m; sourceTree = "<group>"; };
 		1B81610F156F563300E40084 /* DCLoadPosterImageForALAssetsGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCLoadPosterImageForALAssetsGroup.h; sourceTree = "<group>"; };
@@ -158,7 +158,7 @@
 		1BBFAD881565241E00D5FC76 /* ALAsseetGroupView */ = {
 			isa = PBXGroup;
 			children = (
-				1B14208C1574A6B90058199E /* DCALAssetGroupViewNaviTitle.xib */,
+				1B14209A1574ABD00058199E /* DCALAssetGroupViewNaviTitle.xib */,
 				1BBFAD8A1565246500D5FC76 /* DCALAssetGroupViewController.h */,
 				1BBFAD8B1565246500D5FC76 /* DCALAssetGroupViewController.m */,
 			);
@@ -379,7 +379,7 @@
 				1BF9F4B8156483AE0015E004 /* InfoPlist.strings in Resources */,
 				1BF9F5161564939C0015E004 /* DCGroupViewController.xib in Resources */,
 				1BF9F51E156493A50015E004 /* DCItemViewController.xib in Resources */,
-				1B14208D1574A6B90058199E /* DCALAssetGroupViewNaviTitle.xib in Resources */,
+				1B14209B1574ABD00058199E /* DCALAssetGroupViewNaviTitle.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
