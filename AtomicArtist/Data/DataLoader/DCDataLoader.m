@@ -20,6 +20,8 @@ static DCDataLoader *staticDCDataLoader = nil;
     NSTimer *_timerForRestart;
 }
 
+- (void)setSuspended:(BOOL)b;
+
 - (void)restart:(NSTimer *)timer;
 
 @end
@@ -72,19 +74,23 @@ static DCDataLoader *staticDCDataLoader = nil;
     }
 }
 
+- (void)pauseWithAutoResumeIn:(NSTimeInterval)seconds {
+    if (_operationQueue) {
+        [self setSuspended:YES];
+        NSLog(@"DCDataLoader setSuspended:YES");
+        if (_timerForRestart) {
+            [_timerForRestart invalidate];
+            [_timerForRestart release];
+            _timerForRestart = nil;
+        }
+        _timerForRestart = [NSTimer scheduledTimerWithTimeInterval:seconds target:self selector:@selector(restart:) userInfo:nil repeats:NO];
+        [_timerForRestart retain];
+    }
+}
+
 - (void)setSuspended:(BOOL)b {
     if (_operationQueue) {
         [_operationQueue setSuspended:b];
-        if (b) {
-            NSLog(@"DCDataLoader setSuspended:YES");
-            if (_timerForRestart) {
-                [_timerForRestart invalidate];
-                [_timerForRestart release];
-                _timerForRestart = nil;
-            }
-            _timerForRestart = [NSTimer scheduledTimerWithTimeInterval:TIMEFORRESTART target:self selector:@selector(restart:) userInfo:nil repeats:NO];
-            [_timerForRestart retain];
-        }
     }
 }
 

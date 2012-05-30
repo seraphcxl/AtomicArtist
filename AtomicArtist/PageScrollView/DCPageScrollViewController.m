@@ -8,6 +8,7 @@
 
 #import "DCPageScrollViewController.h"
 #import "DCPageView.h"
+#import "DCDataLoader.h"
 
 #define TIMEFORHIDEASSIST ((NSTimeInterval)2.0)
 
@@ -267,8 +268,7 @@ typedef enum {
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
     NSLog(@"DCPageScrollViewController scrollViewWillBeginDragging:");
-//    [[self previousViewCtrl] viewWillAppear:YES];
-//    [[self nextViewCtrl] viewWillAppear:YES];
+    [[DCDataLoader defaultDataLoader] pauseWithAutoResumeIn:3.0];
 }
 
 - (void)scrollViewWillBeginDecelerating:(UIScrollView *)scrollView {
@@ -277,6 +277,9 @@ typedef enum {
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
     NSLog(@"DCPageScrollViewController scrollViewDidEndDecelerating:");
+    
+    [[DCDataLoader defaultDataLoader] pauseWithAutoResumeIn:3.0];
+    
     // do action for prev or next
     scrollViewOffset = [scrollView contentOffset];
     CGPoint prevPageViewOffset = [[self previousPageView] frame].origin;

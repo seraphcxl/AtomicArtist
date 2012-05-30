@@ -477,7 +477,7 @@
 {
     NSLog(@"DCGroupViewController tableView:cellForRowAtIndexPath: indexPath.row = %d", [indexPath row]);
     
-    [[DCDataLoader defaultDataLoader] setSuspended:YES];
+    [[DCDataLoader defaultDataLoader] pauseWithAutoResumeIn:1.0];
     
     NSArray *dataGroupUIDs = [self dataGroupUIDsForCellAtIndexPath:indexPath];
     DCGroupViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"DCGroupViewCell"];

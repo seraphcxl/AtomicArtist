@@ -23,7 +23,8 @@
 - (NSInteger)maxConcurrentOperationCount;
 - (void)setMaxConcurrentOperationCount:(NSInteger)cnt;
 
-- (void)setSuspended:(BOOL)b;
+- (void)pauseWithAutoResumeIn:(NSTimeInterval)seconds;
+
 - (BOOL)isSuspended;
 
 @end
