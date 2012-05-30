@@ -38,6 +38,10 @@
 @synthesize enumDataItemParam = _enumDataItemParam;
 @synthesize loadPosterImageOperation = _loadPosterImageOperation;
 
+- (void)updatePosterImage {
+    [self performSelectorOnMainThread:@selector(layoutSubviews) withObject:nil waitUntilDone:NO];
+}
+
 - (void)cancelLoadPosterImageOperation {
     if (self.loadPosterImageOperation) {
         if (![self.loadPosterImageOperation isFinished] || ![self.loadPosterImageOperation isCancelled]) {

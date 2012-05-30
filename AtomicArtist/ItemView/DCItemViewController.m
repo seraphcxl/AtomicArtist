@@ -11,6 +11,7 @@
 #import "DCDetailViewController.h"
 #import "DCLoadThumbnailOperation.h"
 #import "DCDataModelHelper.h"
+#import "DCDataLoader.h"
 
 @interface DCItemViewController () {
     NSUInteger _itemCountInCell;
@@ -154,7 +155,7 @@
     if (_itemViews) {
         DCItemView *itemView = [_itemViews objectForKey:operation.itemUID];
         itemView.thumbnail = operation.thumbnail;
-        [itemView setNeedsLayout];
+        [itemView updateThumbnail];
     }
 }
 
@@ -460,6 +461,9 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSLog(@"DCItemViewController %@ tableView:cellForRowAtIndexPath:", self);
+    
+    [[DCDataLoader defaultDataLoader] setSuspended:YES];
+    
     DCItemViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"DCItemViewCell"];
     NSArray *itemUIDs = [self getItemUIDsForCellAtIndexPath:indexPath];
     if (cell == nil) {

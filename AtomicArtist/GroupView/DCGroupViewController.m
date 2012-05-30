@@ -199,7 +199,7 @@
     if (_groupViews) {
         DCGroupView *groupView = [_groupViews objectForKey:operation.dataGroupUID];
         groupView.posterImage = operation.thumbnail;
-        [groupView setNeedsLayout];
+        [groupView updatePosterImage];
     }
 }
 
@@ -476,6 +476,9 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSLog(@"DCGroupViewController tableView:cellForRowAtIndexPath: indexPath.row = %d", [indexPath row]);
+    
+    [[DCDataLoader defaultDataLoader] setSuspended:YES];
+    
     NSArray *dataGroupUIDs = [self dataGroupUIDsForCellAtIndexPath:indexPath];
     DCGroupViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"DCGroupViewCell"];
     if (cell == nil) {

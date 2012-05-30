@@ -8,6 +8,12 @@
 
 #import "DCGroupViewCell.h"
 
+@interface DCGroupViewCell () {
+    NSMutableArray *_groupViews;
+}
+
+@end
+
 @implementation DCGroupViewCell
 
 @synthesize delegate = _delegate;
@@ -42,9 +48,19 @@
                 if (self.delegate) {
                     [self.delegate addGroupView:view];
                 }
+            } else {
+                if (view.loadPosterImageOperation) {
+                    [view.loadPosterImageOperation setQueuePriority:NSOperationQueuePriorityNormal];
+                }
             }
             
             [self addSubview:view];
+            
+            if (_groupViews) {
+                [_groupViews addObject:view];
+            } else {
+                [NSException raise:@"DCGroupViewCell error" format:@"Reason: _groupViews == nil"];
+            }
             
             viewFrame.origin.x += (self.frameSize + self.cellSpace);
         }
@@ -54,6 +70,16 @@
 - (id)initWithDataLibHelper:(id <DCDataLibraryHelper>)dataLibraryHelper dataGroupUIDs:(NSArray *)dataGroupUIDs enumDataItemParam:(id)enumDataItemParam cellSpace:(double)cellSpace cellTopBottomMargin:(double)cellTopBottomMargin tableViewMargin:(NSUInteger)tableViewMargin frameSize:(NSUInteger)frameSize andItemCount:(NSUInteger)itemCount {
     self = [self initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"DCGroupViewCell"];
     if (self) {
+        if (_groupViews) {
+            for (DCGroupView *view in _groupViews) {
+                [view.loadPosterImageOperation setQueuePriority:NSOperationQueuePriorityLow];
+                [view removeFromSuperview];
+            }
+            [_groupViews removeAllObjects];
+        } else {
+            _groupViews = [[NSMutableArray alloc] init];
+        }
+        
         self.dataLibraryHelper = dataLibraryHelper;
         self.enumDataItemParam = enumDataItemParam;
         self.dataGroupUIDs = dataGroupUIDs;
@@ -67,6 +93,12 @@
 }
 
 - (void)dealloc {
+    if (_groupViews) {
+        [_groupViews removeAllObjects];
+        [_groupViews release];
+        _groupViews = nil;
+    }
+    
     self.dataGroupUIDs = nil;
     self.enumDataItemParam = nil;
     self.dataLibraryHelper = nil;

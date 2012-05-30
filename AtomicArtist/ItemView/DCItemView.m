@@ -37,6 +37,10 @@
 @synthesize dataLibraryHelper = _dataLibraryHelper;
 @synthesize loadThumbnailOperation = _loadThumbnailOperation;
 
+- (void)updateThumbnail {
+    [self performSelectorOnMainThread:@selector(layoutSubviews) withObject:nil waitUntilDone:NO];
+}
+
 - (void)cancelLoadThumbnailOperation {
     if (self.loadThumbnailOperation) {
         if (![self.loadThumbnailOperation isFinished] || ![self.loadThumbnailOperation isCancelled]) {

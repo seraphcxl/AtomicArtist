@@ -30,4 +30,6 @@
 
 - (void)cancelLoadThumbnailOperation;
 
+- (void)updateThumbnail;
+
 @end

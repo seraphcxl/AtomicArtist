@@ -8,6 +8,12 @@
 
 #import "DCItemViewCell.h"
 
+@interface DCItemViewCell () {
+    NSMutableArray *_itemViews;
+}
+
+@end
+
 @implementation DCItemViewCell
 
 @synthesize delegate = _delegate;
@@ -50,9 +56,19 @@
                 if (self.delegate) {
                     [self.delegate addItemView:view];
                 }
+            } else {
+                if (view.loadThumbnailOperation) {
+                    [view.loadThumbnailOperation setQueuePriority:NSOperationQueuePriorityNormal];
+                }
             }
             
             [self addSubview:view];
+            
+            if (_itemViews) {
+                [_itemViews addObject:view];
+            } else {
+                [NSException raise:@"DCItemViewCell error" format:@"Reason: _itemViews == nil"];
+            }
             
             viewFrame.origin.x += (self.frameSize + self.cellSpace);
         }
@@ -62,6 +78,16 @@
 - (id)initWithDataLibraryHelper:(id<DCDataLibraryHelper>)dataLibraryHelper itemUIDs:(NSArray *)itemUIDs dataGroupUID:(NSString *)dataGroupUID cellSpace:(double)cellSpace cellTopBottomMargin:(double)cellTopBottomMargin tableViewMargin:(NSUInteger)tableViewMargin frameSize:(NSUInteger)frameSize andItemCount:(NSUInteger)itemCount {
     self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"DCItemViewCell"];
     if (self) {
+        if (_itemViews) {
+            for (DCItemView *view in _itemViews) {
+                [view.loadThumbnailOperation setQueuePriority:NSOperationQueuePriorityLow];
+                [view removeFromSuperview];
+            }
+            [_itemViews removeAllObjects];
+        } else {
+            _itemViews = [[NSMutableArray alloc] init];
+        }
+        
         self.dataLibraryHelper = dataLibraryHelper;
         self.itemUIDs = itemUIDs;
         _dataGroupUID = dataGroupUID;
@@ -78,6 +104,12 @@
 - (void)dealloc {
     self.dataLibraryHelper = nil;
     self.itemUIDs = nil;
+    
+    if (_itemViews) {
+        [_itemViews removeAllObjects];
+        [_itemViews release];
+        _itemViews = nil;
+    }
     
     if (_dataGroupUID) {
         [_dataGroupUID release];

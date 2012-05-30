@@ -30,4 +30,6 @@
 
 - (void)cancelLoadPosterImageOperation;
 
+- (void)updatePosterImage;
+
 @end
