@@ -67,7 +67,7 @@ typedef enum {
 
 - (void)tap:(UITapGestureRecognizer *)gr {
     if (gr == _singleTapGestureRecognizer && gr.numberOfTapsRequired == 1) {
-        NSLog(@"AADetailViewController tap:single");
+        NSLog(@"DCPageScrollViewController tap:single");
         if (self.hideNavigationBarEnabled) {
             [self.navigationController.navigationBar setHidden:NO];
         }
@@ -181,7 +181,7 @@ typedef enum {
 }
 
 - (void)hideAssist:(NSTimer *)timer {
-    NSLog(@"AADetailViewController hideAssist:");
+    NSLog(@"DCPageScrollViewController hideAssist:");
     if (_timerForHideAssist == timer) {
         if (self.hideNavigationBarEnabled) {
             [self.navigationController.navigationBar setHidden:YES];

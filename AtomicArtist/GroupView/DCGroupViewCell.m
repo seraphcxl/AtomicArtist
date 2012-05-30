@@ -54,11 +54,6 @@
 - (id)initWithDataLibHelper:(id <DCDataLibraryHelper>)dataLibraryHelper dataGroupUIDs:(NSArray *)dataGroupUIDs enumDataItemParam:(id)enumDataItemParam cellSpace:(double)cellSpace cellTopBottomMargin:(double)cellTopBottomMargin tableViewMargin:(NSUInteger)tableViewMargin frameSize:(NSUInteger)frameSize andItemCount:(NSUInteger)itemCount {
     self = [self initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"DCGroupViewCell"];
     if (self) {
-        for (UIView *view in [self subviews]) {
-            if ([view isMemberOfClass:[DCGroupView class]]) {
-                [view removeFromSuperview];
-            }
-        }
         self.dataLibraryHelper = dataLibraryHelper;
         self.enumDataItemParam = enumDataItemParam;
         self.dataGroupUIDs = dataGroupUIDs;

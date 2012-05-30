@@ -113,7 +113,7 @@
 
 - (void)preparePosterImageInfo {
     if (self.loadPosterImageOperation) {
-        [self.loadPosterImageOperation start];
+//        [self.loadPosterImageOperation start];
     } else {
         if (self.dataLibraryHelper) {
             [self refreshItemsForPosterImage:NO];

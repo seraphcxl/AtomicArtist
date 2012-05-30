@@ -10,15 +10,33 @@
 
 #define OPERATIONQUEUE_DEFAULTCONCURRENTCOUNT ((NSInteger)2)
 
+#define TIMEFORRESTART ((NSTimeInterval)1.0)
+
 static DCDataLoader *staticDCDataLoader = nil;
 
 @interface DCDataLoader () {
     NSOperationQueue *_operationQueue;
+    
+    NSTimer *_timerForRestart;
 }
+
+- (void)restart:(NSTimer *)timer;
 
 @end
 
 @implementation DCDataLoader
+
+- (void)restart:(NSTimer *)timer {
+    if (_timerForRestart == timer) {
+        NSLog(@"DCDataLoader restart:");
+        if (_operationQueue) {
+            [_operationQueue setSuspended:NO];
+        }
+        [_timerForRestart invalidate];
+        [_timerForRestart release];
+        _timerForRestart = nil;
+    }
+}
 
 - (void)addOperation:(NSOperation *)operation {
     if (_operationQueue && operation) {
@@ -57,6 +75,16 @@ static DCDataLoader *staticDCDataLoader = nil;
 - (void)setSuspended:(BOOL)b {
     if (_operationQueue) {
         [_operationQueue setSuspended:b];
+        if (b) {
+            NSLog(@"DCDataLoader setSuspended:YES");
+            if (_timerForRestart) {
+                [_timerForRestart invalidate];
+                [_timerForRestart release];
+                _timerForRestart = nil;
+            }
+            _timerForRestart = [NSTimer scheduledTimerWithTimeInterval:TIMEFORRESTART target:self selector:@selector(restart:) userInfo:nil repeats:NO];
+            [_timerForRestart retain];
+        }
     }
 }
 
@@ -100,6 +128,12 @@ static DCDataLoader *staticDCDataLoader = nil;
 }
 
 - (void)dealloc {
+    if (_timerForRestart) {
+        [_timerForRestart invalidate];
+        [_timerForRestart release];
+        _timerForRestart = nil;
+    }
+    
     if (_operationQueue) {
         [_operationQueue release];
         _operationQueue = nil;

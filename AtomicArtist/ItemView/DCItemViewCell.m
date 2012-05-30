@@ -62,11 +62,6 @@
 - (id)initWithDataLibraryHelper:(id<DCDataLibraryHelper>)dataLibraryHelper itemUIDs:(NSArray *)itemUIDs dataGroupUID:(NSString *)dataGroupUID cellSpace:(double)cellSpace cellTopBottomMargin:(double)cellTopBottomMargin tableViewMargin:(NSUInteger)tableViewMargin frameSize:(NSUInteger)frameSize andItemCount:(NSUInteger)itemCount {
     self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"DCItemViewCell"];
     if (self) {
-        for (UIView *view in [self subviews]) {
-            if ([view isMemberOfClass:[DCItemView class]]) {
-                [view removeFromSuperview];
-            }
-        }
         self.dataLibraryHelper = dataLibraryHelper;
         self.itemUIDs = itemUIDs;
         _dataGroupUID = dataGroupUID;

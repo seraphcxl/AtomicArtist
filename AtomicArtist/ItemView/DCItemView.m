@@ -106,7 +106,7 @@
 
 - (void)runOperation {
     if (self.loadThumbnailOperation) {
-        [self.loadThumbnailOperation start];
+//        [self.loadThumbnailOperation start];
     } else {
         id <DCDataItem> item = [self.dataLibraryHelper itemWithUID:self.itemUID inGroup:self.dataGroupUID];
         if (!item) {

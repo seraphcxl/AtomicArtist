@@ -460,7 +460,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSLog(@"DCItemViewController %@ tableView:cellForRowAtIndexPath:", self);
-    DCItemViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"AAItemViewCell"];
+    DCItemViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"DCItemViewCell"];
     NSArray *itemUIDs = [self getItemUIDsForCellAtIndexPath:indexPath];
     if (cell == nil) {
         cell = [[[DCItemViewCell alloc] initWithDataLibraryHelper:self.dataLibraryHelper itemUIDs:itemUIDs dataGroupUID:self.dataGroupUID cellSpace:_cellSpace cellTopBottomMargin:(_cellSpace / 2) tableViewMargin:_tableViewMargin frameSize:_frameSize andItemCount:_itemCountInCell] autorelease];
