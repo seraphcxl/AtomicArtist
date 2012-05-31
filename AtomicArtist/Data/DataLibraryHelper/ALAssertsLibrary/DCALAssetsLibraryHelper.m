@@ -14,6 +14,7 @@ static DCALAssetsLibraryHelper *staticALAssetsLibraryHelper = nil;
 
 @interface DCALAssetsLibraryHelper () {
     DCALAssetsLibrary *_alAssetsLibrary;
+    BOOL _available;
 }
 
 @end
@@ -44,17 +45,21 @@ static DCALAssetsLibraryHelper *staticALAssetsLibraryHelper = nil;
     if (!_alAssetsLibrary) {
         _alAssetsLibrary = [[DCALAssetsLibrary alloc] init];
     }
-    return [_alAssetsLibrary connect:params];
+    _available = [_alAssetsLibrary connect:params];
+    return _available;
 }
 
 - (BOOL)disconnect {
-    BOOL result = NO;
     if (_alAssetsLibrary) {
-        result = [_alAssetsLibrary disconnect];
+        _available = ![_alAssetsLibrary disconnect];
         [_alAssetsLibrary release];
         _alAssetsLibrary = nil;
     }
-    return result;
+    return !_available;
+}
+
+- (BOOL)available {
+    return _available;
 }
 
 - (void)clearCache {

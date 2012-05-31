@@ -104,6 +104,8 @@ extern NSString * const NOTIFY_DATAGROUP_EMPTY;
 
 - (BOOL)disconnect;
 
+- (BOOL)available;
+
 - (void)clearCache;
 
 - (void)enumGroups:(id)param notifyWithFrequency:(NSUInteger)frequency;

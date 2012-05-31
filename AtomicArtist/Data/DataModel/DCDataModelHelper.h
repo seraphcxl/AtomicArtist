@@ -17,18 +17,21 @@
 
 + (void)staticRelease;
 
-- (NSString *)itemArchivePath;
++ (NSString *)archivePath;
 
+#pragma mark Item
 - (Item *)getItemWithUID:(NSString *)itemUID;
 
 - (void)createItemWithUID:(NSString *)itemUID andThumbnail:(UIImage *)thumbnail;
 
+#pragma mark Group
 - (Group *)getGroupWithUID:(NSString *)groupUID;
 
 - (void)createGroupWithUID:(NSString *)groupUID posterItemUID:(NSString *)posterItemUID andPosterImage:(UIImage *)posterImage;
 
 - (void)updateGroupWithUID:(NSString *)groupUID posterItemUID:(NSString *)posterItemUID andPosterImage:(UIImage *)posterImage;
 
-- (BOOL)saveChanges;
+#pragma mark save
+- (void)saveChanges;
 
 @end

@@ -119,8 +119,6 @@
     }
     
     [pool drain];
-    [pool release];
-    pool = nil;
 }
 
 - (NSUInteger)groupsCount {

@@ -140,8 +140,6 @@
     }
     
     [pool drain];
-    [pool release];
-    pool = nil;
 }
 
 - (void)enumItemAtIndexes:(NSIndexSet *)indexSet withParam:(id)param notifyWithFrequency:(NSUInteger)frequency {
@@ -196,8 +194,6 @@
     }
     
     [pool drain];
-    [pool release];
-    pool = nil;
 }
 
 - (NSUInteger)itemsCount {
