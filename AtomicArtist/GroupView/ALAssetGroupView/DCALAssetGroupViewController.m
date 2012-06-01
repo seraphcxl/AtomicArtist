@@ -26,7 +26,7 @@
 - (void)actionForGroupEmpty:(NSNotification *)note {
     if (_enumDataGroupParam == (id)(ALAssetsGroupPhotoStream)) {
         NSLog(@"PhotoStream is empty");
-        UIAlertView *alertView = [[[UIAlertView alloc] initWithTitle:@"Photo Stream not available!" message:@"Pls sign in your iCloud accout and enable Photo Stream." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil] autorelease];
+        UIAlertView *alertView = [[[UIAlertView alloc] initWithTitle:@"Photo Stream not available!" message:@"Please sign in your iCloud account and turn on Photo Stream." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil] autorelease];
         [alertView show];
     }
 }
