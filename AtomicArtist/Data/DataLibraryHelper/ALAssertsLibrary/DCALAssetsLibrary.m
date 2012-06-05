@@ -67,7 +67,7 @@
     }
 }
 
-- (void)enumGroups:(id)param notifyWithFrequency:(NSUInteger)frequency {
+- (void)enumGroups:(id)groupParam andItemParam:(id)itemParam notifyWithFrequency:(NSUInteger)frequency {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     
     void (^ALAssetsLibraryGroupsEnumerationResultsBlock)(ALAssetsGroup *group, BOOL *stop) = ^(ALAssetsGroup *group, BOOL *stop) {
@@ -75,7 +75,7 @@
 			NSString *groupPersistentID = [group valueForProperty:ALAssetsGroupPropertyPersistentID];
             ALAssetsGroup *result = [_allALAssetsGroups objectForKey:groupPersistentID];
             if (result == nil) {
-                DCALAssetsGroup *alAssetsGroup = [[[DCALAssetsGroup alloc] initWithALAssetsGroup:group] autorelease];
+                DCALAssetsGroup *alAssetsGroup = [[[DCALAssetsGroup alloc] initWithALAssetsGroup:group andAssetType:(NSString *)itemParam] autorelease];
                 NSUInteger index = [_allALAssetsGroupPersistentIDs count];
                 [_allALAssetsGroupPersistentIDs insertObject:groupPersistentID atIndex:index];
                 [_allALAssetsGroups setObject:alAssetsGroup forKey:groupPersistentID];
@@ -113,7 +113,7 @@
     if (_assetsLibrary && frequency != 0) {
         _frequency = frequency;
         _enumCount = 0;
-        [_assetsLibrary enumerateGroupsWithTypes:(ALAssetsGroupType)param usingBlock:ALAssetsLibraryGroupsEnumerationResultsBlock failureBlock:ALAssetsLibraryAccessFailureBlock];
+        [_assetsLibrary enumerateGroupsWithTypes:(ALAssetsGroupType)groupParam usingBlock:ALAssetsLibraryGroupsEnumerationResultsBlock failureBlock:ALAssetsLibraryAccessFailureBlock];
     } else {
         [NSException raise:@"DCALAssetsLibrary error" format:@"Reason: _assetsLibrary is nil or frequency == 0"];
     }

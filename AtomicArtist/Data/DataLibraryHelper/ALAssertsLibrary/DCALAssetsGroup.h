@@ -12,7 +12,8 @@
 @interface DCALAssetsGroup : NSObject <DCDataGroup>
 
 @property (readonly, nonatomic) ALAssetsGroup *alAssetsGroup;
+@property (readonly, nonatomic) NSString *assetType;
 
-- (id)initWithALAssetsGroup:(ALAssetsGroup *)alAssetsGroup;
+- (id)initWithALAssetsGroup:(ALAssetsGroup *)alAssetsGroup andAssetType:(NSString *)assetType;
 
 @end

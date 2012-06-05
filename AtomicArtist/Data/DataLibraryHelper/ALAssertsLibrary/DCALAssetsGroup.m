@@ -22,7 +22,10 @@
 
 @implementation DCALAssetsGroup
 
-- (id)initWithALAssetsGroup:(ALAssetsGroup *)alAssetsGroup {
+@synthesize alAssetsGroup = _alAssetsGroup;
+@synthesize assetType = _assetType;
+
+- (id)initWithALAssetsGroup:(ALAssetsGroup *)alAssetsGroup andAssetType:(NSString *)assetType {
     self = [super init];
     if (self) {
         if (!_allAssetItems) {
@@ -36,12 +39,21 @@
         _alAssetsGroup = alAssetsGroup;
         [_alAssetsGroup retain];
         
+        _assetType = assetType;
+        [_assetType retain];
+        
+        if ([ALAssetTypePhoto isEqualToString:self.assetType]) {
+            [self.alAssetsGroup setAssetsFilter:[ALAssetsFilter allPhotos]];
+        } else if ([ALAssetTypeVideo isEqualToString:self.assetType]) {
+            [self.alAssetsGroup setAssetsFilter:[ALAssetsFilter allVideos]];
+        } else {
+            [NSException raise:@"DCALAssetsGroup Error" format:@"Reason: Not support %@", self.assetType];
+        }
+        
         _enumerated = NO;
     }
     return self;
 }
-
-@synthesize alAssetsGroup = _alAssetsGroup;
 
 - (NSOperation *)createOperationForLoadCachePosterImageWithItemUID:(NSString *)itemUID {
     NSOperation *result = nil;
@@ -70,6 +82,11 @@
     if (_alAssetsGroup) {
         [_alAssetsGroup release];
         _alAssetsGroup = nil;
+    }
+    
+    if (_assetType) {
+        [_assetType release];
+        _assetType = nil;
     }
     
     [self clearCache];
@@ -105,7 +122,7 @@
             
             void (^ALAssetsGroupEnumerationResultsBlock)(ALAsset *result, NSUInteger index, BOOL *stop) = ^(ALAsset *result, NSUInteger index, BOOL *stop) {
                 if (result != nil) {
-                    if ([[result valueForProperty:ALAssetPropertyType] isEqualToString:(NSString *)param]) {
+                    if ([[result valueForProperty:ALAssetPropertyType] isEqualToString:self.assetType]) {
                         ALAssetRepresentation *representation = [result defaultRepresentation];
                         NSURL *url = [representation url];
                         NSString *assetURLStr = [url absoluteString];
@@ -113,14 +130,15 @@
                         DCALAssetItem *item = [[[DCALAssetItem alloc] initWithALAsset:result] autorelease];
                         
                         [_allAssetItems setObject:item forKey:assetURLStr];
-                        [_allAssetUIDs insertObject:assetURLStr atIndex:index];
+                        NSUInteger indexForAsset = [_allAssetUIDs count];
+                        [_allAssetUIDs insertObject:assetURLStr atIndex:indexForAsset];
                         ++_enumCount;
                         if (_enumCount == _frequency) {
                             [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_DATAITEM_ADDED object:[self uniqueID]];
                             _enumCount = 0;
                         }
                     } else {
-                        NSLog(@"Result not %@", param);
+                        [NSException raise:@"DCALAssetsGroup Error" format:@"Result is %@ not %@", [result valueForProperty:ALAssetPropertyType], self.assetType];
                     }
                 } else {
                     if (_enumCount != 0) {
@@ -128,10 +146,10 @@
                     }
                 }
             };
+            _enumerated = YES;
             _frequency = frequency;
             _enumCount = 0;
             [self.alAssetsGroup enumerateAssetsUsingBlock:ALAssetsGroupEnumerationResultsBlock];
-            _enumerated = YES;
         } else {
             [NSException raise:@"DCALAssetsGroup Error" format:@"Reason: _allAssetItems == nil or _allAssetUIDs == nil or frequency == 0"];
         }
@@ -152,7 +170,7 @@
             
             void (^ALAssetsGroupEnumerationResultsBlock)(ALAsset *result, NSUInteger index, BOOL *stop) = ^(ALAsset *result, NSUInteger index, BOOL *stop) {
                 if (result != nil) {
-                    if ([[result valueForProperty:ALAssetPropertyType] isEqualToString:(NSString *)param]) {
+                    if ([[result valueForProperty:ALAssetPropertyType] isEqualToString:self.assetType]) {
                         ALAssetRepresentation *representation = [result defaultRepresentation];
                         NSURL *url = [representation url];
                         NSString *assetURLStr = [url absoluteString];
@@ -160,7 +178,8 @@
                         DCALAssetItem *item = [[[DCALAssetItem alloc] initWithALAsset:result] autorelease];
                         
                         [_allAssetItems setObject:item forKey:assetURLStr];
-                        [_allAssetUIDs insertObject:assetURLStr atIndex:index];
+                        NSUInteger indexForAsset = [_allAssetUIDs count];
+                        [_allAssetUIDs insertObject:assetURLStr atIndex:indexForAsset];
 
                         if (index == 0) {
                             [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_DATAITEMFORPOSTERIMAGE_ADDED object:[self uniqueID]];
@@ -174,7 +193,7 @@
                         }
                         
                     } else {
-                        NSLog(@"Result not %@", param);
+                        [NSException raise:@"DCALAssetsGroup Error" format:@"Result is %@ not %@", [result valueForProperty:ALAssetPropertyType], self.assetType];
                     }
                 } else {
                     if (_enumCount != 0) {

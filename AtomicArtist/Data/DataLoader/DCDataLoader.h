@@ -18,6 +18,8 @@
 
 - (void)cancelAllOperations;
 
+- (void)terminateAllOperations;
+
 - (NSUInteger)operationCount;
 
 - (NSInteger)maxConcurrentOperationCount;

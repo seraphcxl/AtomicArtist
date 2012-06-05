@@ -52,6 +52,14 @@ static DCDataLoader *staticDCDataLoader = nil;
     }
 }
 
+- (void)terminateAllOperations {
+    [self cancelAllOperations];
+    
+    if (_operationQueue) {
+        [_operationQueue waitUntilAllOperationsAreFinished];
+    }
+}
+
 - (NSUInteger)operationCount {
     if (_operationQueue) {
         return [_operationQueue operationCount];

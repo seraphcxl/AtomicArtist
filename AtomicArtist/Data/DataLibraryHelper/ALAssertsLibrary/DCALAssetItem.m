@@ -15,6 +15,19 @@
 @synthesize alAsset = _alAsset;
 
 - (void)save:(NSString *)filePath {
+    do {
+        if (!filePath) {
+            break;
+        }
+        
+        ALAssetRepresentation *rep = [self.alAsset defaultRepresentation];
+        Byte *buffer = (Byte *)malloc(rep.size);
+        NSUInteger buffered = [rep getBytes:buffer fromOffset:0.0 length:rep.size error:nil];
+        NSData *data = [NSData dataWithBytesNoCopy:buffer length:buffered freeWhenDone:NO];
+        [data writeToFile:filePath atomically:YES];
+        free(buffer);
+        
+    } while (NO);
 }
 
 - (id)initWithALAsset:(ALAsset *)alAsset {

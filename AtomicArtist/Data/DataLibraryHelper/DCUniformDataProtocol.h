@@ -80,7 +80,7 @@ extern NSString * const NOTIFY_DATAGROUP_EMPTY;
 
 - (void)clearCache;
 
-- (void)enumGroups:(id)param notifyWithFrequency:(NSUInteger)frequency;
+- (void)enumGroups:(id)groupParam andItemParam:(id)itemParam notifyWithFrequency:(NSUInteger)frequency;
 
 - (NSUInteger)groupsCount;
 
@@ -102,13 +102,13 @@ extern NSString * const NOTIFY_DATAGROUP_EMPTY;
 
 - (BOOL)connect:(NSDictionary *)params;
 
-- (BOOL)disconnect;
-
 - (BOOL)available;
+
+- (BOOL)disconnect;
 
 - (void)clearCache;
 
-- (void)enumGroups:(id)param notifyWithFrequency:(NSUInteger)frequency;
+- (void)enumGroups:(id)groupParam andItemParam:(id)itemParam notifyWithFrequency:(NSUInteger)frequency;
 
 - (NSUInteger)groupsCount;
 
