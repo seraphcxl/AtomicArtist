@@ -215,7 +215,7 @@
     NSLog(@"DCGroupViewController refreshAssetsGroups");
     if (force || [self.dataLibraryHelper groupsCount] == 0) {
         [self clearCache];
-        [self.dataLibraryHelper enumGroups:_enumDataGroupParam notifyWithFrequency:_itemCountInCell];
+        [self.dataLibraryHelper enumGroups:_enumDataGroupParam andItemParam:_enumDataItemParam notifyWithFrequency:_itemCountInCell];
         [self.navigationItem setTitle:[self title]];
     }
 }

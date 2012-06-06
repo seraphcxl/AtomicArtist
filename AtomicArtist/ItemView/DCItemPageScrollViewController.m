@@ -49,25 +49,51 @@
     [itemViewCtrl refresh:sender];
 }
 
-- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
-    NSLog(@"DCPageScrollViewController scrollViewDidEndDecelerating:");
-    // do action for prev or next
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    NSLog(@"DCPageScrollViewController scrollViewDidScroll:");
     scrollViewOffset = [scrollView contentOffset];
     CGPoint prevPageViewOffset = [[self previousPageView] frame].origin;
     CGPoint currentPageViewOffset = [[self currentPageView] frame].origin;
     CGPoint nextPageViewOffset = [[self nextPageView] frame].origin;
     DCItemViewController *itemViewCtrl = nil;
-    if ([self previousViewCtrl] && scrollViewOffset.x == prevPageViewOffset.x) {
+    
+    CGFloat centerOfPrevAndCurrent = (prevPageViewOffset.x + currentPageViewOffset.x) / 2.0;
+    CGFloat centerOfCurrentAndNext = (currentPageViewOffset.x + nextPageViewOffset.x) / 2.0;
+    
+    if ([self previousViewCtrl] && scrollViewOffset.x < centerOfPrevAndCurrent) {
         itemViewCtrl = (DCItemViewController *)[self previousViewCtrl];
-    } else if ([self currentViewCtrl] && scrollViewOffset.x == currentPageViewOffset.x) {
+    } else if ([self currentViewCtrl] && scrollViewOffset.x >= centerOfPrevAndCurrent && scrollViewOffset.x < centerOfCurrentAndNext) {
         itemViewCtrl = (DCItemViewController *)[self currentViewCtrl];
-    } else if ([self nextViewCtrl] && scrollViewOffset.x == nextPageViewOffset.x) {
+    } else if ([self nextViewCtrl] && scrollViewOffset.x >= centerOfCurrentAndNext) {
         itemViewCtrl = (DCItemViewController *)[self nextViewCtrl];
     } else {
         NSLog(@"Warning");
     }
     
     [self.navigationItem setTitle:itemViewCtrl.groupTitle];
+    
+    [super scrollViewDidScroll:scrollView];
+}
+
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+    NSLog(@"DCPageScrollViewController scrollViewDidEndDecelerating:");
+    // do action for prev or next
+//    scrollViewOffset = [scrollView contentOffset];
+//    CGPoint prevPageViewOffset = [[self previousPageView] frame].origin;
+//    CGPoint currentPageViewOffset = [[self currentPageView] frame].origin;
+//    CGPoint nextPageViewOffset = [[self nextPageView] frame].origin;
+//    DCItemViewController *itemViewCtrl = nil;
+//    if ([self previousViewCtrl] && scrollViewOffset.x == prevPageViewOffset.x) {
+//        itemViewCtrl = (DCItemViewController *)[self previousViewCtrl];
+//    } else if ([self currentViewCtrl] && scrollViewOffset.x == currentPageViewOffset.x) {
+//        itemViewCtrl = (DCItemViewController *)[self currentViewCtrl];
+//    } else if ([self nextViewCtrl] && scrollViewOffset.x == nextPageViewOffset.x) {
+//        itemViewCtrl = (DCItemViewController *)[self nextViewCtrl];
+//    } else {
+//        NSLog(@"Warning");
+//    }
+//    
+//    [self.navigationItem setTitle:itemViewCtrl.groupTitle];
     
     [super scrollViewDidEndDecelerating:scrollView];
 }
