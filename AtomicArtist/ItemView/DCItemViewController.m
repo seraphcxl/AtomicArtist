@@ -347,6 +347,16 @@
     [notificationCenter addObserver:self selector:@selector(actionForWillEnterForegroud:) name:@"applicationWillEnterForeground:" object:nil];
     [notificationCenter addObserver:self selector:@selector(actionForItemThumbnailLoaded:) name:NOTIFY_THUMBNAILLOADED object:nil];
     
+    id <DCDataGroup> group = [self.dataLibraryHelper groupWithUID:self.dataGroupUID];
+    if (!group) {
+        [NSException raise:@"DCItemViewController error" format:@"Reason: self.dataLibraryHelper groupWithUID:%@ error", self.dataGroupUID];
+        return;
+    }
+    NSString *groupName = [group valueForProperty:kDATAGROUPPROPERTY_GROUPNAME withOptions:nil];
+    NSInteger numberOfItems = [group itemsCount];
+    
+    _groupTitle = [[NSString alloc] initWithFormat:@"%@ (%d)", groupName, numberOfItems];
+    
 //    [self refreshItems:NO];
 }
 
