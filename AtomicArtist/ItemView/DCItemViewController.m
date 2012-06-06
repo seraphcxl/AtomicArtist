@@ -472,7 +472,7 @@
 {
     NSLog(@"DCItemViewController %@ tableView:cellForRowAtIndexPath:", self);
     
-    [[DCDataLoader defaultDataLoader] pauseWithAutoResumeIn:1.0];
+    [[DCDataLoader defaultDataLoader] pauseWithAutoResume:YES in:1.0];
     
     DCItemViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"DCItemViewCell"];
     NSArray *itemUIDs = [self getItemUIDsForCellAtIndexPath:indexPath];

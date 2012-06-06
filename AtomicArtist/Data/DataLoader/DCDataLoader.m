@@ -82,17 +82,21 @@ static DCDataLoader *staticDCDataLoader = nil;
     }
 }
 
-- (void)pauseWithAutoResumeIn:(NSTimeInterval)seconds {
+- (void)pauseWithAutoResume:(BOOL)enable in:(NSTimeInterval)seconds {
     if (_operationQueue) {
         [self setSuspended:YES];
         NSLog(@"DCDataLoader setSuspended:YES");
+        
         if (_timerForRestart) {
             [_timerForRestart invalidate];
             [_timerForRestart release];
             _timerForRestart = nil;
         }
-        _timerForRestart = [NSTimer scheduledTimerWithTimeInterval:seconds target:self selector:@selector(restart:) userInfo:nil repeats:NO];
-        [_timerForRestart retain];
+        
+        if (enable) {
+            _timerForRestart = [NSTimer scheduledTimerWithTimeInterval:seconds target:self selector:@selector(restart:) userInfo:nil repeats:NO];
+            [_timerForRestart retain];
+        }
     }
 }
 
