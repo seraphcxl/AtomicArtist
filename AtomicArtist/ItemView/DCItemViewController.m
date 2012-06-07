@@ -71,7 +71,7 @@
     DCDetailViewController *prevDetailViewCtrl = (DCDetailViewController *)currentViewCtrl;
     [prevDetailViewCtrl retain];
     DCDetailViewController *nextDetailViewCtrl = nil;
-    if (currentDetailViewCtrl.currentIndexInGroup == ([self.dataLibraryHelper itemsCountInGroup:self.dataGroupUID] - 1)) {
+    if (currentDetailViewCtrl.currentIndexInGroup == ([self.dataLibraryHelper itemsCountWithParam:self.enumDataItemParam inGroup:self.dataGroupUID] - 1)) {
         ;
     } else {
         NSUInteger nextIndex = currentDetailViewCtrl.currentIndexInGroup + 1;
@@ -180,8 +180,8 @@
 - (IBAction)refresh:(id)sender {
     if (self.dataLibraryHelper) {
         id <DCDataGroup> group = [self.dataLibraryHelper groupWithUID:self.dataGroupUID];
-        NSLog(@"groupID:%@ items count = %d", self.dataGroupUID, [group itemsCount]);
-        if ([group itemsCount] == 0) {
+        NSLog(@"groupID:%@ items count = %d", self.dataGroupUID, [group itemsCountWithParam:self.enumDataItemParam]);
+        if ([group itemsCountWithParam:self.enumDataItemParam] == 0) {
             [self.navigationController popViewControllerAnimated:YES];
             NSNotification *note = [NSNotification notificationWithName:@"NotifyRefreshGroup" object:self];
             [[NSNotificationCenter defaultCenter] postNotification:note];
@@ -207,7 +207,7 @@
             return;
         }
         NSString *groupName = [group valueForProperty:kDATAGROUPPROPERTY_GROUPNAME withOptions:nil];
-        NSInteger numberOfItems = [group itemsCount];
+        NSInteger numberOfItems = [group itemsCountWithParam:self.enumDataItemParam];
         
         _groupTitle = [[NSString alloc] initWithFormat:@"%@ (%d)", groupName, numberOfItems];
         
@@ -236,7 +236,7 @@
             [prevDetailViewCtrl setDelegate:pageScrollViewCtrl];
         }
         
-        if (currentIndex < [self.dataLibraryHelper itemsCountInGroup:self.dataGroupUID] - 1) {
+        if (currentIndex < [self.dataLibraryHelper itemsCountWithParam:self.enumDataItemParam inGroup:self.dataGroupUID] - 1) {
             NSUInteger nextIndex = currentIndex + 1;
             NSString *nextItemUID = [self.dataLibraryHelper itemUIDAtIndex:nextIndex inGroup:self.dataGroupUID];
             nextDetailViewCtrl = [[[DCDetailViewController alloc] initWithDataLibraryHelper:self.dataLibraryHelper dataGroupUID:self.dataGroupUID itemUID:nextItemUID andIndexInGroup:nextIndex] autorelease];
@@ -255,7 +255,7 @@
 - (NSArray *)getItemUIDsForCellAtIndexPath:(NSIndexPath *)indexPath {
     NSMutableArray *result = [[[NSMutableArray alloc] init] autorelease];
     if (self.dataLibraryHelper) {
-        int maxIdx = MIN((indexPath.row + 1) * _itemCountInCell, [self.dataLibraryHelper itemsCountInGroup:self.dataGroupUID]); 
+        int maxIdx = MIN((indexPath.row + 1) * _itemCountInCell, [self.dataLibraryHelper itemsCountWithParam:self.enumDataItemParam inGroup:self.dataGroupUID]); 
         for (int idx = 0 + indexPath.row * _itemCountInCell; idx < maxIdx; ++idx) {
             [result addObject:[self.dataLibraryHelper itemUIDAtIndex:idx inGroup:self.dataGroupUID]];
             NSLog(@"Get itemUID: %@ at index: %d", [self.dataLibraryHelper itemUIDAtIndex:idx inGroup:self.dataGroupUID], idx);
@@ -353,7 +353,7 @@
         return;
     }
     NSString *groupName = [group valueForProperty:kDATAGROUPPROPERTY_GROUPNAME withOptions:nil];
-    NSInteger numberOfItems = [group itemsCount];
+    NSInteger numberOfItems = [group itemsCountWithParam:self.enumDataItemParam];
     
     _groupTitle = [[NSString alloc] initWithFormat:@"%@ (%d)", groupName, numberOfItems];
     
@@ -452,7 +452,7 @@
     
     if (self.dataLibraryHelper) {
         if ([self.dataLibraryHelper isGroupEnumerated:self.dataGroupUID]) {
-            NSInteger itemsCount = [self.dataLibraryHelper itemsCountInGroup:self.dataGroupUID];
+            NSInteger itemsCount = [self.dataLibraryHelper itemsCountWithParam:self.enumDataItemParam inGroup:self.dataGroupUID];
             NSLog(@"itemsCount = %d", itemsCount);
             NSInteger addLine = 0;
             if (itemsCount % _itemCountInCell != 0) {

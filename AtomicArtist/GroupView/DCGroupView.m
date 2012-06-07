@@ -201,7 +201,7 @@
         
         CGRect numberLabelFrame = CGRectMake(bounds.origin.x + bounds.size.width / 2.0, bounds.origin.y, bounds.size.width / 2.0, GROUPVIEW_TITLELABEL_HEIGHT);
         UILabel *numbereLabel = [[[UILabel alloc] initWithFrame:numberLabelFrame] autorelease];
-        NSInteger numberOfItems = [group itemsCount];
+        NSInteger numberOfItems = [group itemsCountWithParam:self.enumDataItemParam];
         [numbereLabel setBackgroundColor:[UIColor clearColor]];
 		[numbereLabel setTextColor:[UIColor whiteColor]];
 		numbereLabel.textAlignment = UITextAlignmentRight;

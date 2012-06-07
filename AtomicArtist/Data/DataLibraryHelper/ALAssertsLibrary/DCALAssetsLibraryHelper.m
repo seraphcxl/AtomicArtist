@@ -70,9 +70,9 @@ static DCALAssetsLibraryHelper *staticALAssetsLibraryHelper = nil;
     }
 }
 
-- (void)enumGroups:(id)groupParam andItemParam:(id)itemParam notifyWithFrequency:(NSUInteger)frequency {
+- (void)enumGroups:(id)groupParam notifyWithFrequency:(NSUInteger)frequency {
     if (_alAssetsLibrary) {
-        [_alAssetsLibrary enumGroups:groupParam andItemParam:itemParam notifyWithFrequency:frequency];
+        [_alAssetsLibrary enumGroups:groupParam notifyWithFrequency:frequency];
     } else {
         [NSException raise:@"DCALAssetsLibraryHelper error" format:@"Reason: _alAssetsLibrary == nil"];
     }
@@ -153,11 +153,11 @@ static DCALAssetsLibraryHelper *staticALAssetsLibraryHelper = nil;
     }
 }
 
-- (NSUInteger)itemsCountInGroup:(NSString *) groupUID {
+- (NSUInteger)itemsCountWithParam:(id)param inGroup:(NSString *)groupUID {
     if (_alAssetsLibrary) {
         id <DCDataGroup> group = [_alAssetsLibrary groupWithUID:groupUID];
         if (group) {
-            return [group itemsCount];
+            return [group itemsCountWithParam:param];
         } else {
 //            [NSException raise:@"DCALAssetsLibraryHelper error" format:@"Reason: can not find group id == %@", groupUID];
             return 0;

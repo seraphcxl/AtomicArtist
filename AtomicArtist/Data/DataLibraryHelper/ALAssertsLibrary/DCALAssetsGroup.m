@@ -25,7 +25,7 @@
 @synthesize alAssetsGroup = _alAssetsGroup;
 @synthesize assetType = _assetType;
 
-- (id)initWithALAssetsGroup:(ALAssetsGroup *)alAssetsGroup andAssetType:(NSString *)assetType {
+- (id)initWithALAssetsGroup:(ALAssetsGroup *)alAssetsGroup {
     self = [super init];
     if (self) {
         if (!_allAssetItems) {
@@ -38,17 +38,6 @@
         
         _alAssetsGroup = alAssetsGroup;
         [_alAssetsGroup retain];
-        
-        _assetType = assetType;
-        [_assetType retain];
-        
-        if ([ALAssetTypePhoto isEqualToString:self.assetType]) {
-            [self.alAssetsGroup setAssetsFilter:[ALAssetsFilter allPhotos]];
-        } else if ([ALAssetTypeVideo isEqualToString:self.assetType]) {
-            [self.alAssetsGroup setAssetsFilter:[ALAssetsFilter allVideos]];
-        } else {
-            [NSException raise:@"DCALAssetsGroup Error" format:@"Reason: Not support %@", self.assetType];
-        }
         
         _enumerated = NO;
     }
@@ -146,6 +135,21 @@
                     }
                 }
             };
+            
+            if (_assetType != (NSString *)param) {
+                _assetType = (NSString *)param;
+                
+                if ([ALAssetTypePhoto isEqualToString:self.assetType]) {
+                    NSLog(@"ALAssetsGroup photo");
+                    [self.alAssetsGroup setAssetsFilter:[ALAssetsFilter allPhotos]];
+                } else if ([ALAssetTypeVideo isEqualToString:self.assetType]) {
+                    NSLog(@"ALAssetsGroup video");
+                    [self.alAssetsGroup setAssetsFilter:[ALAssetsFilter allVideos]];
+                } else {
+                    NSLog(@"ALAssetsGroup photo and video");
+                }
+            }
+            
             _enumerated = YES;
             _frequency = frequency;
             _enumCount = 0;
@@ -201,6 +205,21 @@
                     }
                 }
             };
+            
+            if (_assetType != (NSString *)param) {
+                _assetType = (NSString *)param;
+                
+                if ([ALAssetTypePhoto isEqualToString:self.assetType]) {
+                    NSLog(@"ALAssetsGroup photo");
+                    [self.alAssetsGroup setAssetsFilter:[ALAssetsFilter allPhotos]];
+                } else if ([ALAssetTypeVideo isEqualToString:self.assetType]) {
+                    NSLog(@"ALAssetsGroup video");
+                    [self.alAssetsGroup setAssetsFilter:[ALAssetsFilter allVideos]];
+                } else {
+                    NSLog(@"ALAssetsGroup photo and video");
+                }
+            }
+            
             _frequency = frequency;
             _enumCount = 0;
             [self.alAssetsGroup enumerateAssetsAtIndexes:indexSet options:NSEnumerationConcurrent usingBlock:ALAssetsGroupEnumerationResultsBlock];
@@ -215,8 +234,23 @@
     [pool drain];
 }
 
-- (NSUInteger)itemsCount {
+- (NSUInteger)itemsCountWithParam:(id)param {
     if (self.alAssetsGroup) {
+        
+        if (_assetType != (NSString *)param) {
+            _assetType = (NSString *)param;
+            
+            if ([ALAssetTypePhoto isEqualToString:self.assetType]) {
+                NSLog(@"ALAssetsGroup photo");
+                [self.alAssetsGroup setAssetsFilter:[ALAssetsFilter allPhotos]];
+            } else if ([ALAssetTypeVideo isEqualToString:self.assetType]) {
+                NSLog(@"ALAssetsGroup video");
+                [self.alAssetsGroup setAssetsFilter:[ALAssetsFilter allVideos]];
+            } else {
+                NSLog(@"ALAssetsGroup photo and video");
+            }
+        }
+        
         return [self.alAssetsGroup numberOfAssets];
     } else {
         return 0;

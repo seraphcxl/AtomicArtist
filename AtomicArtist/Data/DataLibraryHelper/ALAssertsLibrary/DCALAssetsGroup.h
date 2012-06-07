@@ -14,6 +14,6 @@
 @property (readonly, nonatomic) ALAssetsGroup *alAssetsGroup;
 @property (readonly, nonatomic) NSString *assetType;
 
-- (id)initWithALAssetsGroup:(ALAssetsGroup *)alAssetsGroup andAssetType:(NSString *)assetType;
+- (id)initWithALAssetsGroup:(ALAssetsGroup *)alAssetsGroup;
 
 @end

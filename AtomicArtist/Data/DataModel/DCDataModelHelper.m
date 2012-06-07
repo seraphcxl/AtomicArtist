@@ -113,7 +113,7 @@ NSString * const GROUP_POSTERIMAGEITEMUID = @"GROUP_POSTERIMAGEITEMUID";
     NSMutableDictionary *arg = [[[NSMutableDictionary alloc] init] autorelease];
     [arg setObject:itemUID forKey:ITEM_UID];
     [arg setObject:thumbnail forKey:ITEM_THUMBNAIL];
-    [self performSelector:@selector(internlCreateItemWithUID:) onThread:_thread withObject:arg waitUntilDone:YES];
+    [self performSelector:@selector(internlCreateItemWithUID:) onThread:_thread withObject:arg waitUntilDone:NO];
 }
 
 #pragma mark group
@@ -211,7 +211,7 @@ NSString * const GROUP_POSTERIMAGEITEMUID = @"GROUP_POSTERIMAGEITEMUID";
     [arg setObject:groupUID forKey:GROUP_UID];
     [arg setObject:posterItemUID forKey:GROUP_POSTERIMAGEITEMUID];
     [arg setObject:posterImage forKey:GROUP_POSTERIMAGE];
-    [self performSelector:@selector(internlCreateGroupWithUID:) onThread:_thread withObject:arg waitUntilDone:YES];
+    [self performSelector:@selector(internlCreateGroupWithUID:) onThread:_thread withObject:arg waitUntilDone:NO];
 }
 
 - (void)updateGroupWithUID:(NSString *)groupUID posterItemUID:(NSString *)posterItemUID andPosterImage:(UIImage *)posterImage {
@@ -219,7 +219,7 @@ NSString * const GROUP_POSTERIMAGEITEMUID = @"GROUP_POSTERIMAGEITEMUID";
     [arg setObject:groupUID forKey:GROUP_UID];
     [arg setObject:posterItemUID forKey:GROUP_POSTERIMAGEITEMUID];
     [arg setObject:posterImage forKey:GROUP_POSTERIMAGE];
-    [self performSelector:@selector(internlUpdateGroupWithUID:) onThread:_thread withObject:arg waitUntilDone:YES];
+    [self performSelector:@selector(internlUpdateGroupWithUID:) onThread:_thread withObject:arg waitUntilDone:NO];
 }
 
 #pragma mark DCDataModelHelper
@@ -319,7 +319,7 @@ NSString * const GROUP_POSTERIMAGEITEMUID = @"GROUP_POSTERIMAGEITEMUID";
 }
 
 - (void)saveChanges {
-    [self performSelector:@selector(internlSaveChanges) onThread:_thread withObject:nil waitUntilDone:YES];
+    [self performSelector:@selector(internlSaveChanges) onThread:_thread withObject:nil waitUntilDone:NO];
 }
 
 - (void)threadMain {
