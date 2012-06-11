@@ -17,6 +17,7 @@
 @protocol DCItemViewControllerDelegate <NSObject>
 
 - (void)itemViewCtrl:(DCItemViewController *)viewCtrl setGroupTitle:(NSString *)title;
+- (void)popFormNavigationCtrl;
 
 @end
 

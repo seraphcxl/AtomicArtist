@@ -20,6 +20,9 @@
     NSUInteger _tableViewMargin;
     
     NSMutableDictionary *_itemViews;
+    
+    UIPinchGestureRecognizer *_pinchGestureRecognizer;
+    CGFloat _pinchScale;
 }
 
 - (void)reloadTableView:(NSNotification *)note;
@@ -44,6 +47,8 @@
 
 - (NSString *)pathInDocumentDirectory:(NSString *)fileName;
 
+- (void)pinch:(UIPinchGestureRecognizer *)gr;
+
 @end
 
 @implementation DCItemViewController
@@ -55,6 +60,20 @@
 @synthesize dataLibraryHelper = _dataLibraryHelper;
 @synthesize enumDataItemParam = _enumDataItemParam;
 @synthesize dataGroupIndex = _dataGroupIndex;
+
+- (void)pinch:(UIPinchGestureRecognizer *)gr {
+    NSLog(@"DCItemViewController pinch:");
+    if (gr.state == UIGestureRecognizerStateBegan) {
+        _pinchScale = gr.scale;
+    } else if (gr.state == UIGestureRecognizerStateEnded) {
+        if (gr.scale < _pinchScale) {
+            if (self.delegate) {
+                [self.delegate popFormNavigationCtrl];
+            }
+        }
+        _pinchScale = 0.0;
+    }
+}
 
 - (NSString *)pathInDocumentDirectory:(NSString *)fileName {
     NSArray *documentDirectories = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
@@ -182,9 +201,10 @@
         id <DCDataGroup> group = [self.dataLibraryHelper groupWithUID:self.dataGroupUID];
         NSLog(@"groupID:%@ items count = %d", self.dataGroupUID, [group itemsCountWithParam:self.enumDataItemParam]);
         if ([group itemsCountWithParam:self.enumDataItemParam] == 0) {
-            [self.navigationController popViewControllerAnimated:YES];
-            NSNotification *note = [NSNotification notificationWithName:@"NotifyRefreshGroup" object:self];
-            [[NSNotificationCenter defaultCenter] postNotification:note];
+            if (self.delegate) {
+                [self.delegate popFormNavigationCtrl];
+            }
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"NotifyRefreshGroup" object:self];
         } else {
             [self refreshItems:YES];
         }
@@ -342,6 +362,12 @@
     [self.tableView setSeparatorColor:[UIColor clearColor]];
     [self.tableView setAllowsSelection:NO];
     
+    if (!_pinchGestureRecognizer) {
+        _pinchGestureRecognizer = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(pinch:)];
+        [self.tableView addGestureRecognizer:_pinchGestureRecognizer];
+        _pinchScale = 0.0;
+    }
+    
     NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
     [notificationCenter addObserver:self selector:@selector(reloadTableView:) name:NOTIFY_DATAITEM_ADDED object:nil];
     [notificationCenter addObserver:self selector:@selector(actionForWillEnterForegroud:) name:@"applicationWillEnterForeground:" object:nil];
@@ -391,6 +417,14 @@
 - (void)viewDidUnload
 {
     NSLog(@"DCItemViewController %@ viewDidUnload:", self);
+    
+    if (_pinchGestureRecognizer) {
+        _pinchScale = 0.0;
+        [self.tableView removeGestureRecognizer:_pinchGestureRecognizer];
+        [_pinchGestureRecognizer release];
+        _pinchGestureRecognizer = nil;
+    }
+    
     NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
     [notificationCenter removeObserver:self];
     

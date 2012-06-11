@@ -102,8 +102,11 @@
     
     void (^ALAssetsLibraryAccessFailureBlock)(NSError *error) = ^(NSError *error) {
         NSInteger errCode = error.code;						 
-        if (errCode == ALAssetsLibraryAccessGloballyDeniedError || errCode == ALAssetsLibraryAccessUserDeniedError) {
-            UIAlertView *alertView = [[[UIAlertView alloc] initWithTitle:@"Enum ALGroup failed" message:@"AccessGloballyDeniedError or AccessUserDeniedError" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil] autorelease];
+        if (errCode == ALAssetsLibraryAccessGloballyDeniedError) {
+            UIAlertView *alertView = [[[UIAlertView alloc] initWithTitle:@"Enum ALGroup failed" message:@"AccessGloballyDeniedError" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil] autorelease];
+            [alertView show];
+        } else if (errCode == ALAssetsLibraryAccessUserDeniedError) {
+            UIAlertView *alertView = [[[UIAlertView alloc] initWithTitle:@"Enum ALGroup failed" message:@"AccessUserDeniedError" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil] autorelease];
             [alertView show];
         }
     };
@@ -113,7 +116,8 @@
     if (_assetsLibrary && frequency != 0) {
         _frequency = frequency;
         _enumCount = 0;
-        [_assetsLibrary enumerateGroupsWithTypes:(ALAssetsGroupType)groupParam usingBlock:ALAssetsLibraryGroupsEnumerationResultsBlock failureBlock:ALAssetsLibraryAccessFailureBlock];
+        ALAssetsGroupType type = (ALAssetsGroupType)groupParam;
+        [_assetsLibrary enumerateGroupsWithTypes:type usingBlock:ALAssetsLibraryGroupsEnumerationResultsBlock failureBlock:ALAssetsLibraryAccessFailureBlock];
     } else {
         [NSException raise:@"DCALAssetsLibrary error" format:@"Reason: _assetsLibrary is nil or frequency == 0"];
     }

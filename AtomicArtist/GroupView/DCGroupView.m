@@ -13,13 +13,17 @@
 
 @interface DCGroupView () {
     UITapGestureRecognizer *_tapGestureRecognizer;
+    
+    UIPinchGestureRecognizer *_pinchGestureRecognizer;
+    CGFloat _pinchScale;
 }
 
 - (NSInteger)calcPosterImageSize;
 
 - (NSInteger)calcTitleFontSize;
 
-- (void)tap:(UIPanGestureRecognizer *)gr;
+- (void)tap:(UITapGestureRecognizer *)gr;
+- (void)pinch:(UIPinchGestureRecognizer *)gr;
 
 - (void)preparePosterImageInfo;
 
@@ -52,18 +56,32 @@
 
 - (void)refreshItemsForPosterImage:(BOOL)force {
     if (self.dataLibraryHelper) {
-        if (force || [self.dataLibraryHelper isGroupEnumerated:self.dataGroupUID] == 0) {
-            [self.dataLibraryHelper clearCacheInGroup:self.dataGroupUID];
-            NSIndexSet *indexSet = [[[NSIndexSet alloc] initWithIndex:0] autorelease];
-            [self.dataLibraryHelper enumItemAtIndexes:indexSet withParam:self.enumDataItemParam inGroup:self.dataGroupUID notifyWithFrequency:1];
+        if (force || ![self.dataLibraryHelper isGroupEnumerated:self.dataGroupUID]) {
+            if ([self.dataLibraryHelper itemsCountWithParam:self.enumDataItemParam inGroup:self.dataGroupUID] != 0) {
+                [self.dataLibraryHelper clearCacheInGroup:self.dataGroupUID];
+                NSIndexSet *indexSet = [[[NSIndexSet alloc] initWithIndex:0] autorelease];
+                [self.dataLibraryHelper enumItemAtIndexes:indexSet withParam:self.enumDataItemParam inGroup:self.dataGroupUID notifyWithFrequency:1];
+            }
         }
     }
 }
 
-- (void)tap:(UIPanGestureRecognizer *)gr {
+- (void)tap:(UITapGestureRecognizer *)gr {
     NSLog(@"DCGroupView tap:");
     if (self.delegate && self.dataGroupUID) {
         [self.delegate selectGroup:self.dataGroupUID];
+    }
+}
+
+- (void)pinch:(UIPinchGestureRecognizer *)gr {
+    NSLog(@"DCGroupView pinch:");
+    if (gr.state == UIGestureRecognizerStateBegan) {
+        _pinchScale = gr.scale;
+    } else if (gr.state == UIGestureRecognizerStateEnded) {
+        if (gr.scale > _pinchScale) {
+            [self tap:nil];
+        }
+        _pinchScale = 0.0;
     }
 }
 
@@ -76,6 +94,13 @@
         [self removeGestureRecognizer:_tapGestureRecognizer];
         [_tapGestureRecognizer release];
         _tapGestureRecognizer = nil;
+    }
+    
+    if (_pinchGestureRecognizer) {
+        _pinchScale = 0.0;
+        [self removeGestureRecognizer:_pinchGestureRecognizer];
+        [_pinchGestureRecognizer release];
+        _pinchGestureRecognizer = nil;
     }
     
     if (_loadPosterImageOperation) {
@@ -229,8 +254,16 @@
         _posterImageSize = [self calcPosterImageSize];
         _titleFontSize = [self calcTitleFontSize];
         
-        _tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap:)];
-        [self addGestureRecognizer:_tapGestureRecognizer];
+        if (!_tapGestureRecognizer) {
+            _tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap:)];
+            [self addGestureRecognizer:_tapGestureRecognizer];
+        }
+        
+        if (!_pinchGestureRecognizer) {
+            _pinchGestureRecognizer = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(pinch:)];
+            [self addGestureRecognizer:_pinchGestureRecognizer];
+            _pinchScale = 0.0;
+        }
         
         NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
         [notificationCenter addObserver:self selector:@selector(runOperation:) name:NOTIFY_DATAITEMFORPOSTERIMAGE_ADDED object:nil];

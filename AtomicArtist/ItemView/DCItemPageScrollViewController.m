@@ -119,6 +119,10 @@
     [self.navigationController pushViewController:pageScrollViewCtrl animated:YES];
 }
 
+- (void)popFormNavigationCtrl {
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
 - (void)itemViewCtrl:(DCItemViewController *)viewCtrl setGroupTitle:(NSString *)title {
     if (title && viewCtrl == [self currentViewCtrl]) {
         [self.navigationItem setTitle:title];
