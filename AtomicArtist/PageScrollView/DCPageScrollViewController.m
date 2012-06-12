@@ -375,9 +375,14 @@ typedef enum {
         }
     }
     if (needChangeView) {
+        CGRect naviRect = [self.navigationController.navigationBar bounds];
         CGRect rect = pageView.frame;
         rect.origin.x = 0;
         rect.origin.y = 0;
+        if (!self.hideNavigationBarEnabled) {
+            rect.origin.y = naviRect.origin.y + naviRect.size.height;
+            rect.size.height -= naviRect.size.height;
+        }
         [pageViewCtrl.view setFrame:rect];
         [pageView addSubview:pageViewCtrl.view];
     }
@@ -429,9 +434,7 @@ typedef enum {
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    if (self.hideNavigationBarEnabled) {
-        [self.navigationController.navigationBar setHidden:YES];
-    }
+    [self.navigationController.navigationBar setHidden:self.hideNavigationBarEnabled];
     CGRect rectForScrollView = [self.view bounds];
     self.pageScrollView = [[[UIScrollView alloc] initWithFrame:rectForScrollView] autorelease];
     CGRect rectForContextView;
