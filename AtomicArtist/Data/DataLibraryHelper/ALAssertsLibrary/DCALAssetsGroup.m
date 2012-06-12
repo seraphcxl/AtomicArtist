@@ -123,6 +123,7 @@
                         [_allAssetUIDs insertObject:assetURLStr atIndex:indexForAsset];
                         ++_enumCount;
                         if (_enumCount == _frequency) {
+                            _enumerated = YES;
                             [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_DATAITEM_ADDED object:[self uniqueID]];
                             _enumCount = 0;
                         }
@@ -131,6 +132,7 @@
                     }
                 } else {
                     if (_enumCount != 0) {
+                        _enumerated = YES;
                         [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_DATAITEM_ADDED object:[self uniqueID]];
                     }
                 }
@@ -150,7 +152,6 @@
                 }
             }
             
-            _enumerated = YES;
             _frequency = frequency;
             _enumCount = 0;
             [self.alAssetsGroup enumerateAssetsUsingBlock:ALAssetsGroupEnumerationResultsBlock];

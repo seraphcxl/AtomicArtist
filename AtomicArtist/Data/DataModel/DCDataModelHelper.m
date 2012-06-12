@@ -25,10 +25,6 @@ NSString * const GROUP_POSTERIMAGEITEMUID = @"GROUP_POSTERIMAGEITEMUID";
 @interface DCDataModelHelper () {
     NSManagedObjectContext *_context;
     NSManagedObjectModel *_model;
-//    NSLock *_lockForDataModel;
-    
-    NSThread *_thread;
-    BOOL _stopThread;
 }
 
 - (void)internlGetItemWithUID:(NSMutableDictionary *)arg;
@@ -42,10 +38,6 @@ NSString * const GROUP_POSTERIMAGEITEMUID = @"GROUP_POSTERIMAGEITEMUID";
 - (void)internlUpdateGroupWithUID:(NSMutableDictionary *)arg;
 
 - (void)internlSaveChanges;
-
-- (void)threadMain;
-
-- (void)quitThreadMain;
 
 @end
 
@@ -104,7 +96,8 @@ NSString * const GROUP_POSTERIMAGEITEMUID = @"GROUP_POSTERIMAGEITEMUID";
 - (Item *)getItemWithUID:(NSString *)itemUID {
     NSMutableDictionary *arg = [[[NSMutableDictionary alloc] init] autorelease];
     [arg setObject:itemUID forKey:ITEM_UID];
-    [self performSelector:@selector(internlGetItemWithUID:) onThread:_thread withObject:arg waitUntilDone:YES];
+//    [self performSelector:@selector(internlGetItemWithUID:) onThread:_thread withObject:arg waitUntilDone:YES];
+    [self performSelectorOnMainThread:@selector(internlGetItemWithUID:) withObject:arg waitUntilDone:YES];
     Item *result = [arg objectForKey:ITEM];
     return result;
 }
@@ -113,7 +106,8 @@ NSString * const GROUP_POSTERIMAGEITEMUID = @"GROUP_POSTERIMAGEITEMUID";
     NSMutableDictionary *arg = [[[NSMutableDictionary alloc] init] autorelease];
     [arg setObject:itemUID forKey:ITEM_UID];
     [arg setObject:thumbnail forKey:ITEM_THUMBNAIL];
-    [self performSelector:@selector(internlCreateItemWithUID:) onThread:_thread withObject:arg waitUntilDone:NO];
+//    [self performSelector:@selector(internlCreateItemWithUID:) onThread:_thread withObject:arg waitUntilDone:YES];
+    [self performSelectorOnMainThread:@selector(internlCreateItemWithUID:) withObject:arg waitUntilDone:YES];
 }
 
 #pragma mark group
@@ -201,7 +195,8 @@ NSString * const GROUP_POSTERIMAGEITEMUID = @"GROUP_POSTERIMAGEITEMUID";
 - (Group *)getGroupWithUID:(NSString *)groupUID {
     NSMutableDictionary *arg = [[[NSMutableDictionary alloc] init] autorelease];
     [arg setObject:groupUID forKey:GROUP_UID];
-    [self performSelector:@selector(internlGetGroupWithUID:) onThread:_thread withObject:arg waitUntilDone:YES];
+//    [self performSelector:@selector(internlGetGroupWithUID:) onThread:_thread withObject:arg waitUntilDone:YES];
+    [self performSelectorOnMainThread:@selector(internlGetGroupWithUID:) withObject:arg waitUntilDone:YES];
     Group *result = [arg objectForKey:GROUP];
     return result;
 }
@@ -211,7 +206,8 @@ NSString * const GROUP_POSTERIMAGEITEMUID = @"GROUP_POSTERIMAGEITEMUID";
     [arg setObject:groupUID forKey:GROUP_UID];
     [arg setObject:posterItemUID forKey:GROUP_POSTERIMAGEITEMUID];
     [arg setObject:posterImage forKey:GROUP_POSTERIMAGE];
-    [self performSelector:@selector(internlCreateGroupWithUID:) onThread:_thread withObject:arg waitUntilDone:NO];
+//    [self performSelector:@selector(internlCreateGroupWithUID:) onThread:_thread withObject:arg waitUntilDone:YES];
+    [self performSelectorOnMainThread:@selector(internlCreateGroupWithUID:) withObject:arg waitUntilDone:YES];
 }
 
 - (void)updateGroupWithUID:(NSString *)groupUID posterItemUID:(NSString *)posterItemUID andPosterImage:(UIImage *)posterImage {
@@ -219,7 +215,8 @@ NSString * const GROUP_POSTERIMAGEITEMUID = @"GROUP_POSTERIMAGEITEMUID";
     [arg setObject:groupUID forKey:GROUP_UID];
     [arg setObject:posterItemUID forKey:GROUP_POSTERIMAGEITEMUID];
     [arg setObject:posterImage forKey:GROUP_POSTERIMAGE];
-    [self performSelector:@selector(internlUpdateGroupWithUID:) onThread:_thread withObject:arg waitUntilDone:NO];
+//    [self performSelector:@selector(internlUpdateGroupWithUID:) onThread:_thread withObject:arg waitUntilDone:YES];
+    [self performSelectorOnMainThread:@selector(internlUpdateGroupWithUID:) withObject:arg waitUntilDone:YES];
 }
 
 #pragma mark DCDataModelHelper
@@ -245,12 +242,6 @@ NSString * const GROUP_POSTERIMAGEITEMUID = @"GROUP_POSTERIMAGEITEMUID";
 
 - (void)dealloc {
     
-    if (_thread) {
-        [self quitThreadMain];
-        [_thread release];
-        _thread = nil;
-    }
-    
     if (_context) {
         [_context release];
         _context = nil;
@@ -267,13 +258,6 @@ NSString * const GROUP_POSTERIMAGEITEMUID = @"GROUP_POSTERIMAGEITEMUID";
 - (id)init {
     self = [super init];
     if (self) {
-        
-        if (!_thread) {
-            _stopThread = NO;
-            _thread = [[NSThread alloc] initWithTarget:self selector:@selector(threadMain) object:nil];
-            [_thread setStackSize:DATAMODELTHREADSTACKSIZE];
-            [_thread start];
-        }
         
         // Read in AtomicArtistModel.xcdatamodeld
         _model = [NSManagedObjectModel mergedModelFromBundles:nil];
@@ -319,28 +303,8 @@ NSString * const GROUP_POSTERIMAGEITEMUID = @"GROUP_POSTERIMAGEITEMUID";
 }
 
 - (void)saveChanges {
-    [self performSelector:@selector(internlSaveChanges) onThread:_thread withObject:nil waitUntilDone:NO];
-}
-
-- (void)threadMain {
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	
-    NSRunLoop *runloop = [NSRunLoop currentRunLoop];
-    [runloop addPort:[NSMachPort port] forMode:NSDefaultRunLoopMode];
-	
-    while (!_stopThread) {
-        [runloop runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
-    }
-	
-    [pool drain];
-}
-
-- (void)quitThreadMain {
-	_stopThread = YES;
-	while (![_thread isFinished]) {
-		[self performSelector:@selector(threadMain) onThread:_thread withObject:nil waitUntilDone:NO]; //nothing, but only let the thread to have change to check the stopCache value.
-		[[NSRunLoop currentRunLoop] runUntilDate:[NSDate distantPast]];
-	}
+//    [self performSelector:@selector(internlSaveChanges) onThread:_thread withObject:nil waitUntilDone:YES];
+    [self performSelectorOnMainThread:@selector(internlSaveChanges) withObject:nil waitUntilDone:YES];
 }
 
 @end
