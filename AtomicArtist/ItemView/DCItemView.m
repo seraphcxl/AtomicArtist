@@ -158,12 +158,19 @@
             CGSize thumbnailSize = [self.thumbnail size];
             
             CGRect imageViewFrame;
-            if (thumbnailSize.width >= self.thumbnailSize && thumbnailSize.width > thumbnailSize.height) {
+            
+//            if (thumbnailSize.width >= self.thumbnailSize && thumbnailSize.width > thumbnailSize.height) {
+//                imageViewFrame = CGRectMake(bounds.origin.x + ((GROUPVIEW_TITLELABEL_HEIGHT + GROUPVIEW_TITLELABEL_SPACE) / 2.0), bounds.origin.y + ((self.thumbnailSize * (1.0 - thumbnailSize.height / thumbnailSize.width)) / 2.0), self.thumbnailSize, (thumbnailSize.height / thumbnailSize.width * self.thumbnailSize));
+//            } else if (thumbnailSize.height >= self.thumbnailSize) {
+//                imageViewFrame = CGRectMake(bounds.origin.x + ((GROUPVIEW_TITLELABEL_HEIGHT + GROUPVIEW_TITLELABEL_SPACE) / 2.0)+ ((self.thumbnailSize * (1.0 - thumbnailSize.width / thumbnailSize.height)) / 2.0), bounds.origin.y, (thumbnailSize.width / thumbnailSize.height * self.thumbnailSize), self.thumbnailSize);
+//            } else {
+//                imageViewFrame = CGRectMake(bounds.origin.x + ((GROUPVIEW_TITLELABEL_HEIGHT + GROUPVIEW_TITLELABEL_SPACE) / 2.0) + ((self.thumbnailSize - thumbnailSize.width) / 2.0), bounds.origin.y + ((self.thumbnailSize - thumbnailSize.height) / 2.0), thumbnailSize.width, thumbnailSize.height);
+//            }
+            
+            if (thumbnailSize.width > thumbnailSize.height) {
                 imageViewFrame = CGRectMake(bounds.origin.x + ((GROUPVIEW_TITLELABEL_HEIGHT + GROUPVIEW_TITLELABEL_SPACE) / 2.0), bounds.origin.y + ((self.thumbnailSize * (1.0 - thumbnailSize.height / thumbnailSize.width)) / 2.0), self.thumbnailSize, (thumbnailSize.height / thumbnailSize.width * self.thumbnailSize));
-            } else if (thumbnailSize.height >= self.thumbnailSize) {
-                imageViewFrame = CGRectMake(bounds.origin.x + ((GROUPVIEW_TITLELABEL_HEIGHT + GROUPVIEW_TITLELABEL_SPACE) / 2.0)+ ((self.thumbnailSize * (1.0 - thumbnailSize.width / thumbnailSize.height)) / 2.0), bounds.origin.y, (thumbnailSize.width / thumbnailSize.height * self.thumbnailSize), self.thumbnailSize);
             } else {
-                imageViewFrame = CGRectMake(bounds.origin.x + ((GROUPVIEW_TITLELABEL_HEIGHT + GROUPVIEW_TITLELABEL_SPACE) / 2.0) + ((self.thumbnailSize - thumbnailSize.width) / 2.0), bounds.origin.y + ((self.thumbnailSize - thumbnailSize.height) / 2.0), thumbnailSize.width, thumbnailSize.height);
+                imageViewFrame = CGRectMake(bounds.origin.x + ((GROUPVIEW_TITLELABEL_HEIGHT + GROUPVIEW_TITLELABEL_SPACE) / 2.0)+ ((self.thumbnailSize * (1.0 - thumbnailSize.width / thumbnailSize.height)) / 2.0), bounds.origin.y, (thumbnailSize.width / thumbnailSize.height * self.thumbnailSize), self.thumbnailSize);
             }
             
             UIImageView *imageView = [[[UIImageView alloc] initWithFrame:imageViewFrame] autorelease];

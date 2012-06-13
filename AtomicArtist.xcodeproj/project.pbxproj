@@ -328,9 +328,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		1BF9F4A8156483AE0015E004 /* AtomicArtist */ = {
+		1BF9F4A8156483AE0015E004 /* AtomicArtist_Simulator */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 1BF9F4C1156483AE0015E004 /* Build configuration list for PBXNativeTarget "AtomicArtist" */;
+			buildConfigurationList = 1BF9F4C1156483AE0015E004 /* Build configuration list for PBXNativeTarget "AtomicArtist_Simulator" */;
 			buildPhases = (
 				1BF9F4A5156483AE0015E004 /* Sources */,
 				1BF9F4A6156483AE0015E004 /* Frameworks */,
@@ -340,7 +340,7 @@
 			);
 			dependencies = (
 			);
-			name = AtomicArtist;
+			name = AtomicArtist_Simulator;
 			productName = AtomicArtist;
 			productReference = 1BF9F4A9156483AE0015E004 /* AtomicArtist.app */;
 			productType = "com.apple.product-type.application";
@@ -366,7 +366,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				1BF9F4A8156483AE0015E004 /* AtomicArtist */,
+				1BF9F4A8156483AE0015E004 /* AtomicArtist_Simulator */,
 			);
 		};
 /* End PBXProject section */
@@ -514,7 +514,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		1BF9F4C1156483AE0015E004 /* Build configuration list for PBXNativeTarget "AtomicArtist" */ = {
+		1BF9F4C1156483AE0015E004 /* Build configuration list for PBXNativeTarget "AtomicArtist_Simulator" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1BF9F4C2156483AE0015E004 /* Debug */,
