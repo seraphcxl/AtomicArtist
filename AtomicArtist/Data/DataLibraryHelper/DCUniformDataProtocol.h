@@ -40,8 +40,10 @@ extern NSString * const kDATAGROUPPROPERTY_TYPE;
 extern NSString * const kDATAGROUPPROPERTY_POSTERIMAGE;
 
 extern NSString * const NOTIFY_DATAITEM_ADDED;
+extern NSString * const NOTIFY_DATAITEM_ENUM_END;
 extern NSString * const NOTIFY_DATAITEMFORPOSTERIMAGE_ADDED;
 extern NSString * const NOTIFY_DATAGROUP_ADDED;
+extern NSString * const NOTIFY_DATAGROUP_ENUM_END;
 extern NSString * const NOTIFY_DATAGROUP_EMPTY;
 
 @protocol DCDataGroup <NSObject>

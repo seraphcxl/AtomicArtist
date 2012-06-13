@@ -7,6 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1B0537631588810C000C93F8 /* DCCreateGroupOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B0537541588810A000C93F8 /* DCCreateGroupOperation.m */; };
+		1B0537641588810C000C93F8 /* DCCreateItemOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B0537561588810A000C93F8 /* DCCreateItemOperation.m */; };
+		1B0537651588810C000C93F8 /* DCDataModelCommonDefine.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B0537581588810B000C93F8 /* DCDataModelCommonDefine.m */; };
+		1B0537661588810C000C93F8 /* DCDataModelOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B05375A1588810B000C93F8 /* DCDataModelOperation.m */; };
+		1B0537671588810C000C93F8 /* DCGetGroupOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B05375C1588810B000C93F8 /* DCGetGroupOperation.m */; };
+		1B0537681588810C000C93F8 /* DCGetItemOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B05375E1588810C000C93F8 /* DCGetItemOperation.m */; };
+		1B0537691588810C000C93F8 /* DCSaveOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B0537601588810C000C93F8 /* DCSaveOperation.m */; };
+		1B05376A1588810C000C93F8 /* DCUpdateGroupOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B0537621588810C000C93F8 /* DCUpdateGroupOperation.m */; };
 		1B14209B1574ABD00058199E /* DCALAssetGroupViewNaviTitle.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1B14209A1574ABD00058199E /* DCALAssetGroupViewNaviTitle.xib */; };
 		1B8160FF156F17F400E40084 /* DCLoadThumbnailOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B8160FE156F17F300E40084 /* DCLoadThumbnailOperation.m */; };
 		1B816111156F563400E40084 /* DCLoadPosterImageForALAssetsGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B816110156F563300E40084 /* DCLoadPosterImageForALAssetsGroup.m */; };
@@ -49,6 +57,22 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1B0537531588810A000C93F8 /* DCCreateGroupOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCCreateGroupOperation.h; sourceTree = "<group>"; };
+		1B0537541588810A000C93F8 /* DCCreateGroupOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCCreateGroupOperation.m; sourceTree = "<group>"; };
+		1B0537551588810A000C93F8 /* DCCreateItemOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCCreateItemOperation.h; sourceTree = "<group>"; };
+		1B0537561588810A000C93F8 /* DCCreateItemOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCCreateItemOperation.m; sourceTree = "<group>"; };
+		1B0537571588810B000C93F8 /* DCDataModelCommonDefine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCDataModelCommonDefine.h; sourceTree = "<group>"; };
+		1B0537581588810B000C93F8 /* DCDataModelCommonDefine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCDataModelCommonDefine.m; sourceTree = "<group>"; };
+		1B0537591588810B000C93F8 /* DCDataModelOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCDataModelOperation.h; sourceTree = "<group>"; };
+		1B05375A1588810B000C93F8 /* DCDataModelOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCDataModelOperation.m; sourceTree = "<group>"; };
+		1B05375B1588810B000C93F8 /* DCGetGroupOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCGetGroupOperation.h; sourceTree = "<group>"; };
+		1B05375C1588810B000C93F8 /* DCGetGroupOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCGetGroupOperation.m; sourceTree = "<group>"; };
+		1B05375D1588810B000C93F8 /* DCGetItemOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCGetItemOperation.h; sourceTree = "<group>"; };
+		1B05375E1588810C000C93F8 /* DCGetItemOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCGetItemOperation.m; sourceTree = "<group>"; };
+		1B05375F1588810C000C93F8 /* DCSaveOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCSaveOperation.h; sourceTree = "<group>"; };
+		1B0537601588810C000C93F8 /* DCSaveOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCSaveOperation.m; sourceTree = "<group>"; };
+		1B0537611588810C000C93F8 /* DCUpdateGroupOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCUpdateGroupOperation.h; sourceTree = "<group>"; };
+		1B0537621588810C000C93F8 /* DCUpdateGroupOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCUpdateGroupOperation.m; sourceTree = "<group>"; };
 		1B14209A1574ABD00058199E /* DCALAssetGroupViewNaviTitle.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = DCALAssetGroupViewNaviTitle.xib; path = GroupView/ALAssetGroupView/DCALAssetGroupViewNaviTitle.xib; sourceTree = "<group>"; };
 		1B8160FD156F17F300E40084 /* DCLoadThumbnailOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCLoadThumbnailOperation.h; sourceTree = "<group>"; };
 		1B8160FE156F17F300E40084 /* DCLoadThumbnailOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCLoadThumbnailOperation.m; sourceTree = "<group>"; };
@@ -75,7 +99,7 @@
 		1BBFADA2156525B500D5FC76 /* Item.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Item.h; sourceTree = "<group>"; };
 		1BBFADA3156525B500D5FC76 /* Item.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Item.m; sourceTree = "<group>"; };
 		1BD5CACC15690F1600C9133D /* CommonDefine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonDefine.h; sourceTree = "<group>"; };
-		1BF9F4A9156483AE0015E004 /* AtomicArtist.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AtomicArtist.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1BF9F4A9156483AE0015E004 /* AtomicArtist.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = AtomicArtist.app; path = AtomicArtist_Simulator.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1BF9F4AD156483AE0015E004 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		1BF9F4AF156483AE0015E004 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1BF9F4B1156483AE0015E004 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -178,6 +202,8 @@
 		1BBFAD9B156525B500D5FC76 /* DataModel */ = {
 			isa = PBXGroup;
 			children = (
+				1B0537571588810B000C93F8 /* DCDataModelCommonDefine.h */,
+				1B0537581588810B000C93F8 /* DCDataModelCommonDefine.m */,
 				1BBFAD9C156525B500D5FC76 /* AtomicArtistModel.xcdatamodeld */,
 				1BBFAD9E156525B500D5FC76 /* DCDataModelHelper.h */,
 				1BBFAD9F156525B500D5FC76 /* DCDataModelHelper.m */,
@@ -185,6 +211,20 @@
 				1BBFADA1156525B500D5FC76 /* Group.m */,
 				1BBFADA2156525B500D5FC76 /* Item.h */,
 				1BBFADA3156525B500D5FC76 /* Item.m */,
+				1B0537591588810B000C93F8 /* DCDataModelOperation.h */,
+				1B05375A1588810B000C93F8 /* DCDataModelOperation.m */,
+				1B0537531588810A000C93F8 /* DCCreateGroupOperation.h */,
+				1B0537541588810A000C93F8 /* DCCreateGroupOperation.m */,
+				1B0537551588810A000C93F8 /* DCCreateItemOperation.h */,
+				1B0537561588810A000C93F8 /* DCCreateItemOperation.m */,
+				1B05375B1588810B000C93F8 /* DCGetGroupOperation.h */,
+				1B05375C1588810B000C93F8 /* DCGetGroupOperation.m */,
+				1B05375D1588810B000C93F8 /* DCGetItemOperation.h */,
+				1B05375E1588810C000C93F8 /* DCGetItemOperation.m */,
+				1B05375F1588810C000C93F8 /* DCSaveOperation.h */,
+				1B0537601588810C000C93F8 /* DCSaveOperation.m */,
+				1B0537611588810C000C93F8 /* DCUpdateGroupOperation.h */,
+				1B0537621588810C000C93F8 /* DCUpdateGroupOperation.m */,
 			);
 			path = DataModel;
 			sourceTree = "<group>";
@@ -418,6 +458,14 @@
 				1BFCE23C15735A0800C07B87 /* DCALAssetsGroup.m in Sources */,
 				1BFCE23D15735A0800C07B87 /* DCALAssetsLibrary.m in Sources */,
 				1BFCE23E15735A0800C07B87 /* DCALAssetsLibraryHelper.m in Sources */,
+				1B0537631588810C000C93F8 /* DCCreateGroupOperation.m in Sources */,
+				1B0537641588810C000C93F8 /* DCCreateItemOperation.m in Sources */,
+				1B0537651588810C000C93F8 /* DCDataModelCommonDefine.m in Sources */,
+				1B0537661588810C000C93F8 /* DCDataModelOperation.m in Sources */,
+				1B0537671588810C000C93F8 /* DCGetGroupOperation.m in Sources */,
+				1B0537681588810C000C93F8 /* DCGetItemOperation.m in Sources */,
+				1B0537691588810C000C93F8 /* DCSaveOperation.m in Sources */,
+				1B05376A1588810C000C93F8 /* DCUpdateGroupOperation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

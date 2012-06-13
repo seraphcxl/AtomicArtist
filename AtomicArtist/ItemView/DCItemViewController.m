@@ -26,9 +26,8 @@
 }
 
 - (void)reloadTableView:(NSNotification *)note;
-
+- (void)dataRefreshFinished:(NSNotification *)note;
 - (void)actionForWillEnterForegroud:(NSNotification *)note;
-
 - (void)actionForItemThumbnailLoaded:(NSNotification *)note;
 
 - (double)calcCellSpaceWithFrameSize:(NSUInteger)frameSize tableViewMargin:(NSUInteger)tableViewMargin andItemCountInCell:(NSUInteger)itemCountInCell;
@@ -217,6 +216,10 @@
     NSLog(@"DCItemViewController refreshAssets");
     if (self.dataLibraryHelper) {
         if (force || ![self.dataLibraryHelper isGroupEnumerated:self.dataGroupUID]) {
+            if (self.delegate) {
+                [self.delegate dataRefreshStarted];
+            }
+            
             [self clearCache];
             [self.dataLibraryHelper enumItems:self.enumDataItemParam inGroup:self.dataGroupUID notifyWithFrequency:_itemCountInCell];
         }
@@ -286,6 +289,12 @@
 
 - (void)reloadTableView:(NSNotification *)note {
     [self.tableView reloadData];
+}
+
+- (void)dataRefreshFinished:(NSNotification *)note {
+    if (self.delegate) {
+        [self.delegate dataRefreshFinished];
+    }
 }
 
 - (NSUInteger)calcFrameSize {
@@ -370,6 +379,7 @@
     
     NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
     [notificationCenter addObserver:self selector:@selector(reloadTableView:) name:NOTIFY_DATAITEM_ADDED object:nil];
+    [notificationCenter addObserver:self selector:@selector(dataRefreshFinished:) name:NOTIFY_DATAITEM_ENUM_END object:nil];
     [notificationCenter addObserver:self selector:@selector(actionForWillEnterForegroud:) name:@"applicationWillEnterForeground:" object:nil];
     [notificationCenter addObserver:self selector:@selector(actionForItemThumbnailLoaded:) name:NOTIFY_THUMBNAILLOADED object:nil];
     

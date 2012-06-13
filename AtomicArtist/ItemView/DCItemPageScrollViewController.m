@@ -119,6 +119,18 @@
     [self.navigationController pushViewController:pageScrollViewCtrl animated:YES];
 }
 
+- (void)dataRefreshStarted {
+    UIActivityIndicatorView *activityIndicatorView = [[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite] autorelease];
+    [activityIndicatorView startAnimating];
+    UIBarButtonItem *bbi = [[[UIBarButtonItem alloc] initWithCustomView:activityIndicatorView] autorelease];
+    [self.navigationItem setRightBarButtonItem:bbi];
+}
+
+- (void)dataRefreshFinished {
+    UIBarButtonItem *bbi = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(refresh:)] autorelease];
+    [self.navigationItem setRightBarButtonItem:bbi];
+}
+
 - (void)popFormNavigationCtrl {
     [self.navigationController popViewControllerAnimated:YES];
 }

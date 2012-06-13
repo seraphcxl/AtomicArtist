@@ -135,6 +135,7 @@
                         _enumerated = YES;
                         [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_DATAITEM_ADDED object:[self uniqueID]];
                     }
+                    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_DATAITEM_ENUM_END object:self];
                 }
             };
             

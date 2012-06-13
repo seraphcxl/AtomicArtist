@@ -18,6 +18,8 @@
 
 - (void)itemViewCtrl:(DCItemViewController *)viewCtrl setGroupTitle:(NSString *)title;
 - (void)popFormNavigationCtrl;
+- (void)dataRefreshStarted;
+- (void)dataRefreshFinished;
 
 @end
 

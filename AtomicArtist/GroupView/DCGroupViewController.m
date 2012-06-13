@@ -23,11 +23,9 @@
 }
 
 - (void)reloadTableView:(NSNotification *)note;
-
+- (void)dataRefreshFinished:(NSNotification *)note;
 - (void)notifyRefresh:(NSNotification *)note;
-
 - (void)actionForWillEnterForegroud:(NSNotification *)note;
-
 - (void)actionForGroupPosterImageLoaded:(NSNotification *)note;
 
 - (double)calcCellSpaceWithFrameSize:(NSUInteger)frameSize tableViewMargin:(NSUInteger)tableViewMargin andItemCountInCell:(NSUInteger)itemCountInCell;
@@ -214,6 +212,11 @@
 - (void)refreshGroups:(BOOL)force {
     NSLog(@"DCGroupViewController refreshAssetsGroups");
     if (force || [self.dataLibraryHelper groupsCount] == 0) {
+        UIActivityIndicatorView *activityIndicatorView = [[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite] autorelease];
+        [activityIndicatorView startAnimating];
+        UIBarButtonItem *bbi = [[[UIBarButtonItem alloc] initWithCustomView:activityIndicatorView] autorelease];
+        [self.navigationItem setRightBarButtonItem:bbi];
+        
         [self clearCache];
         [self.dataLibraryHelper enumGroups:_enumDataGroupParam notifyWithFrequency:_itemCountInCell];
         [self.navigationItem setTitle:[self title]];
@@ -340,6 +343,11 @@
     [self.tableView reloadData];
 }
 
+- (void)dataRefreshFinished:(NSNotification *)note {
+    UIBarButtonItem *bbi = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(refresh:)] autorelease];
+    [self.navigationItem setRightBarButtonItem:bbi];
+}
+
 - (void)viewDidLoad
 {
     NSLog(@"DCGroupViewController viewDidLoad:");
@@ -358,6 +366,7 @@
     
     NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
     [notificationCenter addObserver:self selector:@selector(reloadTableView:) name:NOTIFY_DATAGROUP_ADDED object:nil];
+    [notificationCenter addObserver:self selector:@selector(dataRefreshFinished:) name:NOTIFY_DATAGROUP_ENUM_END object:nil];
     [notificationCenter addObserver:self selector:@selector(notifyRefresh:) name:@"NotifyRefreshGroup" object:nil];
     [notificationCenter addObserver:self selector:@selector(actionForWillEnterForegroud:) name:@"applicationWillEnterForeground:" object:nil];
     [notificationCenter addObserver:self selector:@selector(actionForGroupPosterImageLoaded:) name:NOTIFY_POSTERIMAGELOADED object:nil];

@@ -9,102 +9,40 @@
 #import "DCDataModelHelper.h"
 #import "Group.h"
 #import "Item.h"
+#import "DCDataModelCommonDefine.h"
+
+#import "DCGetItemOperation.h"
+#import "DCCreateItemOperation.h"
+
+#import "DCGetGroupOperation.h"
+#import "DCCreateGroupOperation.h"
+#import "DCUpdateGroupOperation.h"
+
+#import "DCSaveOperation.h"
 
 #define DATAMODELTHREADSTACKSIZE ((NSUInteger)(1024 *1024 * 8))
 
 static DCDataModelHelper *staticDefaultDataModelHelper = nil;
 
-NSString * const ITEM = @"ITEM";
-NSString * const ITEM_UID = @"ITEM_UID";
-NSString * const ITEM_THUMBNAIL = @"ITEM_THUMBNAIL";
-NSString * const GROUP = @"GROUP";
-NSString * const GROUP_UID = @"GROUP_UID";
-NSString * const GROUP_POSTERIMAGE = @"GROUP_POSTERIMAGE";
-NSString * const GROUP_POSTERIMAGEITEMUID = @"GROUP_POSTERIMAGEITEMUID";
-
 @interface DCDataModelHelper () {
     NSManagedObjectContext *_context;
     NSManagedObjectModel *_model;
-    //    NSLock *_lockForDataModel;
     
-    NSThread *_thread;
-    BOOL _stopThread;
+    NSOperationQueue *_operationQueue;
 }
-
-- (void)internlGetItemWithUID:(NSMutableDictionary *)arg;
-
-- (void)internlCreateItemWithUID:(NSMutableDictionary *)arg;
-
-- (void)internlGetGroupWithUID:(NSMutableDictionary *)arg;
-
-- (void)internlCreateGroupWithUID:(NSMutableDictionary *)arg;
-
-- (void)internlUpdateGroupWithUID:(NSMutableDictionary *)arg;
-
-- (void)internlSaveChanges;
-
-- (void)threadMain;
-
-- (void)quitThreadMain;
 
 @end
 
 @implementation DCDataModelHelper
 
 #pragma mark item
-- (void)internlGetItemWithUID:(NSMutableDictionary *)arg {
-    do {
-        NSString *itemUID = [arg objectForKey:ITEM_UID];
-        
-        NSFetchRequest *request = [[[NSFetchRequest alloc] init] autorelease];
-        
-        NSEntityDescription *entityDescription = [[_model entitiesByName] objectForKey:@"Item"];
-        [request setEntity:entityDescription];
-        
-        [request setSortDescriptors:nil];
-        
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"uniqueID like %@", itemUID];
-        [request setPredicate:predicate];
-        
-        NSError *err = nil;
-        NSArray *result = [_context executeFetchRequest:request error:&err];
-        if (!result) {
-            [NSException raise:@"DCDataModelHelper error" format:@"Reason: %@", [err localizedDescription]];
-        }
-        
-        if ([result count] == 0) {
-            ;
-        } else {
-            if ([result count] != 1) {
-                NSLog(@"count = %d", [result count]);
-            }
-            [arg setObject:[result objectAtIndex:0] forKey:ITEM];
-        }
-    } while (NO);
-}
-
-- (void)internlCreateItemWithUID:(NSMutableDictionary *)arg {
-    do {
-        NSString *itemUID = [arg objectForKey:ITEM_UID];
-        
-        UIImage *thumbnail = [arg objectForKey:ITEM_THUMBNAIL];
-        
-        [self internlGetItemWithUID:arg];
-        
-        if (![arg objectForKey:ITEM]) {
-            Item *item = [NSEntityDescription insertNewObjectForEntityForName:@"Item" inManagedObjectContext:_context];
-            
-            item.uniqueID = itemUID;
-            item.thumbnail = thumbnail;
-            item.thumbnailData = UIImagePNGRepresentation(thumbnail);
-        }
-    } while (NO);
-}
 
 - (Item *)getItemWithUID:(NSString *)itemUID {
     NSMutableDictionary *arg = [[[NSMutableDictionary alloc] init] autorelease];
     [arg setObject:itemUID forKey:ITEM_UID];
-    [self performSelector:@selector(internlGetItemWithUID:) onThread:_thread withObject:arg waitUntilDone:YES];
+    DCGetItemOperation *operation = [[[DCGetItemOperation alloc] initWithConetet:_context model:_model andArgs:arg] autorelease];
+    NSArray *operations = [NSArray arrayWithObject:operation];
+    [_operationQueue addOperations:operations waitUntilFinished:YES];
     Item *result = [arg objectForKey:ITEM];
     return result;
 }
@@ -113,95 +51,24 @@ NSString * const GROUP_POSTERIMAGEITEMUID = @"GROUP_POSTERIMAGEITEMUID";
     NSMutableDictionary *arg = [[[NSMutableDictionary alloc] init] autorelease];
     [arg setObject:itemUID forKey:ITEM_UID];
     [arg setObject:thumbnail forKey:ITEM_THUMBNAIL];
-    [self performSelector:@selector(internlCreateItemWithUID:) onThread:_thread withObject:arg waitUntilDone:YES];
+    DCGetItemOperation *operation = [[[DCGetItemOperation alloc] initWithConetet:_context model:_model andArgs:arg] autorelease];
+    NSArray *operations = [NSArray arrayWithObject:operation];
+    [_operationQueue addOperations:operations waitUntilFinished:YES];
+    Item *result = [arg objectForKey:ITEM];
+    if (!result) {
+        DCCreateItemOperation *operation1 = [[[DCCreateItemOperation alloc] initWithConetet:_context model:_model andArgs:arg] autorelease];
+        NSArray *operations1 = [NSArray arrayWithObject:operation1];
+        [_operationQueue addOperations:operations1 waitUntilFinished:YES];
+    }
 }
 
 #pragma mark group
-- (void)internlGetGroupWithUID:(NSMutableDictionary *)arg {
-    do {
-        NSString *groupUID = [arg objectForKey:GROUP_UID];
-        
-        NSFetchRequest *request = [[[NSFetchRequest alloc] init] autorelease];
-        
-        NSEntityDescription *entityDescription = [[_model entitiesByName] objectForKey:@"Group"];
-        [request setEntity:entityDescription];
-        
-        [request setSortDescriptors:nil];
-        
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"uniqueID like %@", groupUID];
-        [request setPredicate:predicate];
-        
-        NSError *err = nil;
-        NSArray *result = [_context executeFetchRequest:request error:&err];
-        if (!result) {
-            [NSException raise:@"DCDataModelHelper error" format:@"Reason: %@", [err localizedDescription]];
-        }
-        
-        if ([result count] == 0) {
-            ;
-        } else {
-            if ([result count] != 1) {
-                [NSException raise:@"DCDataModelHelper error" format:@"Reason: The result count for get album from AtomicArtistModel != 1"];
-            }
-            [arg setObject:[result objectAtIndex:0] forKey:GROUP];
-        }
-    } while (NO);
-    
-}
-
-- (void)internlCreateGroupWithUID:(NSMutableDictionary *)arg {
-    do {
-        NSString *groupUID = [arg objectForKey:GROUP_UID];
-        
-        UIImage *posterImage = [arg objectForKey:GROUP_POSTERIMAGE];
-        
-        NSString *posterItemUID = [arg objectForKey:GROUP_POSTERIMAGEITEMUID];
-        
-        [self internlGetGroupWithUID:arg];
-        
-        if (![arg objectForKey:GROUP]) {
-            Group *group = [NSEntityDescription insertNewObjectForEntityForName:@"Group" inManagedObjectContext:_context];
-            
-            group.uniqueID = groupUID;
-            group.posterItemUID = posterItemUID;
-            group.posterImage = posterImage;
-            group.posterImageData = UIImagePNGRepresentation(posterImage);
-        }
-    } while (NO);
-}
-
-- (void)internlUpdateGroupWithUID:(NSMutableDictionary *)arg {
-    do {
-        NSString *groupUID = [arg objectForKey:GROUP_UID];
-        
-        UIImage *posterImage = [arg objectForKey:GROUP_POSTERIMAGE];
-        
-        NSString *posterItemUID = [arg objectForKey:GROUP_POSTERIMAGEITEMUID];
-        
-        [self internlGetGroupWithUID:arg];
-        
-        Group *group = [arg objectForKey:GROUP];
-        if (group) {
-            group.posterItemUID = posterItemUID;
-            group.posterImage = posterImage;
-            group.posterImageData = UIImagePNGRepresentation(posterImage);
-            group.inspectionRecord = [NSDate date];
-            
-        } else {
-            group = [NSEntityDescription insertNewObjectForEntityForName:@"Group" inManagedObjectContext:_context];
-            
-            group.uniqueID = groupUID;
-            group.posterItemUID = posterItemUID;
-            group.posterImage = posterImage;
-            group.posterImageData = UIImagePNGRepresentation(posterImage);
-        }
-    } while (NO);
-}
-
 - (Group *)getGroupWithUID:(NSString *)groupUID {
     NSMutableDictionary *arg = [[[NSMutableDictionary alloc] init] autorelease];
     [arg setObject:groupUID forKey:GROUP_UID];
-    [self performSelector:@selector(internlGetGroupWithUID:) onThread:_thread withObject:arg waitUntilDone:YES];
+    DCGetGroupOperation *operation = [[[DCGetGroupOperation alloc] initWithConetet:_context model:_model andArgs:arg] autorelease];
+    NSArray *operations = [NSArray arrayWithObject:operation];
+    [_operationQueue addOperations:operations waitUntilFinished:YES];
     Group *result = [arg objectForKey:GROUP];
     return result;
 }
@@ -211,7 +78,15 @@ NSString * const GROUP_POSTERIMAGEITEMUID = @"GROUP_POSTERIMAGEITEMUID";
     [arg setObject:groupUID forKey:GROUP_UID];
     [arg setObject:posterItemUID forKey:GROUP_POSTERIMAGEITEMUID];
     [arg setObject:posterImage forKey:GROUP_POSTERIMAGE];
-    [self performSelector:@selector(internlCreateGroupWithUID:) onThread:_thread withObject:arg waitUntilDone:YES];
+    DCGetGroupOperation *operation = [[[DCGetGroupOperation alloc] initWithConetet:_context model:_model andArgs:arg] autorelease];
+    NSArray *operations = [NSArray arrayWithObject:operation];
+    [_operationQueue addOperations:operations waitUntilFinished:YES];
+    Group *result = [arg objectForKey:GROUP];
+    if (!result) {
+        DCCreateGroupOperation *operation1 = [[[DCCreateGroupOperation alloc] initWithConetet:_context model:_model andArgs:arg] autorelease];
+        NSArray *operations1 = [NSArray arrayWithObject:operation1];
+        [_operationQueue addOperations:operations1 waitUntilFinished:YES];
+    }
 }
 
 - (void)updateGroupWithUID:(NSString *)groupUID posterItemUID:(NSString *)posterItemUID andPosterImage:(UIImage *)posterImage {
@@ -219,7 +94,19 @@ NSString * const GROUP_POSTERIMAGEITEMUID = @"GROUP_POSTERIMAGEITEMUID";
     [arg setObject:groupUID forKey:GROUP_UID];
     [arg setObject:posterItemUID forKey:GROUP_POSTERIMAGEITEMUID];
     [arg setObject:posterImage forKey:GROUP_POSTERIMAGE];
-    [self performSelector:@selector(internlUpdateGroupWithUID:) onThread:_thread withObject:arg waitUntilDone:YES];
+    DCGetGroupOperation *operation = [[[DCGetGroupOperation alloc] initWithConetet:_context model:_model andArgs:arg] autorelease];
+    NSArray *operations = [NSArray arrayWithObject:operation];
+    [_operationQueue addOperations:operations waitUntilFinished:YES];
+    Group *result = [arg objectForKey:GROUP];
+    if (!result) {
+        DCCreateGroupOperation *operation1 = [[[DCCreateGroupOperation alloc] initWithConetet:_context model:_model andArgs:arg] autorelease];
+        NSArray *operations1 = [NSArray arrayWithObject:operation1];
+        [_operationQueue addOperations:operations1 waitUntilFinished:YES];
+    } else {
+        DCUpdateGroupOperation *operation2 = [[[DCUpdateGroupOperation alloc] initWithConetet:_context model:_model andArgs:arg] autorelease];
+        NSArray *operations2 = [NSArray arrayWithObject:operation2];
+        [_operationQueue addOperations:operations2 waitUntilFinished:YES];
+    }
 }
 
 #pragma mark DCDataModelHelper
@@ -244,11 +131,9 @@ NSString * const GROUP_POSTERIMAGEITEMUID = @"GROUP_POSTERIMAGEITEMUID";
 }
 
 - (void)dealloc {
-    
-    if (_thread) {
-        [self quitThreadMain];
-        [_thread release];
-        _thread = nil;
+    if (_operationQueue) {
+        [_operationQueue release];
+        _operationQueue = nil;
     }
     
     if (_context) {
@@ -268,11 +153,9 @@ NSString * const GROUP_POSTERIMAGEITEMUID = @"GROUP_POSTERIMAGEITEMUID";
     self = [super init];
     if (self) {
         
-        if (!_thread) {
-            _stopThread = NO;
-            _thread = [[NSThread alloc] initWithTarget:self selector:@selector(threadMain) object:nil];
-            [_thread setStackSize:DATAMODELTHREADSTACKSIZE];
-            [_thread start];
+        if (!_operationQueue) {
+            _operationQueue = [[NSOperationQueue alloc] init];
+            [_operationQueue setMaxConcurrentOperationCount:1];
         }
         
         // Read in AtomicArtistModel.xcdatamodeld
@@ -310,37 +193,10 @@ NSString * const GROUP_POSTERIMAGEITEMUID = @"GROUP_POSTERIMAGEITEMUID";
     return [documentDirectory stringByAppendingPathComponent:@"dataModel.data"];
 }
 
-- (void)internlSaveChanges {
-    NSError *err = nil;
-    BOOL successful = [_context save:&err];
-    if (!successful) {
-        NSLog(@"Error saving: %@", [err localizedDescription]);
-    }
-}
-
 - (void)saveChanges {
-    [self performSelector:@selector(internlSaveChanges) onThread:_thread withObject:nil waitUntilDone:YES];
-}
-
-- (void)threadMain {
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	
-    NSRunLoop *runloop = [NSRunLoop currentRunLoop];
-    [runloop addPort:[NSMachPort port] forMode:NSDefaultRunLoopMode];
-	
-    while (!_stopThread) {
-        [runloop runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
-    }
-	
-    [pool drain];
-}
-
-- (void)quitThreadMain {
-	_stopThread = YES;
-	while (![_thread isFinished]) {
-		[self performSelector:@selector(threadMain) onThread:_thread withObject:nil waitUntilDone:NO]; //nothing, but only let the thread to have change to check the stopCache value.
-		[[NSRunLoop currentRunLoop] runUntilDate:[NSDate distantPast]];
-	}
+    DCSaveOperation *operation = [[[DCSaveOperation alloc] initWithConetet:_context model:_model andArgs:nil] autorelease];
+    NSArray *operations = [NSArray arrayWithObject:operation];
+    [_operationQueue addOperations:operations waitUntilFinished:YES];
 }
 
 @end
