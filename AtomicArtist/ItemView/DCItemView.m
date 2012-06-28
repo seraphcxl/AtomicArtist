@@ -23,6 +23,10 @@
 
 - (void)runOperation;
 
+- (void)loadDBThumbnail;
+
+- (void)showThumbnail;
+
 @end
 
 
@@ -36,6 +40,51 @@
 @synthesize dataGroupUID = _dataGroupUID;
 @synthesize dataLibraryHelper = _dataLibraryHelper;
 @synthesize loadThumbnailOperation = _loadThumbnailOperation;
+
+- (void)showThumbnail {
+    if (self.thumbnail) {
+        CGRect bounds = [self bounds];
+        
+        CGSize thumbnailSize = [self.thumbnail size];
+        
+        CGRect imageViewFrame;
+        
+        if (thumbnailSize.width > thumbnailSize.height) {
+            imageViewFrame = CGRectMake(bounds.origin.x + ((GROUPVIEW_TITLELABEL_HEIGHT + GROUPVIEW_TITLELABEL_SPACE) / 2.0), bounds.origin.y + ((self.thumbnailSize * (1.0 - thumbnailSize.height / thumbnailSize.width)) / 2.0), self.thumbnailSize, (thumbnailSize.height / thumbnailSize.width * self.thumbnailSize));
+        } else {
+            imageViewFrame = CGRectMake(bounds.origin.x + ((GROUPVIEW_TITLELABEL_HEIGHT + GROUPVIEW_TITLELABEL_SPACE) / 2.0)+ ((self.thumbnailSize * (1.0 - thumbnailSize.width / thumbnailSize.height)) / 2.0), bounds.origin.y, (thumbnailSize.width / thumbnailSize.height * self.thumbnailSize), self.thumbnailSize);
+        }
+        
+        UIImageView *imageView = [[[UIImageView alloc] initWithFrame:imageViewFrame] autorelease];
+        [imageView setImage:self.thumbnail];
+        
+        for (UIView *view in self.subviews) {
+            if ([view isMemberOfClass:[UIImageView class]]) {
+                [view removeFromSuperview];
+            }
+        }
+        
+        [self addSubview:imageView];
+    }
+}
+
+- (void)loadDBThumbnail {
+    BOOL needRunOperation = NO;
+    Item *dataModelItem = [[DCDataModelHelper defaultDataModelHelper] getItemWithUID:self.itemUID];
+    if (!dataModelItem) {
+        needRunOperation = YES;
+    } else {
+        self.thumbnail = dataModelItem.thumbnail;
+        if (!self.thumbnail) {
+            needRunOperation = YES;
+        }
+    }
+    if (needRunOperation) {
+        [self performSelectorInBackground:@selector(runOperation) withObject:nil];
+    } else {
+        [self showThumbnail];
+    }
+}
 
 - (void)updateThumbnail {
     [self performSelectorOnMainThread:@selector(layoutSubviews) withObject:nil waitUntilDone:NO];
@@ -129,61 +178,29 @@
         if (self.thumbnailSize == 0 || !self.itemUID) {
             break;
         }
+        
         if (self.dataLibraryHelper) {
-            id <DCDataItem> item = [self.dataLibraryHelper itemWithUID:self.itemUID inGroup:self.dataGroupUID];
-            if (!item) {
-                break;
-            }
-            CGRect bounds = [self bounds];
-            
             BOOL needRunOperation = NO;
+            
             if (!self.thumbnail) {
-                Item *dataModelItem = [[DCDataModelHelper defaultDataModelHelper] getItemWithUID:self.itemUID];
-                if (!dataModelItem) {
-                    needRunOperation = YES;
+                id <DCDataItem> item = [self.dataLibraryHelper itemWithUID:self.itemUID inGroup:self.dataGroupUID];
+                if (!item) {
+                    break;
+                }
+                self.thumbnail = (UIImage *)[item valueForProperty:kDATAITEMPROPERTY_THUMBNAIL withOptions:nil];
+                needRunOperation = YES;
+            } else {
+                if (self.thumbnail.size.width == self.thumbnailSize || self.thumbnail.size.height == self.thumbnailSize) {
+                    needRunOperation = NO;
                 } else {
-                    self.thumbnail = dataModelItem.thumbnail;
-                    if (!self.thumbnail) {
-                        needRunOperation = YES;
-                    }
-                }
-                if (needRunOperation) {
-                    self.thumbnail = (UIImage *)[item valueForProperty:kDATAITEMPROPERTY_THUMBNAIL withOptions:nil];
-                    [self performSelectorOnMainThread:@selector(runOperation) withObject:nil waitUntilDone:NO];
-                }
-            } else {
-                NSLog(@"self.thumbnail already loaded");
-            }
-            
-            CGSize thumbnailSize = [self.thumbnail size];
-            
-            CGRect imageViewFrame;
-            
-//            if (thumbnailSize.width >= self.thumbnailSize && thumbnailSize.width > thumbnailSize.height) {
-//                imageViewFrame = CGRectMake(bounds.origin.x + ((GROUPVIEW_TITLELABEL_HEIGHT + GROUPVIEW_TITLELABEL_SPACE) / 2.0), bounds.origin.y + ((self.thumbnailSize * (1.0 - thumbnailSize.height / thumbnailSize.width)) / 2.0), self.thumbnailSize, (thumbnailSize.height / thumbnailSize.width * self.thumbnailSize));
-//            } else if (thumbnailSize.height >= self.thumbnailSize) {
-//                imageViewFrame = CGRectMake(bounds.origin.x + ((GROUPVIEW_TITLELABEL_HEIGHT + GROUPVIEW_TITLELABEL_SPACE) / 2.0)+ ((self.thumbnailSize * (1.0 - thumbnailSize.width / thumbnailSize.height)) / 2.0), bounds.origin.y, (thumbnailSize.width / thumbnailSize.height * self.thumbnailSize), self.thumbnailSize);
-//            } else {
-//                imageViewFrame = CGRectMake(bounds.origin.x + ((GROUPVIEW_TITLELABEL_HEIGHT + GROUPVIEW_TITLELABEL_SPACE) / 2.0) + ((self.thumbnailSize - thumbnailSize.width) / 2.0), bounds.origin.y + ((self.thumbnailSize - thumbnailSize.height) / 2.0), thumbnailSize.width, thumbnailSize.height);
-//            }
-            
-            if (thumbnailSize.width > thumbnailSize.height) {
-                imageViewFrame = CGRectMake(bounds.origin.x + ((GROUPVIEW_TITLELABEL_HEIGHT + GROUPVIEW_TITLELABEL_SPACE) / 2.0), bounds.origin.y + ((self.thumbnailSize * (1.0 - thumbnailSize.height / thumbnailSize.width)) / 2.0), self.thumbnailSize, (thumbnailSize.height / thumbnailSize.width * self.thumbnailSize));
-            } else {
-                imageViewFrame = CGRectMake(bounds.origin.x + ((GROUPVIEW_TITLELABEL_HEIGHT + GROUPVIEW_TITLELABEL_SPACE) / 2.0)+ ((self.thumbnailSize * (1.0 - thumbnailSize.width / thumbnailSize.height)) / 2.0), bounds.origin.y, (thumbnailSize.width / thumbnailSize.height * self.thumbnailSize), self.thumbnailSize);
-            }
-            
-            UIImageView *imageView = [[[UIImageView alloc] initWithFrame:imageViewFrame] autorelease];
-            [imageView setImage:self.thumbnail];
-            
-            for (UIView *view in self.subviews) {
-                if ([view isMemberOfClass:[UIImageView class]]) {
-                    [view removeFromSuperview];
+                    needRunOperation = YES;
                 }
             }
             
-            [self addSubview:imageView];
-
+            if (needRunOperation) {
+                [self performSelectorInBackground:@selector(loadDBThumbnail) withObject:nil];
+            }
+            [self showThumbnail];
         } else {
             [NSException raise:@"DCItemView error" format:@"Reason: self.dataLibraryHelper == nil"];
         }

@@ -29,6 +29,10 @@
 
 - (void)runOperation:(NSNotification *)note;
 
+- (void)loadDBPosterImage;
+
+- (void)showPosterImage;
+
 @end
 
 @implementation DCGroupView
@@ -41,6 +45,50 @@
 @synthesize dataLibraryHelper = _dataLibraryHelper;
 @synthesize enumDataItemParam = _enumDataItemParam;
 @synthesize loadPosterImageOperation = _loadPosterImageOperation;
+
+- (void)showPosterImage {
+    if (self.posterImage) {
+        CGRect bounds = [self bounds];
+        
+        CGSize posterImageSize = [self.posterImage size];
+        
+        CGRect imageViewFrame;
+        if (posterImageSize.width > posterImageSize.height) {
+            imageViewFrame = CGRectMake(bounds.origin.x + ((GROUPVIEW_TITLELABEL_HEIGHT + GROUPVIEW_TITLELABEL_SPACE) / 2.0), bounds.origin.y + ((self.posterImageSize * (1.0 - posterImageSize.height / posterImageSize.width)) / 2.0), self.posterImageSize, (posterImageSize.height / posterImageSize.width * self.posterImageSize));
+        } else {
+            imageViewFrame = CGRectMake(bounds.origin.x + ((GROUPVIEW_TITLELABEL_HEIGHT + GROUPVIEW_TITLELABEL_SPACE) / 2.0)+ ((self.posterImageSize * (1.0 - posterImageSize.width / posterImageSize.height)) / 2.0), bounds.origin.y, (posterImageSize.width / posterImageSize.height * self.posterImageSize), self.posterImageSize);
+        }
+        
+        UIImageView *imageView = [[[UIImageView alloc] initWithFrame:imageViewFrame] autorelease];
+        [imageView setImage:self.posterImage];
+        
+        for (UIView *view in self.subviews) {
+            if ([view isMemberOfClass:[UIImageView class]]) {
+                [view removeFromSuperview];
+            }
+        }
+        
+        [self addSubview:imageView];
+    }
+}
+
+- (void)loadDBPosterImage {
+    BOOL needRunOperation = NO;
+    Group *dataModelGroup = [[DCDataModelHelper defaultDataModelHelper] getGroupWithUID:self.dataGroupUID];
+    if (!dataModelGroup) {
+        needRunOperation = YES;
+    } else {
+        self.posterImage = dataModelGroup.posterImage;
+        if (!self.posterImage) {
+            needRunOperation = YES;
+        }
+    }
+    if (needRunOperation) {
+        [self performSelectorInBackground:@selector(preparePosterImageInfo) withObject:nil];
+    } else {
+        [self showPosterImage];
+    }
+}
 
 - (void)updatePosterImage {
     [self performSelectorOnMainThread:@selector(layoutSubviews) withObject:nil waitUntilDone:NO];
@@ -180,47 +228,28 @@
         if (!group) {
             break;
         }
-        CGRect bounds = [self bounds];
         
         BOOL needRunOperation = NO;
+        
         if (!self.posterImage) {
-            Group *dataModelGroup = [[DCDataModelHelper defaultDataModelHelper] getGroupWithUID:self.dataGroupUID];
-            if (!dataModelGroup) {
-                needRunOperation = YES;
+            self.posterImage = (UIImage *)[group valueForProperty:kDATAGROUPPROPERTY_POSTERIMAGE withOptions:nil];
+            
+            needRunOperation = YES;
+        } else {
+            if (self.posterImage.size.width == self.posterImageSize || self.posterImage.size.height == self.posterImageSize) {
+                needRunOperation = NO;
             } else {
-                self.posterImage = dataModelGroup.posterImage;
-                if (!self.posterImage) {
-                    needRunOperation = YES;
-                }
+                needRunOperation = YES;
             }
-            if (needRunOperation) {
-                self.posterImage = (UIImage *)[group valueForProperty:kDATAGROUPPROPERTY_POSTERIMAGE withOptions:nil];
-                [self performSelectorOnMainThread:@selector(preparePosterImageInfo) withObject:nil waitUntilDone:NO];
-            }
-        } else {
-            NSLog(@"self.posterImage already loaded");
         }
         
-        CGSize posterImageSize = [self.posterImage size];
-        
-        CGRect imageViewFrame;
-        
-//        if (posterImageSize.width >= self.posterImageSize && posterImageSize.width > posterImageSize.height) {
-//            imageViewFrame = CGRectMake(bounds.origin.x + ((GROUPVIEW_TITLELABEL_HEIGHT + GROUPVIEW_TITLELABEL_SPACE) / 2.0), bounds.origin.y + ((self.posterImageSize * (1.0 - posterImageSize.height / posterImageSize.width)) / 2.0), self.posterImageSize, (posterImageSize.height / posterImageSize.width * self.posterImageSize));
-//        } else if (posterImageSize.height >= self.posterImageSize) {
-//            imageViewFrame = CGRectMake(bounds.origin.x + ((GROUPVIEW_TITLELABEL_HEIGHT + GROUPVIEW_TITLELABEL_SPACE) / 2.0)+ ((self.posterImageSize * (1.0 - posterImageSize.width / posterImageSize.height)) / 2.0), bounds.origin.y, (posterImageSize.width / posterImageSize.height * self.posterImageSize), self.posterImageSize);
-//        } else {
-//            imageViewFrame = CGRectMake(bounds.origin.x + ((GROUPVIEW_TITLELABEL_HEIGHT + GROUPVIEW_TITLELABEL_SPACE) / 2.0) + ((self.posterImageSize - posterImageSize.width) / 2.0), bounds.origin.y + ((self.posterImageSize - posterImageSize.height) / 2.0), posterImageSize.width, posterImageSize.height);
-//        }
-        
-        if (posterImageSize.width > posterImageSize.height) {
-            imageViewFrame = CGRectMake(bounds.origin.x + ((GROUPVIEW_TITLELABEL_HEIGHT + GROUPVIEW_TITLELABEL_SPACE) / 2.0), bounds.origin.y + ((self.posterImageSize * (1.0 - posterImageSize.height / posterImageSize.width)) / 2.0), self.posterImageSize, (posterImageSize.height / posterImageSize.width * self.posterImageSize));
-        } else {
-            imageViewFrame = CGRectMake(bounds.origin.x + ((GROUPVIEW_TITLELABEL_HEIGHT + GROUPVIEW_TITLELABEL_SPACE) / 2.0)+ ((self.posterImageSize * (1.0 - posterImageSize.width / posterImageSize.height)) / 2.0), bounds.origin.y, (posterImageSize.width / posterImageSize.height * self.posterImageSize), self.posterImageSize);
+        if (needRunOperation) {
+            [self performSelectorInBackground:@selector(loadDBPosterImage) withObject:nil];
         }
         
-        UIImageView *imageView = [[[UIImageView alloc] initWithFrame:imageViewFrame] autorelease];
-        [imageView setImage:self.posterImage];
+        [self showPosterImage];
+
+        CGRect bounds = [self bounds];
         
         CGRect titleLabelFrame = CGRectMake(bounds.origin.x, bounds.origin.y + self.posterImageSize + GROUPVIEW_TITLELABEL_SPACE, bounds.size.width, GROUPVIEW_TITLELABEL_HEIGHT);
         UILabel *titleLabel = [[[UILabel alloc] initWithFrame:titleLabelFrame] autorelease];
@@ -241,12 +270,11 @@
         [numbereLabel setText:[[[NSString alloc] initWithFormat:@"%d", numberOfItems] autorelease]];
         
         for (UIView *view in self.subviews) {
-            if ([view isMemberOfClass:[UIImageView class]] || [view isMemberOfClass:[UILabel class]]) {
+            if ([view isMemberOfClass:[UILabel class]]) {
                 [view removeFromSuperview];
             }
         }
         
-        [self addSubview:imageView];
         [self addSubview:titleLabel];
         [self addSubview:numbereLabel];
     } while (NO);

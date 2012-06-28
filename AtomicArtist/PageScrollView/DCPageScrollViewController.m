@@ -375,14 +375,14 @@ typedef enum {
         }
     }
     if (needChangeView) {
-        CGRect naviRect = [self.navigationController.navigationBar bounds];
+//        CGRect naviRect = [self.navigationController.navigationBar bounds];
         CGRect rect = pageView.frame;
         rect.origin.x = 0;
         rect.origin.y = 0;
-        if (!self.hideNavigationBarEnabled) {
-            rect.origin.y = naviRect.origin.y + naviRect.size.height;
-            rect.size.height -= naviRect.size.height;
-        }
+//        if (!self.hideNavigationBarEnabled) {
+//            rect.origin.y = naviRect.origin.y + naviRect.size.height;
+//            rect.size.height -= naviRect.size.height;
+//        }
         [pageViewCtrl.view setFrame:rect];
         [pageView addSubview:pageViewCtrl.view];
     }
