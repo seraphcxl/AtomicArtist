@@ -56,7 +56,7 @@ static DCDataModelHelper *staticDefaultDataModelHelper = nil;
     if (!result) {
         DCCreateItemOperation *operation1 = [[[DCCreateItemOperation alloc] initWithConetet:_context model:_model andArgs:arg] autorelease];
         NSArray *operations1 = [NSArray arrayWithObject:operation1];
-        [_operationQueue addOperations:operations1 waitUntilFinished:NO];
+        [_operationQueue addOperations:operations1 waitUntilFinished:YES];
     }
 }
 
@@ -83,7 +83,7 @@ static DCDataModelHelper *staticDefaultDataModelHelper = nil;
     if (!result) {
         DCCreateGroupOperation *operation1 = [[[DCCreateGroupOperation alloc] initWithConetet:_context model:_model andArgs:arg] autorelease];
         NSArray *operations1 = [NSArray arrayWithObject:operation1];
-        [_operationQueue addOperations:operations1 waitUntilFinished:NO];
+        [_operationQueue addOperations:operations1 waitUntilFinished:YES];
     }
 }
 
@@ -99,11 +99,11 @@ static DCDataModelHelper *staticDefaultDataModelHelper = nil;
     if (!result) {
         DCCreateGroupOperation *operation1 = [[[DCCreateGroupOperation alloc] initWithConetet:_context model:_model andArgs:arg] autorelease];
         NSArray *operations1 = [NSArray arrayWithObject:operation1];
-        [_operationQueue addOperations:operations1 waitUntilFinished:NO];
+        [_operationQueue addOperations:operations1 waitUntilFinished:YES];
     } else {
         DCUpdateGroupOperation *operation2 = [[[DCUpdateGroupOperation alloc] initWithConetet:_context model:_model andArgs:arg] autorelease];
         NSArray *operations2 = [NSArray arrayWithObject:operation2];
-        [_operationQueue addOperations:operations2 waitUntilFinished:NO];
+        [_operationQueue addOperations:operations2 waitUntilFinished:YES];
     }
 }
 
@@ -194,7 +194,7 @@ static DCDataModelHelper *staticDefaultDataModelHelper = nil;
 - (void)saveChanges {
     DCSaveOperation *operation = [[[DCSaveOperation alloc] initWithConetet:_context model:_model andArgs:nil] autorelease];
     NSArray *operations = [NSArray arrayWithObject:operation];
-    [_operationQueue addOperations:operations waitUntilFinished:NO];
+    [_operationQueue addOperations:operations waitUntilFinished:YES];
 }
 
 @end

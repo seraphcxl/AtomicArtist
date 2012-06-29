@@ -80,7 +80,7 @@
         }
     }
     if (needRunOperation) {
-        [self performSelectorInBackground:@selector(runOperation) withObject:nil];
+        [self performSelectorOnMainThread:@selector(runOperation) withObject:nil waitUntilDone:NO];
     } else {
         [self showThumbnail];
     }
@@ -198,7 +198,7 @@
             }
             
             if (needRunOperation) {
-                [self performSelectorInBackground:@selector(loadDBThumbnail) withObject:nil];
+                [self performSelectorOnMainThread:@selector(loadDBThumbnail) withObject:nil waitUntilDone:NO];
             }
             [self showThumbnail];
         } else {

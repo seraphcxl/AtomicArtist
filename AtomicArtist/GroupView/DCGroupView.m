@@ -84,7 +84,7 @@
         }
     }
     if (needRunOperation) {
-        [self performSelectorInBackground:@selector(preparePosterImageInfo) withObject:nil];
+        [self performSelectorOnMainThread:@selector(preparePosterImageInfo) withObject:nil waitUntilDone:NO];
     } else {
         [self showPosterImage];
     }
@@ -244,7 +244,7 @@
         }
         
         if (needRunOperation) {
-            [self performSelectorInBackground:@selector(loadDBPosterImage) withObject:nil];
+            [self performSelectorOnMainThread:@selector(loadDBPosterImage) withObject:nil waitUntilDone:NO];
         }
         
         [self showPosterImage];
