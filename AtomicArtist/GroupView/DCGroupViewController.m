@@ -36,6 +36,8 @@
 
 - (NSUInteger)calcTableViewMargin;
 
+- (NSUInteger)calcVisiableRowNumber;
+
 - (NSArray *)dataGroupUIDsForCellAtIndexPath:(NSIndexPath *)indexPath;
 
 - (void)refreshGroups:(BOOL)force;
@@ -218,13 +220,16 @@
         [self.navigationItem setRightBarButtonItem:bbi];
         
         [self clearCache];
-        [self.dataLibraryHelper enumGroups:_enumDataGroupParam notifyWithFrequency:_itemCountInCell];
+        [self.dataLibraryHelper enumGroups:_enumDataGroupParam notifyWithFrequency:_itemCountInCell * [self calcVisiableRowNumber]];
         [self.navigationItem setTitle:[self title]];
     }
 }
 
 - (void)selectGroup:(NSString *)dataGroupUID {
     if (dataGroupUID && self.dataLibraryHelper) {
+        
+        [[DCDataLoader defaultDataLoader] pauseWithAutoResume:NO in:0.0];
+
 //        NSUInteger index = [self.dataLibraryHelper indexForGroupUID:dataGroupUID];
 //        DCItemViewController *itemViewController = [[[DCItemViewController alloc] initWithDataLibraryHelper:self.dataLibraryHelper] autorelease];
 //        itemViewController.dataGroupUID = dataGroupUID;
@@ -319,6 +324,14 @@
     }
 }
 
+- (NSUInteger)calcVisiableRowNumber {
+    NSUInteger result = 0;
+    if (_frameSize && _cellSpace) {
+        result = self.tableView.bounds.size.height / (_frameSize + _cellSpace) + 1;
+    }
+    return result;
+}
+
 - (NSUInteger)calcItemCountInCellWithFrameSize:(NSUInteger)frameSize andTableViewMargin:(NSUInteger)tableViewMargin {
     if (frameSize == 0) {
         [NSException raise:@"DCGroupViewController error" format:@"Reason: frameSize == 0"];
@@ -388,7 +401,7 @@
     
     [self refreshGroups:NO];
     
-    [self.tableView reloadData];
+//    [self.tableView reloadData];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {

@@ -27,6 +27,8 @@
 
 - (void)pauseWithAutoResume:(BOOL)enable in:(NSTimeInterval)seconds;
 
+- (void)resume;
+
 - (BOOL)isSuspended;
 
 @end

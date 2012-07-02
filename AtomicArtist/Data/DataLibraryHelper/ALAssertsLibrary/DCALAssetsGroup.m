@@ -126,6 +126,7 @@
                             _enumerated = YES;
                             [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_DATAITEM_ADDED object:[self uniqueID]];
                             _enumCount = 0;
+                            _frequency *= 4;
                         }
                     } else {
                         [NSException raise:@"DCALAssetsGroup Error" format:@"Result is %@ not %@", [result valueForProperty:ALAssetPropertyType], self.assetType];
@@ -254,6 +255,14 @@
         }
         
         return [self.alAssetsGroup numberOfAssets];
+    } else {
+        return 0;
+    }
+}
+
+- (NSUInteger)enumratedItemsCountWithParam:(id)param {
+    if (_allAssetItems) {
+        return [_allAssetItems count];
     } else {
         return 0;
     }

@@ -32,12 +32,12 @@
     
     do {
         if (!self.dataGroupUID) {
-            [NSException raise:@"AAItemViewCell error" format:@"self.dataGroupUID == nil"];
+            [NSException raise:@"DCItemViewCell error" format:@"self.dataGroupUID == nil"];
             break;
         }
         
         if (!self.dataLibraryHelper) {
-            [NSException raise:@"AAItemViewCell error" format:@"self.dataLibraryHelper == nil"];
+            [NSException raise:@"DCItemViewCell error" format:@"self.dataLibraryHelper == nil"];
             break;
         }
         

@@ -58,6 +58,8 @@ extern NSString * const NOTIFY_DATAGROUP_EMPTY;
 
 - (NSUInteger)itemsCountWithParam:(id)param;
 
+- (NSUInteger)enumratedItemsCountWithParam:(id)param;
+
 - (id <DCDataItem>)itemWithUID:(NSString *)uid;
 
 - (id)valueForProperty:(NSString *)property withOptions:(NSDictionary *)options;
@@ -131,6 +133,8 @@ extern NSString * const NOTIFY_DATAGROUP_EMPTY;
 - (void)enumItemAtIndexes:(NSIndexSet *)indexSet withParam:(id)param inGroup:(NSString *) groupUID notifyWithFrequency:(NSUInteger)frequency;
 
 - (NSUInteger)itemsCountWithParam:(id)param inGroup:(NSString *) groupUID;
+
+- (NSUInteger)enumratedItemsCountWithParam:(id)param inGroup:(NSString *) groupUID;
 
 - (id <DCDataItem>)itemWithUID:(NSString *)uid inGroup:(NSString *) groupUID;
 

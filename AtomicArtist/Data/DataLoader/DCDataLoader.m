@@ -85,7 +85,7 @@ static DCDataLoader *staticDCDataLoader = nil;
 - (void)pauseWithAutoResume:(BOOL)enable in:(NSTimeInterval)seconds {
     if (_operationQueue) {
         [self setSuspended:YES];
-        NSLog(@"DCDataLoader setSuspended:YES");
+        NSLog(@"DCDataLoader pauseWithAutoResume:in:");
         
         if (_timerForRestart) {
             [_timerForRestart invalidate];
@@ -96,6 +96,22 @@ static DCDataLoader *staticDCDataLoader = nil;
         if (enable) {
             _timerForRestart = [NSTimer scheduledTimerWithTimeInterval:seconds target:self selector:@selector(restart:) userInfo:nil repeats:NO];
             [_timerForRestart retain];
+        }
+    }
+}
+
+- (void)resume {
+    if ([self isSuspended]) {
+        if (_operationQueue) {
+            NSLog(@"DCDataLoader resume");
+            
+            if (_timerForRestart) {
+                [_timerForRestart invalidate];
+                [_timerForRestart release];
+                _timerForRestart = nil;
+            }
+            
+            [self setSuspended:NO];
         }
     }
 }

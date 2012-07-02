@@ -70,7 +70,9 @@
         NSLog(@"Warning");
     }
     
-    [self.navigationItem setTitle:itemViewCtrl.groupTitle];
+    if (itemViewCtrl) {
+        [self.navigationItem setTitle:itemViewCtrl.groupTitle];
+    }
     
     [super scrollViewDidScroll:scrollView];
 }

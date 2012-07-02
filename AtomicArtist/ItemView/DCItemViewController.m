@@ -38,8 +38,11 @@
 
 - (NSUInteger)calcTableViewMargin;
 
-- (void)refreshItems:(BOOL)force;
+- (NSUInteger)calcVisiableRowNumber;
 
+- (void)refreshItems:(BOOL)force;
+- (void)refreshFirstScreen;
+- (void)refreshItemViewTitle;
 - (void)clearCache;
 
 - (NSArray *)getItemUIDsForCellAtIndexPath:(NSIndexPath *)indexPath;
@@ -47,6 +50,8 @@
 - (NSString *)pathInDocumentDirectory:(NSString *)fileName;
 
 - (void)pinch:(UIPinchGestureRecognizer *)gr;
+
+- (void)enumAllItems;
 
 @end
 
@@ -59,6 +64,10 @@
 @synthesize dataLibraryHelper = _dataLibraryHelper;
 @synthesize enumDataItemParam = _enumDataItemParam;
 @synthesize dataGroupIndex = _dataGroupIndex;
+
+- (void)enumAllItems {
+    [self refreshItems:NO];
+}
 
 - (void)pinch:(UIPinchGestureRecognizer *)gr {
     NSLog(@"DCItemViewController pinch:");
@@ -89,7 +98,7 @@
     DCDetailViewController *prevDetailViewCtrl = (DCDetailViewController *)currentViewCtrl;
     [prevDetailViewCtrl retain];
     DCDetailViewController *nextDetailViewCtrl = nil;
-    if (currentDetailViewCtrl.currentIndexInGroup == ([self.dataLibraryHelper itemsCountWithParam:self.enumDataItemParam inGroup:self.dataGroupUID] - 1)) {
+    if (currentDetailViewCtrl.currentIndexInGroup == ([self.dataLibraryHelper enumratedItemsCountWithParam:self.enumDataItemParam inGroup:self.dataGroupUID] - 1)) {
         ;
     } else {
         NSUInteger nextIndex = currentDetailViewCtrl.currentIndexInGroup + 1;
@@ -213,7 +222,7 @@
 }
 
 - (void)refreshItems:(BOOL)force {
-    NSLog(@"DCItemViewController refreshAssets");
+    NSLog(@"DCItemViewController refreshItems:");
     if (self.dataLibraryHelper) {
         if (force || ![self.dataLibraryHelper isGroupEnumerated:self.dataGroupUID]) {
             if (self.delegate) {
@@ -221,9 +230,36 @@
             }
             
             [self clearCache];
-            [self.dataLibraryHelper enumItems:self.enumDataItemParam inGroup:self.dataGroupUID notifyWithFrequency:_itemCountInCell];
+            [self.dataLibraryHelper enumItems:self.enumDataItemParam inGroup:self.dataGroupUID notifyWithFrequency:_itemCountInCell * [self calcVisiableRowNumber]];
         }
         
+        [self refreshItemViewTitle];
+    }
+}
+
+- (void)refreshFirstScreen {
+    NSLog(@"DCItemViewController refreshFirstScreen");
+    if (self.dataLibraryHelper) {
+        if (![self.dataLibraryHelper isGroupEnumerated:self.dataGroupUID]) {
+            if (self.delegate) {
+                [self.delegate dataRefreshStarted];
+            }
+            
+            [self clearCache];
+            NSRange range;
+            range.location = 0;
+            range.length = _itemCountInCell * [self calcVisiableRowNumber];
+            NSIndexSet *indexSet = [[[NSIndexSet alloc] initWithIndexesInRange:range] autorelease];
+            [self.dataLibraryHelper enumItemAtIndexes:indexSet withParam:self.enumDataItemParam inGroup:self.dataGroupUID notifyWithFrequency:_itemCountInCell * [self calcVisiableRowNumber]];
+        }
+        
+        [self refreshItemViewTitle];
+    }
+}
+
+- (void)refreshItemViewTitle {
+    NSLog(@"DCItemViewController refreshFirstScreen");
+    if (self.dataLibraryHelper) {
         id <DCDataGroup> group = [self.dataLibraryHelper groupWithUID:self.dataGroupUID];
         if (!group) {
             [NSException raise:@"DCItemViewController error" format:@"Reason: self.dataLibraryHelper groupWithUID:%@ error", self.dataGroupUID];
@@ -232,7 +268,7 @@
         NSString *groupName = [group valueForProperty:kDATAGROUPPROPERTY_GROUPNAME withOptions:nil];
         NSInteger numberOfItems = [group itemsCountWithParam:self.enumDataItemParam];
         
-        _groupTitle = [[NSString alloc] initWithFormat:@"%@ (%d)", groupName, numberOfItems];
+        _groupTitle = [[NSString alloc] initWithFormat:NSLocalizedString(@"AA_GroupTitle", nil), groupName, numberOfItems];
         
         if (self.delegate) {
             [self.delegate itemViewCtrl:self setGroupTitle:self.groupTitle];
@@ -278,7 +314,7 @@
 - (NSArray *)getItemUIDsForCellAtIndexPath:(NSIndexPath *)indexPath {
     NSMutableArray *result = [[[NSMutableArray alloc] init] autorelease];
     if (self.dataLibraryHelper) {
-        int maxIdx = MIN((indexPath.row + 1) * _itemCountInCell, [self.dataLibraryHelper itemsCountWithParam:self.enumDataItemParam inGroup:self.dataGroupUID]); 
+        int maxIdx = MIN((indexPath.row + 1) * _itemCountInCell, [self.dataLibraryHelper enumratedItemsCountWithParam:self.enumDataItemParam inGroup:self.dataGroupUID]); 
         for (int idx = 0 + indexPath.row * _itemCountInCell; idx < maxIdx; ++idx) {
             [result addObject:[self.dataLibraryHelper itemUIDAtIndex:idx inGroup:self.dataGroupUID]];
             NSLog(@"Get itemUID: %@ at index: %d", [self.dataLibraryHelper itemUIDAtIndex:idx inGroup:self.dataGroupUID], idx);
@@ -288,7 +324,11 @@
 }
 
 - (void)reloadTableView:(NSNotification *)note {
-    [self.tableView reloadData];
+    NSString *uid = (NSString *)[note object];
+    if ([uid isEqualToString:self.dataGroupUID]) {
+        NSLog(@"DCItemViewController %@ reloadTableView:", self);
+        [self.tableView reloadData];
+    }
 }
 
 - (void)dataRefreshFinished:(NSNotification *)note {
@@ -339,6 +379,14 @@
     return ((bounds.size.width - (tableViewMargin * 2) - (itemCountInCell * frameSize)) * 1.0 / (itemCountInCell - 1));
 }
 
+- (NSUInteger)calcVisiableRowNumber {
+    NSUInteger result = 0;
+    if (_frameSize && _cellSpace) {
+        result = self.tableView.bounds.size.height / (_frameSize + _cellSpace) + 1;
+    }
+    return result;
+}
+
 - (id)initWithDataLibraryHelper:(id<DCDataLibraryHelper>)dataLibraryHelper
 {
     self = [super initWithStyle:UITableViewStylePlain];
@@ -383,15 +431,7 @@
     [notificationCenter addObserver:self selector:@selector(actionForWillEnterForegroud:) name:@"applicationWillEnterForeground:" object:nil];
     [notificationCenter addObserver:self selector:@selector(actionForItemThumbnailLoaded:) name:NOTIFY_THUMBNAILLOADED object:nil];
     
-    id <DCDataGroup> group = [self.dataLibraryHelper groupWithUID:self.dataGroupUID];
-    if (!group) {
-        [NSException raise:@"DCItemViewController error" format:@"Reason: self.dataLibraryHelper groupWithUID:%@ error", self.dataGroupUID];
-        return;
-    }
-    NSString *groupName = [group valueForProperty:kDATAGROUPPROPERTY_GROUPNAME withOptions:nil];
-    NSInteger numberOfItems = [group itemsCountWithParam:self.enumDataItemParam];
-    
-    _groupTitle = [[NSString alloc] initWithFormat:@"%@ (%d)", groupName, numberOfItems];
+    [self refreshItemViewTitle];
     
 //    [self refreshItems:NO];
 }
@@ -409,9 +449,15 @@
         [_itemViews removeAllObjects];
     }
     
-    [self refreshItems:NO];
+    if ([self.dataLibraryHelper itemsCountWithParam:self.enumDataItemParam inGroup:self.dataGroupUID] > _itemCountInCell * [self calcVisiableRowNumber]) {
+        [self refreshFirstScreen];
+        
+        [self performSelectorInBackground:@selector(enumAllItems) withObject:nil];
+    } else {
+        [self refreshItems:NO];
+    }
     
-    [self.tableView reloadData];
+//    [self.tableView reloadData];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {

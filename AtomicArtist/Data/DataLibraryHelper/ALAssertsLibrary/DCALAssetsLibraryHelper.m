@@ -168,6 +168,20 @@ static DCALAssetsLibraryHelper *staticALAssetsLibraryHelper = nil;
     }
 }
 
+- (NSUInteger)enumratedItemsCountWithParam:(id)param inGroup:(NSString *)groupUID {
+    if (_alAssetsLibrary) {
+        id <DCDataGroup> group = [_alAssetsLibrary groupWithUID:groupUID];
+        if (group) {
+            return [group enumratedItemsCountWithParam:param];
+        } else {
+            return 0;
+        }
+    } else {
+        [NSException raise:@"DCALAssetsLibraryHelper error" format:@"Reason: _alAssetsLibrary == nil"];
+        return 0;
+    }
+}
+
 - (id <DCDataItem>)itemWithUID:(NSString *)uid inGroup:(NSString *) groupUID {
     if (_alAssetsLibrary) {
         id <DCDataGroup> group = [_alAssetsLibrary groupWithUID:groupUID];

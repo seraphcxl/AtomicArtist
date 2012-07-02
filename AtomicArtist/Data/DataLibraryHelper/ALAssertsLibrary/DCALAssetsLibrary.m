@@ -86,6 +86,7 @@
             if (_enumCount == _frequency) {
                 [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_DATAGROUP_ADDED object:self];
                 _enumCount = 0;
+                _frequency *= 4;
             }
 		} else {
             if (_enumCount != 0) {

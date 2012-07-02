@@ -99,7 +99,7 @@
 		1BBFADA2156525B500D5FC76 /* Item.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Item.h; sourceTree = "<group>"; };
 		1BBFADA3156525B500D5FC76 /* Item.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Item.m; sourceTree = "<group>"; };
 		1BD5CACC15690F1600C9133D /* CommonDefine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonDefine.h; sourceTree = "<group>"; };
-		1BF9F4A9156483AE0015E004 /* AtomicArtist.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = AtomicArtist.app; path = AtomicArtist_Simulator.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1BF9F4A9156483AE0015E004 /* AtomicArtist_Simulator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AtomicArtist_Simulator.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1BF9F4AD156483AE0015E004 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		1BF9F4AF156483AE0015E004 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1BF9F4B1156483AE0015E004 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -241,7 +241,7 @@
 		1BF9F4AA156483AE0015E004 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				1BF9F4A9156483AE0015E004 /* AtomicArtist.app */,
+				1BF9F4A9156483AE0015E004 /* AtomicArtist_Simulator.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -382,7 +382,7 @@
 			);
 			name = AtomicArtist_Simulator;
 			productName = AtomicArtist;
-			productReference = 1BF9F4A9156483AE0015E004 /* AtomicArtist.app */;
+			productReference = 1BF9F4A9156483AE0015E004 /* AtomicArtist_Simulator.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */

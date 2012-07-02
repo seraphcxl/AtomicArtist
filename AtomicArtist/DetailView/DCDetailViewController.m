@@ -94,7 +94,7 @@
             self.imageScrollView.scrollEnabled = YES;
             _imageViewType = DETAILIMAGEVIEWTYPE_ORIGIN;
         } else {
-            [NSException raise:@"AADetailViewController error" format:@"Reason: self.imageScrollView is nil when show origin image"];
+            [NSException raise:@"DCDetailViewController error" format:@"Reason: self.imageScrollView is nil when show origin image"];
         }
         
 //        if (_swipeRightGestureRecognizer) {
@@ -110,7 +110,7 @@
     } else if (_imageViewType == DETAILIMAGEVIEWTYPE_ORIGIN) {
         [self relayout];
     } else {
-        [NSException raise:@"AADetailViewController error" format:@"Reason: _imageViewType unknown"];
+        [NSException raise:@"DCDetailViewController error" format:@"Reason: _imageViewType unknown"];
     }
     
     if (self.delegate) {
@@ -189,7 +189,7 @@
 
 - (void)tap:(UITapGestureRecognizer *)gr {
     if (gr == _doubleTapGestureRecognizer && gr.numberOfTapsRequired == 2) {
-        NSLog(@"AADetailViewController tap:double");
+        NSLog(@"DCDetailViewController tap:double");
         [self changeDetailImageViewType];
     } else {
         ;
@@ -278,7 +278,7 @@
     } else if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
         result =  YES;
     } else {
-        [NSException raise:@"AADetailViewController error" format:@"Reason: Current device type unknown"];
+        [NSException raise:@"DCDetailViewController error" format:@"Reason: Current device type unknown"];
         result =  NO;
     }
     BOOL needRotate = NO;
