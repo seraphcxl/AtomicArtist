@@ -94,14 +94,6 @@
     [self performSelectorOnMainThread:@selector(showPosterImage) withObject:nil waitUntilDone:NO];
 }
 
-- (void)cancelLoadPosterImageOperation {
-    if (self.loadPosterImageOperation) {
-        if (![self.loadPosterImageOperation isFinished] || ![self.loadPosterImageOperation isCancelled]) {
-            [self.loadPosterImageOperation cancel];
-        }
-    }
-}
-
 - (void)refreshItemsForPosterImage:(BOOL)force {
     if (self.dataLibraryHelper) {
         if (force || ![self.dataLibraryHelper isGroupEnumerated:self.dataGroupUID]) {

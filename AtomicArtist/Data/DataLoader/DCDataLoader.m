@@ -53,6 +53,7 @@ static DCDataLoader *staticDCDataLoader = nil;
 }
 
 - (void)terminateAllOperations {
+    [self resume];
     [self cancelAllOperations];
     
     if (_operationQueue) {
