@@ -91,7 +91,7 @@
 }
 
 - (void)updatePosterImage {
-    [self performSelectorOnMainThread:@selector(layoutSubviews) withObject:nil waitUntilDone:NO];
+    [self performSelectorOnMainThread:@selector(showPosterImage) withObject:nil waitUntilDone:NO];
 }
 
 - (void)cancelLoadPosterImageOperation {
@@ -236,7 +236,7 @@
             
             needRunOperation = YES;
         } else {
-            if (self.posterImage.size.width == self.posterImageSize || self.posterImage.size.height == self.posterImageSize) {
+            if (self.posterImage.size.width >= self.posterImageSize || self.posterImage.size.height >= self.posterImageSize) {
                 needRunOperation = NO;
             } else {
                 needRunOperation = YES;

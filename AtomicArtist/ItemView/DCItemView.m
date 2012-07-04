@@ -87,7 +87,7 @@
 }
 
 - (void)updateThumbnail {
-    [self performSelectorOnMainThread:@selector(layoutSubviews) withObject:nil waitUntilDone:NO];
+    [self performSelectorOnMainThread:@selector(showThumbnail) withObject:nil waitUntilDone:NO];
 }
 
 - (void)cancelLoadThumbnailOperation {
@@ -190,7 +190,7 @@
                 self.thumbnail = (UIImage *)[item valueForProperty:kDATAITEMPROPERTY_THUMBNAIL withOptions:nil];
                 needRunOperation = YES;
             } else {
-                if (self.thumbnail.size.width == self.thumbnailSize || self.thumbnail.size.height == self.thumbnailSize) {
+                if (self.thumbnail.size.width >= self.thumbnailSize || self.thumbnail.size.height >= self.thumbnailSize) {
                     needRunOperation = NO;
                 } else {
                     needRunOperation = YES;
