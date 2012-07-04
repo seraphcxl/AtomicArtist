@@ -16,6 +16,8 @@
 		1B0537691588810C000C93F8 /* DCSaveOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B0537601588810C000C93F8 /* DCSaveOperation.m */; };
 		1B05376A1588810C000C93F8 /* DCUpdateGroupOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B0537621588810C000C93F8 /* DCUpdateGroupOperation.m */; };
 		1B14209B1574ABD00058199E /* DCALAssetGroupViewNaviTitle.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1B14209A1574ABD00058199E /* DCALAssetGroupViewNaviTitle.xib */; };
+		1B65666515A441E1000BF1BE /* DCViewCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B65666215A441E1000BF1BE /* DCViewCache.m */; };
+		1B65666615A441E1000BF1BE /* DCViewCacheOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B65666415A441E1000BF1BE /* DCViewCacheOperation.m */; };
 		1B8160FF156F17F400E40084 /* DCLoadThumbnailOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B8160FE156F17F300E40084 /* DCLoadThumbnailOperation.m */; };
 		1B816111156F563400E40084 /* DCLoadPosterImageForALAssetsGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B816110156F563300E40084 /* DCLoadPosterImageForALAssetsGroup.m */; };
 		1B816115156F59BD00E40084 /* DCLoadPosterImageOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B816114156F59BD00E40084 /* DCLoadPosterImageOperation.m */; };
@@ -74,6 +76,10 @@
 		1B0537611588810C000C93F8 /* DCUpdateGroupOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCUpdateGroupOperation.h; sourceTree = "<group>"; };
 		1B0537621588810C000C93F8 /* DCUpdateGroupOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCUpdateGroupOperation.m; sourceTree = "<group>"; };
 		1B14209A1574ABD00058199E /* DCALAssetGroupViewNaviTitle.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = DCALAssetGroupViewNaviTitle.xib; path = GroupView/ALAssetGroupView/DCALAssetGroupViewNaviTitle.xib; sourceTree = "<group>"; };
+		1B65666115A441E1000BF1BE /* DCViewCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCViewCache.h; sourceTree = "<group>"; };
+		1B65666215A441E1000BF1BE /* DCViewCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCViewCache.m; sourceTree = "<group>"; };
+		1B65666315A441E1000BF1BE /* DCViewCacheOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCViewCacheOperation.h; sourceTree = "<group>"; };
+		1B65666415A441E1000BF1BE /* DCViewCacheOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCViewCacheOperation.m; sourceTree = "<group>"; };
 		1B8160FD156F17F300E40084 /* DCLoadThumbnailOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCLoadThumbnailOperation.h; sourceTree = "<group>"; };
 		1B8160FE156F17F300E40084 /* DCLoadThumbnailOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCLoadThumbnailOperation.m; sourceTree = "<group>"; };
 		1B81610F156F563300E40084 /* DCLoadPosterImageForALAssetsGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCLoadPosterImageForALAssetsGroup.h; sourceTree = "<group>"; };
@@ -162,6 +168,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1B65666015A441E1000BF1BE /* ViewCache */ = {
+			isa = PBXGroup;
+			children = (
+				1B65666115A441E1000BF1BE /* DCViewCache.h */,
+				1B65666215A441E1000BF1BE /* DCViewCache.m */,
+				1B65666315A441E1000BF1BE /* DCViewCacheOperation.h */,
+				1B65666415A441E1000BF1BE /* DCViewCacheOperation.m */,
+			);
+			path = ViewCache;
+			sourceTree = "<group>";
+		};
 		1BBB2064156E2D09003BE51C /* DataLoader */ = {
 			isa = PBXGroup;
 			children = (
@@ -263,6 +280,7 @@
 		1BF9F4B3156483AE0015E004 /* AtomicArtist */ = {
 			isa = PBXGroup;
 			children = (
+				1B65666015A441E1000BF1BE /* ViewCache */,
 				1BF9F4DC156487470015E004 /* Data */,
 				1BF9F4FE15648F6E0015E004 /* GroupView */,
 				1BF9F4F215648B480015E004 /* ItemView */,
@@ -466,6 +484,8 @@
 				1B0537681588810C000C93F8 /* DCGetItemOperation.m in Sources */,
 				1B0537691588810C000C93F8 /* DCSaveOperation.m in Sources */,
 				1B05376A1588810C000C93F8 /* DCUpdateGroupOperation.m in Sources */,
+				1B65666515A441E1000BF1BE /* DCViewCache.m in Sources */,
+				1B65666615A441E1000BF1BE /* DCViewCacheOperation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
