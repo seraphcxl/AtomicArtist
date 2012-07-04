@@ -228,7 +228,7 @@
 - (void)selectGroup:(NSString *)dataGroupUID {
     if (dataGroupUID && self.dataLibraryHelper) {
         
-        [[DCDataLoader defaultDataLoader] pauseWithAutoResume:NO in:0.0];
+        [[DCDataLoader defaultDataLoader] pauseWithAutoResume:NO with:0.0];
 
 //        NSUInteger index = [self.dataLibraryHelper indexForGroupUID:dataGroupUID];
 //        DCItemViewController *itemViewController = [[[DCItemViewController alloc] initWithDataLibraryHelper:self.dataLibraryHelper] autorelease];
@@ -400,6 +400,7 @@
     }
     
     [self refreshGroups:NO];
+//    [self performSelectorInBackground:@selector(refreshGroups:) withObject:NO];
     
 //    [self.tableView reloadData];
 }
@@ -499,7 +500,7 @@
 {
     NSLog(@"DCGroupViewController tableView:cellForRowAtIndexPath: indexPath.row = %d", [indexPath row]);
     
-    [[DCDataLoader defaultDataLoader] pauseWithAutoResume:YES in:1.0];
+    [[DCDataLoader defaultDataLoader] pauseWithAutoResume:YES with:1.0];
     
     NSArray *dataGroupUIDs = [self dataGroupUIDsForCellAtIndexPath:indexPath];
     DCGroupViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"DCGroupViewCell"];

@@ -71,7 +71,7 @@
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     
     void (^ALAssetsLibraryGroupsEnumerationResultsBlock)(ALAssetsGroup *group, BOOL *stop) = ^(ALAssetsGroup *group, BOOL *stop) {
-		if (group != nil) {
+		if (group != nil && [group numberOfAssets] > 0) {
 			NSString *groupPersistentID = [group valueForProperty:ALAssetsGroupPropertyPersistentID];
             ALAssetsGroup *result = [_allALAssetsGroups objectForKey:groupPersistentID];
             if (result == nil) {

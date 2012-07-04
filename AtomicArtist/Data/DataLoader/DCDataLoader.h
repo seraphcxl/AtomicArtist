@@ -25,7 +25,7 @@
 - (NSInteger)maxConcurrentOperationCount;
 - (void)setMaxConcurrentOperationCount:(NSInteger)cnt;
 
-- (void)pauseWithAutoResume:(BOOL)enable in:(NSTimeInterval)seconds;
+- (void)pauseWithAutoResume:(BOOL)enable with:(NSTimeInterval)seconds;
 
 - (void)resume;
 

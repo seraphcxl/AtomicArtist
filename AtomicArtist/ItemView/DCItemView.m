@@ -42,10 +42,17 @@
 @synthesize loadThumbnailOperation = _loadThumbnailOperation;
 
 - (void)showThumbnail {
-    if (self.thumbnail) {
+    do {
+        if (!self.thumbnail) {
+            break;
+        }
         CGRect bounds = [self bounds];
         
         CGSize thumbnailSize = [self.thumbnail size];
+        
+        if (thumbnailSize.width == 0 || thumbnailSize.height == 0) {
+            break;
+        }
         
         CGRect imageViewFrame;
         
@@ -65,7 +72,7 @@
         }
         
         [self addSubview:imageView];
-    }
+    } while (NO);
 }
 
 - (void)loadDBThumbnail {

@@ -47,10 +47,17 @@
 @synthesize loadPosterImageOperation = _loadPosterImageOperation;
 
 - (void)showPosterImage {
-    if (self.posterImage) {
+    do {
+        if (!self.posterImage) {
+            break;
+        }
         CGRect bounds = [self bounds];
         
         CGSize posterImageSize = [self.posterImage size];
+        
+        if (posterImageSize.width == 0 || posterImageSize.height == 0) {
+            break;
+        }
         
         CGRect imageViewFrame;
         if (posterImageSize.width > posterImageSize.height) {
@@ -69,7 +76,7 @@
         }
         
         [self addSubview:imageView];
-    }
+    } while (NO);
 }
 
 - (void)loadDBPosterImage {

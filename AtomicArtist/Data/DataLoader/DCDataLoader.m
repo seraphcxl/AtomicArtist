@@ -24,9 +24,27 @@ static DCDataLoader *staticDCDataLoader = nil;
 
 - (void)restart:(NSTimer *)timer;
 
+- (void)removeTimer;
+
+- (void)createTimer:(NSString *) timeStr;
+
 @end
 
 @implementation DCDataLoader
+
+- (void)removeTimer {
+    if (_timerForRestart) {
+        [_timerForRestart invalidate];
+        [_timerForRestart release];
+        _timerForRestart = nil;
+    }
+}
+
+- (void)createTimer:(NSString *)timeStr {
+    NSInteger seconds = [timeStr integerValue];
+    _timerForRestart = [NSTimer scheduledTimerWithTimeInterval:seconds target:self selector:@selector(restart:) userInfo:nil repeats:NO];
+    [_timerForRestart retain];
+}
 
 - (void)restart:(NSTimer *)timer {
     if (_timerForRestart == timer) {
@@ -43,6 +61,7 @@ static DCDataLoader *staticDCDataLoader = nil;
 - (void)addOperation:(NSOperation *)operation {
     if (_operationQueue && operation) {
         [_operationQueue addOperation:operation];
+        NSLog(@"ops count in queue: %d", [_operationQueue operationCount]);
     }
 }
 
@@ -83,20 +102,25 @@ static DCDataLoader *staticDCDataLoader = nil;
     }
 }
 
-- (void)pauseWithAutoResume:(BOOL)enable in:(NSTimeInterval)seconds {
+- (void)pauseWithAutoResume:(BOOL)enable with:(NSTimeInterval)seconds {
     if (_operationQueue) {
         [self setSuspended:YES];
-        NSLog(@"DCDataLoader pauseWithAutoResume:in:");
+        NSLog(@"DCDataLoader pauseWithAutoResume:with:");
         
-        if (_timerForRestart) {
-            [_timerForRestart invalidate];
-            [_timerForRestart release];
-            _timerForRestart = nil;
-        }
+//        if (_timerForRestart) {
+//            [_timerForRestart invalidate];
+//            [_timerForRestart release];
+//            _timerForRestart = nil;
+//        }
+        [self performSelectorOnMainThread:@selector(removeTimer) withObject:nil waitUntilDone:YES];
         
         if (enable) {
-            _timerForRestart = [NSTimer scheduledTimerWithTimeInterval:seconds target:self selector:@selector(restart:) userInfo:nil repeats:NO];
-            [_timerForRestart retain];
+//            _timerForRestart = [NSTimer scheduledTimerWithTimeInterval:seconds target:self selector:@selector(restart:) userInfo:nil repeats:NO];
+//            [_timerForRestart retain];
+            NSString *timeStr = [NSString stringWithFormat:@"%d", seconds];
+            [self performSelectorOnMainThread:@selector(createTimer:) withObject:timeStr waitUntilDone:YES];
+        } else {
+            NSLog(@"No auto resume");
         }
     }
 }
@@ -106,11 +130,12 @@ static DCDataLoader *staticDCDataLoader = nil;
         if (_operationQueue) {
             NSLog(@"DCDataLoader resume");
             
-            if (_timerForRestart) {
-                [_timerForRestart invalidate];
-                [_timerForRestart release];
-                _timerForRestart = nil;
-            }
+//            if (_timerForRestart) {
+//                [_timerForRestart invalidate];
+//                [_timerForRestart release];
+//                _timerForRestart = nil;
+//            }
+            [self performSelectorOnMainThread:@selector(removeTimer) withObject:nil waitUntilDone:YES];
             
             [self setSuspended:NO];
         }

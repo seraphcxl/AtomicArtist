@@ -268,7 +268,7 @@ typedef enum {
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
     NSLog(@"DCPageScrollViewController scrollViewWillBeginDragging:");
-    [[DCDataLoader defaultDataLoader] pauseWithAutoResume:NO in:0.0];
+    [[DCDataLoader defaultDataLoader] pauseWithAutoResume:NO with:0.0];
 }
 
 - (void)scrollViewWillBeginDecelerating:(UIScrollView *)scrollView {
@@ -278,7 +278,7 @@ typedef enum {
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
     NSLog(@"DCPageScrollViewController scrollViewDidEndDecelerating:");
     
-   [[DCDataLoader defaultDataLoader] pauseWithAutoResume:YES in:1.0];
+   [[DCDataLoader defaultDataLoader] pauseWithAutoResume:YES with:1.0];
     
     // do action for prev or next
     scrollViewOffset = [scrollView contentOffset];
