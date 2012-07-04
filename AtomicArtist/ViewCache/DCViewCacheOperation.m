@@ -44,38 +44,64 @@
         if (_canceled) {
             break;
         }
-        // clear cache
+        /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// 
+        // clearCache
         if (self.needClearCache) {
-            [self.delegate actionForClearCacheWithBufferRangeFrom:self.bufferBeginTableCellIndex to:self.bufferEndTableCellIndex andCancelFlag:&_canceled];
+            [self.delegate clearCacheWithBufferRangeFrom:self.bufferBeginTableCellIndex to:self.bufferEndTableCellIndex andCancelFlag:&_canceled];
         }
-        
         if (_canceled) {
+            NSLog(@"cancel break after clearCache");
             break;
         }
-        // do action for current cell
-        [self.delegate actionForCurrentTableCellWithIndex:self.currentTableCellIndex andCancelFlag:&_canceled];
-        
+        /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// 
+        // loadBigThumbnailForCurrentTableCell
+        [self.delegate loadBigThumbnailForCurrentTableCellWithIndex:self.currentTableCellIndex andCancelFlag:&_canceled];
         if (_canceled) {
+            NSLog(@"cancel break after loadBigThumbnailForCurrentTableCell");
             break;
         }
-        // do action for visiable range
-        [self.delegate actionForVisiableTableCellFrom:self.currentTableCellIndex to:self.visiableEndTableCellIndex andCancelFlag:&_canceled];
-        
-        if (_canceled) {
-            break;
-        }
-        // do action for next buffer
+        /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// 
+        // createViewsAndLoadSmallThumbnailForNextBuffer
         if (self.bufferEndTableCellIndex != NSUIntegerMax) {
-            [self.delegate actionForNextBufferFrom:self.visiableEndTableCellIndex + 1 to:self.bufferEndTableCellIndex andCancelFlag:&_canceled];
+            [self.delegate createViewsAndLoadSmallThumbnailForNextBufferFrom:self.visiableEndTableCellIndex + 1 to:self.bufferEndTableCellIndex andCancelFlag:&_canceled];
         }
-        
         if (_canceled) {
+            NSLog(@"cancel break after createViewsAndLoadSmallThumbnailForNextBuffer");
             break;
         }
-        // do action for prev buffer
+        // createViewsAndLoadSmallThumbnailForPreviousBuffer
         if (self.bufferBeginTableCellIndex != self.visiableBeginTableCellIndex) {
-            [self.delegate actionForPreviousBufferFrom:self.bufferBeginTableCellIndex to:self.visiableBeginTableCellIndex - 1 andCancelFlag:&_canceled];
+            [self.delegate createViewsAndLoadSmallThumbnailForPreviousBufferFrom:self.bufferBeginTableCellIndex to:self.visiableBeginTableCellIndex - 1 andCancelFlag:&_canceled];
         }
+        if (_canceled) {
+            NSLog(@"cancel break after createViewsAndLoadSmallThumbnailForPreviousBuffer");
+            break;
+        }
+        /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// 
+        // loadBigThumbnailForVisiableTableCell
+        [self.delegate loadBigThumbnailForVisiableTableCellFrom:self.currentTableCellIndex to:self.visiableEndTableCellIndex andCancelFlag:&_canceled];
+        if (_canceled) {
+            NSLog(@"cancel break after loadBigThumbnailForVisiableTableCell");
+            break;
+        }
+        /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// 
+        // loadBigThumbnailForNextBuffer
+        if (self.bufferEndTableCellIndex != NSUIntegerMax) {
+            [self.delegate loadBigThumbnailForNextBufferFrom:self.visiableEndTableCellIndex + 1 to:self.bufferEndTableCellIndex andCancelFlag:&_canceled];
+        }
+        if (_canceled) {
+            NSLog(@"cancel break after loadBigThumbnailForNextBuffer");
+            break;
+        }
+        // loadBigThumbnailForPreviousBuffer
+        if (self.bufferBeginTableCellIndex != self.visiableBeginTableCellIndex) {
+            [self.delegate loadBigThumbnailForPreviousBufferFrom:self.bufferBeginTableCellIndex to:self.visiableBeginTableCellIndex - 1 andCancelFlag:&_canceled];
+        }
+        if (_canceled) {
+            NSLog(@"cancel break after loadBigThumbnailForPreviousBuffer");
+            break;
+        }
+        
     } while (NO);
 }
 

@@ -16,6 +16,8 @@
 
 - (NSString *)uidForTableCell:(NSUInteger)index;
 
+- (void)createViewsAndLoadSmallThumbnailForTableCell:(NSUInteger)index;
+
 @end
 
 @implementation DCViewCache
@@ -53,7 +55,16 @@
     }
 }
 
+- (void)createViewsAndLoadSmallThumbnailForTableCell:(NSUInteger)index {
+    do {
+        ;
+    } while (NO);
+}
+
 - (void)addVisiableTableCell:(NSIndexPath *)indexPath {
+    do {
+        ;
+    } while (NO);
 }
 
 - (UIView *)getViewWithUID:(NSString *)uid {
@@ -116,6 +127,63 @@
     }
     
     [super dealloc];
+}
+
+#pragma mark DCViewCacheOperationDelegate
+- (void)loadBigThumbnailForCurrentTableCellWithIndex:(NSInteger)index andCancelFlag:(BOOL *)cancel {
+    do {
+        if (!cancel) {
+            break;
+        }
+    } while (NO);
+}
+
+- (void)loadBigThumbnailForVisiableTableCellFrom:(NSInteger)begin to:(NSInteger)end andCancelFlag:(BOOL *)cancel {
+    do {
+        if (!cancel) {
+            break;
+        }
+    } while (NO);
+}
+
+- (void)createViewsAndLoadSmallThumbnailForNextBufferFrom:(NSInteger)begin to:(NSInteger)end andCancelFlag:(BOOL *)cancel {
+    do {
+        if (!cancel) {
+            break;
+        }
+    } while (NO);
+}
+
+- (void)createViewsAndLoadSmallThumbnailForPreviousBufferFrom:(NSInteger)begin to:(NSInteger)end andCancelFlag:(BOOL *)cancel {
+    do {
+        if (!cancel) {
+            break;
+        }
+    } while (NO);
+}
+
+- (void)loadBigThumbnailForNextBufferFrom:(NSInteger)begin to:(NSInteger)end andCancelFlag:(BOOL *)cancel {
+    do {
+        if (!cancel) {
+            break;
+        }
+    } while (NO);
+}
+
+- (void)loadBigThumbnailForPreviousBufferFrom:(NSInteger)begin to:(NSInteger)end andCancelFlag:(BOOL *)cancel {
+    do {
+        if (!cancel) {
+            break;
+        }
+    } while (NO);
+}
+
+- (void)clearCacheWithBufferRangeFrom:(NSInteger)begin to:(NSInteger)end andCancelFlag:(BOOL *)cancel {
+    do {
+        if (!cancel) {
+            break;
+        }
+    } while (NO);
 }
 
 @end

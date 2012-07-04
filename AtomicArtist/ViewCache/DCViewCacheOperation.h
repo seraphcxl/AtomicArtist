@@ -10,12 +10,14 @@
 
 @protocol DCViewCacheOperationDelegate <NSObject>
 
-- (void)actionForCurrentTableCellWithIndex:(NSInteger)index andCancelFlag:(BOOL *)cancel;
-- (void)actionForVisiableTableCellFrom:(NSInteger)begin to:(NSInteger)end andCancelFlag:(BOOL *)cancel;
-- (void)actionForPreviousBufferFrom:(NSInteger)begin to:(NSInteger)end andCancelFlag:(BOOL *)cancel;
-- (void)actionForNextBufferFrom:(NSInteger)begin to:(NSInteger)end andCancelFlag:(BOOL *)cancel;
+- (void)loadBigThumbnailForCurrentTableCellWithIndex:(NSInteger)index andCancelFlag:(BOOL *)cancel;
+- (void)loadBigThumbnailForVisiableTableCellFrom:(NSInteger)begin to:(NSInteger)end andCancelFlag:(BOOL *)cancel;
+- (void)createViewsAndLoadSmallThumbnailForPreviousBufferFrom:(NSInteger)begin to:(NSInteger)end andCancelFlag:(BOOL *)cancel;
+- (void)createViewsAndLoadSmallThumbnailForNextBufferFrom:(NSInteger)begin to:(NSInteger)end andCancelFlag:(BOOL *)cancel;
+- (void)loadBigThumbnailForPreviousBufferFrom:(NSInteger)begin to:(NSInteger)end andCancelFlag:(BOOL *)cancel;
+- (void)loadBigThumbnailForNextBufferFrom:(NSInteger)begin to:(NSInteger)end andCancelFlag:(BOOL *)cancel;
 
-- (void)actionForClearCacheWithBufferRangeFrom:(NSInteger)begin to:(NSInteger)end andCancelFlag:(BOOL *)cancel;
+- (void)clearCacheWithBufferRangeFrom:(NSInteger)begin to:(NSInteger)end andCancelFlag:(BOOL *)cancel;
 
 @end
 
