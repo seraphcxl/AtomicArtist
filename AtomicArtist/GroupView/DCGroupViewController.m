@@ -46,6 +46,9 @@
 
 - (NSString *)title;
 
+- (void)actionForWillDisappear;
+- (void)actionForDidUnload;
+
 @end
 
 @interface DCGroupViewController ()
@@ -152,7 +155,8 @@
 }
 
 - (void)dealloc {
-    [self clearCache];
+    [self actionForWillDisappear];
+    [self actionForDidUnload];
     
     if (_groupViews) {
         [_groupViews release];
@@ -409,9 +413,7 @@
 - (void)viewWillDisappear:(BOOL)animated {
     NSLog(@"DCGroupViewController viewWillDisappear:");
     
-    if (_groupViews) {
-        [_groupViews removeAllObjects];
-    }
+    [self actionForWillDisappear];
     
     [super viewWillDisappear:animated];
 }
@@ -420,17 +422,24 @@
 {
     NSLog(@"DCGroupViewController viewDidUnload:");
     /*** *** ***/
-    NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
-    [notificationCenter removeObserver:self];
-    
-    [self clearCache];
-    
+    [self actionForDidUnload];
     /*** *** ***/
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
+}
+
+- (void)actionForWillDisappear {
+    if (_groupViews) {
+        [_groupViews removeAllObjects];
+    }
+}
+
+- (void)actionForDidUnload {
+    NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+    [notificationCenter removeObserver:self];
     
-    
+    [self clearCache];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation

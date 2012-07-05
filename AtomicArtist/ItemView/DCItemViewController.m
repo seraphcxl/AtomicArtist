@@ -53,6 +53,9 @@
 
 - (void)enumAllItems;
 
+- (void)actionForWillDisappear;
+- (void)actionForDidUnload;
+
 @end
 
 @implementation DCItemViewController
@@ -187,6 +190,9 @@
 }
 
 - (void)dealloc {
+    [self actionForWillDisappear];
+    [self actionForDidUnload];
+    
     if (_itemViews) {
         [_itemViews removeAllObjects];
         [_itemViews release];
@@ -462,18 +468,26 @@
 
 - (void)viewWillDisappear:(BOOL)animated {
     NSLog(@"DCItemViewController %@ viewWillDisappear:", self);
-    
-    if (_itemViews) {
-        [_itemViews removeAllObjects];
-    }
-    
+    [self actionForWillDisappear];
     [super viewWillDisappear:animated];
 }
 
 - (void)viewDidUnload
 {
     NSLog(@"DCItemViewController %@ viewDidUnload:", self);
-    
+    [self actionForDidUnload];
+    [super viewDidUnload];
+    // Release any retained subviews of the main view.
+    // e.g. self.myOutlet = nil;
+}
+
+- (void)actionForWillDisappear {
+    if (_itemViews) {
+        [_itemViews removeAllObjects];
+    }
+}
+
+- (void)actionForDidUnload {
     if (_pinchGestureRecognizer) {
         _pinchScale = 0.0;
         [self.tableView removeGestureRecognizer:_pinchGestureRecognizer];
@@ -485,10 +499,6 @@
     [notificationCenter removeObserver:self];
     
     [self clearCache];
-    
-    [super viewDidUnload];
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation

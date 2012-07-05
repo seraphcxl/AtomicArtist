@@ -60,8 +60,6 @@
 }
 
 - (void)dealloc {
-    [self.naviCtrl popViewControllerAnimated:NO];
-    
     if (_naviCtrl) {
         [_naviCtrl release];
         _naviCtrl = nil;
