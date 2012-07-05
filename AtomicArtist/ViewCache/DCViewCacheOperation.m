@@ -54,13 +54,6 @@
             break;
         }
         /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// 
-        // loadBigThumbnailForCurrentTableCell
-        [self.delegate loadBigThumbnailForCurrentTableCellWithIndex:self.currentTableCellIndex andCancelFlag:&_canceled];
-        if (_canceled) {
-            NSLog(@"cancel break after loadBigThumbnailForCurrentTableCell");
-            break;
-        }
-        /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// 
         // createViewsAndLoadSmallThumbnailForNextBuffer
         if (self.bufferEndTableCellIndex != NSUIntegerMax) {
             [self.delegate createViewsAndLoadSmallThumbnailForNextBufferFrom:self.visiableEndTableCellIndex + 1 to:self.bufferEndTableCellIndex andCancelFlag:&_canceled];

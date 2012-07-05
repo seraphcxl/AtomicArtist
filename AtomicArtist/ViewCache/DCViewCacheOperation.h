@@ -10,7 +10,6 @@
 
 @protocol DCViewCacheOperationDelegate <NSObject>
 
-- (void)loadBigThumbnailForCurrentTableCellWithIndex:(NSInteger)index andCancelFlag:(BOOL *)cancel;
 - (void)loadBigThumbnailForVisiableTableCellFrom:(NSInteger)begin to:(NSInteger)end andCancelFlag:(BOOL *)cancel;
 - (void)createViewsAndLoadSmallThumbnailForPreviousBufferFrom:(NSInteger)begin to:(NSInteger)end andCancelFlag:(BOOL *)cancel;
 - (void)createViewsAndLoadSmallThumbnailForNextBufferFrom:(NSInteger)begin to:(NSInteger)end andCancelFlag:(BOOL *)cancel;

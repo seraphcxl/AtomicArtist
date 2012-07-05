@@ -24,11 +24,12 @@
 @end
 
 @interface DCViewCache : NSObject <DCViewCacheOperationDelegate> {
-    NSMutableDictionary *_tableCells;  // key:UIDForIndexPath; value:NSMutableArray *viewsInTableCell
+    NSMutableDictionary *_tableCells;  // key:UIDForIndexPath; value:NSMutableDictionary *viewsInTableCell
     NSMutableDictionary *_views;  // key:UIDForView; value:view
     NSLock *_lockForViews;
     
-    NSOperationQueue *_operationQueue;
+    NSOperationQueue *_queueForCacheOp;
+    NSOperationQueue *_queueForLoadCurrentTableCellBigThumbnailOp;
 }
 
 @property (assign, nonatomic) id<DCViewCacheDelegate> delegate;

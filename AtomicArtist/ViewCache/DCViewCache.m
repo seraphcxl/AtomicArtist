@@ -18,6 +18,10 @@
 
 - (void)createViewsAndLoadSmallThumbnailForTableCell:(NSUInteger)index;
 
+- (void)rebuildCache:(NSUInteger)index;
+
+- (void)loadBigThumbnailForCurrentTableCell:(NSInteger)index;
+
 @end
 
 @implementation DCViewCache
@@ -55,24 +59,42 @@
     }
 }
 
+- (void)loadBigThumbnailForCurrentTableCell:(NSInteger)index {
+}
+
+- (void)rebuildCache:(NSUInteger)index {
+}
+
 - (void)createViewsAndLoadSmallThumbnailForTableCell:(NSUInteger)index {
     do {
-        ;
+        NSString *uidForTableCell = [self uidForTableCell:index];
+        [_lockForViews lock];
+        NSMutableDictionary *viewsInTableCell = [_tableCells objectForKey:uidForTableCell];
+        [_lockForViews unlock];
     } while (NO);
 }
 
 - (void)addVisiableTableCell:(NSIndexPath *)indexPath {
     do {
-        ;
+        NSUInteger index = [indexPath row];
+        
+        [self createViewsAndLoadSmallThumbnailForTableCell:index];
+        [self loadBigThumbnailForCurrentTableCell:index];
+        
+        if (self.lastRequireBufferIndex == NSUIntegerMax || ABS(self.lastRequireBufferIndex - index) > self.bufferFrequency) {
+            [self rebuildCache:index];
+        }
     } while (NO);
 }
 
 - (UIView *)getViewWithUID:(NSString *)uid {
     UIView *result = nil;
     do {
+        [_lockForViews lock];
         if (_views) {
             result = [_views objectForKey:uid];
         }
+        [_lockForViews unlock];
     } while (NO);
     return result;
 }
@@ -88,6 +110,13 @@
 - (id)init {
     self = [super init];
     if (self) {
+        self.lastRequireBufferIndex = NSUIntegerMax;
+        
+        if (!_lockForViews) {
+            _lockForViews = [[NSLock alloc] init];
+        }
+        
+        [_lockForViews lock];
         if (!_views) {
             _views = [[NSMutableDictionary alloc] init];
         }
@@ -95,20 +124,37 @@
         if (!_tableCells) {
             _tableCells = [[NSMutableDictionary alloc] init];
         }
+        [_lockForViews unlock];
         
-        if (!_operationQueue) {
-            _operationQueue = [[NSOperationQueue alloc] init];
-            [_operationQueue setMaxConcurrentOperationCount:1];
+        if (!_queueForCacheOp) {
+            _queueForCacheOp = [[NSOperationQueue alloc] init];
+            [_queueForCacheOp setMaxConcurrentOperationCount:1];
         }
         
-        if (!_lockForViews) {
-            _lockForViews = [[NSLock alloc] init];
+        if (!_queueForLoadCurrentTableCellBigThumbnailOp) {
+            _queueForLoadCurrentTableCellBigThumbnailOp = [[NSOperationQueue alloc] init];
+            [_queueForLoadCurrentTableCellBigThumbnailOp setMaxConcurrentOperationCount:1];
         }
     }
     return self;
 }
 
 - (void)dealloc {
+    if (_queueForCacheOp) {
+        [_queueForCacheOp cancelAllOperations];
+        [_queueForCacheOp waitUntilAllOperationsAreFinished];
+        [_queueForCacheOp release];
+        _queueForCacheOp = nil;
+    }
+    
+    if (_queueForLoadCurrentTableCellBigThumbnailOp) {
+        [_queueForLoadCurrentTableCellBigThumbnailOp cancelAllOperations];
+        [_queueForLoadCurrentTableCellBigThumbnailOp waitUntilAllOperationsAreFinished];
+        [_queueForLoadCurrentTableCellBigThumbnailOp release];
+        _queueForLoadCurrentTableCellBigThumbnailOp = nil;
+    }
+    
+    [_lockForViews lock];
     if (_tableCells) {
         [_tableCells removeAllObjects];
         [_tableCells release];
@@ -120,7 +166,7 @@
         [_views release];
         _views = nil;
     }
-    
+    [_lockForViews unlock];
     if (_lockForViews) {
         [_lockForViews release];
         _lockForViews = nil;
@@ -130,14 +176,6 @@
 }
 
 #pragma mark DCViewCacheOperationDelegate
-- (void)loadBigThumbnailForCurrentTableCellWithIndex:(NSInteger)index andCancelFlag:(BOOL *)cancel {
-    do {
-        if (!cancel) {
-            break;
-        }
-    } while (NO);
-}
-
 - (void)loadBigThumbnailForVisiableTableCellFrom:(NSInteger)begin to:(NSInteger)end andCancelFlag:(BOOL *)cancel {
     do {
         if (!cancel) {
