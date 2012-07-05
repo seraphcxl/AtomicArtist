@@ -11,12 +11,17 @@
 #import "DCUniformDataProtocol.h"
 #import "DCPageScrollViewController.h"
 
+enum GROUPVIEWCTRL_TYPE {
+    GROUPVIEWCTRL_TYPE_ALASSET = 0,
+};
+
 @interface DCGroupViewController : UITableViewController <DCGroupViewDelegate, DCGroupViewCellDelegate, DCPageScrollViewControllerDelegate> {
     id _enumDataGroupParam;
     id _enumDataItemParam;
 }
 
 @property (assign, nonatomic) id <DCDataLibraryHelper> dataLibraryHelper;
+@property (assign, nonatomic) enum GROUPVIEWCTRL_TYPE type;
 
 - (IBAction)refresh:(id)sender;
 

@@ -55,6 +55,7 @@
 @implementation DCGroupViewController
 
 @synthesize dataLibraryHelper = _dataLibraryHelper;
+@synthesize type = _type;
 //@synthesize interfaceOrientation = _interfaceOrientation;
 
 - (void)pageScrollViewCtrl:(DCPageScrollViewController *)pageScrollViewCtrl doNextActionWithCurrentViewCtrl:(UIViewController *)currentViewCtrl nextViewCtrl:(UIViewController *)nextViewCtrl {

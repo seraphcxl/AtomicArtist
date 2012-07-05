@@ -62,6 +62,8 @@
     if (self) {
         // Custom initialization
         [[NSBundle mainBundle] loadNibNamed:@"DCALAssetGroupViewNaviTitle" owner:self options:nil];
+        
+        self.type = GROUPVIEWCTRL_TYPE_ALASSET;
     }
     return self;
 }

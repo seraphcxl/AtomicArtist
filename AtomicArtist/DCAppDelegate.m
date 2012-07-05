@@ -7,9 +7,16 @@
 //
 
 #import "DCAppDelegate.h"
-#import "DCALAssetGroupViewController.h"
+//#import "DCALAssetGroupViewController.h"
 #import "DCDataModelHelper.h"
 #import "DCALAssetsLibraryHelper.h"
+#import "DCBrower.h"
+
+@interface DCAppDelegate () {
+    DCBrower *_brower;
+}
+
+@end
 
 @implementation DCAppDelegate
 
@@ -27,18 +34,12 @@
     // Override point for customization after application launch.
     self.window.backgroundColor = [UIColor clearColor];
     /*** *** ***/
-    
-    [DCDataModelHelper defaultDataModelHelper];
-    
-    DCALAssetsLibraryHelper *alAssetsLibraryHelper = [DCALAssetsLibraryHelper defaultDataLibraryHelper];
-    [alAssetsLibraryHelper connect:nil];
-    DCALAssetGroupViewController *groupViewCtrl = [[[DCALAssetGroupViewController alloc] initWithDataLibHelper:alAssetsLibraryHelper] autorelease];
-    [groupViewCtrl setEnumDataGroupParam:(id)(ALAssetsGroupAlbum | ALAssetsGroupSavedPhotos)];
-    [groupViewCtrl setEnumDataItemParam:(id)ALAssetTypePhoto];
-    
-    UINavigationController *naviCtrl = [[[UINavigationController alloc] initWithRootViewController:groupViewCtrl] autorelease];
-    [naviCtrl.navigationBar setBarStyle:UIBarStyleBlackTranslucent];
-    [[self window] setRootViewController:naviCtrl];
+    if (_brower) {
+        [_brower release];
+        _brower = nil;
+    }
+    _brower = [[DCBrower alloc] init:GROUPVIEWCTRL_TYPE_ALASSET];
+    [[self window] setRootViewController:_brower.naviCtrl];
     /*** *** ***/
     [self.window makeKeyAndVisible];
     return YES;
@@ -73,6 +74,11 @@
     [[DCDataModelHelper defaultDataModelHelper] saveChanges];
     [DCDataModelHelper staticRelease];
     [DCALAssetsLibraryHelper staticRelease];
+    
+    if (_brower) {
+        [_brower release];
+        _brower = nil;
+    }
 }
 
 @end
