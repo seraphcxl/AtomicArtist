@@ -166,7 +166,7 @@
         }
         _loadThumbnailOperation = [item createOperationForLoadCacheThumbnail];
         [_loadThumbnailOperation retain];
-        [[DCDataLoader defaultDataLoader] addOperation:self.loadThumbnailOperation];
+        [[DCDataLoader defaultDataLoader] queue:DATALODER_TYPE_VISIABLE addOperation:self.loadThumbnailOperation];
     }
 }
 

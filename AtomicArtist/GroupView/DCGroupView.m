@@ -211,7 +211,7 @@
             }
             _loadPosterImageOperation = [group createOperationForLoadCachePosterImageWithItemUID:itemUID];
             [_loadPosterImageOperation retain];
-            [[DCDataLoader defaultDataLoader] addOperation:self.loadPosterImageOperation];
+            [[DCDataLoader defaultDataLoader] queue:DATALODER_TYPE_VISIABLE addOperation:self.loadPosterImageOperation];
         }
     }
 }

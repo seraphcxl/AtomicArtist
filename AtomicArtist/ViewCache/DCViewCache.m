@@ -18,9 +18,9 @@
 
 - (void)createViewsAndLoadSmallThumbnailForTableCell:(NSUInteger)index;
 
-- (void)rebuildCache:(NSUInteger)index;
+- (void)actionForBuffer:(NSUInteger)index;
 
-- (void)loadBigThumbnailForCurrentTableCell:(NSInteger)index;
+- (void)actionForVisiable:(NSInteger)index;
 
 @end
 
@@ -29,40 +29,16 @@
 @synthesize delegate = _delegate;
 @synthesize lastRequireBufferIndex = _lastRequireBufferIndex;
 @synthesize bufferTableCellNumber = _bufferTableCellNumber;
-@synthesize bufferFrequency = _bufferFrequency;
 @synthesize dataLibraryHelper = _dataLibraryHelper;
 
 - (void)setBufferTableCellNumber:(NSUInteger)bufferTableCellNumber {
     _bufferTableCellNumber = bufferTableCellNumber;
-    
-    if (self.bufferFrequency < bufferTableCellNumber / 2) {
-        ;
-    } else {
-        _bufferFrequency = bufferTableCellNumber / 2;
-    }
-    
-    if (_bufferFrequency < 1) {
-        _bufferFrequency = 1;
-    }
 }
 
-- (void)setBufferFrequency:(NSUInteger)bufferFrequency {
-    NSUInteger max = self.bufferTableCellNumber / 2;
-    if (bufferFrequency < max) {
-        _bufferFrequency = bufferFrequency;
-    } else {
-        _bufferFrequency = max;
-    }
-    
-    if (_bufferFrequency < 1) {
-        _bufferFrequency = 1;
-    }
+- (void)actionForVisiable:(NSInteger)index {
 }
 
-- (void)loadBigThumbnailForCurrentTableCell:(NSInteger)index {
-}
-
-- (void)rebuildCache:(NSUInteger)index {
+- (void)actionForBuffer:(NSUInteger)index {
 }
 
 - (void)createViewsAndLoadSmallThumbnailForTableCell:(NSUInteger)index {
@@ -79,10 +55,10 @@
         NSUInteger index = [indexPath row];
         
         [self createViewsAndLoadSmallThumbnailForTableCell:index];
-        [self loadBigThumbnailForCurrentTableCell:index];
+        [self actionForVisiable:index];
         
-        if (self.lastRequireBufferIndex == NSUIntegerMax || ABS(self.lastRequireBufferIndex - index) > self.bufferFrequency) {
-            [self rebuildCache:index];
+        if (self.lastRequireBufferIndex == NSUIntegerMax || ABS(self.lastRequireBufferIndex - index) > self.bufferTableCellNumber / 2) {
+            [self actionForBuffer:index];
         }
     } while (NO);
 }
@@ -126,32 +102,32 @@
         }
         [_lockForViews unlock];
         
-        if (!_queueForCacheOp) {
-            _queueForCacheOp = [[NSOperationQueue alloc] init];
-            [_queueForCacheOp setMaxConcurrentOperationCount:1];
+        if (!_queueForVisiableOp) {
+            _queueForVisiableOp = [[NSOperationQueue alloc] init];
+            [_queueForVisiableOp setMaxConcurrentOperationCount:1];
         }
         
-        if (!_queueForLoadCurrentTableCellBigThumbnailOp) {
-            _queueForLoadCurrentTableCellBigThumbnailOp = [[NSOperationQueue alloc] init];
-            [_queueForLoadCurrentTableCellBigThumbnailOp setMaxConcurrentOperationCount:1];
+        if (!_queueForBufferOp) {
+            _queueForBufferOp = [[NSOperationQueue alloc] init];
+            [_queueForBufferOp setMaxConcurrentOperationCount:1];
         }
     }
     return self;
 }
 
 - (void)dealloc {
-    if (_queueForCacheOp) {
-        [_queueForCacheOp cancelAllOperations];
-        [_queueForCacheOp waitUntilAllOperationsAreFinished];
-        [_queueForCacheOp release];
-        _queueForCacheOp = nil;
+    if (_queueForVisiableOp) {
+        [_queueForVisiableOp cancelAllOperations];
+        [_queueForVisiableOp waitUntilAllOperationsAreFinished];
+        [_queueForVisiableOp release];
+        _queueForVisiableOp = nil;
     }
     
-    if (_queueForLoadCurrentTableCellBigThumbnailOp) {
-        [_queueForLoadCurrentTableCellBigThumbnailOp cancelAllOperations];
-        [_queueForLoadCurrentTableCellBigThumbnailOp waitUntilAllOperationsAreFinished];
-        [_queueForLoadCurrentTableCellBigThumbnailOp release];
-        _queueForLoadCurrentTableCellBigThumbnailOp = nil;
+    if (_queueForBufferOp) {
+        [_queueForBufferOp cancelAllOperations];
+        [_queueForBufferOp waitUntilAllOperationsAreFinished];
+        [_queueForBufferOp release];
+        _queueForBufferOp = nil;
     }
     
     [_lockForViews lock];
@@ -175,8 +151,8 @@
     [super dealloc];
 }
 
-#pragma mark DCViewCacheOperationDelegate
-- (void)loadBigThumbnailForVisiableTableCellFrom:(NSInteger)begin to:(NSInteger)end andCancelFlag:(BOOL *)cancel {
+#pragma mark DCCacheOperationForVisiableDelegate
+- (void)loadBigThumbnailForCurrentTableCell:(NSInteger)index andCancelFlag:(BOOL *)cancel {
     do {
         if (!cancel) {
             break;
@@ -184,7 +160,7 @@
     } while (NO);
 }
 
-- (void)createViewsAndLoadSmallThumbnailForNextBufferFrom:(NSInteger)begin to:(NSInteger)end andCancelFlag:(BOOL *)cancel {
+- (void)loadBigThumbnailForVisiableFrom:(NSInteger)begin to:(NSInteger)end andCancelFlag:(BOOL *)cancel {
     do {
         if (!cancel) {
             break;
@@ -192,7 +168,8 @@
     } while (NO);
 }
 
-- (void)createViewsAndLoadSmallThumbnailForPreviousBufferFrom:(NSInteger)begin to:(NSInteger)end andCancelFlag:(BOOL *)cancel {
+#pragma mark DCCacheOperationForBufferDelegate
+- (void)createViewsAndLoadSmallThumbnailForBufferFrom:(NSInteger)begin to:(NSInteger)end andCancelFlag:(BOOL *)cancel {
     do {
         if (!cancel) {
             break;
@@ -200,15 +177,7 @@
     } while (NO);
 }
 
-- (void)loadBigThumbnailForNextBufferFrom:(NSInteger)begin to:(NSInteger)end andCancelFlag:(BOOL *)cancel {
-    do {
-        if (!cancel) {
-            break;
-        }
-    } while (NO);
-}
-
-- (void)loadBigThumbnailForPreviousBufferFrom:(NSInteger)begin to:(NSInteger)end andCancelFlag:(BOOL *)cancel {
+- (void)loadBigThumbnailForBufferFrom:(NSInteger)begin to:(NSInteger)end andCancelFlag:(BOOL *)cancel {
     do {
         if (!cancel) {
             break;
@@ -223,5 +192,4 @@
         }
     } while (NO);
 }
-
 @end

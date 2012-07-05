@@ -8,134 +8,251 @@
 
 #import "DCDataLoader.h"
 
-#define OPERATIONQUEUE_DEFAULTCONCURRENTCOUNT ((NSInteger)2)
+#define OPERATIONQUEUE_DEFAULTCONCURRENTCOUNT ((NSInteger)1)
 
 #define TIMEFORRESTART ((NSTimeInterval)1.0)
 
 static DCDataLoader *staticDCDataLoader = nil;
 
 @interface DCDataLoader () {
-    NSOperationQueue *_operationQueue;
+    NSOperationQueue *_queueForVisiable;
+    NSTimer *_timerForRestartVisiable;
     
-    NSTimer *_timerForRestart;
+    NSOperationQueue *_queueForBuffer;
+    NSTimer *_timerForRestartBuffer;
 }
 
-- (void)setSuspended:(BOOL)b;
+- (void)queue:(enum DATALODER_TYPE)type setSuspended:(BOOL)b;
+
+- (void)queue:(enum DATALODER_TYPE)type setMaxConcurrentOperationCount:(NSInteger)cnt;
 
 - (void)restart:(NSTimer *)timer;
 
-- (void)removeTimer;
+- (void)resumeQueue:(enum DATALODER_TYPE)type;
 
-- (void)createTimer:(NSString *) timeStr;
+- (void)removeTimerForVisiableQueue;
+
+- (void)createTimerForVisiableQueue:(NSString *) timeStr;
+
+- (void)removeTimerForBufferQueue;
+
+- (void)createTimerForBufferQueue:(NSString *) timeStr;
 
 @end
 
 @implementation DCDataLoader
 
-- (void)removeTimer {
-    if (_timerForRestart) {
-        [_timerForRestart invalidate];
-        [_timerForRestart release];
-        _timerForRestart = nil;
+- (void)removeTimerForVisiableQueue {
+    if (_timerForRestartVisiable) {
+        [_timerForRestartVisiable invalidate];
+        [_timerForRestartVisiable release];
+        _timerForRestartVisiable = nil;
     }
 }
 
-- (void)createTimer:(NSString *)timeStr {
+- (void)removeTimerForBufferQueue {
+    if (_timerForRestartBuffer) {
+        [_timerForRestartBuffer invalidate];
+        [_timerForRestartBuffer release];
+        _timerForRestartBuffer = nil;
+    }
+}
+
+- (void)createTimerForVisiableQueue:(NSString *)timeStr {
     NSInteger seconds = [timeStr integerValue];
-    _timerForRestart = [NSTimer scheduledTimerWithTimeInterval:seconds target:self selector:@selector(restart:) userInfo:nil repeats:NO];
-    [_timerForRestart retain];
+    _timerForRestartVisiable = [NSTimer scheduledTimerWithTimeInterval:seconds target:self selector:@selector(restart:) userInfo:nil repeats:NO];
+    [_timerForRestartVisiable retain];
+}
+
+- (void)createTimerForBufferQueue:(NSString *)timeStr {
+    NSInteger seconds = [timeStr integerValue];
+    _timerForRestartBuffer = [NSTimer scheduledTimerWithTimeInterval:seconds target:self selector:@selector(restart:) userInfo:nil repeats:NO];
+    [_timerForRestartBuffer retain];
 }
 
 - (void)restart:(NSTimer *)timer {
-    if (_timerForRestart == timer) {
-        NSLog(@"DCDataLoader restart:");
-        if (_operationQueue) {
-            [_operationQueue setSuspended:NO];
+    if (_timerForRestartVisiable == timer) {
+        NSLog(@"DCDataLoader restart visiable:");
+        if (_queueForVisiable) {
+            [_queueForVisiable setSuspended:NO];
         }
-        [_timerForRestart invalidate];
-        [_timerForRestart release];
-        _timerForRestart = nil;
+        [_timerForRestartVisiable invalidate];
+        [_timerForRestartVisiable release];
+        _timerForRestartVisiable = nil;
+    } else if (_timerForRestartBuffer == timer) {
+        NSLog(@"DCDataLoader restart buffer:");
+        if (_queueForBuffer) {
+            [_queueForBuffer setSuspended:NO];
+        }
+        [_timerForRestartBuffer invalidate];
+        [_timerForRestartBuffer release];
+        _timerForRestartBuffer = nil;
     }
 }
 
-- (void)addOperation:(NSOperation *)operation {
-    if (_operationQueue && operation) {
-        [_operationQueue addOperation:operation];
-        NSLog(@"ops count in queue: %d", [_operationQueue operationCount]);
+- (void)queue:(enum DATALODER_TYPE)type addOperation:(NSOperation *)operation {
+    if (operation) {
+        if (type == DATALODER_TYPE_VISIABLE) {
+            if (_queueForVisiable) {
+                [_queueForVisiable addOperation:operation];
+                NSLog(@"ops count in visiable queue: %d", [_queueForVisiable operationCount]);
+            }
+        } else if (type == DATALODER_TYPE_BUFFER) {
+            if (_queueForBuffer) {
+                [_queueForBuffer addOperation:operation];
+                NSLog(@"ops count in buffer queue: %d", [_queueForBuffer operationCount]);
+            }
+        }
     }
 }
 
-- (void)cancelAllOperations {
-    if (_operationQueue) {
-        [_operationQueue cancelAllOperations];
+- (void)cancelAllOperationsOnQueue:(enum DATALODER_TYPE)type {
+    if (type == DATALODER_TYPE_VISIABLE) {
+        if (_queueForVisiable) {
+            [_queueForVisiable cancelAllOperations];
+        }
+    } else if (type == DATALODER_TYPE_BUFFER) {
+        if (_queueForBuffer) {
+            [_queueForBuffer cancelAllOperations];
+        }
     }
 }
 
-- (void)terminateAllOperations {
-    [self resume];
-    [self cancelAllOperations];
+- (void)terminateAllOperationsOnQueue:(enum DATALODER_TYPE)type {
+    [self resumeQueue:type];
+    [self cancelAllOperationsOnQueue:type];
     
-    if (_operationQueue) {
-        [_operationQueue waitUntilAllOperationsAreFinished];
+    if (type == DATALODER_TYPE_VISIABLE) {
+        if (_queueForVisiable) {
+            [_queueForVisiable waitUntilAllOperationsAreFinished];
+        }
+    } else if (type == DATALODER_TYPE_BUFFER) {
+        if (_queueForBuffer) {
+            [_queueForBuffer waitUntilAllOperationsAreFinished];
+        }
     }
 }
 
-- (NSUInteger)operationCount {
-    if (_operationQueue) {
-        return [_operationQueue operationCount];
+- (NSUInteger)operationCountOnQueue:(enum DATALODER_TYPE)type {
+    if (type == DATALODER_TYPE_VISIABLE) {
+        if (_queueForVisiable) {
+            return [_queueForVisiable operationCount];
+        } else {
+            return 0;
+        }
+    } else if (type == DATALODER_TYPE_BUFFER) {
+        if (_queueForBuffer) {
+            return [_queueForBuffer operationCount];
+        } else {
+            return 0;
+        }
     } else {
         return 0;
     }
 }
 
-- (NSInteger)maxConcurrentOperationCount {
-    if (_operationQueue) {
-        return [_operationQueue maxConcurrentOperationCount];
-    } else {
-        return -1;
-    }
-}
-
-- (void)setMaxConcurrentOperationCount:(NSInteger)cnt {
-    if (_operationQueue) {
-        [_operationQueue setMaxConcurrentOperationCount:cnt];
-    }
-}
-
-- (void)pauseWithAutoResume:(BOOL)enable with:(NSTimeInterval)seconds {
-    if (_operationQueue) {
-        [self setSuspended:YES];
-        NSLog(@"DCDataLoader pauseWithAutoResume:with:");
-        [self performSelectorOnMainThread:@selector(removeTimer) withObject:nil waitUntilDone:YES];
-        
-        if (enable) {
-            NSString *timeStr = [NSString stringWithFormat:@"%d", seconds];
-            [self performSelectorOnMainThread:@selector(createTimer:) withObject:timeStr waitUntilDone:YES];
+- (NSInteger)maxConcurrentOperationCountOnQueue:(enum DATALODER_TYPE)type {
+    if (type == DATALODER_TYPE_VISIABLE) {
+        if (_queueForVisiable) {
+            return [_queueForVisiable maxConcurrentOperationCount];
         } else {
-            NSLog(@"No auto resume");
+            return 0;
+        }
+    } else if (type == DATALODER_TYPE_BUFFER) {
+        if (_queueForBuffer) {
+            return [_queueForBuffer maxConcurrentOperationCount];
+        } else {
+            return 0;
+        }
+    } else {
+        return 0;
+    }
+}
+
+- (void)queue:(enum DATALODER_TYPE)type setMaxConcurrentOperationCount:(NSInteger)cnt {
+    if (type == DATALODER_TYPE_VISIABLE) {
+        if (_queueForVisiable) {
+            [_queueForVisiable setMaxConcurrentOperationCount:cnt];
+        }
+    } else if (type == DATALODER_TYPE_BUFFER) {
+        if (_queueForBuffer) {
+            [_queueForBuffer setMaxConcurrentOperationCount:cnt];
         }
     }
 }
 
-- (void)resume {
-    if ([self isSuspended]) {
-        if (_operationQueue) {
-            NSLog(@"DCDataLoader resume");
-            [self performSelectorOnMainThread:@selector(removeTimer) withObject:nil waitUntilDone:YES];
-            [self setSuspended:NO];
+- (void)queue:(enum DATALODER_TYPE)type pauseWithAutoResume:(BOOL)enable with:(NSTimeInterval)seconds {
+    if (type == DATALODER_TYPE_VISIABLE) {
+        if (_queueForVisiable) {
+            [self queue:type setSuspended:YES];
+            
+            [self performSelectorOnMainThread:@selector(removeTimerForVisiableQueue) withObject:nil waitUntilDone:YES];
+            
+            if (enable) {
+                NSString *timeStr = [NSString stringWithFormat:@"%d", seconds];
+                [self performSelectorOnMainThread:@selector(createTimerForVisiableQueue:) withObject:timeStr waitUntilDone:YES];
+            } else {
+                NSLog(@"No auto resume");
+            }
+        }
+    } else if (type == DATALODER_TYPE_BUFFER) {
+        if (_queueForBuffer) {
+            [self queue:type setSuspended:YES];
+            
+            [self performSelectorOnMainThread:@selector(removeTimerForBufferQueue) withObject:nil waitUntilDone:YES];
+            
+            if (enable) {
+                NSString *timeStr = [NSString stringWithFormat:@"%d", seconds];
+                [self performSelectorOnMainThread:@selector(createTimerForBufferQueue:) withObject:timeStr waitUntilDone:YES];
+            } else {
+                NSLog(@"No auto resume");
+            }
         }
     }
 }
 
-- (void)setSuspended:(BOOL)b {
-    if (_operationQueue) {
-        [_operationQueue setSuspended:b];
+- (void)resumeQueue:(enum DATALODER_TYPE)type {
+    if ([self isSuspendedQueue:type]) {
+        if (type == DATALODER_TYPE_VISIABLE) {
+            if (_queueForVisiable) {
+                NSLog(@"DCDataLoader resume visiable queue");
+                [self performSelectorOnMainThread:@selector(removeTimerForVisiableQueue) withObject:nil waitUntilDone:YES];
+            }
+        } else if (type == DATALODER_TYPE_BUFFER) {
+            if (_queueForBuffer) {
+                NSLog(@"DCDataLoader resume buffer queue");
+                [self performSelectorOnMainThread:@selector(removeTimerForBufferQueue) withObject:nil waitUntilDone:YES];
+            }
+        }
+        [self queue:type setSuspended:NO];
     }
 }
 
-- (BOOL)isSuspended {
-    if (_operationQueue) {
-        return [_operationQueue isSuspended];
+- (void)queue:(enum DATALODER_TYPE)type setSuspended:(BOOL)b {
+    if (type == DATALODER_TYPE_VISIABLE) {
+        if (_queueForVisiable) {
+            [_queueForVisiable setSuspended:b];
+        }
+    } else if (type == DATALODER_TYPE_BUFFER) {
+        if (_queueForBuffer) {
+            [_queueForBuffer setSuspended:b];
+        }
+    }
+}
+
+- (BOOL)isSuspendedQueue:(enum DATALODER_TYPE)type {
+    if (type == DATALODER_TYPE_VISIABLE) {
+        if (_queueForVisiable) {
+            return [_queueForVisiable isSuspended];
+        } else {
+            return YES;
+        }
+    } else if (type == DATALODER_TYPE_BUFFER) {
+        if (_queueForBuffer) {
+            return [_queueForBuffer isSuspended];
+        } else {
+            return YES;
+        }
     } else {
         return YES;
     }
@@ -164,25 +281,42 @@ static DCDataLoader *staticDCDataLoader = nil;
 - (id)init {
     self = [super init];
     if (self) {
-        if (!_operationQueue) {
-            _operationQueue = [[NSOperationQueue alloc] init];
-            [self setMaxConcurrentOperationCount:OPERATIONQUEUE_DEFAULTCONCURRENTCOUNT];
+        if (!_queueForVisiable) {
+            _queueForVisiable = [[NSOperationQueue alloc] init];
+            [self queue:DATALODER_TYPE_VISIABLE setMaxConcurrentOperationCount:OPERATIONQUEUE_DEFAULTCONCURRENTCOUNT];
+        }
+        
+        if (!_queueForBuffer) {
+            _queueForBuffer = [[NSOperationQueue alloc] init];
+            [self queue:DATALODER_TYPE_BUFFER setMaxConcurrentOperationCount:OPERATIONQUEUE_DEFAULTCONCURRENTCOUNT];
         }
     }
     return self;
 }
 
 - (void)dealloc {
-    if (_timerForRestart) {
-        [_timerForRestart invalidate];
-        [_timerForRestart release];
-        _timerForRestart = nil;
+    if (_timerForRestartVisiable) {
+        [_timerForRestartVisiable invalidate];
+        [_timerForRestartVisiable release];
+        _timerForRestartVisiable = nil;
     }
     
-    if (_operationQueue) {
-        [_operationQueue release];
-        _operationQueue = nil;
+    if (_timerForRestartBuffer) {
+        [_timerForRestartBuffer invalidate];
+        [_timerForRestartBuffer release];
+        _timerForRestartBuffer = nil;
     }
+    
+    if (_queueForVisiable) {
+        [_queueForVisiable release];
+        _queueForVisiable = nil;
+    }
+    
+    if (_queueForBuffer) {
+        [_queueForBuffer release];
+        _queueForBuffer = nil;
+    }
+    
     [super dealloc];
 }
 

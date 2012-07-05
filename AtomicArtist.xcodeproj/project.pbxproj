@@ -17,7 +17,6 @@
 		1B05376A1588810C000C93F8 /* DCUpdateGroupOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B0537621588810C000C93F8 /* DCUpdateGroupOperation.m */; };
 		1B14209B1574ABD00058199E /* DCALAssetGroupViewNaviTitle.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1B14209A1574ABD00058199E /* DCALAssetGroupViewNaviTitle.xib */; };
 		1B65666515A441E1000BF1BE /* DCViewCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B65666215A441E1000BF1BE /* DCViewCache.m */; };
-		1B65666615A441E1000BF1BE /* DCViewCacheOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B65666415A441E1000BF1BE /* DCViewCacheOperation.m */; };
 		1B791D6815A541BE002CD1E5 /* DCBrower.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B791D6715A541BE002CD1E5 /* DCBrower.m */; };
 		1B8160FF156F17F400E40084 /* DCLoadThumbnailOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B8160FE156F17F300E40084 /* DCLoadThumbnailOperation.m */; };
 		1B816111156F563400E40084 /* DCLoadPosterImageForALAssetsGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B816110156F563300E40084 /* DCLoadPosterImageForALAssetsGroup.m */; };
@@ -32,6 +31,8 @@
 		1BBFADA5156525B500D5FC76 /* DCDataModelHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BBFAD9F156525B500D5FC76 /* DCDataModelHelper.m */; };
 		1BBFADA6156525B500D5FC76 /* Group.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BBFADA1156525B500D5FC76 /* Group.m */; };
 		1BBFADA7156525B500D5FC76 /* Item.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BBFADA3156525B500D5FC76 /* Item.m */; };
+		1BC3D55815A5BD83001808D6 /* DCCacheOperationForBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BC3D55715A5BD83001808D6 /* DCCacheOperationForBuffer.m */; };
+		1BC3D55C15A5BDA5001808D6 /* DCCacheOperationForVisiable.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BC3D55B15A5BDA5001808D6 /* DCCacheOperationForVisiable.m */; };
 		1BF9F4AE156483AE0015E004 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BF9F4AD156483AE0015E004 /* UIKit.framework */; };
 		1BF9F4B0156483AE0015E004 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BF9F4AF156483AE0015E004 /* Foundation.framework */; };
 		1BF9F4B2156483AE0015E004 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BF9F4B1156483AE0015E004 /* CoreGraphics.framework */; };
@@ -79,8 +80,6 @@
 		1B14209A1574ABD00058199E /* DCALAssetGroupViewNaviTitle.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = DCALAssetGroupViewNaviTitle.xib; path = GroupView/ALAssetGroupView/DCALAssetGroupViewNaviTitle.xib; sourceTree = "<group>"; };
 		1B65666115A441E1000BF1BE /* DCViewCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCViewCache.h; sourceTree = "<group>"; };
 		1B65666215A441E1000BF1BE /* DCViewCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCViewCache.m; sourceTree = "<group>"; };
-		1B65666315A441E1000BF1BE /* DCViewCacheOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCViewCacheOperation.h; sourceTree = "<group>"; };
-		1B65666415A441E1000BF1BE /* DCViewCacheOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCViewCacheOperation.m; sourceTree = "<group>"; };
 		1B791D6615A541BE002CD1E5 /* DCBrower.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCBrower.h; sourceTree = "<group>"; };
 		1B791D6715A541BE002CD1E5 /* DCBrower.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCBrower.m; sourceTree = "<group>"; };
 		1B8160FD156F17F300E40084 /* DCLoadThumbnailOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCLoadThumbnailOperation.h; sourceTree = "<group>"; };
@@ -107,6 +106,10 @@
 		1BBFADA1156525B500D5FC76 /* Group.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Group.m; sourceTree = "<group>"; };
 		1BBFADA2156525B500D5FC76 /* Item.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Item.h; sourceTree = "<group>"; };
 		1BBFADA3156525B500D5FC76 /* Item.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Item.m; sourceTree = "<group>"; };
+		1BC3D55615A5BD83001808D6 /* DCCacheOperationForBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCCacheOperationForBuffer.h; sourceTree = "<group>"; };
+		1BC3D55715A5BD83001808D6 /* DCCacheOperationForBuffer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCCacheOperationForBuffer.m; sourceTree = "<group>"; };
+		1BC3D55A15A5BDA5001808D6 /* DCCacheOperationForVisiable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCCacheOperationForVisiable.h; sourceTree = "<group>"; };
+		1BC3D55B15A5BDA5001808D6 /* DCCacheOperationForVisiable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCCacheOperationForVisiable.m; sourceTree = "<group>"; };
 		1BD5CACC15690F1600C9133D /* CommonDefine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonDefine.h; sourceTree = "<group>"; };
 		1BF9F4A9156483AE0015E004 /* AtomicArtist_Simulator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AtomicArtist_Simulator.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1BF9F4AD156483AE0015E004 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -176,8 +179,10 @@
 			children = (
 				1B65666115A441E1000BF1BE /* DCViewCache.h */,
 				1B65666215A441E1000BF1BE /* DCViewCache.m */,
-				1B65666315A441E1000BF1BE /* DCViewCacheOperation.h */,
-				1B65666415A441E1000BF1BE /* DCViewCacheOperation.m */,
+				1BC3D55615A5BD83001808D6 /* DCCacheOperationForBuffer.h */,
+				1BC3D55715A5BD83001808D6 /* DCCacheOperationForBuffer.m */,
+				1BC3D55A15A5BDA5001808D6 /* DCCacheOperationForVisiable.h */,
+				1BC3D55B15A5BDA5001808D6 /* DCCacheOperationForVisiable.m */,
 			);
 			path = ViewCache;
 			sourceTree = "<group>";
@@ -490,8 +495,9 @@
 				1B0537691588810C000C93F8 /* DCSaveOperation.m in Sources */,
 				1B05376A1588810C000C93F8 /* DCUpdateGroupOperation.m in Sources */,
 				1B65666515A441E1000BF1BE /* DCViewCache.m in Sources */,
-				1B65666615A441E1000BF1BE /* DCViewCacheOperation.m in Sources */,
 				1B791D6815A541BE002CD1E5 /* DCBrower.m in Sources */,
+				1BC3D55815A5BD83001808D6 /* DCCacheOperationForBuffer.m in Sources */,
+				1BC3D55C15A5BDA5001808D6 /* DCCacheOperationForVisiable.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -8,7 +8,8 @@
 
 #import <Foundation/Foundation.h>
 #import "DCUniformDataProtocol.h"
-#import "DCViewCacheOperation.h"
+#import "DCCacheOperationForVisiable.h"
+#import "DCCacheOperationForBuffer.h"
 
 @protocol DCViewCacheDelegate <NSObject>
 
@@ -23,13 +24,13 @@
 
 @end
 
-@interface DCViewCache : NSObject <DCViewCacheOperationDelegate> {
+@interface DCViewCache : NSObject <DCCacheOperationForVisiableDelegate, DCCacheOperationForBufferDelegate> {
     NSMutableDictionary *_tableCells;  // key:UIDForIndexPath; value:NSMutableDictionary *viewsInTableCell
     NSMutableDictionary *_views;  // key:UIDForView; value:view
     NSLock *_lockForViews;
     
-    NSOperationQueue *_queueForCacheOp;
-    NSOperationQueue *_queueForLoadCurrentTableCellBigThumbnailOp;
+    NSOperationQueue *_queueForVisiableOp;
+    NSOperationQueue *_queueForBufferOp;
 }
 
 @property (assign, nonatomic) id<DCViewCacheDelegate> delegate;
@@ -37,7 +38,6 @@
 @property (assign, nonatomic) NSUInteger lastRequireBufferIndex;
 
 @property (assign, nonatomic) NSUInteger bufferTableCellNumber;
-@property (assign, nonatomic) NSUInteger bufferFrequency;  // bufferFrequency <= bufferRowNumber / 2
 
 @property (assign, nonatomic) id<DCDataLibraryHelper> dataLibraryHelper;
 

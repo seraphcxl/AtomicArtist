@@ -8,27 +8,29 @@
 
 #import <Foundation/Foundation.h>
 
+enum DATALODER_TYPE {
+    DATALODER_TYPE_VISIABLE = 1,
+    DATALODER_TYPE_BUFFER = 2
+    };
+
 @interface DCDataLoader : NSObject
 
 + (id)defaultDataLoader;
 
 + (void)staticRelease;
 
-- (void)addOperation:(NSOperation *)operation;
+- (void)queue:(enum DATALODER_TYPE)type addOperation:(NSOperation *)operation;
 
-- (void)cancelAllOperations;
+- (void)cancelAllOperationsOnQueue:(enum DATALODER_TYPE)type;
 
-- (void)terminateAllOperations;
+- (void)terminateAllOperationsOnQueue:(enum DATALODER_TYPE)type;
 
-- (NSUInteger)operationCount;
+- (NSUInteger)operationCountOnQueue:(enum DATALODER_TYPE)type;
 
-- (NSInteger)maxConcurrentOperationCount;
-- (void)setMaxConcurrentOperationCount:(NSInteger)cnt;
+- (NSInteger)maxConcurrentOperationCountOnQueue:(enum DATALODER_TYPE)type;
 
-- (void)pauseWithAutoResume:(BOOL)enable with:(NSTimeInterval)seconds;
+- (void)queue:(enum DATALODER_TYPE)type pauseWithAutoResume:(BOOL)enable with:(NSTimeInterval)seconds;
 
-- (void)resume;
-
-- (BOOL)isSuspended;
+- (BOOL)isSuspendedQueue:(enum DATALODER_TYPE)type;
 
 @end
