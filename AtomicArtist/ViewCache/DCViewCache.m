@@ -12,15 +12,13 @@
 
 }
 
-- (NSString *)uidForView:(UIView *)view;
-
 - (NSString *)uidForTableCell:(NSUInteger)index;
 
-- (void)createViewsAndLoadSmallThumbnailForTableCell:(NSUInteger)index;
+- (NSArray *)createViewsAndLoadSmallThumbnailForTableCell:(NSUInteger)index;
 
-- (void)actionForBuffer:(NSUInteger)index;
+- (void)actionForBufferFrom:(NSInteger)beginBuffer to:(NSInteger)endBuffer andVisiableFrom:(NSInteger)beginVisiable to:(NSInteger)endVisiable;
 
-- (void)actionForVisiable:(NSInteger)index;
+- (void)actionForVisiableFrom:(NSInteger)begin to:(NSInteger)end andCurrent:(NSInteger)index;
 
 @end
 
@@ -35,32 +33,111 @@
     _bufferTableCellNumber = bufferTableCellNumber;
 }
 
-- (void)actionForVisiable:(NSInteger)index {
-}
-
-- (void)actionForBuffer:(NSUInteger)index {
-}
-
-- (void)createViewsAndLoadSmallThumbnailForTableCell:(NSUInteger)index {
+- (void)actionForVisiableFrom:(NSInteger)begin to:(NSInteger)end andCurrent:(NSInteger)index {
     do {
+        [self createViewsAndLoadSmallThumbnailForTableCell:index];
+        [_queueForVisiableOp cancelAllOperations];
+        DCCacheOperationForVisiable *op = [[[DCCacheOperationForVisiable alloc] init] autorelease];
+        op.currentTableCellIndex = index;
+        op.visiableBeginTableCellIndex = begin;
+        op.visiableEndTableCellIndex = end;
+        [op setDelegate:self];
+        [_queueForVisiableOp addOperation:op];
+    } while (NO);
+}
+
+- (void)actionForBufferFrom:(NSInteger)beginBuffer to:(NSInteger)endBuffer andVisiableFrom:(NSInteger)beginVisiable to:(NSInteger)endVisiable {
+    [_queueForBufferOp cancelAllOperations];
+    DCCacheOperationForBuffer *op = [[[DCCacheOperationForBuffer alloc] init] autorelease];
+    op.visiableBeginTableCellIndex = beginVisiable;
+    op.visiableEndTableCellIndex = endVisiable;
+    op.bufferBeginTableCellIndex = beginBuffer;
+    op.bufferEndTableCellIndex = endBuffer;
+    [op setDelegate:self];
+    [_queueForBufferOp addOperation:op];
+}
+
+- (NSArray *)createViewsAndLoadSmallThumbnailForTableCell:(NSUInteger)index {
+    NSArray *result = nil;
+    do {
+        if (!self.delegate) {
+            break;
+        }
         NSString *uidForTableCell = [self uidForTableCell:index];
         [_lockForViews lock];
         NSMutableDictionary *viewsInTableCell = [_tableCells objectForKey:uidForTableCell];
+        
+        if (!viewsInTableCell) {
+            viewsInTableCell = [[[NSMutableDictionary alloc] init] autorelease];
+            [_tableCells setObject:viewsInTableCell forKey:uidForTableCell];
+        }
+        
+        NSMutableArray *addViewUIDs = [self.delegate getViewUIDsForTableCellAtIndexPath:index];
+        
+        NSArray *existingViewUIDs = [viewsInTableCell allKeys];
+        
+        // remove view not in addViewUIDs
+        for (NSString *uid in existingViewUIDs) {
+            if ([addViewUIDs containsObject:uid]) {
+                UIView *view = [viewsInTableCell objectForKey:uid];
+                if (view) {
+                    [self.delegate loadSmallThumbnailForView:view];
+                }
+                [addViewUIDs removeObject:uid];
+            } else {
+                [viewsInTableCell removeObjectForKey:uid];
+            }
+        }
+        
+        for (NSString *uid in addViewUIDs) {
+            UIView *view = [self.delegate createViewWithUID:uid];
+            [self.delegate loadSmallThumbnailForView:view];
+            [viewsInTableCell setObject:view forKey:uid];
+        }
         [_lockForViews unlock];
     } while (NO);
+    return result;
 }
 
-- (void)addVisiableTableCell:(NSIndexPath *)indexPath {
+- (NSArray *)getViewsForTableCell:(NSIndexPath *)indexPath {
+    NSArray *result = nil;
     do {
+        if (!self.delegate) {
+            break;
+        }
         NSUInteger index = [indexPath row];
+        NSUInteger visiableBeginTableCellIndex = 0;
+        NSUInteger visiableEndTableCellIndex = NSUIntegerMax;
         
-        [self createViewsAndLoadSmallThumbnailForTableCell:index];
-        [self actionForVisiable:index];
+        NSUInteger visiableCellCount = [self.delegate visiableCellCount];
+        NSUInteger tableCellCount = [self.delegate tableCellCount];
+        
+        result = [self createViewsAndLoadSmallThumbnailForTableCell:index];
+        
+        if (self.lastRequireBufferIndex > index) {
+            visiableEndTableCellIndex = index;
+            visiableBeginTableCellIndex = (int)(index + 1 - visiableCellCount) > 0 ? (index + 1 - visiableCellCount) : 0;
+        } else if (self.lastRequireBufferIndex < index) {
+            visiableBeginTableCellIndex = index;
+            visiableEndTableCellIndex = (int)(index + visiableCellCount - 1) > (int)(tableCellCount - 1) ? (tableCellCount - 1) : (index + visiableCellCount - 1);
+        } else {
+            [NSException raise:@"DCViewCache erroe" format:@"Reason: self.lastRequireBufferIndex == index"];
+        }
+        
+        [self actionForVisiableFrom:visiableBeginTableCellIndex to:visiableEndTableCellIndex andCurrent:index];
         
         if (self.lastRequireBufferIndex == NSUIntegerMax || ABS(self.lastRequireBufferIndex - index) > self.bufferTableCellNumber / 2) {
-            [self actionForBuffer:index];
+            if (visiableCellCount < tableCellCount) {
+                NSUInteger bufferBeginTableCellIndex = (int)(visiableBeginTableCellIndex - self.bufferTableCellNumber) < 0 ? 0 : visiableBeginTableCellIndex - self.bufferTableCellNumber;
+                NSUInteger bufferEndTableCellIndex = visiableEndTableCellIndex + self.bufferTableCellNumber < tableCellCount ? visiableEndTableCellIndex + self.bufferTableCellNumber : tableCellCount;
+                
+                [self actionForBufferFrom:bufferBeginTableCellIndex to:bufferEndTableCellIndex andVisiableFrom:visiableBeginTableCellIndex to:visiableEndTableCellIndex];
+                
+                self.lastRequireBufferIndex = index;
+            }
         }
     } while (NO);
+    return result;
 }
 
 - (UIView *)getViewWithUID:(NSString *)uid {
@@ -152,6 +229,14 @@
 }
 
 #pragma mark DCCacheOperationForVisiableDelegate
+- (void)createViewsAndLoadSmallThumbnailForVisiableFrom:(NSInteger)begin to:(NSInteger)end andCancelFlag:(BOOL *)cancel {
+    do {
+        if (!cancel) {
+            break;
+        }
+    } while (NO);
+}
+
 - (void)loadBigThumbnailForCurrentTableCell:(NSInteger)index andCancelFlag:(BOOL *)cancel {
     do {
         if (!cancel) {
@@ -169,7 +254,7 @@
 }
 
 #pragma mark DCCacheOperationForBufferDelegate
-- (void)createViewsAndLoadSmallThumbnailForBufferFrom:(NSInteger)begin to:(NSInteger)end andCancelFlag:(BOOL *)cancel {
+- (void)createViewsAndLoadSmallThumbnailForBuffer:(NSInteger)beginBuffer to:(NSInteger)endBuffer andVisiable:(NSInteger)beginVisiable to:(NSInteger)endVisiable andCancelFlag:(BOOL *)cancel {
     do {
         if (!cancel) {
             break;
@@ -177,7 +262,7 @@
     } while (NO);
 }
 
-- (void)loadBigThumbnailForBufferFrom:(NSInteger)begin to:(NSInteger)end andCancelFlag:(BOOL *)cancel {
+- (void)loadBigThumbnailForBuffer:(NSInteger)beginBuffer to:(NSInteger)endBuffer andVisiable:(NSInteger)beginVisiable to:(NSInteger)endVisiable andCancelFlag:(BOOL *)cancel {
     do {
         if (!cancel) {
             break;

@@ -10,9 +10,8 @@
 
 @protocol DCCacheOperationForBufferDelegate <NSObject>
 
-- (void)createViewsAndLoadSmallThumbnailForBufferFrom:(NSInteger)begin to:(NSInteger)end andCancelFlag:(BOOL *)cancel;
-- (void)loadBigThumbnailForBufferFrom:(NSInteger)begin to:(NSInteger)end andCancelFlag:(BOOL *)cancel;
-
+- (void)createViewsAndLoadSmallThumbnailForBuffer:(NSInteger)beginBuffer to:(NSInteger)endBuffer andVisiable:(NSInteger)beginVisiable to:(NSInteger)endVisiable andCancelFlag:(BOOL *)cancel;
+- (void)loadBigThumbnailForBuffer:(NSInteger)beginBuffer to:(NSInteger)endBuffer andVisiable:(NSInteger)beginVisiable to:(NSInteger)endVisiable andCancelFlag:(BOOL *)cancel;
 - (void)clearCacheWithBufferRangeFrom:(NSInteger)begin to:(NSInteger)end andCancelFlag:(BOOL *)cancel;
 
 @end
@@ -27,5 +26,7 @@
 
 @property (assign, nonatomic) NSInteger visiableBeginTableCellIndex;
 @property (assign, nonatomic) NSInteger visiableEndTableCellIndex;
+
+@property (assign, nonatomic) BOOL needClearCache;
 
 @end

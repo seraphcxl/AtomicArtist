@@ -13,7 +13,8 @@
 
 @protocol DCViewCacheDelegate <NSObject>
 
-- (NSArray *)getViewUIDsForTableCellAtIndexPath:(NSIndexPath *)indexPath;
+- (NSMutableArray *)getViewUIDsForTableCellAtIndexPath:(NSUInteger)index;
+- (UIView *)createViewWithUID:(NSString *)uid;
 
 - (NSUInteger)visiableCellCount;
 
@@ -43,6 +44,8 @@
 
 - (UIView *)getViewWithUID:(NSString *)uid;
 
-- (void)addVisiableTableCell:(NSIndexPath *)indexPath;
+- (NSArray *)getViewsForTableCell:(NSIndexPath *)indexPath;
+
+- (NSString *)uidForView:(UIView *)view;
 
 @end
