@@ -19,7 +19,7 @@
     double _cellSpace;
     NSUInteger _tableViewMargin;
     
-    NSMutableDictionary *_groupViews;
+//    NSMutableDictionary *_groupViews;
 }
 
 - (void)reloadTableView:(NSNotification *)note;
@@ -37,8 +37,6 @@
 - (NSUInteger)calcTableViewMargin;
 
 - (NSUInteger)calcVisiableRowNumber;
-
-- (NSArray *)dataGroupUIDsForCellAtIndexPath:(NSIndexPath *)indexPath;
 
 - (void)refreshGroups:(BOOL)force;
 
@@ -59,6 +57,7 @@
 
 @synthesize dataLibraryHelper = _dataLibraryHelper;
 @synthesize type = _type;
+@synthesize viewCache = _viewCache;
 //@synthesize interfaceOrientation = _interfaceOrientation;
 
 - (void)pageScrollViewCtrl:(DCPageScrollViewController *)pageScrollViewCtrl doNextActionWithCurrentViewCtrl:(UIViewController *)currentViewCtrl nextViewCtrl:(UIViewController *)nextViewCtrl {
@@ -144,8 +143,13 @@
 //        _itemCountInCell = [self calcItemCountInCellWithFrameSize:_frameSize];
 //        _cellSpace = [self calcCellSpaceWithFrameSize:_frameSize andItemCountInCell:_itemCountInCell];
         
-        if (!_groupViews) {
-            _groupViews = [[NSMutableDictionary alloc] init];
+//        if (!_groupViews) {
+//            _groupViews = [[NSMutableDictionary alloc] init];
+//        }
+        
+        if (!_viewCache) {
+            _viewCache = [[DCGroupViewCache alloc] init];
+            [_viewCache setDelegate:self];
         }
         
         UIBarButtonItem *bbi = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(refresh:)] autorelease];
@@ -158,9 +162,13 @@
     [self actionForWillDisappear];
     [self actionForDidUnload];
     
-    if (_groupViews) {
-        [_groupViews release];
-        _groupViews = nil;
+//    if (_groupViews) {
+//        [_groupViews release];
+//        _groupViews = nil;
+//    }
+    if (_viewCache) {
+        [_viewCache release];
+        _viewCache = nil;
     }
     
     self.dataLibraryHelper = nil;
@@ -169,28 +177,28 @@
 }
 
 - (void)clearCache {
-    if (_groupViews) {
-        [_groupViews removeAllObjects];
-    }
-    
+//    if (_groupViews) {
+//        [_groupViews removeAllObjects];
+//    }
+    [self.viewCache clear];
     [self.dataLibraryHelper clearCache];
 }
 
-- (void)addGroupView:(DCGroupView *)groupView {
-    if (groupView && _groupViews) {
-        [_groupViews setObject:groupView forKey:groupView.dataGroupUID];
-    }
-}
-
-- (DCGroupView *)getGroupViewWithDataGroupUID:(NSString *)uid {
-    DCGroupView *result = nil;
-    do {
-        if (_groupViews) {
-            result = [_groupViews objectForKey:uid];
-        }
-    } while (NO);
-    return result;
-}
+//- (void)addGroupView:(DCGroupView *)groupView {
+//    if (groupView && _groupViews) {
+//        [_groupViews setObject:groupView forKey:groupView.dataGroupUID];
+//    }
+//}
+//
+//- (DCGroupView *)getGroupViewWithDataGroupUID:(NSString *)uid {
+//    DCGroupView *result = nil;
+//    do {
+//        if (_groupViews) {
+//            result = [_groupViews objectForKey:uid];
+//        }
+//    } while (NO);
+//    return result;
+//}
 
 - (void)actionForWillEnterForegroud:(NSNotification *)note {
     if (self.navigationController.topViewController == self) {
@@ -201,10 +209,14 @@
 - (void)actionForGroupPosterImageLoaded:(NSNotification *)note {
     DCLoadPosterImageOperation *operation = (DCLoadPosterImageOperation *)[note object];
     [[DCDataModelHelper defaultDataModelHelper] createGroupWithUID:operation.dataGroupUID posterItemUID:operation.itemUID andPosterImage:operation.thumbnail];
-    if (_groupViews) {
-        DCGroupView *groupView = [_groupViews objectForKey:operation.dataGroupUID];
-        groupView.posterImage = operation.thumbnail;
-        [groupView updatePosterImage];
+    if (self.viewCache) {
+        UIView *view = [self.viewCache getViewWithUID:operation.dataGroupUID];
+        if ([view isMemberOfClass:[DCGroupView class]]) {
+            DCGroupView *groupView = (DCGroupView *)view;
+            groupView.posterImage = operation.thumbnail;
+            [groupView updatePosterImage];
+        }
+        
     }
 }
 
@@ -219,13 +231,17 @@
 - (void)refreshGroups:(BOOL)force {
     NSLog(@"DCGroupViewController refreshAssetsGroups");
     if (force || [self.dataLibraryHelper groupsCount] == 0) {
+        NSUInteger pageViewCount = _itemCountInCell * [self calcVisiableRowNumber];
+        
+        [_viewCache setBufferTableCellNumber:pageViewCount * 4];
+        
         UIActivityIndicatorView *activityIndicatorView = [[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite] autorelease];
         [activityIndicatorView startAnimating];
         UIBarButtonItem *bbi = [[[UIBarButtonItem alloc] initWithCustomView:activityIndicatorView] autorelease];
         [self.navigationItem setRightBarButtonItem:bbi];
         
         [self clearCache];
-        [self.dataLibraryHelper enumGroups:_enumDataGroupParam notifyWithFrequency:_itemCountInCell * [self calcVisiableRowNumber]];
+        [self.dataLibraryHelper enumGroups:_enumDataGroupParam notifyWithFrequency:pageViewCount];
         [self.navigationItem setTitle:[self title]];
     }
 }
@@ -285,21 +301,6 @@
     } else {
         [NSException raise:@"DCGroupViewController error" format:@"Reason: dataGroupUID == nil"];
     }
-}
-
-- (NSArray *)dataGroupUIDsForCellAtIndexPath:(NSIndexPath *)indexPath {
-    NSMutableArray *result = [[[NSMutableArray alloc] init] autorelease];
-    if (self.dataLibraryHelper) {
-        int maxIdx = MIN((indexPath.row + 1) * _itemCountInCell, [self.dataLibraryHelper groupsCount]); 
-        for (int idx = 0 + indexPath.row * _itemCountInCell; idx < maxIdx; ++idx) {
-            [result addObject:[self.dataLibraryHelper groupUIDAtIndex:idx]];
-            NSLog(@"Get DataGoupUID: %@ at index: %d", [self.dataLibraryHelper groupUIDAtIndex:idx], idx);
-        }
-    } else {
-        [NSException raise:@"DCGroupViewController error" format:@"Reason: self.dataLibraryHelper == nil"];
-    }
-    
-    return result;
 }
 
 - (NSString *)title {
@@ -400,9 +401,10 @@
     _itemCountInCell = [self calcItemCountInCellWithFrameSize:_frameSize andTableViewMargin:_tableViewMargin];
     _cellSpace = [self calcCellSpaceWithFrameSize:_frameSize tableViewMargin:_tableViewMargin andItemCountInCell:_itemCountInCell];
     
-    if (_groupViews) {
-        [_groupViews removeAllObjects];
-    }
+//    if (_groupViews) {
+//        [_groupViews removeAllObjects];
+//    }
+    [self.viewCache clear];
     
     [self refreshGroups:NO];
 //    [self performSelectorInBackground:@selector(refreshGroups:) withObject:NO];
@@ -430,9 +432,10 @@
 }
 
 - (void)actionForWillDisappear {
-    if (_groupViews) {
-        [_groupViews removeAllObjects];
-    }
+//    if (_groupViews) {
+//        [_groupViews removeAllObjects];
+//    }
+    [self.viewCache clear];
 }
 
 - (void)actionForDidUnload {
@@ -465,10 +468,10 @@
         _itemCountInCell = tmpItemCountInCell;
         _cellSpace = tmpCellSpace;
         
-        if (_groupViews) {
-            [_groupViews removeAllObjects];
-        }
-        
+//        if (_groupViews) {
+//            [_groupViews removeAllObjects];
+//        }
+        [self.viewCache clear];
         [self.tableView reloadData];
     }
     
@@ -512,15 +515,17 @@
     
     [[DCDataLoader defaultDataLoader] queue:DATALODER_TYPE_VISIABLE pauseWithAutoResume:YES with:1.0];
     
-    NSArray *dataGroupUIDs = [self dataGroupUIDsForCellAtIndexPath:indexPath];
+//    NSArray *dataGroupUIDs = [self dataGroupUIDsForCellAtIndexPath:indexPath];
+    
+    NSArray *views = [self.viewCache getViewsForTableCell:indexPath];
+    
     DCGroupViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"DCGroupViewCell"];
     if (cell == nil) {
-        cell = [[[DCGroupViewCell alloc] initWithDataLibHelper:self.dataLibraryHelper dataGroupUIDs:dataGroupUIDs enumDataItemParam:_enumDataItemParam cellSpace:_cellSpace cellTopBottomMargin:(_cellSpace / 2) tableViewMargin:_tableViewMargin frameSize:_frameSize andItemCount:_itemCountInCell] autorelease];
+        cell = [[[DCGroupViewCell alloc] initWithDataGroupViews:views cellSpace:_cellSpace cellTopBottomMargin:(_cellSpace / 2) tableViewMargin:_tableViewMargin frameSize:_frameSize andItemCount:_itemCountInCell] autorelease];
     } else {
-        [cell initWithDataLibHelper:self.dataLibraryHelper dataGroupUIDs:dataGroupUIDs enumDataItemParam:_enumDataItemParam cellSpace:_cellSpace cellTopBottomMargin:(_cellSpace / 2) tableViewMargin:_tableViewMargin frameSize:_frameSize andItemCount:_itemCountInCell];
+        [cell initWithDataGroupViews:views cellSpace:_cellSpace cellTopBottomMargin:(_cellSpace / 2) tableViewMargin:_tableViewMargin frameSize:_frameSize andItemCount:_itemCountInCell];
     }
     cell.delegate = self;
-    cell.delegateForGroupView = self;
     return cell;
 }
 
@@ -579,6 +584,50 @@
      [self.navigationController pushViewController:detailViewController animated:YES];
      [detailViewController release];
      */
+}
+
+#pragma mark DCViewCacheDelegate
+- (NSMutableArray *)getViewUIDsForTableCellAtIndexPath:(NSUInteger)index {
+    NSMutableArray *result = [[[NSMutableArray alloc] init] autorelease];
+    if (self.dataLibraryHelper) {
+        int maxIdx = MIN((index + 1) * _itemCountInCell, [self.dataLibraryHelper groupsCount]); 
+        for (int idx = 0 + index * _itemCountInCell; idx < maxIdx; ++idx) {
+            [result addObject:[self.dataLibraryHelper groupUIDAtIndex:idx]];
+            NSLog(@"Get DataGoupUID: %@ at index: %d", [self.dataLibraryHelper groupUIDAtIndex:idx], idx);
+        }
+    } else {
+        [NSException raise:@"DCGroupViewController error" format:@"Reason: self.dataLibraryHelper == nil"];
+    }
+    
+    return result;
+}
+
+- (UIView *)createViewWithUID:(NSString *)uid {
+    DCGroupView *groupView = nil;
+    do {
+        if (uid) {
+            groupView = [[[DCGroupView alloc] initWithFrame:CGRectZero] autorelease];
+            groupView.delegate = self;
+            groupView.dataGroupUID = uid;
+            groupView.dataLibraryHelper = self.dataLibraryHelper;
+            groupView.enumDataItemParam = _enumDataItemParam;
+        }
+    } while (NO);
+    return groupView;
+}
+
+- (NSUInteger)visiableCellCount {
+    return _itemCountInCell * [self calcVisiableRowNumber];
+}
+
+- (NSUInteger)tableCellCount {
+    return [self.dataLibraryHelper groupsCount];
+}
+
+- (void)loadSmallThumbnailForView:(UIView *)view {
+}
+
+- (void)loadBigThumbnailForView:(UIView *)view {
 }
 
 @end

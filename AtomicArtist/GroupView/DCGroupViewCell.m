@@ -17,15 +17,12 @@
 @implementation DCGroupViewCell
 
 @synthesize delegate = _delegate;
-@synthesize delegateForGroupView = _delegateForGroupView;
 @synthesize cellSpace = _cellSpace;
 @synthesize cellTopBottomMargin = _cellTopBottomMargin;
 @synthesize frameSize = _frameSize;
 @synthesize tableViewMargin = _tableViewMargin;
 @synthesize itemCount = _itemCount;
-@synthesize dataGroupUIDs = _dataGroupUIDs;
-@synthesize dataLibraryHelper = _dataLibraryHelper;
-@synthesize enumDataItemParam = _enumDataItemParam;
+@synthesize dataGroupViews = _dataGroupViews;
 
 - (void)layoutSubviews {
     [super layoutSubviews];
@@ -33,41 +30,26 @@
     do {
         CGRect viewFrame = CGRectMake(self.tableViewMargin, self.cellTopBottomMargin, self.frameSize, self.frameSize);
         
-        for (NSString *dataGroupUID in self.dataGroupUIDs) {
-            DCGroupView *view = nil;
-            if (self.delegate) {
-                view = [self.delegate getGroupViewWithDataGroupUID:dataGroupUID];
-            }
-            
-            if (!view) {
-                view = [[[DCGroupView alloc] initWithFrame:viewFrame] autorelease];
-                view.delegate = self.delegateForGroupView;
-                view.dataGroupUID = dataGroupUID;
-                view.dataLibraryHelper = self.dataLibraryHelper;
-                view.enumDataItemParam = self.enumDataItemParam;
-                if (self.delegate) {
-                    [self.delegate addGroupView:view];
+        for (UIView *view in self.dataGroupViews) {
+            if (view && [view isMemberOfClass:[DCGroupView class]]) {
+                DCGroupView *groupView = (DCGroupView *)view;
+                [groupView setFrame:viewFrame];
+                
+                [self addSubview:groupView];
+                
+                if (_groupViews) {
+                    [_groupViews addObject:view];
+                } else {
+                    [NSException raise:@"DCGroupViewCell error" format:@"Reason: _groupViews == nil"];
                 }
-            } else {
-                if (view.loadPosterImageOperation) {
-                    [view.loadPosterImageOperation setQueuePriority:NSOperationQueuePriorityNormal];
-                }
+                
+                viewFrame.origin.x += (self.frameSize + self.cellSpace);
             }
-            
-            [self addSubview:view];
-            
-            if (_groupViews) {
-                [_groupViews addObject:view];
-            } else {
-                [NSException raise:@"DCGroupViewCell error" format:@"Reason: _groupViews == nil"];
-            }
-            
-            viewFrame.origin.x += (self.frameSize + self.cellSpace);
         }
     } while (NO);
 }
 
-- (id)initWithDataLibHelper:(id <DCDataLibraryHelper>)dataLibraryHelper dataGroupUIDs:(NSArray *)dataGroupUIDs enumDataItemParam:(id)enumDataItemParam cellSpace:(double)cellSpace cellTopBottomMargin:(double)cellTopBottomMargin tableViewMargin:(NSUInteger)tableViewMargin frameSize:(NSUInteger)frameSize andItemCount:(NSUInteger)itemCount {
+- (id)initWithDataGroupViews:(NSArray *)dataGroupViews cellSpace:(double)cellSpace cellTopBottomMargin:(double)cellTopBottomMargin tableViewMargin:(NSUInteger)tableViewMargin frameSize:(NSUInteger)frameSize andItemCount:(NSUInteger)itemCount {
     self = [self initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"DCGroupViewCell"];
     if (self) {
         if (_groupViews) {
@@ -80,9 +62,7 @@
             _groupViews = [[NSMutableArray alloc] init];
         }
         
-        self.dataLibraryHelper = dataLibraryHelper;
-        self.enumDataItemParam = enumDataItemParam;
-        self.dataGroupUIDs = dataGroupUIDs;
+        self.dataGroupViews = dataGroupViews;
         _cellSpace = cellSpace;
         _cellTopBottomMargin = cellTopBottomMargin;
         _tableViewMargin = tableViewMargin;
@@ -99,11 +79,8 @@
         _groupViews = nil;
     }
     
-    self.dataGroupUIDs = nil;
-    self.enumDataItemParam = nil;
-    self.dataLibraryHelper = nil;
+    self.dataGroupViews = nil;
     self.delegate = nil;
-    self.delegateForGroupView = nil;
     
     [super dealloc];
 }

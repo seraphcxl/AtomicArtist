@@ -31,7 +31,7 @@
 @synthesize delegate = _delegate;
 @synthesize lastRequireBufferIndex = _lastRequireBufferIndex;
 @synthesize bufferTableCellNumber = _bufferTableCellNumber;
-@synthesize dataLibraryHelper = _dataLibraryHelper;
+//@synthesize dataLibraryHelper = _dataLibraryHelper;
 
 - (void)setBufferTableCellNumber:(NSUInteger)bufferTableCellNumber {
     _bufferTableCellNumber = bufferTableCellNumber;
@@ -97,7 +97,7 @@
             UIView *view = [self.delegate createViewWithUID:uid];
             [self.delegate loadSmallThumbnailForView:view];
             [viewsInTableCell setObject:view forKey:uid];
-//            [_views setObject:view forKey:uid];
+            [_views setObject:view forKey:uid];
         }
         [_lockForViews unlock];
     } while (NO);
@@ -139,16 +139,16 @@
     do {
         [_lockForViews lock];
         NSString *uidForTableCell = [self uidForTableCell:index];
-//        NSArray *allViews = nil;
-//        NSMutableDictionary *viewsInTableCell = [_tableCells objectForKey:uidForTableCell];
-//        if (viewsInTableCell) {
-//            allViews = [viewsInTableCell allValues];
-//        }
-//        
-//        for (UIView *view in allViews) {
-//            NSString *viewUID = [self uidForView:view];
-//            [_views removeObjectForKey:viewUID];
-//        }
+        NSArray *allViews = nil;
+        NSMutableDictionary *viewsInTableCell = [_tableCells objectForKey:uidForTableCell];
+        if (viewsInTableCell) {
+            allViews = [viewsInTableCell allValues];
+        }
+        
+        for (UIView *view in allViews) {
+            NSString *viewUID = [self uidForView:view];
+            [_views removeObjectForKey:viewUID];
+        }
         
         [_tableCells removeObjectForKey:uidForTableCell];
         
@@ -190,24 +190,24 @@
                 
                 [self actionForBufferFrom:bufferBeginTableCellIndex to:bufferEndTableCellIndex andVisiableFrom:visiableBeginTableCellIndex to:visiableEndTableCellIndex];
                 
-                self.lastRequireBufferIndex = index;
+                _lastRequireBufferIndex = index;
             }
         }
     } while (NO);
     return result;
 }
 
-//- (UIView *)getViewWithUID:(NSString *)uid {
-//    UIView *result = nil;
-//    do {
-//        [_lockForViews lock];
-//        if (_views) {
-//            result = [_views objectForKey:uid];
-//        }
-//        [_lockForViews unlock];
-//    } while (NO);
-//    return result;
-//}
+- (UIView *)getViewWithUID:(NSString *)uid {
+    UIView *result = nil;
+    do {
+        [_lockForViews lock];
+        if (_views) {
+            result = [_views objectForKey:uid];
+        }
+        [_lockForViews unlock];
+    } while (NO);
+    return result;
+}
 
 - (NSString *)uidForTableCell:(NSUInteger)index {
     return [[[NSString alloc] initWithFormat:@"%d", index] autorelease];
@@ -220,16 +220,16 @@
 - (id)init {
     self = [super init];
     if (self) {
-        self.lastRequireBufferIndex = NSUIntegerMax;
+        _lastRequireBufferIndex = NSUIntegerMax;
         
         if (!_lockForViews) {
             _lockForViews = [[NSLock alloc] init];
         }
         
         [_lockForViews lock];
-//        if (!_views) {
-//            _views = [[NSMutableDictionary alloc] init];
-//        }
+        if (!_views) {
+            _views = [[NSMutableDictionary alloc] init];
+        }
         
         if (!_tableCells) {
             _tableCells = [[NSMutableDictionary alloc] init];
@@ -247,6 +247,28 @@
         }
     }
     return self;
+}
+
+- (void)clear {
+    if (_queueForVisiableOp) {
+        [_queueForVisiableOp cancelAllOperations];
+        [_queueForVisiableOp waitUntilAllOperationsAreFinished];
+    }
+    
+    if (_queueForBufferOp) {
+        [_queueForBufferOp cancelAllOperations];
+        [_queueForBufferOp waitUntilAllOperationsAreFinished];
+    }
+    
+    [_lockForViews lock];
+    if (_tableCells) {
+        [_tableCells removeAllObjects];
+    }
+    
+    if (_views) {
+        [_views removeAllObjects];
+    }
+    [_lockForViews unlock];
 }
 
 - (void)dealloc {
@@ -271,12 +293,13 @@
         _tableCells = nil;
     }
     
-//    if (_views) {
-//        [_views removeAllObjects];
-//        [_views release];
-//        _views = nil;
-//    }
+    if (_views) {
+        [_views removeAllObjects];
+        [_views release];
+        _views = nil;
+    }
     [_lockForViews unlock];
+    
     if (_lockForViews) {
         [_lockForViews release];
         _lockForViews = nil;

@@ -10,27 +10,20 @@
 #import "DCGroupView.h"
 #import "DCUniformDataProtocol.h"
 
-@protocol DCGroupViewCellDelegate <NSObject>
-
-- (void)addGroupView:(DCGroupView *)groupView;
-
-- (DCGroupView *)getGroupViewWithDataGroupUID:(NSString *)uid;
+@protocol DCGroupViewCellDelegate
 
 @end
 
 @interface DCGroupViewCell : UITableViewCell
 
 @property (assign, nonatomic) id <DCGroupViewCellDelegate> delegate;
-@property (assign, nonatomic) id <DCGroupViewDelegate> delegateForGroupView;
 @property (readonly, nonatomic) double cellSpace;
 @property (readonly, nonatomic) double cellTopBottomMargin;
 @property (readonly, nonatomic) NSUInteger frameSize;
 @property (readonly, nonatomic) NSUInteger tableViewMargin;
 @property (readonly, nonatomic) NSUInteger itemCount;
-@property (retain, nonatomic) NSArray *dataGroupUIDs;
-@property (assign, nonatomic) id <DCDataLibraryHelper> dataLibraryHelper;
-@property (assign, nonatomic) id enumDataItemParam;
+@property (retain, nonatomic) NSArray *dataGroupViews;
 
-- (id)initWithDataLibHelper:(id <DCDataLibraryHelper>)dataLibraryHelper dataGroupUIDs:(NSArray *)dataGroupUIDs enumDataItemParam:(id)enumDataItemParam cellSpace:(double)cellSpace cellTopBottomMargin:(double)cellTopBottomMargin tableViewMargin:(NSUInteger)tableViewMargin frameSize:(NSUInteger)frameSize andItemCount:(NSUInteger)itemCount;
+- (id)initWithDataGroupViews:(NSArray *)dataGroupViews cellSpace:(double)cellSpace cellTopBottomMargin:(double)cellTopBottomMargin tableViewMargin:(NSUInteger)tableViewMargin frameSize:(NSUInteger)frameSize andItemCount:(NSUInteger)itemCount;
 
 @end
