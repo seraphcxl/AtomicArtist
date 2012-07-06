@@ -38,17 +38,34 @@
         if (self.needClearCache) {
             [self.delegate clearCacheWithBufferRangeFrom:self.bufferBeginTableCellIndex to:self.bufferEndTableCellIndex andCancelFlag:&_canceled];
         }
+        // perpare indexs
+        if (_canceled) {
+            break;
+        }
+        
+        NSMutableArray *prevIndexs = [[[NSMutableArray alloc] init] autorelease];
+        for (NSInteger index = self.visiableBeginTableCellIndex - 1; index >= self.bufferBeginTableCellIndex; --index) {
+            NSString *indexStr = [[[NSString alloc] initWithFormat:@"%d", index] autorelease];
+            [prevIndexs addObject:indexStr];
+        }
+        
+        NSMutableArray *nextIndexs = [[[NSMutableArray alloc] init] autorelease];
+        for (NSInteger index = self.visiableEndTableCellIndex + 1; index <= self.bufferEndTableCellIndex; ++index) {
+            NSString *indexStr = [[[NSString alloc] initWithFormat:@"%d", index] autorelease];
+            [nextIndexs addObject:indexStr];
+        }
         // createViewsAndLoadSmallThumbnailForBuffer
         if (_canceled) {
             break;
         }
-        [self.delegate createViewsAndLoadSmallThumbnailForBuffer:self.bufferBeginTableCellIndex to:self.bufferEndTableCellIndex andVisiable:self.visiableBeginTableCellIndex to:self.visiableEndTableCellIndex andCancelFlag:&_canceled];
+        
+        [self.delegate createViewsAndLoadSmallThumbnailForBufferWithPrevIndexs:prevIndexs nextIndexs:nextIndexs andCancelFlag:&_canceled];
         // loadBigThumbnailForBuffer
         if (_canceled) {
             break;
         }
         [[DCDataLoader defaultDataLoader] cancelAllOperationsOnQueue:DATALODER_TYPE_BUFFER];
-        [self.delegate loadBigThumbnailForBuffer:self.bufferBeginTableCellIndex to:self.bufferEndTableCellIndex andVisiable:self.visiableBeginTableCellIndex to:self.visiableEndTableCellIndex andCancelFlag:&_canceled];
+        [self.delegate loadBigThumbnailForBufferWithPrevIndexs:prevIndexs nextIndexs:nextIndexs andCancelFlag:&_canceled];
     } while (NO);
 }
 

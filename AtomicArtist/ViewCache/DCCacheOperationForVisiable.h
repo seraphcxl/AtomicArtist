@@ -10,9 +10,9 @@
 
 @protocol DCCacheOperationForVisiableDelegate <NSObject>
 
-- (void)createViewsAndLoadSmallThumbnailForVisiableFrom:(NSInteger)begin to:(NSInteger)end andCancelFlag:(BOOL *)cancel;
+- (void)createViewsAndLoadSmallThumbnailForVisiableFrom:(NSInteger)begin to:(NSInteger)end except:(NSInteger)current andCancelFlag:(BOOL *)cancel;
 - (void)loadBigThumbnailForCurrentTableCell:(NSInteger)index andCancelFlag:(BOOL *)cancel;
-- (void)loadBigThumbnailForVisiableFrom:(NSInteger)begin to:(NSInteger)end andCancelFlag:(BOOL *)cancel;
+- (void)loadBigThumbnailForVisiableFrom:(NSInteger)begin to:(NSInteger)end except:(NSInteger)current andCancelFlag:(BOOL *)cancel;
 
 @end
 

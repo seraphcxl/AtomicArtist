@@ -16,6 +16,10 @@
 
 - (NSArray *)createViewsAndLoadSmallThumbnailForTableCell:(NSUInteger)index;
 
+- (void)loadBigThumbnailForTableCell:(NSInteger)index andCancelFlag:(BOOL *)cancel;
+
+- (void)clearCacheWithBufferForTableCell:(NSInteger)index;
+
 - (void)actionForBufferFrom:(NSInteger)beginBuffer to:(NSInteger)endBuffer andVisiableFrom:(NSInteger)beginVisiable to:(NSInteger)endVisiable;
 
 - (void)actionForVisiableFrom:(NSInteger)begin to:(NSInteger)end andCurrent:(NSInteger)index;
@@ -93,10 +97,63 @@
             UIView *view = [self.delegate createViewWithUID:uid];
             [self.delegate loadSmallThumbnailForView:view];
             [viewsInTableCell setObject:view forKey:uid];
+//            [_views setObject:view forKey:uid];
         }
         [_lockForViews unlock];
     } while (NO);
     return result;
+}
+
+- (void)loadBigThumbnailForTableCell:(NSInteger)index andCancelFlag:(BOOL *)cancel {
+    do {
+        if (!cancel) {
+            break;
+        }
+        
+        NSString *uidForTableCell = [self uidForTableCell:index];
+        NSArray *allViews = nil;
+        [_lockForViews lock];
+        NSMutableDictionary *viewsInTableCell = [_tableCells objectForKey:uidForTableCell];
+        if (viewsInTableCell) {
+            allViews = [viewsInTableCell allValues];
+        }
+        [_lockForViews unlock];
+        
+        for (UIView *view in allViews) {
+            if (*cancel) {
+                NSLog(@"Cancel from loadBigThumbnailForTableCell:andCancelFlag:");
+                break;
+            }
+            [self.delegate loadBigThumbnailForView:view];
+        }
+        
+        if (*cancel) {
+            NSLog(@"Cancel from loadBigThumbnailForTableCell:andCancelFlag:");
+            break;
+        }
+
+    } while (NO);
+}
+
+- (void)clearCacheWithBufferForTableCell:(NSInteger)index {
+    do {
+        [_lockForViews lock];
+        NSString *uidForTableCell = [self uidForTableCell:index];
+//        NSArray *allViews = nil;
+//        NSMutableDictionary *viewsInTableCell = [_tableCells objectForKey:uidForTableCell];
+//        if (viewsInTableCell) {
+//            allViews = [viewsInTableCell allValues];
+//        }
+//        
+//        for (UIView *view in allViews) {
+//            NSString *viewUID = [self uidForView:view];
+//            [_views removeObjectForKey:viewUID];
+//        }
+        
+        [_tableCells removeObjectForKey:uidForTableCell];
+        
+        [_lockForViews unlock];
+    } while (NO);
 }
 
 - (NSArray *)getViewsForTableCell:(NSIndexPath *)indexPath {
@@ -140,17 +197,17 @@
     return result;
 }
 
-- (UIView *)getViewWithUID:(NSString *)uid {
-    UIView *result = nil;
-    do {
-        [_lockForViews lock];
-        if (_views) {
-            result = [_views objectForKey:uid];
-        }
-        [_lockForViews unlock];
-    } while (NO);
-    return result;
-}
+//- (UIView *)getViewWithUID:(NSString *)uid {
+//    UIView *result = nil;
+//    do {
+//        [_lockForViews lock];
+//        if (_views) {
+//            result = [_views objectForKey:uid];
+//        }
+//        [_lockForViews unlock];
+//    } while (NO);
+//    return result;
+//}
 
 - (NSString *)uidForTableCell:(NSUInteger)index {
     return [[[NSString alloc] initWithFormat:@"%d", index] autorelease];
@@ -170,9 +227,9 @@
         }
         
         [_lockForViews lock];
-        if (!_views) {
-            _views = [[NSMutableDictionary alloc] init];
-        }
+//        if (!_views) {
+//            _views = [[NSMutableDictionary alloc] init];
+//        }
         
         if (!_tableCells) {
             _tableCells = [[NSMutableDictionary alloc] init];
@@ -214,11 +271,11 @@
         _tableCells = nil;
     }
     
-    if (_views) {
-        [_views removeAllObjects];
-        [_views release];
-        _views = nil;
-    }
+//    if (_views) {
+//        [_views removeAllObjects];
+//        [_views release];
+//        _views = nil;
+//    }
     [_lockForViews unlock];
     if (_lockForViews) {
         [_lockForViews release];
@@ -229,10 +286,19 @@
 }
 
 #pragma mark DCCacheOperationForVisiableDelegate
-- (void)createViewsAndLoadSmallThumbnailForVisiableFrom:(NSInteger)begin to:(NSInteger)end andCancelFlag:(BOOL *)cancel {
+- (void)createViewsAndLoadSmallThumbnailForVisiableFrom:(NSInteger)begin to:(NSInteger)end except:(NSInteger)current andCancelFlag:(BOOL *)cancel {
     do {
         if (!cancel) {
             break;
+        }
+        for (NSUInteger index = begin; index <= end; ++index) {
+            if (*cancel) {
+                NSLog(@"Cancel from createViewsAndLoadSmallThumbnailForVisiableFrom:to:except:andCancelFlag:");
+                break;
+            }
+            if (index != current) {
+                [self createViewsAndLoadSmallThumbnailForTableCell:index];
+            }
         }
     } while (NO);
 }
@@ -242,29 +308,108 @@
         if (!cancel) {
             break;
         }
+        [self loadBigThumbnailForTableCell:index andCancelFlag:cancel];
     } while (NO);
 }
 
-- (void)loadBigThumbnailForVisiableFrom:(NSInteger)begin to:(NSInteger)end andCancelFlag:(BOOL *)cancel {
+- (void)loadBigThumbnailForVisiableFrom:(NSInteger)begin to:(NSInteger)end except:(NSInteger)current andCancelFlag:(BOOL *)cancel {
     do {
         if (!cancel) {
+            break;
+        }
+        for (NSUInteger index = begin; index <= end; ++index) {
+            if (*cancel) {
+                NSLog(@"Cancel from loadBigThumbnailForVisiableFrom:to:except:andCancelFlag:");
+                break;
+            }
+            if (index != current) {
+                [self loadBigThumbnailForTableCell:index andCancelFlag:cancel];
+            }
+        }
+        
+        if (*cancel) {
+            NSLog(@"Cancel from loadBigThumbnailForVisiableFrom:to:except:andCancelFlag:");
             break;
         }
     } while (NO);
 }
 
 #pragma mark DCCacheOperationForBufferDelegate
-- (void)createViewsAndLoadSmallThumbnailForBuffer:(NSInteger)beginBuffer to:(NSInteger)endBuffer andVisiable:(NSInteger)beginVisiable to:(NSInteger)endVisiable andCancelFlag:(BOOL *)cancel {
+- (void)createViewsAndLoadSmallThumbnailForBufferWithPrevIndexs:(NSArray *)prevIndexs nextIndexs:(NSArray *)nextIndexs andCancelFlag:(BOOL *)cancel {
     do {
-        if (!cancel) {
+        if (!cancel || !prevIndexs || !nextIndexs) {
+            break;
+        }
+        NSUInteger prevIndexsCount = [prevIndexs count];
+        NSUInteger nextIndexsCount = [nextIndexs count];
+        NSUInteger count = MAX(prevIndexsCount, nextIndexsCount);
+        
+        for (NSUInteger index = 0; index < count; ++index) {
+            if (*cancel) {
+                NSLog(@"Cancel from createViewsAndLoadSmallThumbnailForBufferWithPrevIndexs:nextIndexs:andCancelFlag:");
+                break;
+            }
+            
+            NSString *nextIndexStr = [nextIndexs objectAtIndex:index];
+            if (nextIndexStr) {
+                NSUInteger nextIndex = [nextIndexStr integerValue];
+                [self createViewsAndLoadSmallThumbnailForTableCell:nextIndex];
+            }
+            
+            if (*cancel) {
+                NSLog(@"Cancel from createViewsAndLoadSmallThumbnailForBufferWithPrevIndexs:nextIndexs:andCancelFlag:");
+                break;
+            }
+            
+            NSString *prevIndexStr = [prevIndexs objectAtIndex:index];
+            if (prevIndexStr) {
+                NSUInteger prevIndex = [prevIndexStr integerValue];
+                [self createViewsAndLoadSmallThumbnailForTableCell:prevIndex];
+            }
+        }
+        
+        if (*cancel) {
+            NSLog(@"Cancel from createViewsAndLoadSmallThumbnailForBufferWithPrevIndexs:nextIndexs:andCancelFlag:");
             break;
         }
     } while (NO);
 }
 
-- (void)loadBigThumbnailForBuffer:(NSInteger)beginBuffer to:(NSInteger)endBuffer andVisiable:(NSInteger)beginVisiable to:(NSInteger)endVisiable andCancelFlag:(BOOL *)cancel {
+- (void)loadBigThumbnailForBufferWithPrevIndexs:(NSArray *)prevIndexs nextIndexs:(NSArray *)nextIndexs andCancelFlag:(BOOL *)cancel {
     do {
-        if (!cancel) {
+        if (!cancel || !prevIndexs || !nextIndexs) {
+            break;
+        }
+        NSUInteger prevIndexsCount = [prevIndexs count];
+        NSUInteger nextIndexsCount = [nextIndexs count];
+        NSUInteger count = MAX(prevIndexsCount, nextIndexsCount);
+        
+        for (NSUInteger index = 0; index < count; ++index) {
+            if (*cancel) {
+                NSLog(@"Cancel from loadBigThumbnailForBufferWithPrevIndexs:nextIndexs:andCancelFlag:");
+                break;
+            }
+            
+            NSString *nextIndexStr = [nextIndexs objectAtIndex:index];
+            if (nextIndexStr) {
+                NSUInteger nextIndex = [nextIndexStr integerValue];
+                [self loadBigThumbnailForTableCell:nextIndex andCancelFlag:cancel];
+            }
+            
+            if (*cancel) {
+                NSLog(@"Cancel from loadBigThumbnailForBufferWithPrevIndexs:nextIndexs:andCancelFlag:");
+                break;
+            }
+            
+            NSString *prevIndexStr = [prevIndexs objectAtIndex:index];
+            if (prevIndexStr) {
+                NSUInteger prevIndex = [prevIndexStr integerValue];
+                [self loadBigThumbnailForTableCell:prevIndex andCancelFlag:cancel];
+            }
+        }
+        
+        if (*cancel) {
+            NSLog(@"Cancel from loadBigThumbnailForBufferWithPrevIndexs:nextIndexs:andCancelFlag:");
             break;
         }
     } while (NO);
@@ -273,6 +418,27 @@
 - (void)clearCacheWithBufferRangeFrom:(NSInteger)begin to:(NSInteger)end andCancelFlag:(BOOL *)cancel {
     do {
         if (!cancel) {
+            break;
+        }
+        [_lockForViews lock];
+        NSArray *allTableCellIndexs = [_tableCells allKeys];
+        [_lockForViews unlock];
+        
+        for (NSString *tableCellIndexStr in allTableCellIndexs) {
+            if (*cancel) {
+                NSLog(@"Cancel from clearCacheWithBufferRangeFrom:to:andCancelFlag:");
+                break;
+            }
+            
+            if (tableCellIndexStr) {
+                NSUInteger tableCellIndex = [tableCellIndexStr integerValue];
+                if (tableCellIndex <= begin || tableCellIndex >= end) {
+                    [self clearCacheWithBufferForTableCell:tableCellIndex];
+                }
+            }
+        }
+        if (*cancel) {
+            NSLog(@"Cancel from clearCacheWithBufferRangeFrom:to:andCancelFlag:");
             break;
         }
     } while (NO);

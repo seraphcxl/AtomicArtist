@@ -39,12 +39,12 @@
         if (_canceled) {
             break;
         }
-        [self.delegate createViewsAndLoadSmallThumbnailForVisiableFrom:self.visiableBeginTableCellIndex to:self.visiableEndTableCellIndex andCancelFlag:&_canceled];
+        [self.delegate createViewsAndLoadSmallThumbnailForVisiableFrom:self.visiableBeginTableCellIndex to:self.visiableEndTableCellIndex except:self.currentTableCellIndex andCancelFlag:&_canceled];
         // loadBigThumbnailForVisiable
         if (_canceled) {
             break;
         }
-        [self.delegate loadBigThumbnailForVisiableFrom:self.visiableBeginTableCellIndex to:self.visiableEndTableCellIndex andCancelFlag:&_canceled];
+        [self.delegate loadBigThumbnailForVisiableFrom:self.visiableBeginTableCellIndex to:self.visiableEndTableCellIndex except:self.currentTableCellIndex andCancelFlag:&_canceled];
     } while (NO);
 }
 

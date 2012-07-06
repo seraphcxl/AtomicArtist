@@ -27,7 +27,7 @@
 
 @interface DCViewCache : NSObject <DCCacheOperationForVisiableDelegate, DCCacheOperationForBufferDelegate> {
     NSMutableDictionary *_tableCells;  // key:UIDForIndexPath; value:NSMutableDictionary *viewsInTableCell
-    NSMutableDictionary *_views;  // key:UIDForView; value:view
+//    NSMutableDictionary *_views;  // key:UIDForView; value:view
     NSLock *_lockForViews;
     
     NSOperationQueue *_queueForVisiableOp;
@@ -42,7 +42,7 @@
 
 @property (assign, nonatomic) id<DCDataLibraryHelper> dataLibraryHelper;
 
-- (UIView *)getViewWithUID:(NSString *)uid;
+//- (UIView *)getViewWithUID:(NSString *)uid;
 
 - (NSArray *)getViewsForTableCell:(NSIndexPath *)indexPath;
 
