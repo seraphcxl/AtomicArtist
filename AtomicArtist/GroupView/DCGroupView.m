@@ -44,7 +44,30 @@
 @synthesize posterImage = _posterImage;
 @synthesize dataLibraryHelper = _dataLibraryHelper;
 @synthesize enumDataItemParam = _enumDataItemParam;
-@synthesize loadPosterImageOperation = _loadPosterImageOperation;
+
+- (void)loadSmallThumbnail {
+    do {
+        if (!self.posterImage) {
+            if (!self.dataGroupUID || !self.dataLibraryHelper) {
+                break;
+            }
+            id <DCDataGroup> group = [self.dataLibraryHelper groupWithUID:self.dataGroupUID];
+            if (!group) {
+                break;
+            }
+            
+            self.posterImage = (UIImage *)[group valueForProperty:kDATAGROUPPROPERTY_POSTERIMAGE withOptions:nil];
+        }
+    } while (NO);
+}
+
+- (void)loadBigThumbnail {
+    do {
+        if (!self.posterImage || (self.posterImage.size.width < self.posterImageSize && self.posterImage.size.height < self.posterImageSize)) {
+            [self loadDBPosterImage];
+        }
+    } while (NO);
+}
 
 - (void)showPosterImage {
     do {
@@ -91,9 +114,9 @@
         }
     }
     if (needRunOperation) {
-        [self performSelectorOnMainThread:@selector(preparePosterImageInfo) withObject:nil waitUntilDone:NO];
+        [self preparePosterImageInfo];
     } else {
-        [self showPosterImage];
+        [self performSelectorOnMainThread:@selector(showPosterImage) withObject:nil waitUntilDone:NO];
     }
 }
 
@@ -150,12 +173,6 @@
         _pinchGestureRecognizer = nil;
     }
     
-    if (_loadPosterImageOperation) {
-        [_loadPosterImageOperation cancel];
-        [_loadPosterImageOperation release];
-        _loadPosterImageOperation = nil;
-    }
-    
     self.posterImage = nil;
     self.dataGroupUID = nil;
     self.enumDataItemParam = nil;
@@ -188,15 +205,11 @@
 }
 
 - (void)preparePosterImageInfo {
-    if (self.loadPosterImageOperation) {
-//        [self.loadPosterImageOperation start];
+    if (self.dataLibraryHelper) {
+        [self refreshItemsForPosterImage:NO];
+        
     } else {
-        if (self.dataLibraryHelper) {
-            [self refreshItemsForPosterImage:NO];
-            
-        } else {
-            [NSException raise:@"DCGroupView error" format:@"Reason: self.dataLibraryHelper == nil"];
-        }
+        [NSException raise:@"DCGroupView error" format:@"Reason: self.dataLibraryHelper == nil"];
     }
 }
 
@@ -209,9 +222,8 @@
             if (!group) {
                 return;
             }
-            _loadPosterImageOperation = [group createOperationForLoadCachePosterImageWithItemUID:itemUID];
-            [_loadPosterImageOperation retain];
-            [[DCDataLoader defaultDataLoader] queue:DATALODER_TYPE_VISIABLE addOperation:self.loadPosterImageOperation];
+            NSOperation *loadPosterImageOperation = [group createOperationForLoadCachePosterImageWithItemUID:itemUID];
+            [[DCDataLoader defaultDataLoader] queue:DATALODER_TYPE_VISIABLE addOperation:loadPosterImageOperation];
         }
     }
 }
@@ -223,27 +235,10 @@
         if (self.posterImageSize == 0 || !self.dataGroupUID || !self.dataLibraryHelper) {
             break;
         }
+        
         id <DCDataGroup> group = [self.dataLibraryHelper groupWithUID:self.dataGroupUID];
         if (!group) {
             break;
-        }
-        
-        BOOL needRunOperation = NO;
-        
-        if (!self.posterImage) {
-            self.posterImage = (UIImage *)[group valueForProperty:kDATAGROUPPROPERTY_POSTERIMAGE withOptions:nil];
-            
-            needRunOperation = YES;
-        } else {
-            if (self.posterImage.size.width >= self.posterImageSize || self.posterImage.size.height >= self.posterImageSize) {
-                needRunOperation = NO;
-            } else {
-                needRunOperation = YES;
-            }
-        }
-        
-        if (needRunOperation) {
-            [self performSelectorOnMainThread:@selector(loadDBPosterImage) withObject:nil waitUntilDone:NO];
         }
         
         [self showPosterImage];

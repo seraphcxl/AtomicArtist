@@ -24,10 +24,13 @@
 @property (retain, nonatomic) UIImage *posterImage;
 @property (assign, nonatomic) id <DCDataLibraryHelper> dataLibraryHelper;
 @property (assign, nonatomic) id enumDataItemParam;
-@property (readonly, nonatomic) NSOperation *loadPosterImageOperation;
 
 - (void)refreshItemsForPosterImage:(BOOL)force;
 
 - (void)updatePosterImage;
+
+- (void)loadSmallThumbnail;
+
+- (void)loadBigThumbnail;
 
 @end

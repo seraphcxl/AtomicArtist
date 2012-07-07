@@ -54,7 +54,6 @@
     if (self) {
         if (_groupViews) {
             for (DCGroupView *view in _groupViews) {
-                [view.loadPosterImageOperation setQueuePriority:NSOperationQueuePriorityLow];
                 [view removeFromSuperview];
             }
             [_groupViews removeAllObjects];

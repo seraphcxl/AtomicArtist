@@ -625,9 +625,21 @@
 }
 
 - (void)loadSmallThumbnailForView:(UIView *)view {
+    do {
+        if ([view isMemberOfClass:[DCGroupView class]]) {
+            DCGroupView *groupView = (DCGroupView *)view;
+            [groupView loadSmallThumbnail];
+        }
+    } while (NO);
 }
 
 - (void)loadBigThumbnailForView:(UIView *)view {
+    do {
+        if ([view isMemberOfClass:[DCGroupView class]]) {
+            DCGroupView *groupView = (DCGroupView *)view;
+            [groupView loadBigThumbnail];
+        }
+    } while (NO);
 }
 
 @end

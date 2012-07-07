@@ -99,6 +99,8 @@
             [viewsInTableCell setObject:view forKey:uid];
             [_views setObject:view forKey:uid];
         }
+        
+        result = [viewsInTableCell allValues];
         [_lockForViews unlock];
     } while (NO);
     return result;
