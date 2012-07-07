@@ -144,7 +144,11 @@
 }
 
 - (void)clearCache {
+    [[DCDataLoader defaultDataLoader] cancelAllOperationsOnQueue:DATALODER_TYPE_VISIABLE];
+    [[DCDataLoader defaultDataLoader] cancelAllOperationsOnQueue:DATALODER_TYPE_BUFFER];
+    
     [self.viewCache clear];
+    
     if (self.dataLibraryHelper) {
         [self.dataLibraryHelper clearCacheInGroup:self.dataGroupUID];
     }
@@ -264,6 +268,9 @@
 - (void)selectItem:(NSString *)itemUID showInPageScrollViewController:(DCPageScrollViewController *)pageScrollViewCtrl {
     if (itemUID && pageScrollViewCtrl && self.dataGroupUID && self.dataLibraryHelper) {
         /*** *** ***/ /*** *** ***/ /*** *** ***/ /*** *** ***/ /*** *** ***/ /*** *** ***/
+        
+        [[DCDataLoader defaultDataLoader] cancelAllOperationsOnQueue:DATALODER_TYPE_VISIABLE];
+        [[DCDataLoader defaultDataLoader] cancelAllOperationsOnQueue:DATALODER_TYPE_BUFFER];
         
         DCDetailViewController *currentDetailViewCtrl = nil;
         DCDetailViewController *prevDetailViewCtrl = nil;
@@ -419,6 +426,9 @@
     _itemCountInCell = [self calcItemCountInCellWithFrameSize:_frameSize andTableViewMargin:_tableViewMargin];
     _cellSpace = [self calcCellSpaceWithFrameSize:_frameSize tableViewMargin:_tableViewMargin andItemCountInCell:_itemCountInCell];
     
+    [[DCDataLoader defaultDataLoader] cancelAllOperationsOnQueue:DATALODER_TYPE_VISIABLE];
+    [[DCDataLoader defaultDataLoader] cancelAllOperationsOnQueue:DATALODER_TYPE_BUFFER];
+    
     [self.viewCache clear];
     
     if ([self.dataLibraryHelper itemsCountWithParam:self.enumDataItemParam inGroup:self.dataGroupUID] > _itemCountInCell * [self calcVisiableRowNumber]) {
@@ -446,6 +456,9 @@
 }
 
 - (void)actionForWillDisappear {
+    [[DCDataLoader defaultDataLoader] cancelAllOperationsOnQueue:DATALODER_TYPE_VISIABLE];
+    [[DCDataLoader defaultDataLoader] cancelAllOperationsOnQueue:DATALODER_TYPE_BUFFER];
+    
     [self.viewCache clear];
 }
 
@@ -485,6 +498,9 @@
         _tableViewMargin = tmpTableViewMargin;
         _itemCountInCell = tmpItemCountInCell;
         _cellSpace = tmpCellSpace;
+        
+        [[DCDataLoader defaultDataLoader] cancelAllOperationsOnQueue:DATALODER_TYPE_VISIABLE];
+        [[DCDataLoader defaultDataLoader] cancelAllOperationsOnQueue:DATALODER_TYPE_BUFFER];
         
         [self.viewCache clear];
         

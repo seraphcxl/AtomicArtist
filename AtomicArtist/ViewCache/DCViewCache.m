@@ -62,7 +62,7 @@
 }
 
 - (NSArray *)createViewsAndLoadSmallThumbnailForTableCell:(NSUInteger)index {
-    NSArray *result = nil;
+    NSMutableArray *result = nil;
     do {
         if (!self.delegate) {
             break;
@@ -78,29 +78,34 @@
         
         NSMutableArray *addViewUIDs = [self.delegate getViewUIDsForTableCellAtIndexPath:index];
         
-        NSArray *existingViewUIDs = [viewsInTableCell allKeys];
+        NSMutableArray *existingViewUIDs = [[[NSMutableArray alloc] initWithArray:[viewsInTableCell allKeys]] autorelease];
         
-        // remove view not in addViewUIDs
-        for (NSString *uid in existingViewUIDs) {
-            if ([addViewUIDs containsObject:uid]) {
-                UIView *view = [viewsInTableCell objectForKey:uid];
+        result = [[[NSMutableArray alloc] init] autorelease];
+        
+        for (NSString *uid in addViewUIDs) {
+            UIView *view = nil;
+            if ([existingViewUIDs containsObject:uid]) {
+                view = [viewsInTableCell objectForKey:uid];
                 if (view) {
                     [self.delegate loadSmallThumbnailForView:view];
                 }
-                [addViewUIDs removeObject:uid];
+                [existingViewUIDs removeObject:uid];
             } else {
-                [viewsInTableCell removeObjectForKey:uid];
+                view = [self.delegate createViewWithUID:uid];
+                [self.delegate loadSmallThumbnailForView:view];
+                [viewsInTableCell setObject:view forKey:uid];
+                [_views setObject:view forKey:uid];
+            }
+            
+            if (view) {
+                [result addObject:view];
             }
         }
         
-        for (NSString *uid in addViewUIDs) {
-            UIView *view = [self.delegate createViewWithUID:uid];
-            [self.delegate loadSmallThumbnailForView:view];
-            [viewsInTableCell setObject:view forKey:uid];
-            [_views setObject:view forKey:uid];
+        for (NSString *uid in existingViewUIDs) {
+            [viewsInTableCell removeObjectForKey:uid];
         }
         
-        result = [viewsInTableCell allValues];
         [_lockForViews unlock];
     } while (NO);
     return result;

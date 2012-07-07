@@ -297,37 +297,45 @@ typedef enum {
     if (self.viewCtrls) {
         [self.viewCtrls removeAllObjects];
         
-        NSUInteger pageCount = 0;
+        BOOL needRebuildPageViews = NO;
 
         if (previous) {
             [self.viewCtrls setObject:previous forKey:pageID_previous];
             [self setView:PAGEINDEX_PREVIOUS appearFlag:YES];
             enableViews[PAGEINDEX_PREVIOUS] = YES;
-            ++pageCount;
         } else {
+            if (enableViews[PAGEINDEX_PREVIOUS]) {
+                needRebuildPageViews = YES;
+            }
             [self setView:PAGEINDEX_PREVIOUS appearFlag:NO];
             enableViews[PAGEINDEX_PREVIOUS] = NO;
         }
+        
         if (current) {
             [self.viewCtrls setObject:current forKey:pageID_current];
             [self setView:PAGEINDEX_CURRENT appearFlag:YES];
             enableViews[PAGEINDEX_CURRENT] = YES;
-            ++pageCount;
         } else {
+            if (enableViews[PAGEINDEX_CURRENT]) {
+                needRebuildPageViews = YES;
+            }
             [self setView:PAGEINDEX_CURRENT appearFlag:NO];
             enableViews[PAGEINDEX_CURRENT] = NO;
         }
+        
         if (next) {
             [self.viewCtrls setObject:next forKey:pageID_next];
             [self setView:PAGEINDEX_NEXT appearFlag:YES];
             enableViews[PAGEINDEX_NEXT] = YES;
-            ++pageCount;
         } else {
+            if (enableViews[PAGEINDEX_NEXT]) {
+                needRebuildPageViews = YES;
+            }
             [self setView:PAGEINDEX_NEXT appearFlag:NO];
             enableViews[PAGEINDEX_NEXT] = NO;
         }
         
-        if ([self.pageViews count] != 0 && [self.pageViews count] != pageCount) {
+        if ([self.pageViews count] != 0 || needRebuildPageViews) {
             [self clearUI];
             CGRect rectForScrollView = [self.view bounds];
             self.pageScrollView = [[[UIScrollView alloc] initWithFrame:rectForScrollView] autorelease];
