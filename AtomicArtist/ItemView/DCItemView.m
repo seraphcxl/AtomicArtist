@@ -39,7 +39,29 @@
 @synthesize thumbnail = _thumbnail;
 @synthesize dataGroupUID = _dataGroupUID;
 @synthesize dataLibraryHelper = _dataLibraryHelper;
-@synthesize loadThumbnailOperation = _loadThumbnailOperation;
+
+- (void)loadSmallThumbnail {
+    do {
+        if (!self.thumbnail) {
+            if (!self.dataGroupUID || !self.itemUID || !self.dataLibraryHelper) {
+                break;
+            }
+            id <DCDataItem> item = [self.dataLibraryHelper itemWithUID:self.itemUID inGroup:self.dataGroupUID];
+            if (!item) {
+                break;
+            }
+            self.thumbnail = (UIImage *)[item valueForProperty:kDATAITEMPROPERTY_THUMBNAIL withOptions:nil];
+        }
+    } while (NO);
+}
+
+- (void)loadBigThumbnail {
+    do {
+        if (!self.thumbnail || (self.thumbnail.size.width < self.thumbnailSize && self.thumbnail.size.height < self.thumbnailSize)) {
+            [self loadDBThumbnail];
+        }
+    } while (NO);
+}
 
 - (void)showThumbnail {
     do {
@@ -87,9 +109,9 @@
         }
     }
     if (needRunOperation) {
-        [self performSelectorOnMainThread:@selector(runOperation) withObject:nil waitUntilDone:NO];
+        [self runOperation];
     } else {
-        [self showThumbnail];
+        [self performSelectorOnMainThread:@selector(showThumbnail) withObject:nil waitUntilDone:NO];
     }
 }
 
@@ -111,12 +133,6 @@
         [self removeGestureRecognizer:_singleTapGestureRecognizer];
         [_singleTapGestureRecognizer release];
         _singleTapGestureRecognizer = nil;
-    }
-    
-    if (_loadThumbnailOperation) {
-        [_loadThumbnailOperation cancel];
-        [_loadThumbnailOperation release];
-        _loadThumbnailOperation = nil;
     }
     
     self.dataLibraryHelper = nil;
@@ -157,17 +173,18 @@
 }
 
 - (void)runOperation {
-    if (self.loadThumbnailOperation) {
-//        [self.loadThumbnailOperation start];
-    } else {
+    do {
+        if (!self.dataLibraryHelper || !self.itemUID || !self.dataGroupUID) {
+            break;
+        }
         id <DCDataItem> item = [self.dataLibraryHelper itemWithUID:self.itemUID inGroup:self.dataGroupUID];
         if (!item) {
-            return;
+            break;
         }
-        _loadThumbnailOperation = [item createOperationForLoadCacheThumbnail];
-        [_loadThumbnailOperation retain];
-        [[DCDataLoader defaultDataLoader] queue:DATALODER_TYPE_VISIABLE addOperation:self.loadThumbnailOperation];
-    }
+        NSOperation *loadThumbnailOperation = [item createOperationForLoadCacheThumbnail];
+        [loadThumbnailOperation retain];
+        [[DCDataLoader defaultDataLoader] queue:DATALODER_TYPE_VISIABLE addOperation:loadThumbnailOperation];
+    } while (NO);
 }
 
 - (void)layoutSubviews {
@@ -177,32 +194,7 @@
         if (self.thumbnailSize == 0 || !self.itemUID) {
             break;
         }
-        
-        if (self.dataLibraryHelper) {
-            BOOL needRunOperation = NO;
-            
-            if (!self.thumbnail) {
-                id <DCDataItem> item = [self.dataLibraryHelper itemWithUID:self.itemUID inGroup:self.dataGroupUID];
-                if (!item) {
-                    break;
-                }
-                self.thumbnail = (UIImage *)[item valueForProperty:kDATAITEMPROPERTY_THUMBNAIL withOptions:nil];
-                needRunOperation = YES;
-            } else {
-                if (self.thumbnail.size.width >= self.thumbnailSize || self.thumbnail.size.height >= self.thumbnailSize) {
-                    needRunOperation = NO;
-                } else {
-                    needRunOperation = YES;
-                }
-            }
-            
-            if (needRunOperation) {
-                [self performSelectorOnMainThread:@selector(loadDBThumbnail) withObject:nil waitUntilDone:NO];
-            }
-            [self showThumbnail];
-        } else {
-            [NSException raise:@"DCItemView error" format:@"Reason: self.dataLibraryHelper == nil"];
-        }
+        [self showThumbnail];
     } while (NO);
 }
 

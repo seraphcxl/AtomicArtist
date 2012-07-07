@@ -143,10 +143,6 @@
 //        _itemCountInCell = [self calcItemCountInCellWithFrameSize:_frameSize];
 //        _cellSpace = [self calcCellSpaceWithFrameSize:_frameSize andItemCountInCell:_itemCountInCell];
         
-//        if (!_groupViews) {
-//            _groupViews = [[NSMutableDictionary alloc] init];
-//        }
-        
         if (!_viewCache) {
             _viewCache = [[DCGroupViewCache alloc] init];
             [_viewCache setDelegate:self];
@@ -162,10 +158,6 @@
     [self actionForWillDisappear];
     [self actionForDidUnload];
     
-//    if (_groupViews) {
-//        [_groupViews release];
-//        _groupViews = nil;
-//    }
     if (_viewCache) {
         [_viewCache release];
         _viewCache = nil;
@@ -177,28 +169,9 @@
 }
 
 - (void)clearCache {
-//    if (_groupViews) {
-//        [_groupViews removeAllObjects];
-//    }
     [self.viewCache clear];
     [self.dataLibraryHelper clearCache];
 }
-
-//- (void)addGroupView:(DCGroupView *)groupView {
-//    if (groupView && _groupViews) {
-//        [_groupViews setObject:groupView forKey:groupView.dataGroupUID];
-//    }
-//}
-//
-//- (DCGroupView *)getGroupViewWithDataGroupUID:(NSString *)uid {
-//    DCGroupView *result = nil;
-//    do {
-//        if (_groupViews) {
-//            result = [_groupViews objectForKey:uid];
-//        }
-//    } while (NO);
-//    return result;
-//}
 
 - (void)actionForWillEnterForegroud:(NSNotification *)note {
     if (self.navigationController.topViewController == self) {
@@ -401,15 +374,9 @@
     _itemCountInCell = [self calcItemCountInCellWithFrameSize:_frameSize andTableViewMargin:_tableViewMargin];
     _cellSpace = [self calcCellSpaceWithFrameSize:_frameSize tableViewMargin:_tableViewMargin andItemCountInCell:_itemCountInCell];
     
-//    if (_groupViews) {
-//        [_groupViews removeAllObjects];
-//    }
     [self.viewCache clear];
     
     [self refreshGroups:NO];
-//    [self performSelectorInBackground:@selector(refreshGroups:) withObject:NO];
-    
-//    [self.tableView reloadData];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -432,9 +399,6 @@
 }
 
 - (void)actionForWillDisappear {
-//    if (_groupViews) {
-//        [_groupViews removeAllObjects];
-//    }
     [self.viewCache clear];
 }
 
@@ -468,10 +432,8 @@
         _itemCountInCell = tmpItemCountInCell;
         _cellSpace = tmpCellSpace;
         
-//        if (_groupViews) {
-//            [_groupViews removeAllObjects];
-//        }
         [self.viewCache clear];
+        
         [self.tableView reloadData];
     }
     
@@ -514,8 +476,6 @@
     NSLog(@"DCGroupViewController tableView:cellForRowAtIndexPath: indexPath.row = %d", [indexPath row]);
     
     [[DCDataLoader defaultDataLoader] queue:DATALODER_TYPE_VISIABLE pauseWithAutoResume:YES with:1.0];
-    
-//    NSArray *dataGroupUIDs = [self dataGroupUIDsForCellAtIndexPath:indexPath];
     
     NSArray *views = [self.viewCache getViewsForTableCell:indexPath];
     
@@ -606,11 +566,8 @@
     DCGroupView *groupView = nil;
     do {
         if (uid) {
-            groupView = [[[DCGroupView alloc] initWithFrame:CGRectZero] autorelease];
+            groupView = [[[DCGroupView alloc] InitWithDataLibraryHelper:self.dataLibraryHelper dataGroupUID:uid enumDataItemParam:_enumDataItemParam andFrame:CGRectZero] autorelease];
             groupView.delegate = self;
-            groupView.dataGroupUID = uid;
-            groupView.dataLibraryHelper = self.dataLibraryHelper;
-            groupView.enumDataItemParam = _enumDataItemParam;
         }
     } while (NO);
     return groupView;

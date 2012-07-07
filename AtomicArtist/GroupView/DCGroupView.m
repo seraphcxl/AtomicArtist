@@ -33,6 +33,8 @@
 
 - (void)showPosterImage;
 
+- (void)refreshItemsForPosterImage:(BOOL)force;
+
 @end
 
 @implementation DCGroupView
@@ -214,18 +216,20 @@
 }
 
 - (void)runOperation:(NSNotification *)note {
-    if (note) {
-        NSString *dataGroupUID = (NSString *)[note object];
-        if ([dataGroupUID isEqualToString:self.dataGroupUID]) {
-            NSString *itemUID = [self.dataLibraryHelper itemUIDAtIndex:0 inGroup:self.dataGroupUID];
-            id <DCDataGroup> group = [self.dataLibraryHelper groupWithUID:self.dataGroupUID];
-            if (!group) {
-                return;
+    do {
+        if (note) {
+            NSString *dataGroupUID = (NSString *)[note object];
+            if ([dataGroupUID isEqualToString:self.dataGroupUID]) {
+                NSString *itemUID = [self.dataLibraryHelper itemUIDAtIndex:0 inGroup:self.dataGroupUID];
+                id <DCDataGroup> group = [self.dataLibraryHelper groupWithUID:self.dataGroupUID];
+                if (!group) {
+                    break;
+                }
+                NSOperation *loadPosterImageOperation = [group createOperationForLoadCachePosterImageWithItemUID:itemUID];
+                [[DCDataLoader defaultDataLoader] queue:DATALODER_TYPE_VISIABLE addOperation:loadPosterImageOperation];
             }
-            NSOperation *loadPosterImageOperation = [group createOperationForLoadCachePosterImageWithItemUID:itemUID];
-            [[DCDataLoader defaultDataLoader] queue:DATALODER_TYPE_VISIABLE addOperation:loadPosterImageOperation];
         }
-    }
+    } while (NO);
 }
 
 - (void)layoutSubviews {
@@ -274,11 +278,14 @@
     } while (NO);
 }
 
-- (id)initWithFrame:(CGRect)frame
-{
+- (id)InitWithDataLibraryHelper:(id<DCDataLibraryHelper>)dataLibraryHelper dataGroupUID:(NSString *)dataGroupUID enumDataItemParam:(id)enumDataItemParam andFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
+        self.dataLibraryHelper = dataLibraryHelper;
+        self.dataGroupUID = dataGroupUID;
+        self.enumDataItemParam = enumDataItemParam;
+        
         [self setBackgroundColor:[UIColor clearColor]];
         _posterImageSize = [self calcPosterImageSize];
         _titleFontSize = [self calcTitleFontSize];

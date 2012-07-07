@@ -12,25 +12,22 @@
 
 @protocol DCItemViewCellDelegate <NSObject>
 
-- (void)addItemView:(DCItemView *)itemView;
-
-- (DCItemView *)getItemViewWithItemUID:(NSString *)itemUID;
+//- (void)addItemView:(DCItemView *)itemView;
+//
+//- (DCItemView *)getItemViewWithItemUID:(NSString *)itemUID;
 
 @end
 
 @interface DCItemViewCell : UITableViewCell
 
 @property (assign, nonatomic) id <DCItemViewCellDelegate> delegate;
-@property (assign, nonatomic) id <DCItemViewDelegate> delegateForItemView;
 @property (readonly, nonatomic) double cellSpace;
 @property (readonly, nonatomic) double cellTopBottomMargin;
 @property (readonly, nonatomic) NSUInteger frameSize;
 @property (readonly, nonatomic) NSUInteger tableViewMargin;
 @property (readonly, nonatomic) NSUInteger itemCount;
-@property (retain, nonatomic) NSArray *itemUIDs;
-@property (readonly, nonatomic) NSString *dataGroupUID;
-@property (assign, nonatomic) id <DCDataLibraryHelper> dataLibraryHelper;
+@property (retain, nonatomic) NSArray *dataItemViews;
 
-- (id)initWithDataLibraryHelper:(id <DCDataLibraryHelper>)dataLibraryHelper itemUIDs:(NSArray *)itemUIDs dataGroupUID:(NSString *)dataGroupUID cellSpace:(double)cellSpace cellTopBottomMargin:(double)cellTopBottomMargin tableViewMargin:(NSUInteger)tableViewMargin frameSize:(NSUInteger)frameSize andItemCount:(NSUInteger)itemCount;
+- (id)initWithDataItemViews:(NSArray *)dataItemViews cellSpace:(double)cellSpace cellTopBottomMargin:(double)cellTopBottomMargin tableViewMargin:(NSUInteger)tableViewMargin frameSize:(NSUInteger)frameSize andItemCount:(NSUInteger)itemCount;
 
 @end

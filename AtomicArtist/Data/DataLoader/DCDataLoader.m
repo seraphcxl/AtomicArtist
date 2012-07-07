@@ -109,10 +109,12 @@ static DCDataLoader *staticDCDataLoader = nil;
 - (void)cancelAllOperationsOnQueue:(enum DATALODER_TYPE)type {
     if (type == DATALODER_TYPE_VISIABLE) {
         if (_queueForVisiable) {
+            NSLog(@"DataLoader visiable queue cancelAllOperations");
             [_queueForVisiable cancelAllOperations];
         }
     } else if (type == DATALODER_TYPE_BUFFER) {
         if (_queueForBuffer) {
+            NSLog(@"DataLoader buffer queue cancelAllOperations");
             [_queueForBuffer cancelAllOperations];
         }
     }

@@ -19,8 +19,6 @@
     double _cellSpace;
     NSUInteger _tableViewMargin;
     
-    NSMutableDictionary *_itemViews;
-    
     UIPinchGestureRecognizer *_pinchGestureRecognizer;
     CGFloat _pinchScale;
 }
@@ -45,8 +43,6 @@
 - (void)refreshItemViewTitle;
 - (void)clearCache;
 
-- (NSArray *)getItemUIDsForCellAtIndexPath:(NSIndexPath *)indexPath;
-
 - (NSString *)pathInDocumentDirectory:(NSString *)fileName;
 
 - (void)pinch:(UIPinchGestureRecognizer *)gr;
@@ -67,6 +63,7 @@
 @synthesize dataLibraryHelper = _dataLibraryHelper;
 @synthesize enumDataItemParam = _enumDataItemParam;
 @synthesize dataGroupIndex = _dataGroupIndex;
+@synthesize viewCache = _viewCache;
 
 - (void)enumAllItems {
     [self refreshItems:NO];
@@ -147,30 +144,10 @@
 }
 
 - (void)clearCache {
-    if (_itemViews) {
-        [_itemViews removeAllObjects];
-    }
-    
+    [self.viewCache clear];
     if (self.dataLibraryHelper) {
         [self.dataLibraryHelper clearCacheInGroup:self.dataGroupUID];
     }
-}
-
-- (void)addItemView:(DCItemView *)itemView {
-    if (itemView && _itemViews) {
-        NSString *itemUID = itemView.itemUID;
-        [_itemViews setObject:itemView forKey:itemUID];
-    }
-}
-
-- (DCItemView *)getItemViewWithItemUID:(NSString *)itemUID {
-    DCItemView *result = nil;
-    do {
-        if (_itemViews) {
-            result = [_itemViews objectForKey:itemUID];
-        }
-    } while (NO);
-    return result;
 }
 
 - (void)actionForWillEnterForegroud:(NSNotification *)note {
@@ -182,10 +159,13 @@
 - (void)actionForItemThumbnailLoaded:(NSNotification *)note {
     DCLoadThumbnailOperation *operation = (DCLoadThumbnailOperation *)[note object];
     [[DCDataModelHelper defaultDataModelHelper] createItemWithUID:operation.itemUID andThumbnail:operation.thumbnail];
-    if (_itemViews) {
-        DCItemView *itemView = [_itemViews objectForKey:operation.itemUID];
-        itemView.thumbnail = operation.thumbnail;
-        [itemView updateThumbnail];
+    if (self.viewCache) {
+        UIView *view = [self.viewCache getViewWithUID:operation.itemUID];
+        if ([view isMemberOfClass:[DCItemView class]]) {
+            DCItemView *itemView = (DCItemView *)view;
+            itemView.thumbnail = operation.thumbnail;
+            [itemView updateThumbnail];
+        }
     }
 }
 
@@ -193,10 +173,9 @@
     [self actionForWillDisappear];
     [self actionForDidUnload];
     
-    if (_itemViews) {
-        [_itemViews removeAllObjects];
-        [_itemViews release];
-        _itemViews = nil;
+    if (_viewCache) {
+        [_viewCache release];
+        _viewCache = nil;
     }
     
     self.dataGroupUID = nil;
@@ -317,18 +296,6 @@
     }
 }
 
-- (NSArray *)getItemUIDsForCellAtIndexPath:(NSIndexPath *)indexPath {
-    NSMutableArray *result = [[[NSMutableArray alloc] init] autorelease];
-    if (self.dataLibraryHelper) {
-        int maxIdx = MIN((indexPath.row + 1) * _itemCountInCell, [self.dataLibraryHelper enumratedItemsCountWithParam:self.enumDataItemParam inGroup:self.dataGroupUID]); 
-        for (int idx = 0 + indexPath.row * _itemCountInCell; idx < maxIdx; ++idx) {
-            [result addObject:[self.dataLibraryHelper itemUIDAtIndex:idx inGroup:self.dataGroupUID]];
-            NSLog(@"Get itemUID: %@ at index: %d", [self.dataLibraryHelper itemUIDAtIndex:idx inGroup:self.dataGroupUID], idx);
-        }
-    }
-    return result;
-}
-
 - (void)reloadTableView:(NSNotification *)note {
     NSString *uid = (NSString *)[note object];
     if ([uid isEqualToString:self.dataGroupUID]) {
@@ -401,8 +368,9 @@
         
         self.dataLibraryHelper = dataLibraryHelper;
         
-        if (!_itemViews) {
-            _itemViews = [[NSMutableDictionary alloc] init];
+        if (!_viewCache) {
+            _viewCache = [[DCItemViewCache alloc] init];
+            [_viewCache setDelegate:self];
         }
         
 //        UIBarButtonItem *bbi = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(refresh:)] autorelease];
@@ -451,9 +419,7 @@
     _itemCountInCell = [self calcItemCountInCellWithFrameSize:_frameSize andTableViewMargin:_tableViewMargin];
     _cellSpace = [self calcCellSpaceWithFrameSize:_frameSize tableViewMargin:_tableViewMargin andItemCountInCell:_itemCountInCell];
     
-    if (_itemViews) {
-        [_itemViews removeAllObjects];
-    }
+    [self.viewCache clear];
     
     if ([self.dataLibraryHelper itemsCountWithParam:self.enumDataItemParam inGroup:self.dataGroupUID] > _itemCountInCell * [self calcVisiableRowNumber]) {
         [self refreshFirstScreen];
@@ -462,8 +428,6 @@
     } else {
         [self refreshItems:NO];
     }
-    
-//    [self.tableView reloadData];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -482,9 +446,7 @@
 }
 
 - (void)actionForWillDisappear {
-    if (_itemViews) {
-        [_itemViews removeAllObjects];
-    }
+    [self.viewCache clear];
 }
 
 - (void)actionForDidUnload {
@@ -524,12 +486,11 @@
         _itemCountInCell = tmpItemCountInCell;
         _cellSpace = tmpCellSpace;
         
-        if (_itemViews) {
-            [_itemViews removeAllObjects];
-        }
+        [self.viewCache clear];
         
         [self.tableView reloadData];
     }
+    
     return result;
 }
 
@@ -575,14 +536,15 @@
     [[DCDataLoader defaultDataLoader] queue:DATALODER_TYPE_VISIABLE pauseWithAutoResume:YES with:1.0];
     
     DCItemViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"DCItemViewCell"];
-    NSArray *itemUIDs = [self getItemUIDsForCellAtIndexPath:indexPath];
+    
+    NSArray *views = [self.viewCache getViewsForTableCell:indexPath];
+    
     if (cell == nil) {
-        cell = [[[DCItemViewCell alloc] initWithDataLibraryHelper:self.dataLibraryHelper itemUIDs:itemUIDs dataGroupUID:self.dataGroupUID cellSpace:_cellSpace cellTopBottomMargin:(_cellSpace / 2) tableViewMargin:_tableViewMargin frameSize:_frameSize andItemCount:_itemCountInCell] autorelease];
+        cell = [[[DCItemViewCell alloc] initWithDataItemViews:views cellSpace:_cellSpace cellTopBottomMargin:(_cellSpace / 2) tableViewMargin:_tableViewMargin frameSize:_frameSize andItemCount:_itemCountInCell] autorelease];
     } else {
-        [cell initWithDataLibraryHelper:self.dataLibraryHelper itemUIDs:itemUIDs dataGroupUID:self.dataGroupUID cellSpace:_cellSpace cellTopBottomMargin:(_cellSpace / 2) tableViewMargin:_tableViewMargin frameSize:_frameSize andItemCount:_itemCountInCell];
+        [cell initWithDataItemViews:views cellSpace:_cellSpace cellTopBottomMargin:(_cellSpace / 2) tableViewMargin:_tableViewMargin frameSize:_frameSize andItemCount:_itemCountInCell];
     }
     cell.delegate = self;
-    cell.delegateForItemView = self.delegateForItemView;
     return cell;
 }
 
@@ -642,5 +604,56 @@
      [detailViewController release];
      */
 }
+
+#pragma mark DCViewCacheDelegate
+- (NSMutableArray *)getViewUIDsForTableCellAtIndexPath:(NSUInteger)index {
+    NSMutableArray *result = [[[NSMutableArray alloc] init] autorelease];
+    if (self.dataLibraryHelper) {
+        int maxIdx = MIN((index + 1) * _itemCountInCell, [self.dataLibraryHelper enumratedItemsCountWithParam:self.enumDataItemParam inGroup:self.dataGroupUID]); 
+        for (int idx = 0 + index * _itemCountInCell; idx < maxIdx; ++idx) {
+            [result addObject:[self.dataLibraryHelper itemUIDAtIndex:idx inGroup:self.dataGroupUID]];
+            NSLog(@"Get itemUID: %@ at index: %d", [self.dataLibraryHelper itemUIDAtIndex:idx inGroup:self.dataGroupUID], idx);
+        }
+    }
+    return result;
+}
+
+- (UIView *)createViewWithUID:(NSString *)uid {
+    DCItemView *itemView = nil;
+    do {
+        if (uid) {
+            itemView = [[[DCItemView alloc] InitWithDataLibraryHelper:self.dataLibraryHelper itemUID:uid dataGroupUID:self.dataGroupUID andFrame:CGRectZero] autorelease];
+            itemView.delegate = self.delegateForItemView;
+        }
+    } while (NO);
+    return itemView;
+}
+
+- (NSUInteger)visiableCellCount {
+    return _itemCountInCell * [self calcVisiableRowNumber];
+}
+
+- (NSUInteger)tableCellCount {
+    return [self.dataLibraryHelper groupsCount];
+}
+
+- (void)loadSmallThumbnailForView:(UIView *)view {
+    do {
+        if ([view isMemberOfClass:[DCItemView class]]) {
+            DCItemView *itemView = (DCItemView *)view;
+            [itemView loadSmallThumbnail];
+        }
+    } while (NO);
+}
+
+- (void)loadBigThumbnailForView:(UIView *)view {
+    do {
+        if ([view isMemberOfClass:[DCItemView class]]) {
+            DCItemView *itemView = (DCItemView *)view;
+            [itemView loadBigThumbnail];
+        }
+    } while (NO);
+}
+
 
 @end

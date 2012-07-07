@@ -25,7 +25,7 @@
 @property (assign, nonatomic) id <DCDataLibraryHelper> dataLibraryHelper;
 @property (assign, nonatomic) id enumDataItemParam;
 
-- (void)refreshItemsForPosterImage:(BOOL)force;
+- (id)InitWithDataLibraryHelper:(id <DCDataLibraryHelper>)dataLibraryHelper dataGroupUID:(NSString *)dataGroupUID enumDataItemParam:(id)enumDataItemParam andFrame:(CGRect)frame;
 
 - (void)updatePosterImage;
 

@@ -11,6 +11,7 @@
 #import "DCItemViewCell.h"
 #import "DCUniformDataProtocol.h"
 #import "DCPageScrollViewController.h"
+#import "DCItemViewCache.h"
 
 @class DCItemViewController;
 
@@ -23,7 +24,7 @@
 
 @end
 
-@interface DCItemViewController : UITableViewController <DCItemViewCellDelegate, DCPageScrollViewControllerDelegate>
+@interface DCItemViewController : UITableViewController <DCItemViewCellDelegate, DCPageScrollViewControllerDelegate, DCViewCacheDelegate>
 
 @property (assign, nonatomic) id <DCItemViewControllerDelegate> delegate;
 @property (assign, nonatomic) id <DCItemViewDelegate> delegateForItemView;
@@ -32,6 +33,8 @@
 @property (readonly, nonatomic) NSString *groupTitle;
 @property (assign, nonatomic) id <DCDataLibraryHelper> dataLibraryHelper;
 @property (assign, nonatomic) id enumDataItemParam;
+
+@property (readonly, nonatomic) DCItemViewCache *viewCache;
 
 - (IBAction)refresh:(id)sender;
 
