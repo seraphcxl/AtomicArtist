@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "DCUniformDataProtocol.h"
+#import "DCDataLoader.h"
 
 @protocol DCItemViewDelegate <NSObject>
 
@@ -31,6 +32,6 @@
 
 - (void)loadSmallThumbnail;
 
-- (void)loadBigThumbnail;
+- (void)loadBigThumbnailInQueue:(enum DATALODER_TYPE)type;
 
 @end

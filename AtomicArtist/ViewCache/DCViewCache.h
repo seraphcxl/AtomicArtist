@@ -10,6 +10,7 @@
 #import "DCUniformDataProtocol.h"
 #import "DCCacheOperationForVisiable.h"
 #import "DCCacheOperationForBuffer.h"
+#import "DCDataLoader.h"
 
 @protocol DCViewCacheDelegate <NSObject>
 
@@ -21,7 +22,7 @@
 - (NSUInteger)tableCellCount;
 
 - (void)loadSmallThumbnailForView:(UIView *)view;
-- (void)loadBigThumbnailForView:(UIView *)view;
+- (void)loadBigThumbnailInQueue:(enum DATALODER_TYPE)type forView:(UIView *)view;
 
 @end
 

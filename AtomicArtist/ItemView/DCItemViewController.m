@@ -214,12 +214,13 @@
     NSLog(@"DCItemViewController refreshItems:");
     if (self.dataLibraryHelper) {
         if (force || ![self.dataLibraryHelper isGroupEnumerated:self.dataGroupUID]) {
+            NSUInteger pageViewCount = _itemCountInCell * [self calcVisiableRowNumber];
+            [_viewCache setBufferTableCellNumber:pageViewCount * CACHE_BUFFERPAGE_ITEM];
             if (self.delegate) {
                 [self.delegate dataRefreshStarted];
             }
-            
             [self clearCache];
-            [self.dataLibraryHelper enumItems:self.enumDataItemParam inGroup:self.dataGroupUID notifyWithFrequency:_itemCountInCell * [self calcVisiableRowNumber]];
+            [self.dataLibraryHelper enumItems:self.enumDataItemParam inGroup:self.dataGroupUID notifyWithFrequency:pageViewCount];
         }
         
         [self refreshItemViewTitle];
@@ -650,7 +651,7 @@
 }
 
 - (NSUInteger)tableCellCount {
-    return [self.dataLibraryHelper groupsCount];
+    return [self.dataLibraryHelper enumratedItemsCountWithParam:self.enumDataItemParam inGroup:self.dataGroupUID];
 }
 
 - (void)loadSmallThumbnailForView:(UIView *)view {
@@ -662,11 +663,11 @@
     } while (NO);
 }
 
-- (void)loadBigThumbnailForView:(UIView *)view {
+- (void)loadBigThumbnailInQueue:(enum DATALODER_TYPE)type forView:(UIView *)view {
     do {
         if ([view isMemberOfClass:[DCItemView class]]) {
             DCItemView *itemView = (DCItemView *)view;
-            [itemView loadBigThumbnail];
+            [itemView loadBigThumbnailInQueue:type];
         }
     } while (NO);
 }

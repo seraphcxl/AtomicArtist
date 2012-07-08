@@ -210,7 +210,7 @@
     if (force || [self.dataLibraryHelper groupsCount] == 0) {
         NSUInteger pageViewCount = _itemCountInCell * [self calcVisiableRowNumber];
         
-        [_viewCache setBufferTableCellNumber:pageViewCount * 4];
+        [_viewCache setBufferTableCellNumber:pageViewCount * CACHE_BUFFERPAGE_GROUP];
         
         UIActivityIndicatorView *activityIndicatorView = [[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite] autorelease];
         [activityIndicatorView startAnimating];
@@ -602,11 +602,11 @@
     } while (NO);
 }
 
-- (void)loadBigThumbnailForView:(UIView *)view {
+- (void)loadBigThumbnailInQueue:(enum DATALODER_TYPE)type forView:(UIView *)view {
     do {
         if ([view isMemberOfClass:[DCGroupView class]]) {
             DCGroupView *groupView = (DCGroupView *)view;
-            [groupView loadBigThumbnail];
+            [groupView loadBigThumbnailInQueue:type];
         }
     } while (NO);
 }

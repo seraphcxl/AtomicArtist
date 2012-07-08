@@ -16,6 +16,9 @@
     
     UIPinchGestureRecognizer *_pinchGestureRecognizer;
     CGFloat _pinchScale;
+    
+    BOOL _loadBigThumbnailInVisiableDataLoader;
+    BOOL _loadBigThumbnailInBufferDataLoader;
 }
 
 - (NSInteger)calcPosterImageSize;
@@ -63,9 +66,22 @@
     } while (NO);
 }
 
-- (void)loadBigThumbnail {
+- (void)loadBigThumbnailInQueue:(enum DATALODER_TYPE)type {
     do {
         if (!self.posterImage || (self.posterImage.size.width < self.posterImageSize && self.posterImage.size.height < self.posterImageSize)) {
+            switch (type) {
+                case DATALODER_TYPE_VISIABLE:
+                    _loadBigThumbnailInVisiableDataLoader = YES;
+                    break;
+                    
+                case DATALODER_TYPE_BUFFER:
+                    _loadBigThumbnailInBufferDataLoader = YES;
+                    break;
+                    
+                default:
+                    break;
+            }
+            
             [self loadDBPosterImage];
         }
     } while (NO);
@@ -225,8 +241,18 @@
                 if (!group) {
                     break;
                 }
-                NSOperation *loadPosterImageOperation = [group createOperationForLoadCachePosterImageWithItemUID:itemUID];
-                [[DCDataLoader defaultDataLoader] queue:DATALODER_TYPE_VISIABLE addOperation:loadPosterImageOperation];
+                
+                if (_loadBigThumbnailInVisiableDataLoader) {
+                    _loadBigThumbnailInVisiableDataLoader = NO;
+                    NSOperation *loadPosterImageOperation = [group createOperationForLoadCachePosterImageWithItemUID:itemUID];
+                    [[DCDataLoader defaultDataLoader] queue:DATALODER_TYPE_VISIABLE addOperation:loadPosterImageOperation];
+                }
+                
+                if (_loadBigThumbnailInBufferDataLoader) {
+                    _loadBigThumbnailInBufferDataLoader = NO;
+                    NSOperation *loadPosterImageOperation = [group createOperationForLoadCachePosterImageWithItemUID:itemUID];
+                    [[DCDataLoader defaultDataLoader] queue:DATALODER_TYPE_BUFFER addOperation:loadPosterImageOperation];
+                }
             }
         }
     } while (NO);
@@ -285,6 +311,9 @@
         self.dataLibraryHelper = dataLibraryHelper;
         self.dataGroupUID = dataGroupUID;
         self.enumDataItemParam = enumDataItemParam;
+        
+        _loadBigThumbnailInVisiableDataLoader = NO;
+        _loadBigThumbnailInBufferDataLoader = NO;
         
         [self setBackgroundColor:[UIColor clearColor]];
         _posterImageSize = [self calcPosterImageSize];

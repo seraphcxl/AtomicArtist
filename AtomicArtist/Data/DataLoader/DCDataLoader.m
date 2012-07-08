@@ -8,7 +8,8 @@
 
 #import "DCDataLoader.h"
 
-#define OPERATIONQUEUE_DEFAULTCONCURRENTCOUNT ((NSInteger)1)
+#define VISIABLEOPERATIONQUEUE_DEFAULTCONCURRENTCOUNT ((NSInteger)2)
+#define BUFFEROPERATIONQUEUE_DEFAULTCONCURRENTCOUNT ((NSInteger)1)
 
 #define TIMEFORRESTART ((NSTimeInterval)1.0)
 
@@ -285,12 +286,12 @@ static DCDataLoader *staticDCDataLoader = nil;
     if (self) {
         if (!_queueForVisiable) {
             _queueForVisiable = [[NSOperationQueue alloc] init];
-            [self queue:DATALODER_TYPE_VISIABLE setMaxConcurrentOperationCount:OPERATIONQUEUE_DEFAULTCONCURRENTCOUNT];
+            [self queue:DATALODER_TYPE_VISIABLE setMaxConcurrentOperationCount:VISIABLEOPERATIONQUEUE_DEFAULTCONCURRENTCOUNT];
         }
         
         if (!_queueForBuffer) {
             _queueForBuffer = [[NSOperationQueue alloc] init];
-            [self queue:DATALODER_TYPE_BUFFER setMaxConcurrentOperationCount:OPERATIONQUEUE_DEFAULTCONCURRENTCOUNT];
+            [self queue:DATALODER_TYPE_BUFFER setMaxConcurrentOperationCount:BUFFEROPERATIONQUEUE_DEFAULTCONCURRENTCOUNT];
         }
     }
     return self;

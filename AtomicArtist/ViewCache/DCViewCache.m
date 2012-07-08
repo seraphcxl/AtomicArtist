@@ -16,7 +16,7 @@
 
 - (NSArray *)createViewsAndLoadSmallThumbnailForTableCell:(NSUInteger)index;
 
-- (void)loadBigThumbnailForTableCell:(NSInteger)index andCancelFlag:(BOOL *)cancel;
+- (void)loadBigThumbnailInQueue:(enum DATALODER_TYPE)type forTableCell:(NSInteger)index andCancelFlag:(BOOL *)cancel;
 
 - (void)clearCacheWithBufferForTableCell:(NSInteger)index;
 
@@ -111,7 +111,7 @@
     return result;
 }
 
-- (void)loadBigThumbnailForTableCell:(NSInteger)index andCancelFlag:(BOOL *)cancel {
+- (void)loadBigThumbnailInQueue:(enum DATALODER_TYPE)type forTableCell:(NSInteger)index andCancelFlag:(BOOL *)cancel {
     do {
         if (!cancel) {
             break;
@@ -131,7 +131,7 @@
                 NSLog(@"Cancel from loadBigThumbnailForTableCell:andCancelFlag:");
                 break;
             }
-            [self.delegate loadBigThumbnailForView:view];
+            [self.delegate loadBigThumbnailInQueue:type forView:view];
         }
         
         if (*cancel) {
@@ -179,21 +179,21 @@
         result = [self createViewsAndLoadSmallThumbnailForTableCell:index];
         
         if (self.lastRequireBufferIndex > index) {
-            visiableEndTableCellIndex = index;
-            visiableBeginTableCellIndex = (int)(index + 1 - visiableCellCount) > 0 ? (index + 1 - visiableCellCount) : 0;
-        } else if (self.lastRequireBufferIndex < index) {
             visiableBeginTableCellIndex = index;
             visiableEndTableCellIndex = (int)(index + visiableCellCount - 1) > (int)(tableCellCount - 1) ? (tableCellCount - 1) : (index + visiableCellCount - 1);
+        } else if (self.lastRequireBufferIndex == 0 || self.lastRequireBufferIndex < index) {
+            visiableEndTableCellIndex = index;
+            visiableBeginTableCellIndex = (int)(index + 1 - visiableCellCount) > 0 ? (index + 1 - visiableCellCount) : 0;
         } else {
-            [NSException raise:@"DCViewCache erroe" format:@"Reason: self.lastRequireBufferIndex == index"];
+            break;
         }
         
         [self actionForVisiableFrom:visiableBeginTableCellIndex to:visiableEndTableCellIndex andCurrent:index];
         
-        if (self.lastRequireBufferIndex == NSUIntegerMax || ABS(self.lastRequireBufferIndex - index) > self.bufferTableCellNumber / 2) {
+        if (self.lastRequireBufferIndex == 0 || ABS(self.lastRequireBufferIndex - index) > self.bufferTableCellNumber / 2) {
             if (visiableCellCount < tableCellCount) {
                 NSUInteger bufferBeginTableCellIndex = (int)(visiableBeginTableCellIndex - self.bufferTableCellNumber) < 0 ? 0 : visiableBeginTableCellIndex - self.bufferTableCellNumber;
-                NSUInteger bufferEndTableCellIndex = visiableEndTableCellIndex + self.bufferTableCellNumber < tableCellCount ? visiableEndTableCellIndex + self.bufferTableCellNumber : tableCellCount;
+                NSUInteger bufferEndTableCellIndex = visiableEndTableCellIndex + self.bufferTableCellNumber < (tableCellCount - 1) ? visiableEndTableCellIndex + self.bufferTableCellNumber : (tableCellCount - 1);
                 
                 [self actionForBufferFrom:bufferBeginTableCellIndex to:bufferEndTableCellIndex andVisiableFrom:visiableBeginTableCellIndex to:visiableEndTableCellIndex];
                 
@@ -227,7 +227,7 @@
 - (id)init {
     self = [super init];
     if (self) {
-        _lastRequireBufferIndex = NSUIntegerMax;
+        _lastRequireBufferIndex = 0;
         
         if (!_lockForViews) {
             _lockForViews = [[NSLock alloc] init];
@@ -338,7 +338,7 @@
         if (!cancel) {
             break;
         }
-        [self loadBigThumbnailForTableCell:index andCancelFlag:cancel];
+        [self loadBigThumbnailInQueue:DATALODER_TYPE_VISIABLE forTableCell:index andCancelFlag:cancel];
     } while (NO);
 }
 
@@ -353,7 +353,7 @@
                 break;
             }
             if (index != current) {
-                [self loadBigThumbnailForTableCell:index andCancelFlag:cancel];
+                [self loadBigThumbnailInQueue:DATALODER_TYPE_VISIABLE forTableCell:index andCancelFlag:cancel];
             }
         }
         
@@ -379,22 +379,24 @@
                 NSLog(@"Cancel from createViewsAndLoadSmallThumbnailForBufferWithPrevIndexs:nextIndexs:andCancelFlag:");
                 break;
             }
-            
-            NSString *nextIndexStr = [nextIndexs objectAtIndex:index];
-            if (nextIndexStr) {
-                NSUInteger nextIndex = [nextIndexStr integerValue];
-                [self createViewsAndLoadSmallThumbnailForTableCell:nextIndex];
+            if (index < nextIndexsCount) {
+                NSString *nextIndexStr = [nextIndexs objectAtIndex:index];
+                if (nextIndexStr) {
+                    NSUInteger nextIndex = [nextIndexStr integerValue];
+                    [self createViewsAndLoadSmallThumbnailForTableCell:nextIndex];
+                }
             }
             
             if (*cancel) {
                 NSLog(@"Cancel from createViewsAndLoadSmallThumbnailForBufferWithPrevIndexs:nextIndexs:andCancelFlag:");
                 break;
             }
-            
-            NSString *prevIndexStr = [prevIndexs objectAtIndex:index];
-            if (prevIndexStr) {
-                NSUInteger prevIndex = [prevIndexStr integerValue];
-                [self createViewsAndLoadSmallThumbnailForTableCell:prevIndex];
+            if (index < prevIndexsCount) {
+                NSString *prevIndexStr = [prevIndexs objectAtIndex:index];
+                if (prevIndexStr) {
+                    NSUInteger prevIndex = [prevIndexStr integerValue];
+                    [self createViewsAndLoadSmallThumbnailForTableCell:prevIndex];
+                }
             }
         }
         
@@ -419,22 +421,24 @@
                 NSLog(@"Cancel from loadBigThumbnailForBufferWithPrevIndexs:nextIndexs:andCancelFlag:");
                 break;
             }
-            
-            NSString *nextIndexStr = [nextIndexs objectAtIndex:index];
-            if (nextIndexStr) {
-                NSUInteger nextIndex = [nextIndexStr integerValue];
-                [self loadBigThumbnailForTableCell:nextIndex andCancelFlag:cancel];
+            if (index < nextIndexsCount) {
+                NSString *nextIndexStr = [nextIndexs objectAtIndex:index];
+                if (nextIndexStr) {
+                    NSUInteger nextIndex = [nextIndexStr integerValue];
+                    [self loadBigThumbnailInQueue:DATALODER_TYPE_BUFFER forTableCell:nextIndex andCancelFlag:cancel];
+                }
             }
             
             if (*cancel) {
                 NSLog(@"Cancel from loadBigThumbnailForBufferWithPrevIndexs:nextIndexs:andCancelFlag:");
                 break;
             }
-            
-            NSString *prevIndexStr = [prevIndexs objectAtIndex:index];
-            if (prevIndexStr) {
-                NSUInteger prevIndex = [prevIndexStr integerValue];
-                [self loadBigThumbnailForTableCell:prevIndex andCancelFlag:cancel];
+            if (index < prevIndexsCount) {
+                NSString *prevIndexStr = [prevIndexs objectAtIndex:index];
+                if (prevIndexStr) {
+                    NSUInteger prevIndex = [prevIndexStr integerValue];
+                    [self loadBigThumbnailInQueue:DATALODER_TYPE_BUFFER forTableCell:prevIndex andCancelFlag:cancel];
+                }
             }
         }
         

@@ -13,6 +13,9 @@
 
 @interface DCItemView () {
     UITapGestureRecognizer *_singleTapGestureRecognizer;
+    
+    BOOL _loadBigThumbnailInVisiableDataLoader;
+    BOOL _loadBigThumbnailInBufferDataLoader;
 }
 
 - (NSInteger)calcThumbnailSize;
@@ -55,9 +58,22 @@
     } while (NO);
 }
 
-- (void)loadBigThumbnail {
+- (void)loadBigThumbnailInQueue:(enum DATALODER_TYPE)type {
     do {
         if (!self.thumbnail || (self.thumbnail.size.width < self.thumbnailSize && self.thumbnail.size.height < self.thumbnailSize)) {
+            switch (type) {
+                case DATALODER_TYPE_VISIABLE:
+                    _loadBigThumbnailInVisiableDataLoader = YES;
+                    break;
+                    
+                case DATALODER_TYPE_BUFFER:
+                    _loadBigThumbnailInBufferDataLoader = YES;
+                    break;
+                    
+                default:
+                    break;
+            }
+            
             [self loadDBThumbnail];
         }
     } while (NO);
@@ -181,9 +197,18 @@
         if (!item) {
             break;
         }
-        NSOperation *loadThumbnailOperation = [item createOperationForLoadCacheThumbnail];
-        [loadThumbnailOperation retain];
-        [[DCDataLoader defaultDataLoader] queue:DATALODER_TYPE_VISIABLE addOperation:loadThumbnailOperation];
+        
+        if (_loadBigThumbnailInVisiableDataLoader) {
+            _loadBigThumbnailInVisiableDataLoader = NO;
+            NSOperation *loadThumbnailOperation = [item createOperationForLoadCacheThumbnail];
+            [[DCDataLoader defaultDataLoader] queue:DATALODER_TYPE_VISIABLE addOperation:loadThumbnailOperation];
+        }
+        
+        if (_loadBigThumbnailInBufferDataLoader) {
+            _loadBigThumbnailInBufferDataLoader = NO;
+            NSOperation *loadThumbnailOperation = [item createOperationForLoadCacheThumbnail];
+            [[DCDataLoader defaultDataLoader] queue:DATALODER_TYPE_BUFFER addOperation:loadThumbnailOperation];
+        }
     } while (NO);
 }
 
@@ -210,6 +235,9 @@
         _dataGroupUID = dataGroupUID;
         [_dataGroupUID retain];
         self.dataLibraryHelper = dataLibraryHelper;
+        
+        _loadBigThumbnailInVisiableDataLoader = NO;
+        _loadBigThumbnailInBufferDataLoader = NO;
         
         _singleTapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap:)];
         _singleTapGestureRecognizer.numberOfTapsRequired = 1;
