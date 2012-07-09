@@ -32,12 +32,19 @@
             [NSException raise:@"DCALAssetItem error" format:@"Reason: representation == nil"];
             break;
         }
+        if (_canceled) {
+            break;
+        }
         UIImage *image = [[[UIImage alloc] initWithCGImage:[representation fullScreenImage]] autorelease];
-//        CGSize tmpSize = image.size;
+        if (_canceled) {
+            break;
+        }
         CGSize thumbnailSize;
         thumbnailSize.width = thumbnailSize.height = [DCLoadThumbnailForALAssetItem calcThumbnailSize];
         self.thumbnail = [DCImageHelper image:image fitInSize:thumbnailSize];
-//        CGSize tmpSize1 = self.thumbnail.size;
+        if (_canceled) {
+            break;
+        }
         [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_THUMBNAILLOADED object:self];
     } while (NO);
     NSLog(@"DCLoadThumbnailForALAssetItem main exit");

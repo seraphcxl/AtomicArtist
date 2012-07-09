@@ -18,6 +18,10 @@
 @synthesize visiableEndTableCellIndex = _visiableEndTableCellIndex;
 @synthesize needClearCache = _needClearCache;
 
+- (void)cancel {
+    _canceled = TRUE;
+}
+
 - (id)init {
     self = [super init];
     if (self) {

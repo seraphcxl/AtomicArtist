@@ -15,6 +15,10 @@ NSString * const NOTIFY_THUMBNAILLOADED = @"NOTIFY_THUMBNAILLOADED";
 @synthesize thumbnail = _thumbnail;
 @synthesize itemUID = _itemUID;
 
+- (void)cancel {
+    _canceled = YES;
+}
+
 - (id)initWithItemUID:(NSString *)itemUID {
     self = [super init];
     if (self) {

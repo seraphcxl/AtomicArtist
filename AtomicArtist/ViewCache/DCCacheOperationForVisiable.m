@@ -16,6 +16,10 @@
 @synthesize visiableBeginTableCellIndex = _visiableBeginTableCellIndex;
 @synthesize visiableEndTableCellIndex = _visiableEndTableCellIndex;
 
+- (void)cancel {
+    _canceled = TRUE;
+}
+
 - (id)init {
     self = [super init];
     if (self) {

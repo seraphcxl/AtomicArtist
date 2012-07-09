@@ -111,12 +111,16 @@ static DCDataLoader *staticDCDataLoader = nil;
     if (type == DATALODER_TYPE_VISIABLE) {
         if (_queueForVisiable) {
             NSLog(@"DataLoader visiable queue cancelAllOperations");
+            [self queue:DATALODER_TYPE_VISIABLE pauseWithAutoResume:NO with:0];
             [_queueForVisiable cancelAllOperations];
+            [self resumeQueue:DATALODER_TYPE_VISIABLE];
         }
     } else if (type == DATALODER_TYPE_BUFFER) {
         if (_queueForBuffer) {
             NSLog(@"DataLoader buffer queue cancelAllOperations");
+            [self queue:DATALODER_TYPE_BUFFER pauseWithAutoResume:NO with:0];
             [_queueForBuffer cancelAllOperations];
+            [self resumeQueue:DATALODER_TYPE_BUFFER];
         }
     }
 }

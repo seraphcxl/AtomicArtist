@@ -10,7 +10,9 @@
 
 extern NSString * const NOTIFY_THUMBNAILLOADED;
 
-@interface DCLoadThumbnailOperation : NSOperation
+@interface DCLoadThumbnailOperation : NSOperation {
+    BOOL _canceled;
+}
 
 @property (retain, nonatomic) UIImage *thumbnail;
 @property (readonly, nonatomic) NSString *itemUID;

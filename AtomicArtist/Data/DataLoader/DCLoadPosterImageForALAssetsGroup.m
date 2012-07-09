@@ -31,13 +31,23 @@
             [NSException raise:@"DCALAssetItem error" format:@"Reason: representation == nil"];
             break;
         }
+        if (_canceled) {
+            break;
+        }
         UIImage *image = [[[UIImage alloc] initWithCGImage:[representation fullScreenImage]] autorelease];
-//        CGSize tmpSize = image.size;
+        if (_canceled) {
+            break;
+        }
         CGSize thumbnailSize;
         thumbnailSize.width = thumbnailSize.height = [DCLoadPosterImageForALAssetsGroup calcPosterImageSize];
         UIImage *tmpImage = [DCImageHelper image:image fillSize:thumbnailSize];
+        if (_canceled) {
+            break;
+        }
         self.thumbnail = [DCImageHelper bezierImage:tmpImage withRadius:5.0 needCropSquare:YES];
-//        CGSize tmpSize1 = self.thumbnail.size;
+        if (_canceled) {
+            break;
+        }
         [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_POSTERIMAGELOADED object:self];
     } while (NO);
     NSLog(@"DCLoadPosterImageForALAssetsGroup main exit");

@@ -33,6 +33,13 @@
 	// Do any additional setup after loading the view.
 }
 
+- (void)viewDidDisappear:(BOOL)animated {
+    [[DCDataLoader defaultDataLoader] terminateAllOperationsOnQueue:DATALODER_TYPE_VISIABLE];
+    [[DCDataLoader defaultDataLoader] terminateAllOperationsOnQueue:DATALODER_TYPE_BUFFER];
+    
+    [super viewDidDisappear:animated];
+}
+
 - (void)viewDidUnload
 {
     [super viewDidUnload];
