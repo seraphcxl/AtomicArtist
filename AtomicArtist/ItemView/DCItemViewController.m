@@ -220,6 +220,8 @@
             }
             [self clearCache];
             [self.dataLibraryHelper enumItems:self.enumDataItemParam inGroup:self.dataGroupUID notifyWithFrequency:pageViewCount];
+        } else if (!force && [self.dataLibraryHelper isGroupEnumerated:self.dataGroupUID]) {
+            [self.viewCache loadBigThumbnailForCacheViews];
         }
         
         [self refreshItemViewTitle];
@@ -426,7 +428,7 @@
     _itemCountInCell = [self calcItemCountInCellWithFrameSize:_frameSize andTableViewMargin:_tableViewMargin];
     _cellSpace = [self calcCellSpaceWithFrameSize:_frameSize tableViewMargin:_tableViewMargin andItemCountInCell:_itemCountInCell];
     
-    [self.viewCache clear];
+    [self.viewCache clearOperations];
 //    [[DCDataLoader defaultDataLoader] cancelAllOperationsOnQueue:DATALODER_TYPE_VISIABLE];
 //    [[DCDataLoader defaultDataLoader] cancelAllOperationsOnQueue:DATALODER_TYPE_BUFFER];
     
@@ -455,7 +457,7 @@
 }
 
 - (void)actionForWillDisappear {
-    [self.viewCache clear];
+    [self.viewCache clearOperations];
     [[DCDataLoader defaultDataLoader] cancelAllOperationsOnQueue:DATALODER_TYPE_VISIABLE];
     [[DCDataLoader defaultDataLoader] cancelAllOperationsOnQueue:DATALODER_TYPE_BUFFER];
 }

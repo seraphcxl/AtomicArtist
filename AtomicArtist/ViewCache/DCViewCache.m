@@ -33,8 +33,13 @@
 @synthesize bufferTableCellNumber = _bufferTableCellNumber;
 //@synthesize dataLibraryHelper = _dataLibraryHelper;
 
-- (void)setBufferTableCellNumber:(NSUInteger)bufferTableCellNumber {
-    _bufferTableCellNumber = bufferTableCellNumber;
+- (void)loadBigThumbnailForCacheViews {
+    do {
+        [_queueForVisiableOp cancelAllOperations];
+        DCLoadCacheViewBigThumbnailOperation *op = [[[DCLoadCacheViewBigThumbnailOperation alloc] init] autorelease];
+        [op setDelegate:self];
+        [_queueForVisiableOp addOperation:op];
+    } while (NO);
 }
 
 - (void)actionForVisiableFrom:(NSInteger)begin to:(NSInteger)end andCurrent:(NSInteger)index {
@@ -256,7 +261,7 @@
     return self;
 }
 
-- (void)clear {
+- (void)clearOperations {
     if (_queueForVisiableOp) {
         [_queueForVisiableOp cancelAllOperations];
         [_queueForVisiableOp waitUntilAllOperationsAreFinished];
@@ -266,6 +271,10 @@
         [_queueForBufferOp cancelAllOperations];
         [_queueForBufferOp waitUntilAllOperationsAreFinished];
     }
+}
+
+- (void)clear {
+    [self clearOperations];
     
     [_lockForViews lock];
     if (_tableCells) {
@@ -477,4 +486,30 @@
         }
     } while (NO);
 }
+
+#pragma mark DCLoadCacheViewBigThumbnailOperationDelegate
+- (void)loadBigThumbnailForCacheViewsCancelFlag:(BOOL *)cancel {
+    do {
+        if (!cancel) {
+            break;
+        }
+        [_lockForViews lock];
+        NSArray *allTableCellIndexs = [_tableCells allKeys];
+        [_lockForViews unlock];
+        
+        for (NSString *tableCellIndexStr in allTableCellIndexs) {
+            if (*cancel) {
+                NSLog(@"Cancel from clearCacheWithBufferRangeFrom:to:andCancelFlag:");
+                break;
+            }
+            
+            if (tableCellIndexStr) {
+                NSUInteger tableCellIndex = [tableCellIndexStr integerValue];
+                [self loadBigThumbnailInQueue:DATALODER_TYPE_VISIABLE forTableCell:tableCellIndex andCancelFlag:cancel];
+            }
+        }
+
+    } while (NO);
+}
+
 @end

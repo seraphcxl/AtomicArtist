@@ -10,6 +10,7 @@
 #import "DCUniformDataProtocol.h"
 #import "DCCacheOperationForVisiable.h"
 #import "DCCacheOperationForBuffer.h"
+#import "DCLoadCacheViewBigThumbnailOperation.h"
 #import "DCDataLoader.h"
 
 @protocol DCViewCacheDelegate <NSObject>
@@ -26,7 +27,7 @@
 
 @end
 
-@interface DCViewCache : NSObject <DCCacheOperationForVisiableDelegate, DCCacheOperationForBufferDelegate> {
+@interface DCViewCache : NSObject <DCCacheOperationForVisiableDelegate, DCCacheOperationForBufferDelegate, DCLoadCacheViewBigThumbnailOperationDelegate> {
     NSMutableDictionary *_tableCells;  // key:UIDForIndexPath; value:NSMutableDictionary *viewsInTableCell
     NSMutableDictionary *_views;  // key:UIDForView; value:view
     NSLock *_lockForViews;
@@ -48,5 +49,9 @@
 - (NSString *)uidForView:(UIView *)view;
 
 - (void)clear;
+
+- (void)clearOperations;
+
+- (void)loadBigThumbnailForCacheViews;
 
 @end

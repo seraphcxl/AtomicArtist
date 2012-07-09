@@ -16,6 +16,9 @@
 		1B0537691588810C000C93F8 /* DCSaveOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B0537601588810C000C93F8 /* DCSaveOperation.m */; };
 		1B05376A1588810C000C93F8 /* DCUpdateGroupOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B0537621588810C000C93F8 /* DCUpdateGroupOperation.m */; };
 		1B14209B1574ABD00058199E /* DCALAssetGroupViewNaviTitle.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1B14209A1574ABD00058199E /* DCALAssetGroupViewNaviTitle.xib */; };
+		1B19C5B915AAC091009B5056 /* DCItemViewCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B19C5B815AAC091009B5056 /* DCItemViewCache.m */; };
+		1B19C5BC15AAC09B009B5056 /* DCGroupViewCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B19C5BB15AAC09B009B5056 /* DCGroupViewCache.m */; };
+		1B19C5BF15AAC0AC009B5056 /* DCLoadCacheViewBigThumbnailOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B19C5BE15AAC0AC009B5056 /* DCLoadCacheViewBigThumbnailOperation.m */; };
 		1B65666515A441E1000BF1BE /* DCViewCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B65666215A441E1000BF1BE /* DCViewCache.m */; };
 		1B791D6815A541BE002CD1E5 /* DCBrower.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B791D6715A541BE002CD1E5 /* DCBrower.m */; };
 		1B8160FF156F17F400E40084 /* DCLoadThumbnailOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B8160FE156F17F300E40084 /* DCLoadThumbnailOperation.m */; };
@@ -33,8 +36,6 @@
 		1BBFADA7156525B500D5FC76 /* Item.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BBFADA3156525B500D5FC76 /* Item.m */; };
 		1BC3D55815A5BD83001808D6 /* DCCacheOperationForBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BC3D55715A5BD83001808D6 /* DCCacheOperationForBuffer.m */; };
 		1BC3D55C15A5BDA5001808D6 /* DCCacheOperationForVisiable.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BC3D55B15A5BDA5001808D6 /* DCCacheOperationForVisiable.m */; };
-		1BD9AF9515A6AE7E009310BE /* DCGroupViewCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BD9AF9415A6AE7E009310BE /* DCGroupViewCache.m */; };
-		1BD9AF9915A6AE94009310BE /* DCItemViewCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BD9AF9815A6AE94009310BE /* DCItemViewCache.m */; };
 		1BF9F4AE156483AE0015E004 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BF9F4AD156483AE0015E004 /* UIKit.framework */; };
 		1BF9F4B0156483AE0015E004 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BF9F4AF156483AE0015E004 /* Foundation.framework */; };
 		1BF9F4B2156483AE0015E004 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BF9F4B1156483AE0015E004 /* CoreGraphics.framework */; };
@@ -80,6 +81,12 @@
 		1B0537611588810C000C93F8 /* DCUpdateGroupOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCUpdateGroupOperation.h; sourceTree = "<group>"; };
 		1B0537621588810C000C93F8 /* DCUpdateGroupOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCUpdateGroupOperation.m; sourceTree = "<group>"; };
 		1B14209A1574ABD00058199E /* DCALAssetGroupViewNaviTitle.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = DCALAssetGroupViewNaviTitle.xib; path = GroupView/ALAssetGroupView/DCALAssetGroupViewNaviTitle.xib; sourceTree = "<group>"; };
+		1B19C5B715AAC091009B5056 /* DCItemViewCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DCItemViewCache.h; path = ItemView/DCItemViewCache.h; sourceTree = "<group>"; };
+		1B19C5B815AAC091009B5056 /* DCItemViewCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DCItemViewCache.m; path = ItemView/DCItemViewCache.m; sourceTree = "<group>"; };
+		1B19C5BA15AAC09B009B5056 /* DCGroupViewCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DCGroupViewCache.h; path = GroupView/DCGroupViewCache.h; sourceTree = "<group>"; };
+		1B19C5BB15AAC09B009B5056 /* DCGroupViewCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DCGroupViewCache.m; path = GroupView/DCGroupViewCache.m; sourceTree = "<group>"; };
+		1B19C5BD15AAC0AC009B5056 /* DCLoadCacheViewBigThumbnailOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCLoadCacheViewBigThumbnailOperation.h; sourceTree = "<group>"; };
+		1B19C5BE15AAC0AC009B5056 /* DCLoadCacheViewBigThumbnailOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCLoadCacheViewBigThumbnailOperation.m; sourceTree = "<group>"; };
 		1B65666115A441E1000BF1BE /* DCViewCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCViewCache.h; sourceTree = "<group>"; };
 		1B65666215A441E1000BF1BE /* DCViewCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCViewCache.m; sourceTree = "<group>"; };
 		1B791D6615A541BE002CD1E5 /* DCBrower.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCBrower.h; sourceTree = "<group>"; };
@@ -113,10 +120,6 @@
 		1BC3D55A15A5BDA5001808D6 /* DCCacheOperationForVisiable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCCacheOperationForVisiable.h; sourceTree = "<group>"; };
 		1BC3D55B15A5BDA5001808D6 /* DCCacheOperationForVisiable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCCacheOperationForVisiable.m; sourceTree = "<group>"; };
 		1BD5CACC15690F1600C9133D /* CommonDefine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonDefine.h; sourceTree = "<group>"; };
-		1BD9AF9315A6AE7E009310BE /* DCGroupViewCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCGroupViewCache.h; sourceTree = "<group>"; };
-		1BD9AF9415A6AE7E009310BE /* DCGroupViewCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCGroupViewCache.m; sourceTree = "<group>"; };
-		1BD9AF9715A6AE94009310BE /* DCItemViewCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCItemViewCache.h; sourceTree = "<group>"; };
-		1BD9AF9815A6AE94009310BE /* DCItemViewCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCItemViewCache.m; sourceTree = "<group>"; };
 		1BF9F4A9156483AE0015E004 /* AtomicArtist_Simulator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AtomicArtist_Simulator.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1BF9F4AD156483AE0015E004 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		1BF9F4AF156483AE0015E004 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -183,6 +186,8 @@
 		1B65666015A441E1000BF1BE /* ViewCache */ = {
 			isa = PBXGroup;
 			children = (
+				1B19C5BD15AAC0AC009B5056 /* DCLoadCacheViewBigThumbnailOperation.h */,
+				1B19C5BE15AAC0AC009B5056 /* DCLoadCacheViewBigThumbnailOperation.m */,
 				1B65666115A441E1000BF1BE /* DCViewCache.h */,
 				1B65666215A441E1000BF1BE /* DCViewCache.m */,
 				1BC3D55615A5BD83001808D6 /* DCCacheOperationForBuffer.h */,
@@ -356,6 +361,8 @@
 		1BF9F4F215648B480015E004 /* ItemView */ = {
 			isa = PBXGroup;
 			children = (
+				1B19C5B715AAC091009B5056 /* DCItemViewCache.h */,
+				1B19C5B815AAC091009B5056 /* DCItemViewCache.m */,
 				1BF9F519156493A50015E004 /* DCItemViewController.h */,
 				1BF9F51A156493A50015E004 /* DCItemViewController.m */,
 				1BF9F51B156493A50015E004 /* DCItemViewController.xib */,
@@ -365,8 +372,6 @@
 				1BF9F4F415648B730015E004 /* DCItemView.m */,
 				1BB122261569EB5300644586 /* DCItemPageScrollViewController.h */,
 				1BB122271569EB5300644586 /* DCItemPageScrollViewController.m */,
-				1BD9AF9715A6AE94009310BE /* DCItemViewCache.h */,
-				1BD9AF9815A6AE94009310BE /* DCItemViewCache.m */,
 			);
 			name = ItemView;
 			sourceTree = "<group>";
@@ -375,6 +380,8 @@
 			isa = PBXGroup;
 			children = (
 				1BBFAD881565241E00D5FC76 /* ALAsseetGroupView */,
+				1B19C5BA15AAC09B009B5056 /* DCGroupViewCache.h */,
+				1B19C5BB15AAC09B009B5056 /* DCGroupViewCache.m */,
 				1BF9F5111564939C0015E004 /* DCGroupViewController.h */,
 				1BF9F5121564939C0015E004 /* DCGroupViewController.m */,
 				1BF9F5131564939C0015E004 /* DCGroupViewController.xib */,
@@ -382,8 +389,6 @@
 				1BF9F5101564939C0015E004 /* DCGroupViewCell.m */,
 				1BF9F4FF15648F920015E004 /* DCGroupView.h */,
 				1BF9F50015648F920015E004 /* DCGroupView.m */,
-				1BD9AF9315A6AE7E009310BE /* DCGroupViewCache.h */,
-				1BD9AF9415A6AE7E009310BE /* DCGroupViewCache.m */,
 			);
 			name = GroupView;
 			sourceTree = "<group>";
@@ -508,8 +513,9 @@
 				1B791D6815A541BE002CD1E5 /* DCBrower.m in Sources */,
 				1BC3D55815A5BD83001808D6 /* DCCacheOperationForBuffer.m in Sources */,
 				1BC3D55C15A5BDA5001808D6 /* DCCacheOperationForVisiable.m in Sources */,
-				1BD9AF9515A6AE7E009310BE /* DCGroupViewCache.m in Sources */,
-				1BD9AF9915A6AE94009310BE /* DCItemViewCache.m in Sources */,
+				1B19C5B915AAC091009B5056 /* DCItemViewCache.m in Sources */,
+				1B19C5BC15AAC09B009B5056 /* DCGroupViewCache.m in Sources */,
+				1B19C5BF15AAC0AC009B5056 /* DCLoadCacheViewBigThumbnailOperation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

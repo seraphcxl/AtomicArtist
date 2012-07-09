@@ -20,12 +20,19 @@
             break;
         }
         
+//        ALAssetRepresentation *rep = [self.alAsset defaultRepresentation];
+//        Byte *buffer = (Byte *)malloc(rep.size);
+//        NSUInteger buffered = [rep getBytes:buffer fromOffset:0.0 length:rep.size error:nil];
+//        NSData *data = [NSData dataWithBytesNoCopy:buffer length:buffered freeWhenDone:NO];
+//        [data writeToFile:filePath atomically:YES];
+//        free(buffer);
+        
         ALAssetRepresentation *rep = [self.alAsset defaultRepresentation];
-        Byte *buffer = (Byte *)malloc(rep.size);
-        NSUInteger buffered = [rep getBytes:buffer fromOffset:0.0 length:rep.size error:nil];
-        NSData *data = [NSData dataWithBytesNoCopy:buffer length:buffered freeWhenDone:NO];
+        UIImage *image = [[[UIImage alloc] initWithCGImage:[rep fullResolutionImage]] autorelease];
+        CGSize size = [image size];
+        NSLog(@"Full screen image: %f * %f", size.width, size.height);
+        NSData *data = UIImageJPEGRepresentation(image, 1);
         [data writeToFile:filePath atomically:YES];
-        free(buffer);
         
     } while (NO);
 }
