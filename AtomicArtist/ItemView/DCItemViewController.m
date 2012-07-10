@@ -50,9 +50,6 @@
 
 - (void)enumAllItems;
 
-- (void)actionForWillDisappear;
-- (void)actionForDidUnload;
-
 @end
 
 @implementation DCItemViewController

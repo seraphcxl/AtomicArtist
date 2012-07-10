@@ -8,10 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import "DCGroupViewController.h"
+#import "DCBrowerViewController.h"
 
 @interface DCBrower : NSObject <UINavigationControllerDelegate>
 
-@property (readonly, nonatomic) UINavigationController *naviCtrl;
+@property (readonly, nonatomic) DCBrowerViewController *naviCtrl;
 @property (readonly, nonatomic) enum GROUPVIEWCTRL_TYPE type;
 
 - (id)init:(enum GROUPVIEWCTRL_TYPE)type;

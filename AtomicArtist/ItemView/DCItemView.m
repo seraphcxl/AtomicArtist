@@ -42,6 +42,7 @@
 @synthesize thumbnail = _thumbnail;
 @synthesize dataGroupUID = _dataGroupUID;
 @synthesize dataLibraryHelper = _dataLibraryHelper;
+@synthesize bigThumbnailLoaded = _bigThumbnailLoaded;
 
 - (void)loadSmallThumbnail {
     do {
@@ -60,7 +61,7 @@
 
 - (void)loadBigThumbnailInQueue:(enum DATALODER_TYPE)type {
     do {
-        if (!self.thumbnail || (self.thumbnail.size.width < self.thumbnailSize && self.thumbnail.size.height < self.thumbnailSize)) {
+        if (!self.thumbnail || !self.bigThumbnailLoaded) {
             switch (type) {
                 case DATALODER_TYPE_VISIABLE:
                     _loadBigThumbnailInVisiableDataLoader = YES;
@@ -122,6 +123,8 @@
         self.thumbnail = dataModelItem.thumbnail;
         if (!self.thumbnail) {
             needRunOperation = YES;
+        } else {
+            _bigThumbnailLoaded = YES;
         }
     }
     if (needRunOperation) {
@@ -132,6 +135,7 @@
 }
 
 - (void)updateThumbnail {
+    _bigThumbnailLoaded = YES;
     [self performSelectorOnMainThread:@selector(showThumbnail) withObject:nil waitUntilDone:NO];
 }
 
@@ -236,6 +240,7 @@
         [_dataGroupUID retain];
         self.dataLibraryHelper = dataLibraryHelper;
         
+        _bigThumbnailLoaded = YES;
         _loadBigThumbnailInVisiableDataLoader = NO;
         _loadBigThumbnailInBufferDataLoader = NO;
         

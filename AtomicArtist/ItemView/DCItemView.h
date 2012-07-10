@@ -25,6 +25,7 @@
 @property (retain, nonatomic) UIImage *thumbnail;
 @property (readonly, nonatomic) NSString *dataGroupUID;
 @property (assign, nonatomic) id <DCDataLibraryHelper> dataLibraryHelper;
+@property (readonly, nonatomic) BOOL bigThumbnailLoaded;
 
 - (id)InitWithDataLibraryHelper:(id <DCDataLibraryHelper>)dataLibraryHelper itemUID:(NSString *)itemUID dataGroupUID:(NSString *)dataGroupUID andFrame:(CGRect)frame;
 

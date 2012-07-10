@@ -14,4 +14,7 @@
 
 - (IBAction)refresh:(id)sender;
 
+- (void)actionForWillDisappear;
+- (void)actionForDidUnload;
+
 @end

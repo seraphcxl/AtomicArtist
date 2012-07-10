@@ -44,9 +44,6 @@
 
 - (NSString *)title;
 
-- (void)actionForWillDisappear;
-- (void)actionForDidUnload;
-
 @end
 
 @interface DCGroupViewController ()

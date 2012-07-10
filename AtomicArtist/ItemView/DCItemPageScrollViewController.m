@@ -154,4 +154,22 @@
     }
 }
 
+- (void)actionForWillDisappear {
+    do {
+        DCItemViewController *itemViewCtrl = (DCItemViewController *)[self currentViewCtrl];
+        if (itemViewCtrl) {
+            [itemViewCtrl actionForWillDisappear];
+        }
+    } while (NO);
+}
+
+- (void)actionForDidUnload {
+    do {
+        DCItemViewController *itemViewCtrl = (DCItemViewController *)[self currentViewCtrl];
+        if (itemViewCtrl) {
+            [itemViewCtrl actionForDidUnload];
+        }
+    } while (NO);
+}
+
 @end

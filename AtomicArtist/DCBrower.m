@@ -47,7 +47,7 @@
         }
         
         if (!_naviCtrl) {
-            _naviCtrl = [[UINavigationController alloc] initWithRootViewController:viewCtrl];
+            _naviCtrl = [[DCBrowerViewController alloc] initWithRootViewController:viewCtrl];
         }
         
         [self.naviCtrl setDelegate:self];

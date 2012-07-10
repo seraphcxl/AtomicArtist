@@ -49,6 +49,7 @@
 @synthesize posterImage = _posterImage;
 @synthesize dataLibraryHelper = _dataLibraryHelper;
 @synthesize enumDataItemParam = _enumDataItemParam;
+@synthesize bigThumbnailLoaded = _bigThumbnailLoaded;
 
 - (void)loadSmallThumbnail {
     do {
@@ -68,7 +69,7 @@
 
 - (void)loadBigThumbnailInQueue:(enum DATALODER_TYPE)type {
     do {
-        if (!self.posterImage || (self.posterImage.size.width < self.posterImageSize && self.posterImage.size.height < self.posterImageSize)) {
+        if (!self.posterImage || !self.bigThumbnailLoaded) {
             switch (type) {
                 case DATALODER_TYPE_VISIABLE:
                     _loadBigThumbnailInVisiableDataLoader = YES;
@@ -129,6 +130,8 @@
         self.posterImage = dataModelGroup.posterImage;
         if (!self.posterImage) {
             needRunOperation = YES;
+        } else {
+            _bigThumbnailLoaded = YES;
         }
     }
     if (needRunOperation) {
@@ -139,6 +142,7 @@
 }
 
 - (void)updatePosterImage {
+    _bigThumbnailLoaded = YES;
     [self performSelectorOnMainThread:@selector(showPosterImage) withObject:nil waitUntilDone:NO];
 }
 
@@ -237,6 +241,9 @@
             NSString *dataGroupUID = (NSString *)[note object];
             if ([dataGroupUID isEqualToString:self.dataGroupUID]) {
                 NSString *itemUID = [self.dataLibraryHelper itemUIDAtIndex:0 inGroup:self.dataGroupUID];
+                if (!itemUID) {
+                    itemUID = dataGroupUID;
+                }
                 id <DCDataGroup> group = [self.dataLibraryHelper groupWithUID:self.dataGroupUID];
                 if (!group) {
                     break;
@@ -312,6 +319,7 @@
         self.dataGroupUID = dataGroupUID;
         self.enumDataItemParam = enumDataItemParam;
         
+        _bigThumbnailLoaded = NO;
         _loadBigThumbnailInVisiableDataLoader = NO;
         _loadBigThumbnailInBufferDataLoader = NO;
         

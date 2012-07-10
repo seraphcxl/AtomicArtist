@@ -25,6 +25,7 @@
 @property (retain, nonatomic) UIImage *posterImage;
 @property (assign, nonatomic) id <DCDataLibraryHelper> dataLibraryHelper;
 @property (assign, nonatomic) id enumDataItemParam;
+@property (readonly, nonatomic) BOOL bigThumbnailLoaded;
 
 - (id)InitWithDataLibraryHelper:(id <DCDataLibraryHelper>)dataLibraryHelper dataGroupUID:(NSString *)dataGroupUID enumDataItemParam:(id)enumDataItemParam andFrame:(CGRect)frame;
 

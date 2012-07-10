@@ -42,4 +42,7 @@
 
 - (void)selectItem:(NSString *)itemUID showInPageScrollViewController:(DCPageScrollViewController *)pageScrollViewCtrl;
 
+- (void)actionForWillDisappear;
+- (void)actionForDidUnload;
+
 @end
