@@ -23,6 +23,9 @@
 - (void)main {
     NSLog(@"DCLoadPosterImageForALAssetsGroup main enter");
     do {
+        if (_canceled) {
+            break;
+        }
         if (!self.alAsset) {
             break;
         }

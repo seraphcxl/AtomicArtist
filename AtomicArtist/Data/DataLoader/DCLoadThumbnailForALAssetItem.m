@@ -24,6 +24,9 @@
 - (void)main {
     NSLog(@"DCLoadThumbnailForALAssetItem main enter");
     do {
+        if (_canceled) {
+            break;
+        }
         if (!self.alAsset) {
             break;
         }

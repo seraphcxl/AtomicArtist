@@ -20,9 +20,6 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
-        
-        UIBarButtonItem *bbi = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(refresh:)] autorelease];
-        [self.navigationItem setRightBarButtonItem:bbi];
     }
     return self;
 }
@@ -31,13 +28,6 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
-}
-
-- (void)viewDidDisappear:(BOOL)animated {
-    [[DCDataLoader defaultDataLoader] terminateAllOperationsOnQueue:DATALODER_TYPE_VISIABLE];
-    [[DCDataLoader defaultDataLoader] terminateAllOperationsOnQueue:DATALODER_TYPE_BUFFER];
-    
-    [super viewDidDisappear:animated];
 }
 
 - (void)viewDidUnload
@@ -125,19 +115,33 @@
 //        }
     }
     [itemViewCtrl selectItem:itemUID showInPageScrollViewController:pageScrollViewCtrl];
-    [self.navigationController pushViewController:pageScrollViewCtrl animated:YES];
+    [self.navigationController pushViewController:pageScrollViewCtrl animated:NO];
 }
 
 - (void)dataRefreshStarted {
-    UIActivityIndicatorView *activityIndicatorView = [[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite] autorelease];
-    [activityIndicatorView startAnimating];
-    UIBarButtonItem *bbi = [[[UIBarButtonItem alloc] initWithCustomView:activityIndicatorView] autorelease];
-    [self.navigationItem setRightBarButtonItem:bbi];
+    [self.navigationItem setRightBarButtonItem:nil];
+    /// /// ///
+    [self.navigationItem setHidesBackButton:YES animated:NO];
+    /// /// ///
+//    UIActivityIndicatorView *activityIndicatorView = [[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge] autorelease];
+//    [activityIndicatorView setFrame:[self.view frame]];
+//    [self.view addSubview:activityIndicatorView];
+//    [activityIndicatorView startAnimating];
 }
 
 - (void)dataRefreshFinished {
     UIBarButtonItem *bbi = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(refresh:)] autorelease];
     [self.navigationItem setRightBarButtonItem:bbi];
+    /// /// ///
+    [self.navigationItem setHidesBackButton:NO animated:NO];
+    /// /// ///
+//    for (UIView *view in [self.view subviews]) {
+//        if ([view isMemberOfClass:[UIActivityIndicatorView class]]) {
+//            UIActivityIndicatorView *activityIndicatorView = (UIActivityIndicatorView *)view;
+//            [activityIndicatorView stopAnimating];
+//            [activityIndicatorView removeFromSuperview];
+//        }
+//    }
 }
 
 - (void)popFormNavigationCtrl {

@@ -25,6 +25,7 @@
 
 - (void)reloadTableView:(NSNotification *)note;
 - (void)dataRefreshFinished:(NSNotification *)note;
+- (void)dataFirstScreenRefreshFinished:(NSNotification *)note;
 - (void)actionForWillEnterForegroud:(NSNotification *)note;
 - (void)actionForItemThumbnailLoaded:(NSNotification *)note;
 
@@ -218,9 +219,14 @@
             if (self.delegate) {
                 [self.delegate dataRefreshStarted];
             }
-            [self clearCache];
+//            [self clearCache];
+            [self performSelectorOnMainThread:@selector(clearCache) withObject:nil waitUntilDone:YES];
             [self.dataLibraryHelper enumItems:self.enumDataItemParam inGroup:self.dataGroupUID notifyWithFrequency:pageViewCount];
         } else if (!force && [self.dataLibraryHelper isGroupEnumerated:self.dataGroupUID]) {
+            [self.viewCache clear];
+            [[DCDataLoader defaultDataLoader] cancelAllOperationsOnQueue:DATALODER_TYPE_VISIABLE];
+            [[DCDataLoader defaultDataLoader] cancelAllOperationsOnQueue:DATALODER_TYPE_BUFFER];
+            
             [self.viewCache loadBigThumbnailForCacheViews];
         }
         
@@ -232,11 +238,11 @@
     NSLog(@"DCItemViewController refreshFirstScreen");
     if (self.dataLibraryHelper) {
         if (![self.dataLibraryHelper isGroupEnumerated:self.dataGroupUID]) {
-            if (self.delegate) {
-                [self.delegate dataRefreshStarted];
-            }
-            
-            [self clearCache];
+//            if (self.delegate) {
+//                [self.delegate dataRefreshStarted];
+//            }
+//            [self clearCache];
+            [self performSelectorOnMainThread:@selector(clearCache) withObject:nil waitUntilDone:YES];
             NSRange range;
             range.location = 0;
             range.length = _itemCountInCell * [self calcVisiableRowNumber];
@@ -249,7 +255,7 @@
 }
 
 - (void)refreshItemViewTitle {
-    NSLog(@"DCItemViewController refreshFirstScreen");
+    NSLog(@"DCItemViewController refreshItemViewTitle");
     if (self.dataLibraryHelper) {
         id <DCDataGroup> group = [self.dataLibraryHelper groupWithUID:self.dataGroupUID];
         if (!group) {
@@ -271,8 +277,9 @@
     if (itemUID && pageScrollViewCtrl && self.dataGroupUID && self.dataLibraryHelper) {
         /*** *** ***/ /*** *** ***/ /*** *** ***/ /*** *** ***/ /*** *** ***/ /*** *** ***/
         
-        [[DCDataLoader defaultDataLoader] cancelAllOperationsOnQueue:DATALODER_TYPE_VISIABLE];
-        [[DCDataLoader defaultDataLoader] cancelAllOperationsOnQueue:DATALODER_TYPE_BUFFER];
+        [self.viewCache clearOperations];
+        [[DCDataLoader defaultDataLoader] terminateAllOperationsOnQueue:DATALODER_TYPE_VISIABLE];
+        [[DCDataLoader defaultDataLoader] terminateAllOperationsOnQueue:DATALODER_TYPE_BUFFER];
         
         DCDetailViewController *currentDetailViewCtrl = nil;
         DCDetailViewController *prevDetailViewCtrl = nil;
@@ -317,6 +324,11 @@
     if (self.delegate) {
         [self.delegate dataRefreshFinished];
     }
+}
+
+- (void)dataFirstScreenRefreshFinished:(NSNotification *)note {
+    NSLog(@"DCItemViewController dataFirstScreenRefreshFinished:");
+    [self performSelectorInBackground:@selector(enumAllItems) withObject:nil];
 }
 
 - (NSUInteger)calcFrameSize {
@@ -381,9 +393,6 @@
             _viewCache = [[DCItemViewCache alloc] init];
             [_viewCache setDelegate:self];
         }
-        
-//        UIBarButtonItem *bbi = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(refresh:)] autorelease];
-//        [self.navigationItem setRightBarButtonItem:bbi];
     }
     return self;
 }
@@ -411,6 +420,7 @@
     NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
     [notificationCenter addObserver:self selector:@selector(reloadTableView:) name:NOTIFY_DATAITEM_ADDED object:nil];
     [notificationCenter addObserver:self selector:@selector(dataRefreshFinished:) name:NOTIFY_DATAITEM_ENUM_END object:nil];
+    [notificationCenter addObserver:self selector:@selector(dataFirstScreenRefreshFinished:) name:NOTIFY_DATAITEM_ENUMFIRSTSCREEN_END object:nil];
     [notificationCenter addObserver:self selector:@selector(actionForWillEnterForegroud:) name:@"applicationWillEnterForeground:" object:nil];
     [notificationCenter addObserver:self selector:@selector(actionForItemThumbnailLoaded:) name:NOTIFY_THUMBNAILLOADED object:nil];
     
@@ -428,14 +438,8 @@
     _itemCountInCell = [self calcItemCountInCellWithFrameSize:_frameSize andTableViewMargin:_tableViewMargin];
     _cellSpace = [self calcCellSpaceWithFrameSize:_frameSize tableViewMargin:_tableViewMargin andItemCountInCell:_itemCountInCell];
     
-    [self.viewCache clearOperations];
-//    [[DCDataLoader defaultDataLoader] cancelAllOperationsOnQueue:DATALODER_TYPE_VISIABLE];
-//    [[DCDataLoader defaultDataLoader] cancelAllOperationsOnQueue:DATALODER_TYPE_BUFFER];
-    
     if ([self.dataLibraryHelper itemsCountWithParam:self.enumDataItemParam inGroup:self.dataGroupUID] > _itemCountInCell * [self calcVisiableRowNumber]) {
         [self refreshFirstScreen];
-        
-        [self performSelectorInBackground:@selector(enumAllItems) withObject:nil];
     } else {
         [self refreshItems:NO];
     }
@@ -473,7 +477,8 @@
     NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
     [notificationCenter removeObserver:self];
     
-    [self clearCache];
+//    [self clearCache];
+    [self performSelectorOnMainThread:@selector(clearCache) withObject:nil waitUntilDone:YES];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -527,17 +532,13 @@
     }
     
     if (self.dataLibraryHelper) {
-        if ([self.dataLibraryHelper isGroupEnumerated:self.dataGroupUID]) {
-            NSInteger itemsCount = [self.dataLibraryHelper itemsCountWithParam:self.enumDataItemParam inGroup:self.dataGroupUID];
-            NSLog(@"itemsCount = %d", itemsCount);
-            NSInteger addLine = 0;
-            if (itemsCount % _itemCountInCell != 0) {
-                addLine = 1;
-            }
-            return itemsCount / _itemCountInCell + addLine;
-        } else {
-            return 0;
+        NSInteger itemsCount = [self.dataLibraryHelper itemsCountWithParam:self.enumDataItemParam inGroup:self.dataGroupUID];
+        NSLog(@"itemsCount = %d", itemsCount);
+        NSInteger addLine = 0;
+        if (itemsCount % _itemCountInCell != 0) {
+            addLine = 1;
         }
+        return itemsCount / _itemCountInCell + addLine;
     } else {
         [NSException raise:@"DCItemViewController error" format:@"Reason: self.dataLibraryHelper == nil"];
         return 0;
@@ -547,9 +548,8 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSLog(@"DCItemViewController %@ tableView:cellForRowAtIndexPath:", self);
-    
     [[DCDataLoader defaultDataLoader] queue:DATALODER_TYPE_VISIABLE pauseWithAutoResume:YES with:1.0];
-    
+    [[DCDataLoader defaultDataLoader] queue:DATALODER_TYPE_BUFFER pauseWithAutoResume:YES with:1.0];
     DCItemViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"DCItemViewCell"];
     
     NSArray *views = [self.viewCache getViewsForTableCell:indexPath];

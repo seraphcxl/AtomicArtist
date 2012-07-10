@@ -216,10 +216,16 @@
         UIBarButtonItem *bbi = [[[UIBarButtonItem alloc] initWithCustomView:activityIndicatorView] autorelease];
         [self.navigationItem setRightBarButtonItem:bbi];
         
-        [self clearCache];
+//        [self clearCache];
+        [self performSelectorOnMainThread:@selector(clearCache) withObject:nil waitUntilDone:YES];
+        
         [self.dataLibraryHelper enumGroups:_enumDataGroupParam notifyWithFrequency:pageViewCount];
         [self.navigationItem setTitle:[self title]];
     } else if (!force && [self.dataLibraryHelper groupsCount] != 0){
+        [self.viewCache clear];
+        [[DCDataLoader defaultDataLoader] cancelAllOperationsOnQueue:DATALODER_TYPE_VISIABLE];
+        [[DCDataLoader defaultDataLoader] cancelAllOperationsOnQueue:DATALODER_TYPE_BUFFER];
+        
         [self.viewCache loadBigThumbnailForCacheViews];
     }
 }
@@ -227,7 +233,9 @@
 - (void)selectGroup:(NSString *)dataGroupUID {
     if (dataGroupUID && self.dataLibraryHelper) {
         
-        [[DCDataLoader defaultDataLoader] queue:DATALODER_TYPE_VISIABLE pauseWithAutoResume:NO with:0.0];
+        [self.viewCache clearOperations];
+        [[DCDataLoader defaultDataLoader] terminateAllOperationsOnQueue:DATALODER_TYPE_VISIABLE];
+        [[DCDataLoader defaultDataLoader] terminateAllOperationsOnQueue:DATALODER_TYPE_BUFFER];
 
 //        NSUInteger index = [self.dataLibraryHelper indexForGroupUID:dataGroupUID];
 //        DCItemViewController *itemViewController = [[[DCItemViewController alloc] initWithDataLibraryHelper:self.dataLibraryHelper] autorelease];
@@ -275,7 +283,7 @@
         [pageScrollViewCtrl setDelegate:self];
         [pageScrollViewCtrl setScrollEnabled:YES];
         [pageScrollViewCtrl setHideNavigationBarEnabled:NO];
-        [self.navigationController pushViewController:pageScrollViewCtrl animated:YES];
+        [self.navigationController pushViewController:pageScrollViewCtrl animated:NO];
     } else {
         [NSException raise:@"DCGroupViewController error" format:@"Reason: dataGroupUID == nil"];
     }
@@ -379,10 +387,6 @@
     _itemCountInCell = [self calcItemCountInCellWithFrameSize:_frameSize andTableViewMargin:_tableViewMargin];
     _cellSpace = [self calcCellSpaceWithFrameSize:_frameSize tableViewMargin:_tableViewMargin andItemCountInCell:_itemCountInCell];
     
-    [self.viewCache clearOperations];
-//    [[DCDataLoader defaultDataLoader] cancelAllOperationsOnQueue:DATALODER_TYPE_VISIABLE];
-//    [[DCDataLoader defaultDataLoader] cancelAllOperationsOnQueue:DATALODER_TYPE_BUFFER];
-    
     [self refreshGroups:NO];
 }
 
@@ -407,15 +411,16 @@
 
 - (void)actionForWillDisappear {
     [self.viewCache clearOperations];
-    [[DCDataLoader defaultDataLoader] terminateAllOperationsOnQueue:DATALODER_TYPE_VISIABLE];
-    [[DCDataLoader defaultDataLoader] terminateAllOperationsOnQueue:DATALODER_TYPE_BUFFER];
+    [[DCDataLoader defaultDataLoader] cancelAllOperationsOnQueue:DATALODER_TYPE_VISIABLE];
+    [[DCDataLoader defaultDataLoader] cancelAllOperationsOnQueue:DATALODER_TYPE_BUFFER];
 }
 
 - (void)actionForDidUnload {
     NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
     [notificationCenter removeObserver:self];
     
-    [self clearCache];
+//    [self clearCache];
+    [self performSelectorOnMainThread:@selector(clearCache) withObject:nil waitUntilDone:YES];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -485,9 +490,8 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSLog(@"DCGroupViewController tableView:cellForRowAtIndexPath: indexPath.row = %d", [indexPath row]);
-    
     [[DCDataLoader defaultDataLoader] queue:DATALODER_TYPE_VISIABLE pauseWithAutoResume:YES with:1.0];
-    
+    [[DCDataLoader defaultDataLoader] queue:DATALODER_TYPE_BUFFER pauseWithAutoResume:YES with:1.0];
     NSArray *views = [self.viewCache getViewsForTableCell:indexPath];
     
     DCGroupViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"DCGroupViewCell"];

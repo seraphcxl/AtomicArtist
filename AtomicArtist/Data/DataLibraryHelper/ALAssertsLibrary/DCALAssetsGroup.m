@@ -206,6 +206,8 @@
                     if (_enumCount != 0) {
                         [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_DATAITEM_ADDED object:[self uniqueID]];
                     }
+                    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_DATAITEM_ENUMFIRSTSCREEN_END object:self];
+
                 }
             };
             
