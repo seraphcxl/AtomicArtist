@@ -220,7 +220,7 @@
             [self performSelectorOnMainThread:@selector(clearCache) withObject:nil waitUntilDone:YES];
             [self.dataLibraryHelper enumItems:self.enumDataItemParam inGroup:self.dataGroupUID notifyWithFrequency:pageViewCount];
         } else if (!force && [self.dataLibraryHelper isGroupEnumerated:self.dataGroupUID]) {
-            [self.viewCache clear];
+            [self.viewCache clearOperations];
             [[DCDataLoader defaultDataLoader] cancelAllOperationsOnQueue:DATALODER_TYPE_VISIABLE];
             [[DCDataLoader defaultDataLoader] cancelAllOperationsOnQueue:DATALODER_TYPE_BUFFER];
             
@@ -325,7 +325,9 @@
 
 - (void)dataFirstScreenRefreshFinished:(NSNotification *)note {
     NSLog(@"DCItemViewController dataFirstScreenRefreshFinished:");
-    [self performSelectorInBackground:@selector(enumAllItems) withObject:nil];
+    if ([self.navigationController topViewController] == self) {
+        [self performSelectorInBackground:@selector(enumAllItems) withObject:nil];
+    }
 }
 
 - (NSUInteger)calcFrameSize {

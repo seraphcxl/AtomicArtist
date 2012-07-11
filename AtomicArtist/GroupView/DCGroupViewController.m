@@ -219,7 +219,7 @@
         [self.dataLibraryHelper enumGroups:_enumDataGroupParam notifyWithFrequency:pageViewCount];
         [self.navigationItem setTitle:[self title]];
     } else if (!force && [self.dataLibraryHelper groupsCount] != 0){
-        [self.viewCache clear];
+        [self.viewCache clearOperations];
         [[DCDataLoader defaultDataLoader] cancelAllOperationsOnQueue:DATALODER_TYPE_VISIABLE];
         [[DCDataLoader defaultDataLoader] cancelAllOperationsOnQueue:DATALODER_TYPE_BUFFER];
         
