@@ -187,7 +187,7 @@
         result = [self createViewsAndLoadSmallThumbnailForTableCell:index];
         
         if (self.lastRequireBufferIndex > index) {
-            visiableBeginTableCellIndex = (int)(index - 1) >= 0 ? (index - 1) : 0;
+            visiableBeginTableCellIndex = index;
             visiableEndTableCellIndex = (int)(index + visiableCellCount) > (int)(tableCellCount - 1) ? (tableCellCount - 1) : (index + visiableCellCount);
         } else if (self.lastRequireBufferIndex == 0 || self.lastRequireBufferIndex < index) {
             visiableEndTableCellIndex = index;
