@@ -23,11 +23,11 @@
         UIViewController *viewCtrl = [self.viewControllers lastObject];
         if ([viewCtrl isMemberOfClass:[DCGroupViewController class]]) {
             DCGroupViewController *groupViewCtrl = (DCGroupViewController *)viewCtrl;
-            [groupViewCtrl actionForWillDisappear];
+            [groupViewCtrl clearOperations];
             needTerminateAllOperations = YES;
         } else if ([viewCtrl isMemberOfClass:[DCItemPageScrollViewController class]]) {
             DCItemPageScrollViewController *itemPageScrollViewCtrl = (DCItemPageScrollViewController *)viewCtrl;
-            [itemPageScrollViewCtrl actionForWillDisappear];
+            [itemPageScrollViewCtrl clearOperations];
             needTerminateAllOperations = YES;
         }
         if (needTerminateAllOperations) {

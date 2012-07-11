@@ -65,11 +65,11 @@
         
         [self.delegate createViewsAndLoadSmallThumbnailForBufferWithPrevIndexs:prevIndexs nextIndexs:nextIndexs andCancelFlag:&_canceled];
         // loadBigThumbnailForBuffer
-        if (_canceled) {
-            break;
-        }
-        [[DCDataLoader defaultDataLoader] cancelAllOperationsOnQueue:DATALODER_TYPE_BUFFER];
-        [self.delegate loadBigThumbnailForBufferWithPrevIndexs:prevIndexs nextIndexs:nextIndexs andCancelFlag:&_canceled];
+//        if (_canceled) {
+//            break;
+//        }
+//        [[DCDataLoader defaultDataLoader] cancelAllOperationsOnQueue:DATALODER_TYPE_BUFFER];
+//        [self.delegate loadBigThumbnailForBufferWithPrevIndexs:prevIndexs nextIndexs:nextIndexs andCancelFlag:&_canceled];
     } while (NO);
 }
 

@@ -35,19 +35,20 @@
         }
         [[DCDataLoader defaultDataLoader] cancelAllOperationsOnQueue:DATALODER_TYPE_VISIABLE];
         // loadBigThumbnailForCurrentTableCell
-        if (_canceled) {
-            break;
-        }
-        [self.delegate loadBigThumbnailForCurrentTableCell:self.currentTableCellIndex andCancelFlag:&_canceled];
+//        if (_canceled) {
+//            break;
+//        }
+//        [self.delegate loadBigThumbnailForCurrentTableCell:self.currentTableCellIndex andCancelFlag:&_canceled];
         // createViewsAndLoadSmallThumbnailForVisiable
-        if (_canceled) {
-            break;
-        }
-        [self.delegate createViewsAndLoadSmallThumbnailForVisiableFrom:self.visiableBeginTableCellIndex to:self.visiableEndTableCellIndex except:self.currentTableCellIndex andCancelFlag:&_canceled];
+//        if (_canceled) {
+//            break;
+//        }
+//        [self.delegate createViewsAndLoadSmallThumbnailForVisiableFrom:self.visiableBeginTableCellIndex to:self.visiableEndTableCellIndex except:self.currentTableCellIndex andCancelFlag:&_canceled];
         // loadBigThumbnailForVisiable
         if (_canceled) {
             break;
         }
+        NSLog(@"*** *** *** *** *** *** *** *** *** Visiable: %d to:%d", self.visiableBeginTableCellIndex, self.visiableEndTableCellIndex);
         [self.delegate loadBigThumbnailForVisiableFrom:self.visiableBeginTableCellIndex to:self.visiableEndTableCellIndex except:self.currentTableCellIndex andCancelFlag:&_canceled];
     } while (NO);
 }

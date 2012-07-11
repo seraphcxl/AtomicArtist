@@ -152,7 +152,7 @@
 }
 
 - (void)dealloc {
-    [self actionForWillDisappear];
+    [self clearOperations];
     [self actionForDidUnload];
     
     if (_viewCache) {
@@ -390,7 +390,7 @@
 - (void)viewWillDisappear:(BOOL)animated {
     NSLog(@"DCGroupViewController viewWillDisappear:");
     
-    [self actionForWillDisappear];
+    [self clearOperations];
     
     [super viewWillDisappear:animated];
 }
@@ -406,7 +406,7 @@
     // e.g. self.myOutlet = nil;
 }
 
-- (void)actionForWillDisappear {
+- (void)clearOperations {
     [self.viewCache clearOperations];
     [[DCDataLoader defaultDataLoader] cancelAllOperationsOnQueue:DATALODER_TYPE_VISIABLE];
     [[DCDataLoader defaultDataLoader] cancelAllOperationsOnQueue:DATALODER_TYPE_BUFFER];
@@ -471,13 +471,7 @@
         return 0;
     }
     if (self.dataLibraryHelper) {
-        NSInteger dataGroupCount = [self.dataLibraryHelper groupsCount];
-        NSLog(@"dataGroupCount = %d", dataGroupCount);
-        NSInteger addLine = 0;
-        if (dataGroupCount % _itemCountInCell != 0) {
-            addLine = 1;
-        }
-        return dataGroupCount / _itemCountInCell + addLine;
+        return [self tableCellCount];
     } else {
         [NSException raise:@"DCGroupViewController error" format:@"Reason: self.dataLibraryHelper == nil"];
         return 0;
@@ -487,8 +481,8 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSLog(@"DCGroupViewController tableView:cellForRowAtIndexPath: indexPath.row = %d", [indexPath row]);
-    [[DCDataLoader defaultDataLoader] queue:DATALODER_TYPE_VISIABLE pauseWithAutoResume:YES with:1.0];
-    [[DCDataLoader defaultDataLoader] queue:DATALODER_TYPE_BUFFER pauseWithAutoResume:YES with:1.0];
+    [[DCDataLoader defaultDataLoader] queue:DATALODER_TYPE_VISIABLE pauseWithAutoResume:YES with:0.25];
+    [[DCDataLoader defaultDataLoader] queue:DATALODER_TYPE_BUFFER pauseWithAutoResume:YES with:0.25];
     NSArray *views = [self.viewCache getViewsForTableCell:indexPath];
     
     DCGroupViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"DCGroupViewCell"];
@@ -586,11 +580,18 @@
 }
 
 - (NSUInteger)visiableCellCount {
-    return _itemCountInCell * [self calcVisiableRowNumber];
+    return [self calcVisiableRowNumber];
 }
 
 - (NSUInteger)tableCellCount {
-    return [self.dataLibraryHelper groupsCount];
+    NSInteger dataGroupCount = [self.dataLibraryHelper groupsCount];
+    NSLog(@"dataGroupCount = %d", dataGroupCount);
+    NSInteger addLine = 0;
+    if (dataGroupCount % _itemCountInCell != 0) {
+        addLine = 1;
+    }
+    return dataGroupCount / _itemCountInCell + addLine;
+
 }
 
 - (void)loadSmallThumbnailForView:(UIView *)view {

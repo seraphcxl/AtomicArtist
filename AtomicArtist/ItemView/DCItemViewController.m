@@ -171,7 +171,7 @@
 }
 
 - (void)dealloc {
-    [self actionForWillDisappear];
+    [self clearOperations];
     [self actionForDidUnload];
     
     if (_viewCache) {
@@ -444,7 +444,7 @@
 
 - (void)viewWillDisappear:(BOOL)animated {
     NSLog(@"DCItemViewController %@ viewWillDisappear:", self);
-    [self actionForWillDisappear];
+    [self clearOperations];
     [super viewWillDisappear:animated];
 }
 
@@ -457,7 +457,7 @@
     // e.g. self.myOutlet = nil;
 }
 
-- (void)actionForWillDisappear {
+- (void)clearOperations {
     [self.viewCache clearOperations];
     [[DCDataLoader defaultDataLoader] cancelAllOperationsOnQueue:DATALODER_TYPE_VISIABLE];
     [[DCDataLoader defaultDataLoader] cancelAllOperationsOnQueue:DATALODER_TYPE_BUFFER];
@@ -529,13 +529,7 @@
     }
     
     if (self.dataLibraryHelper) {
-        NSInteger itemsCount = [self.dataLibraryHelper itemsCountWithParam:self.enumDataItemParam inGroup:self.dataGroupUID];
-        NSLog(@"itemsCount = %d", itemsCount);
-        NSInteger addLine = 0;
-        if (itemsCount % _itemCountInCell != 0) {
-            addLine = 1;
-        }
-        return itemsCount / _itemCountInCell + addLine;
+        return [self tableCellCount];
     } else {
         [NSException raise:@"DCItemViewController error" format:@"Reason: self.dataLibraryHelper == nil"];
         return 0;
@@ -545,8 +539,8 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSLog(@"DCItemViewController %@ tableView:cellForRowAtIndexPath:", self);
-    [[DCDataLoader defaultDataLoader] queue:DATALODER_TYPE_VISIABLE pauseWithAutoResume:YES with:1.0];
-    [[DCDataLoader defaultDataLoader] queue:DATALODER_TYPE_BUFFER pauseWithAutoResume:YES with:1.0];
+    [[DCDataLoader defaultDataLoader] queue:DATALODER_TYPE_VISIABLE pauseWithAutoResume:YES with:0.25];
+    [[DCDataLoader defaultDataLoader] queue:DATALODER_TYPE_BUFFER pauseWithAutoResume:YES with:0.25];
     DCItemViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"DCItemViewCell"];
     
     NSArray *views = [self.viewCache getViewsForTableCell:indexPath];
@@ -642,11 +636,17 @@
 }
 
 - (NSUInteger)visiableCellCount {
-    return _itemCountInCell * [self calcVisiableRowNumber];
+    return [self calcVisiableRowNumber];
 }
 
 - (NSUInteger)tableCellCount {
-    return [self.dataLibraryHelper enumratedItemsCountWithParam:self.enumDataItemParam inGroup:self.dataGroupUID];
+    NSInteger itemsCount = [self.dataLibraryHelper enumratedItemsCountWithParam:self.enumDataItemParam inGroup:self.dataGroupUID];
+    NSLog(@"itemsCount = %d", itemsCount);
+    NSInteger addLine = 0;
+    if (itemsCount % _itemCountInCell != 0) {
+        addLine = 1;
+    }
+    return itemsCount / _itemCountInCell + addLine;
 }
 
 - (void)loadSmallThumbnailForView:(UIView *)view {

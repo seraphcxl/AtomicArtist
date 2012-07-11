@@ -154,11 +154,11 @@
     }
 }
 
-- (void)actionForWillDisappear {
+- (void)clearOperations {
     do {
         DCItemViewController *itemViewCtrl = (DCItemViewController *)[self currentViewCtrl];
         if (itemViewCtrl) {
-            [itemViewCtrl actionForWillDisappear];
+            [itemViewCtrl clearOperations];
         }
     } while (NO);
 }

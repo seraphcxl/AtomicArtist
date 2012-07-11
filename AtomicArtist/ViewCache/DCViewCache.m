@@ -44,8 +44,10 @@
 
 - (void)actionForVisiableFrom:(NSInteger)begin to:(NSInteger)end andCurrent:(NSInteger)index {
     do {
+        NSLog(@"*** *** *** *** *** *** Add visiable op for from: %d to:%d current:%d", begin, end, index);
         [self createViewsAndLoadSmallThumbnailForTableCell:index];
         [_queueForVisiableOp cancelAllOperations];
+//        [[DCDataLoader defaultDataLoader] terminateAllOperationsOnQueue:DATALODER_TYPE_VISIABLE];
         DCCacheOperationForVisiable *op = [[[DCCacheOperationForVisiable alloc] init] autorelease];
         op.currentTableCellIndex = index;
         op.visiableBeginTableCellIndex = begin;
@@ -57,6 +59,7 @@
 
 - (void)actionForBufferFrom:(NSInteger)beginBuffer to:(NSInteger)endBuffer andVisiableFrom:(NSInteger)beginVisiable to:(NSInteger)endVisiable {
     [_queueForBufferOp cancelAllOperations];
+//    [[DCDataLoader defaultDataLoader] terminateAllOperationsOnQueue:DATALODER_TYPE_BUFFER];
     DCCacheOperationForBuffer *op = [[[DCCacheOperationForBuffer alloc] init] autorelease];
     op.visiableBeginTableCellIndex = beginVisiable;
     op.visiableEndTableCellIndex = endVisiable;
@@ -184,11 +187,11 @@
         result = [self createViewsAndLoadSmallThumbnailForTableCell:index];
         
         if (self.lastRequireBufferIndex > index) {
-            visiableBeginTableCellIndex = index;
-            visiableEndTableCellIndex = (int)(index + visiableCellCount - 1) > (int)(tableCellCount - 1) ? (tableCellCount - 1) : (index + visiableCellCount - 1);
+            visiableBeginTableCellIndex = (int)(index - 1) >= 0 ? (index - 1) : 0;
+            visiableEndTableCellIndex = (int)(index + visiableCellCount) > (int)(tableCellCount - 1) ? (tableCellCount - 1) : (index + visiableCellCount);
         } else if (self.lastRequireBufferIndex == 0 || self.lastRequireBufferIndex < index) {
             visiableEndTableCellIndex = index;
-            visiableBeginTableCellIndex = (int)(index + 1 - visiableCellCount) > 0 ? (index + 1 - visiableCellCount) : 0;
+            visiableBeginTableCellIndex = (int)(index + 1 - visiableCellCount) - 1 >= 0 ? (index + 1 - visiableCellCount) - 1 : 0;
         } else {
             break;
         }
@@ -361,9 +364,10 @@
                 NSLog(@"Cancel from loadBigThumbnailForVisiableFrom:to:except:andCancelFlag:");
                 break;
             }
-            if (index != current) {
-                [self loadBigThumbnailInQueue:DATALODER_TYPE_VISIABLE forTableCell:index andCancelFlag:cancel];
-            }
+            [self loadBigThumbnailInQueue:DATALODER_TYPE_VISIABLE forTableCell:index andCancelFlag:cancel];
+//            if (index != current) {
+//                [self loadBigThumbnailInQueue:DATALODER_TYPE_VISIABLE forTableCell:index andCancelFlag:cancel];
+//            }
         }
         
         if (*cancel) {

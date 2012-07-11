@@ -33,7 +33,7 @@ enum GROUPVIEWCTRL_TYPE {
 - (void)setEnumDataGroupParam:(id)enumDataGroupParam;
 - (void)setEnumDataItemParam:(id)enumDataItemParam;
 
-- (void)actionForWillDisappear;
+- (void)clearOperations;
 - (void)actionForDidUnload;
 
 @end
