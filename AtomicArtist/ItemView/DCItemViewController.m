@@ -239,11 +239,12 @@
 //            }
 //            [self clearCache];
             [self performSelectorOnMainThread:@selector(clearCache) withObject:nil waitUntilDone:YES];
+            NSUInteger pageViewCount = _itemCountInCell * [self calcVisiableRowNumber];
             NSRange range;
             range.location = 0;
-            range.length = _itemCountInCell * [self calcVisiableRowNumber];
+            range.length = pageViewCount;
             NSIndexSet *indexSet = [[[NSIndexSet alloc] initWithIndexesInRange:range] autorelease];
-            [self.dataLibraryHelper enumItemAtIndexes:indexSet withParam:self.enumDataItemParam inGroup:self.dataGroupUID notifyWithFrequency:_itemCountInCell * [self calcVisiableRowNumber]];
+            [self.dataLibraryHelper enumItemAtIndexes:indexSet withParam:self.enumDataItemParam inGroup:self.dataGroupUID notifyWithFrequency:pageViewCount];
         }
         
         [self refreshItemViewTitle];

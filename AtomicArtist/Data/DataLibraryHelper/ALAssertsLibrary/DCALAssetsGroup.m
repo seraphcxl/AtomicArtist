@@ -227,7 +227,7 @@
             
             _frequency = frequency;
             _enumCount = 0;
-            [self.alAssetsGroup enumerateAssetsAtIndexes:indexSet options:NSEnumerationConcurrent usingBlock:ALAssetsGroupEnumerationResultsBlock];
+            [self.alAssetsGroup enumerateAssetsAtIndexes:indexSet options:0 usingBlock:ALAssetsGroupEnumerationResultsBlock];
             
         } else {
             [NSException raise:@"DCALAssetsGroup Error" format:@"Reason: _allAssetItems == nil or _allAssetUIDs == nil or frequency == 0"];

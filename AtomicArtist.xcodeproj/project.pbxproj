@@ -36,8 +36,6 @@
 		1BC2B35C15AE60D7009831DC /* DCLoadThumbnailOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BC2B35715AE60D7009831DC /* DCLoadThumbnailOperation.m */; };
 		1BC3D55815A5BD83001808D6 /* DCCacheOperationForBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BC3D55715A5BD83001808D6 /* DCCacheOperationForBuffer.m */; };
 		1BC3D55C15A5BDA5001808D6 /* DCCacheOperationForVisiable.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BC3D55B15A5BDA5001808D6 /* DCCacheOperationForVisiable.m */; };
-		1BE2D39E15AC27B700472BAE /* DCBrowerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BE2D39C15AC27B700472BAE /* DCBrowerViewController.m */; };
-		1BE2D39F15AC27B700472BAE /* DCBrowerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1BE2D39D15AC27B700472BAE /* DCBrowerViewController.xib */; };
 		1BF9F4AE156483AE0015E004 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BF9F4AD156483AE0015E004 /* UIKit.framework */; };
 		1BF9F4B0156483AE0015E004 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BF9F4AF156483AE0015E004 /* Foundation.framework */; };
 		1BF9F4B2156483AE0015E004 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BF9F4B1156483AE0015E004 /* CoreGraphics.framework */; };
@@ -122,9 +120,6 @@
 		1BC3D55A15A5BDA5001808D6 /* DCCacheOperationForVisiable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCCacheOperationForVisiable.h; sourceTree = "<group>"; };
 		1BC3D55B15A5BDA5001808D6 /* DCCacheOperationForVisiable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCCacheOperationForVisiable.m; sourceTree = "<group>"; };
 		1BD5CACC15690F1600C9133D /* CommonDefine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonDefine.h; sourceTree = "<group>"; };
-		1BE2D39B15AC27B700472BAE /* DCBrowerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCBrowerViewController.h; sourceTree = "<group>"; };
-		1BE2D39C15AC27B700472BAE /* DCBrowerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCBrowerViewController.m; sourceTree = "<group>"; };
-		1BE2D39D15AC27B700472BAE /* DCBrowerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DCBrowerViewController.xib; sourceTree = "<group>"; };
 		1BF9F4A9156483AE0015E004 /* AtomicArtist_Simulator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AtomicArtist_Simulator.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1BF9F4AD156483AE0015E004 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		1BF9F4AF156483AE0015E004 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -319,9 +314,6 @@
 				1BD5CACC15690F1600C9133D /* CommonDefine.h */,
 				1B791D6615A541BE002CD1E5 /* DCBrower.h */,
 				1B791D6715A541BE002CD1E5 /* DCBrower.m */,
-				1BE2D39B15AC27B700472BAE /* DCBrowerViewController.h */,
-				1BE2D39C15AC27B700472BAE /* DCBrowerViewController.m */,
-				1BE2D39D15AC27B700472BAE /* DCBrowerViewController.xib */,
 			);
 			path = AtomicArtist;
 			sourceTree = "<group>";
@@ -471,7 +463,6 @@
 				1BF9F5161564939C0015E004 /* DCGroupViewController.xib in Resources */,
 				1BF9F51E156493A50015E004 /* DCItemViewController.xib in Resources */,
 				1B14209B1574ABD00058199E /* DCALAssetGroupViewNaviTitle.xib in Resources */,
-				1BE2D39F15AC27B700472BAE /* DCBrowerViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -520,7 +511,6 @@
 				1B19C5B915AAC091009B5056 /* DCItemViewCache.m in Sources */,
 				1B19C5BC15AAC09B009B5056 /* DCGroupViewCache.m in Sources */,
 				1B19C5BF15AAC0AC009B5056 /* DCLoadCacheViewBigThumbnailOperation.m in Sources */,
-				1BE2D39E15AC27B700472BAE /* DCBrowerViewController.m in Sources */,
 				1BC2B35815AE60D7009831DC /* DCDataLoader.m in Sources */,
 				1BC2B35915AE60D7009831DC /* DCLoadPosterImageForALAssetsGroup.m in Sources */,
 				1BC2B35A15AE60D7009831DC /* DCLoadPosterImageOperation.m in Sources */,
