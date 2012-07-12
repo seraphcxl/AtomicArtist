@@ -11,13 +11,18 @@
 enum DATALODER_TYPE {
     DATALODER_TYPE_VISIABLE = 1,
     DATALODER_TYPE_BUFFER = 2
-    };
+};
+
+@protocol DCDataLoaderMgrDelegate <NSObject>
+
+- (void)queue:(enum DATALODER_TYPE)type addOperation:(NSOperation *)operation;
+- (void)cancelAllOperationsOnQueue:(enum DATALODER_TYPE)type;
+- (void)terminateAllOperationsOnQueue:(enum DATALODER_TYPE)type;
+- (void)queue:(enum DATALODER_TYPE)type pauseWithAutoResume:(BOOL)enable with:(NSTimeInterval)seconds;
+
+@end
 
 @interface DCDataLoader : NSObject
-
-+ (id)defaultDataLoader;
-
-+ (void)staticRelease;
 
 - (void)queue:(enum DATALODER_TYPE)type addOperation:(NSOperation *)operation;
 

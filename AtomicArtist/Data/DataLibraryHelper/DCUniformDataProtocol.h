@@ -61,7 +61,7 @@ extern NSString * const NOTIFY_DATAGROUP_EMPTY;
 
 - (NSUInteger)enumratedItemsCountWithParam:(id)param;
 
-- (id <DCDataItem>)itemWithUID:(NSString *)uid;
+- (id<DCDataItem>)itemWithUID:(NSString *)uid;
 
 - (id)valueForProperty:(NSString *)property withOptions:(NSDictionary *)options;
 
@@ -89,7 +89,7 @@ extern NSString * const NOTIFY_DATAGROUP_EMPTY;
 
 - (NSUInteger)groupsCount;
 
-- (id <DCDataGroup>)groupWithUID:(NSString *)uid;
+- (id<DCDataGroup>)groupWithUID:(NSString *)uid;
 
 - (NSString *)groupUIDAtIndex:(NSUInteger)index;
 
@@ -117,7 +117,7 @@ extern NSString * const NOTIFY_DATAGROUP_EMPTY;
 
 - (NSUInteger)groupsCount;
 
-- (id <DCDataGroup>)groupWithUID:(NSString *)uid;
+- (id<DCDataGroup>)groupWithUID:(NSString *)uid;
 
 - (NSString *)groupUIDAtIndex:(NSUInteger)index;
 
@@ -137,7 +137,7 @@ extern NSString * const NOTIFY_DATAGROUP_EMPTY;
 
 - (NSUInteger)enumratedItemsCountWithParam:(id)param inGroup:(NSString *) groupUID;
 
-- (id <DCDataItem>)itemWithUID:(NSString *)uid inGroup:(NSString *) groupUID;
+- (id<DCDataItem>)itemWithUID:(NSString *)uid inGroup:(NSString *) groupUID;
 
 - (NSString *)itemUIDAtIndex:(NSUInteger)index inGroup:(NSString *) groupUID;
 

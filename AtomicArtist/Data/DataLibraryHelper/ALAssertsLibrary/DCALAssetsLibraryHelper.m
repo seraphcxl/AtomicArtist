@@ -87,7 +87,7 @@ static DCALAssetsLibraryHelper *staticALAssetsLibraryHelper = nil;
     }
 }
 
-- (id <DCDataGroup>)groupWithUID:(NSString *)uid {
+- (id<DCDataGroup>)groupWithUID:(NSString *)uid {
     if (_alAssetsLibrary) {
         return [_alAssetsLibrary groupWithUID:uid];
     } else {
@@ -116,7 +116,7 @@ static DCALAssetsLibraryHelper *staticALAssetsLibraryHelper = nil;
 
 - (void)clearCacheInGroup:(NSString *) groupUID {
     if (_alAssetsLibrary) {
-        id <DCDataGroup> group = [_alAssetsLibrary groupWithUID:groupUID];
+        id<DCDataGroup> group = [_alAssetsLibrary groupWithUID:groupUID];
         if (group) {
             [group clearCache];
         } else {
@@ -129,7 +129,7 @@ static DCALAssetsLibraryHelper *staticALAssetsLibraryHelper = nil;
 
 - (void)enumItems:(id)param inGroup:(NSString *)groupUID notifyWithFrequency:(NSUInteger)frequency {
     if (_alAssetsLibrary) {
-        id <DCDataGroup> group = [_alAssetsLibrary groupWithUID:groupUID];
+        id<DCDataGroup> group = [_alAssetsLibrary groupWithUID:groupUID];
         if (group) {
             [group enumItems:param notifyWithFrequency:frequency];
         } else {
@@ -142,7 +142,7 @@ static DCALAssetsLibraryHelper *staticALAssetsLibraryHelper = nil;
 
 - (void)enumItemAtIndexes:(NSIndexSet *)indexSet withParam:(id)param inGroup:(NSString *)groupUID notifyWithFrequency:(NSUInteger)frequency {
     if (_alAssetsLibrary) {
-        id <DCDataGroup> group = [_alAssetsLibrary groupWithUID:groupUID];
+        id<DCDataGroup> group = [_alAssetsLibrary groupWithUID:groupUID];
         if (group) {
             [group enumItemAtIndexes:indexSet withParam:param notifyWithFrequency:frequency];
         } else {
@@ -155,7 +155,7 @@ static DCALAssetsLibraryHelper *staticALAssetsLibraryHelper = nil;
 
 - (NSUInteger)itemsCountWithParam:(id)param inGroup:(NSString *)groupUID {
     if (_alAssetsLibrary) {
-        id <DCDataGroup> group = [_alAssetsLibrary groupWithUID:groupUID];
+        id<DCDataGroup> group = [_alAssetsLibrary groupWithUID:groupUID];
         if (group) {
             return [group itemsCountWithParam:param];
         } else {
@@ -170,7 +170,7 @@ static DCALAssetsLibraryHelper *staticALAssetsLibraryHelper = nil;
 
 - (NSUInteger)enumratedItemsCountWithParam:(id)param inGroup:(NSString *)groupUID {
     if (_alAssetsLibrary) {
-        id <DCDataGroup> group = [_alAssetsLibrary groupWithUID:groupUID];
+        id<DCDataGroup> group = [_alAssetsLibrary groupWithUID:groupUID];
         if (group) {
             return [group enumratedItemsCountWithParam:param];
         } else {
@@ -182,9 +182,9 @@ static DCALAssetsLibraryHelper *staticALAssetsLibraryHelper = nil;
     }
 }
 
-- (id <DCDataItem>)itemWithUID:(NSString *)uid inGroup:(NSString *) groupUID {
+- (id<DCDataItem>)itemWithUID:(NSString *)uid inGroup:(NSString *) groupUID {
     if (_alAssetsLibrary) {
-        id <DCDataGroup> group = [_alAssetsLibrary groupWithUID:groupUID];
+        id<DCDataGroup> group = [_alAssetsLibrary groupWithUID:groupUID];
         if (group) {
             return [group itemWithUID:uid];
         } else {
@@ -199,7 +199,7 @@ static DCALAssetsLibraryHelper *staticALAssetsLibraryHelper = nil;
 
 - (NSString *)itemUIDAtIndex:(NSUInteger)index inGroup:(NSString *) groupUID {
     if (_alAssetsLibrary) {
-        id <DCDataGroup> group = [_alAssetsLibrary groupWithUID:groupUID];
+        id<DCDataGroup> group = [_alAssetsLibrary groupWithUID:groupUID];
         if (group) {
             return [group itemUIDAtIndex:index];
         } else {
@@ -214,7 +214,7 @@ static DCALAssetsLibraryHelper *staticALAssetsLibraryHelper = nil;
 
 - (NSInteger)indexForItemUID:(NSString *)itemUID inGroup:(NSString *) groupUID {
     if (_alAssetsLibrary) {
-        id <DCDataGroup> group = [_alAssetsLibrary groupWithUID:groupUID];
+        id<DCDataGroup> group = [_alAssetsLibrary groupWithUID:groupUID];
         if (group) {
             return [group indexForItemUID:itemUID];
         } else {
@@ -229,7 +229,7 @@ static DCALAssetsLibraryHelper *staticALAssetsLibraryHelper = nil;
 
 - (BOOL)isGroupEnumerated:(NSString *) groupUID {
     if (_alAssetsLibrary) {
-        id <DCDataGroup> group = [_alAssetsLibrary groupWithUID:groupUID];
+        id<DCDataGroup> group = [_alAssetsLibrary groupWithUID:groupUID];
         if (group) {
             return [group isEnumerated];
         } else {

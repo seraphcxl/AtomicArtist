@@ -31,6 +31,7 @@
 @synthesize delegate = _delegate;
 @synthesize lastRequireBufferIndex = _lastRequireBufferIndex;
 @synthesize bufferTableCellNumber = _bufferTableCellNumber;
+@synthesize dataLoader = _dataLoader;
 //@synthesize dataLibraryHelper = _dataLibraryHelper;
 
 - (void)loadBigThumbnailForCacheViews {
@@ -38,6 +39,7 @@
         [_queueForVisiableOp cancelAllOperations];
         DCLoadCacheViewBigThumbnailOperation *op = [[[DCLoadCacheViewBigThumbnailOperation alloc] init] autorelease];
         [op setDelegate:self];
+        [op setDelegateForDCDataLoaderMgr:self];
         [_queueForVisiableOp addOperation:op];
     } while (NO);
 }
@@ -47,25 +49,25 @@
         NSLog(@"*** *** *** *** *** *** Add visiable op for from: %d to:%d current:%d", begin, end, index);
         [self createViewsAndLoadSmallThumbnailForTableCell:index];
         [_queueForVisiableOp cancelAllOperations];
-//        [[DCDataLoader defaultDataLoader] terminateAllOperationsOnQueue:DATALODER_TYPE_VISIABLE];
         DCCacheOperationForVisiable *op = [[[DCCacheOperationForVisiable alloc] init] autorelease];
         op.currentTableCellIndex = index;
         op.visiableBeginTableCellIndex = begin;
         op.visiableEndTableCellIndex = end;
         [op setDelegate:self];
+        [op setDelegateForDCDataLoaderMgr:self];
         [_queueForVisiableOp addOperation:op];
     } while (NO);
 }
 
 - (void)actionForBufferFrom:(NSInteger)beginBuffer to:(NSInteger)endBuffer andVisiableFrom:(NSInteger)beginVisiable to:(NSInteger)endVisiable {
     [_queueForBufferOp cancelAllOperations];
-//    [[DCDataLoader defaultDataLoader] terminateAllOperationsOnQueue:DATALODER_TYPE_BUFFER];
     DCCacheOperationForBuffer *op = [[[DCCacheOperationForBuffer alloc] init] autorelease];
     op.visiableBeginTableCellIndex = beginVisiable;
     op.visiableEndTableCellIndex = endVisiable;
     op.bufferBeginTableCellIndex = beginBuffer;
     op.bufferEndTableCellIndex = endBuffer;
     [op setDelegate:self];
+    [op setDelegateForDCDataLoaderMgr:self];
     [_queueForBufferOp addOperation:op];
 }
 
@@ -260,6 +262,10 @@
             _queueForBufferOp = [[NSOperationQueue alloc] init];
             [_queueForBufferOp setMaxConcurrentOperationCount:1];
         }
+        
+        if (!_dataLoader) {
+            _dataLoader = [[DCDataLoader alloc] init];
+        }
     }
     return self;
 }
@@ -291,6 +297,11 @@
 }
 
 - (void)dealloc {
+    if (_dataLoader) {
+        [_dataLoader release];
+        _dataLoader = nil;
+    }
+    
     if (_queueForVisiableOp) {
         [_queueForVisiableOp cancelAllOperations];
         [_queueForVisiableOp waitUntilAllOperationsAreFinished];
@@ -513,6 +524,39 @@
             }
         }
 
+    } while (NO);
+}
+
+#pragma mark DCDataLoaderMgrDelegate
+- (void)queue:(enum DATALODER_TYPE)type addOperation:(NSOperation *)operation {
+    do {
+        if (self.dataLoader) {
+            [self.dataLoader queue:type addOperation:operation];
+        }
+    } while (NO);
+}
+
+- (void)cancelAllOperationsOnQueue:(enum DATALODER_TYPE)type {
+    do {
+        if (self.dataLoader) {
+            [self.dataLoader cancelAllOperationsOnQueue:type];
+        }
+    } while (NO);
+}
+
+- (void)terminateAllOperationsOnQueue:(enum DATALODER_TYPE)type {
+    do {
+        if (self.dataLoader) {
+            [self.dataLoader terminateAllOperationsOnQueue:type];
+        }
+    } while (NO);
+}
+
+- (void)queue:(enum DATALODER_TYPE)type pauseWithAutoResume:(BOOL)enable with:(NSTimeInterval)seconds {
+    do {
+        if (self.dataLoader) {
+            [self.dataLoader queue:type pauseWithAutoResume:enable with:seconds];
+        }
     } while (NO);
 }
 

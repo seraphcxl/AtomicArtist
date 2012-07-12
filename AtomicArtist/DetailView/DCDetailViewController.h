@@ -22,14 +22,14 @@ typedef enum {
 
 @interface DCDetailViewController : UIViewController
 
-@property (assign, nonatomic) id <DCDetailViewControllerDelegate> delegate;
+@property (assign, nonatomic) id<DCDetailViewControllerDelegate> delegate;
 @property (retain, nonatomic) NSString *currentDataGroupUID;
 @property (retain, nonatomic) NSString *currentItemUID;
 @property (assign, nonatomic) NSUInteger currentIndexInGroup;
 @property (assign, nonatomic) UIScrollView *imageScrollView;
 @property (retain, nonatomic) UIImageView *imageView;
-@property (assign, nonatomic) id <DCDataLibraryHelper> dataLibraryHelper;
+@property (assign, nonatomic) id<DCDataLibraryHelper> dataLibraryHelper;
 
-- (id)initWithDataLibraryHelper:(id <DCDataLibraryHelper>)dataLibraryHelper dataGroupUID:(NSString *)dataGroupUID itemUID:(NSString *)itemUID andIndexInGroup:(NSUInteger) indexInGroup;
+- (id)initWithDataLibraryHelper:(id<DCDataLibraryHelper>)dataLibraryHelper dataGroupUID:(NSString *)dataGroupUID itemUID:(NSString *)itemUID andIndexInGroup:(NSUInteger) indexInGroup;
 
 @end

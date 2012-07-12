@@ -18,16 +18,17 @@
 
 @interface DCGroupView : UIView
 
-@property (assign, nonatomic) id <DCGroupViewDelegate> delegate;
+@property (assign, nonatomic) id<DCGroupViewDelegate> delegate;
+@property (assign, nonatomic) id<DCDataLoaderMgrDelegate> delegateForDCDataLoaderMgr;
 @property (retain, nonatomic) NSString *dataGroupUID;
 @property (readonly, nonatomic) NSUInteger posterImageSize;
 @property (readonly, nonatomic) NSUInteger titleFontSize;
 @property (retain, nonatomic) UIImage *posterImage;
-@property (assign, nonatomic) id <DCDataLibraryHelper> dataLibraryHelper;
+@property (assign, nonatomic) id<DCDataLibraryHelper> dataLibraryHelper;
 @property (assign, nonatomic) id enumDataItemParam;
 @property (readonly, nonatomic) BOOL bigThumbnailLoaded;
 
-- (id)InitWithDataLibraryHelper:(id <DCDataLibraryHelper>)dataLibraryHelper dataGroupUID:(NSString *)dataGroupUID enumDataItemParam:(id)enumDataItemParam andFrame:(CGRect)frame;
+- (id)InitWithDataLibraryHelper:(id<DCDataLibraryHelper>)dataLibraryHelper dataGroupUID:(NSString *)dataGroupUID enumDataItemParam:(id)enumDataItemParam andFrame:(CGRect)frame;
 
 - (void)updatePosterImage;
 

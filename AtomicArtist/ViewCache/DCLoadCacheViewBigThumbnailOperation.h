@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-
+#import "DCDataLoader.h"
 @protocol DCLoadCacheViewBigThumbnailOperationDelegate <NSObject>
 
 - (void)loadBigThumbnailForCacheViewsCancelFlag:(BOOL *)cancel;
@@ -19,5 +19,6 @@
 }
 
 @property (assign, nonatomic) id<DCLoadCacheViewBigThumbnailOperationDelegate> delegate;
+@property (assign, nonatomic) id<DCDataLoaderMgrDelegate> delegateForDCDataLoaderMgr;
 
 @end

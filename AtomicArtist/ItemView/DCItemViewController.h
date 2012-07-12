@@ -26,23 +26,25 @@
 
 @interface DCItemViewController : UITableViewController <DCItemViewCellDelegate, DCPageScrollViewControllerDelegate, DCViewCacheDelegate>
 
-@property (assign, nonatomic) id <DCItemViewControllerDelegate> delegate;
-@property (assign, nonatomic) id <DCItemViewDelegate> delegateForItemView;
+@property (assign, nonatomic) id<DCItemViewControllerDelegate> delegate;
+@property (assign, nonatomic) id<DCItemViewDelegate> delegateForItemView;
 @property (retain, nonatomic) NSString *dataGroupUID;
 @property (assign, nonatomic) NSUInteger dataGroupIndex;
 @property (readonly, nonatomic) NSString *groupTitle;
-@property (assign, nonatomic) id <DCDataLibraryHelper> dataLibraryHelper;
+@property (assign, nonatomic) id<DCDataLibraryHelper> dataLibraryHelper;
 @property (assign, nonatomic) id enumDataItemParam;
 
 @property (readonly, nonatomic) DCItemViewCache *viewCache;
 
 - (IBAction)refresh:(id)sender;
 
-- (id)initWithDataLibraryHelper:(id <DCDataLibraryHelper>)dataLibraryHelper;
+- (id)initWithDataLibraryHelper:(id<DCDataLibraryHelper>)dataLibraryHelper;
 
 - (void)selectItem:(NSString *)itemUID showInPageScrollViewController:(DCPageScrollViewController *)pageScrollViewCtrl;
 
 - (void)clearOperations;
 - (void)actionForDidUnload;
+
+- (void)dataFirstScreenRefreshFinished:(NSNotification *)note;
 
 @end

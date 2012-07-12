@@ -19,20 +19,13 @@
 - (UIViewController *)popViewControllerAnimated:(BOOL)animated {
     UIViewController *result = nil;
     do {
-        BOOL needTerminateAllOperations = NO;
         UIViewController *viewCtrl = [self.viewControllers lastObject];
         if ([viewCtrl isMemberOfClass:[DCGroupViewController class]]) {
             DCGroupViewController *groupViewCtrl = (DCGroupViewController *)viewCtrl;
             [groupViewCtrl clearOperations];
-            needTerminateAllOperations = YES;
         } else if ([viewCtrl isMemberOfClass:[DCItemPageScrollViewController class]]) {
             DCItemPageScrollViewController *itemPageScrollViewCtrl = (DCItemPageScrollViewController *)viewCtrl;
             [itemPageScrollViewCtrl clearOperations];
-            needTerminateAllOperations = YES;
-        }
-        if (needTerminateAllOperations) {
-            [[DCDataLoader defaultDataLoader] terminateAllOperationsOnQueue:DATALODER_TYPE_VISIABLE];
-            [[DCDataLoader defaultDataLoader] terminateAllOperationsOnQueue:DATALODER_TYPE_BUFFER];
         }
         result = [super popViewControllerAnimated:animated];
     } while (NO);
@@ -63,7 +56,15 @@
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
+    BOOL result = NO;
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+        result = (interfaceOrientation == UIInterfaceOrientationPortrait || interfaceOrientation == UIInterfaceOrientationLandscapeLeft || interfaceOrientation == UIInterfaceOrientationLandscapeRight);
+    } else if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+        result = YES;
+    } else {
+        [NSException raise:@"DCBrowerViewController error" format:@"Reason: Current device type unknown"];
+    }
+    return result;
 }
 
 @end

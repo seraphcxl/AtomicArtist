@@ -21,14 +21,14 @@ enum GROUPVIEWCTRL_TYPE {
     id _enumDataItemParam;
 }
 
-@property (assign, nonatomic) id <DCDataLibraryHelper> dataLibraryHelper;
+@property (assign, nonatomic) id<DCDataLibraryHelper> dataLibraryHelper;
 @property (assign, nonatomic) enum GROUPVIEWCTRL_TYPE type;
 
 @property (readonly, nonatomic) DCGroupViewCache *viewCache;
 
 - (IBAction)refresh:(id)sender;
 
-- (id)initWithDataLibHelper:(id <DCDataLibraryHelper>)dataLibraryHelper;
+- (id)initWithDataLibHelper:(id<DCDataLibraryHelper>)dataLibraryHelper;
 
 - (void)setEnumDataGroupParam:(id)enumDataGroupParam;
 - (void)setEnumDataItemParam:(id)enumDataItemParam;

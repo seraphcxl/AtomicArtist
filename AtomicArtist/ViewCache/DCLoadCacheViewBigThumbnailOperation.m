@@ -7,11 +7,11 @@
 //
 
 #import "DCLoadCacheViewBigThumbnailOperation.h"
-#import "DCDataLoader.h"
 
 @implementation DCLoadCacheViewBigThumbnailOperation
 
 @synthesize delegate = _delegate;
+@synthesize delegateForDCDataLoaderMgr = _delegateForDCDataLoaderMgr;
 
 - (void)cancel {
     _canceled = TRUE;
@@ -27,10 +27,10 @@
 
 - (void)main {
     do {
-        if (!self.delegate) {
+        if (!self.delegate || !self.delegateForDCDataLoaderMgr) {
             break;
         }
-        [[DCDataLoader defaultDataLoader] cancelAllOperationsOnQueue:DATALODER_TYPE_VISIABLE];
+        [self.delegateForDCDataLoaderMgr cancelAllOperationsOnQueue:DATALODER_TYPE_VISIABLE];
         // loadBigThumbnailForCacheViews
         if (_canceled) {
             break;

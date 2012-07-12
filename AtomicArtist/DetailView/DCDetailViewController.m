@@ -69,7 +69,7 @@
         if (!_originImage) {
             if (self.currentItemUID && self.currentDataGroupUID) {
                 if (self.dataLibraryHelper) {
-                    id <DCDataItem> item = [self.dataLibraryHelper itemWithUID:self.currentItemUID inGroup:self.currentDataGroupUID];
+                    id<DCDataItem> item = [self.dataLibraryHelper itemWithUID:self.currentItemUID inGroup:self.currentDataGroupUID];
                     if (item) {
                         _originImage = (UIImage *)[item valueForProperty:kDATAITEMPROPERTY_ORIGINIMAGE withOptions:nil];
                         [_originImage retain];
@@ -156,7 +156,7 @@
     if (!_fitInImage) {
         if (self.currentItemUID && self.currentDataGroupUID) {
             if (self.dataLibraryHelper) {
-                id <DCDataItem> item = [self.dataLibraryHelper itemWithUID:self.currentItemUID inGroup:self.currentDataGroupUID];
+                id<DCDataItem> item = [self.dataLibraryHelper itemWithUID:self.currentItemUID inGroup:self.currentDataGroupUID];
                 if (item) {
                     UIImage *fullScreemImage = (UIImage *)[item valueForProperty:kDATAITEMPROPERTY_FULLSCREENIMAGE withOptions:nil];
                     _fitInImage = [DCImageHelper image:fullScreemImage fitInSize:rect.size];

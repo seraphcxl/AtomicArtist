@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "DCDataLoader.h"
 
 @protocol DCCacheOperationForVisiableDelegate <NSObject>
 
@@ -20,6 +21,7 @@
     BOOL _canceled;
 }
 @property (assign, nonatomic) id<DCCacheOperationForVisiableDelegate> delegate;
+@property (assign, nonatomic) id<DCDataLoaderMgrDelegate> delegateForDCDataLoaderMgr;
 
 @property (assign, nonatomic) NSInteger currentTableCellIndex;
 

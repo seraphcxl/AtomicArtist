@@ -8,7 +8,6 @@
 
 #import "DCPageScrollViewController.h"
 #import "DCPageView.h"
-#import "DCDataLoader.h"
 
 #define TIMEFORHIDEASSIST ((NSTimeInterval)2.0)
 
@@ -59,6 +58,7 @@ typedef enum {
 @implementation DCPageScrollViewController
 
 @synthesize delegate = _delegate;
+@synthesize delegateForDCDataLoaderMgr = _delegateForDCDataLoaderMgr;
 @synthesize pageScrollView = _pageScrollView;
 @synthesize contextView = _contextView;
 @synthesize pageViews = _pageViews;
@@ -268,8 +268,10 @@ typedef enum {
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
     NSLog(@"DCPageScrollViewController scrollViewWillBeginDragging:");
-    [[DCDataLoader defaultDataLoader] queue:DATALODER_TYPE_VISIABLE pauseWithAutoResume:NO with:0.0];
-    [[DCDataLoader defaultDataLoader] queue:DATALODER_TYPE_BUFFER pauseWithAutoResume:NO with:0.0];
+    if (self.delegateForDCDataLoaderMgr) {
+        [self.delegateForDCDataLoaderMgr queue:DATALODER_TYPE_VISIABLE pauseWithAutoResume:NO with:0.0];
+        [self.delegateForDCDataLoaderMgr queue:DATALODER_TYPE_BUFFER pauseWithAutoResume:NO with:0.0];
+    }
 }
 
 - (void)scrollViewWillBeginDecelerating:(UIScrollView *)scrollView {
@@ -279,8 +281,10 @@ typedef enum {
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
     NSLog(@"DCPageScrollViewController scrollViewDidEndDecelerating:");
     
-    [[DCDataLoader defaultDataLoader] queue:DATALODER_TYPE_VISIABLE pauseWithAutoResume:YES with:0.25];
-    [[DCDataLoader defaultDataLoader] queue:DATALODER_TYPE_BUFFER pauseWithAutoResume:YES with:0.25];
+    if (self.delegateForDCDataLoaderMgr) {
+        [self.delegateForDCDataLoaderMgr queue:DATALODER_TYPE_VISIABLE pauseWithAutoResume:YES with:0.25];
+        [self.delegateForDCDataLoaderMgr queue:DATALODER_TYPE_BUFFER pauseWithAutoResume:YES with:0.25];
+    }
     
     // do action for prev or next
     scrollViewOffset = [scrollView contentOffset];

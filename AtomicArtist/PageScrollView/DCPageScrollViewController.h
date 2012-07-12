@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "DCDetailViewController.h"
+#import "DCDataLoader.h"
 
 @class DCPageView;
 
@@ -28,7 +29,8 @@ extern NSString * const pageID_next;
     CGPoint scrollViewOffset;
 }
 
-@property (assign, nonatomic) id <DCPageScrollViewControllerDelegate> delegate;
+@property (assign, nonatomic) id<DCPageScrollViewControllerDelegate> delegate;
+@property (assign, nonatomic) id<DCDataLoaderMgrDelegate> delegateForDCDataLoaderMgr;
 @property (retain, nonatomic) UIScrollView *pageScrollView;
 @property (retain, nonatomic) UIView *contextView;
 @property (retain, nonatomic) NSMutableDictionary *pageViews;

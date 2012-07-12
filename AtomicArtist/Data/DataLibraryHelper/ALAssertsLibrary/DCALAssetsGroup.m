@@ -270,7 +270,7 @@
     }
 }
 
-- (id <DCDataItem>)itemWithUID:(NSString *)uid {
+- (id<DCDataItem>)itemWithUID:(NSString *)uid {
     DCALAssetItem *item = nil;
     if (_allAssetItems) {
         item = [_allAssetItems objectForKey:uid];

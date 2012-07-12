@@ -36,6 +36,7 @@
 @implementation DCItemView
 
 @synthesize delegate = _delegate;
+@synthesize delegateForDCDataLoaderMgr = _delegateForDCDataLoaderMgr;
 @synthesize itemUID = _itemUID;
 @synthesize thumbnailSize = _thumbnailSize;
 @synthesize titleFontSize = _titleFontSize;
@@ -50,7 +51,7 @@
             if (!self.dataGroupUID || !self.itemUID || !self.dataLibraryHelper) {
                 break;
             }
-            id <DCDataItem> item = [self.dataLibraryHelper itemWithUID:self.itemUID inGroup:self.dataGroupUID];
+            id<DCDataItem> item = [self.dataLibraryHelper itemWithUID:self.itemUID inGroup:self.dataGroupUID];
             if (!item) {
                 break;
             }
@@ -194,10 +195,10 @@
 
 - (void)runOperation {
     do {
-        if (!self.dataLibraryHelper || !self.itemUID || !self.dataGroupUID) {
+        if (!self.dataLibraryHelper || !self.itemUID || !self.dataGroupUID || !self.delegateForDCDataLoaderMgr) {
             break;
         }
-        id <DCDataItem> item = [self.dataLibraryHelper itemWithUID:self.itemUID inGroup:self.dataGroupUID];
+        id<DCDataItem> item = [self.dataLibraryHelper itemWithUID:self.itemUID inGroup:self.dataGroupUID];
         if (!item) {
             break;
         }
@@ -205,13 +206,13 @@
         if (_loadBigThumbnailInVisiableDataLoader) {
             _loadBigThumbnailInVisiableDataLoader = NO;
             NSOperation *loadThumbnailOperation = [item createOperationForLoadCacheThumbnail];
-            [[DCDataLoader defaultDataLoader] queue:DATALODER_TYPE_VISIABLE addOperation:loadThumbnailOperation];
+            [self.delegateForDCDataLoaderMgr queue:DATALODER_TYPE_VISIABLE addOperation:loadThumbnailOperation];
         }
         
         if (_loadBigThumbnailInBufferDataLoader) {
             _loadBigThumbnailInBufferDataLoader = NO;
             NSOperation *loadThumbnailOperation = [item createOperationForLoadCacheThumbnail];
-            [[DCDataLoader defaultDataLoader] queue:DATALODER_TYPE_BUFFER addOperation:loadThumbnailOperation];
+            [self.delegateForDCDataLoaderMgr queue:DATALODER_TYPE_BUFFER addOperation:loadThumbnailOperation];
         }
     } while (NO);
 }
@@ -240,7 +241,7 @@
         [_dataGroupUID retain];
         self.dataLibraryHelper = dataLibraryHelper;
         
-        _bigThumbnailLoaded = YES;
+        _bigThumbnailLoaded = NO;
         _loadBigThumbnailInVisiableDataLoader = NO;
         _loadBigThumbnailInBufferDataLoader = NO;
         

@@ -167,8 +167,8 @@
 
 - (void)clearCache {
     [self.viewCache clear];
-    [[DCDataLoader defaultDataLoader] terminateAllOperationsOnQueue:DATALODER_TYPE_VISIABLE];
-    [[DCDataLoader defaultDataLoader] terminateAllOperationsOnQueue:DATALODER_TYPE_BUFFER];
+    [self.viewCache.dataLoader terminateAllOperationsOnQueue:DATALODER_TYPE_VISIABLE];
+    [self.viewCache.dataLoader terminateAllOperationsOnQueue:DATALODER_TYPE_BUFFER];
     
     [self.dataLibraryHelper clearCache];
 }
@@ -220,8 +220,8 @@
         [self.navigationItem setTitle:[self title]];
     } else if (!force && [self.dataLibraryHelper groupsCount] != 0){
         [self.viewCache clearOperations];
-        [[DCDataLoader defaultDataLoader] cancelAllOperationsOnQueue:DATALODER_TYPE_VISIABLE];
-        [[DCDataLoader defaultDataLoader] cancelAllOperationsOnQueue:DATALODER_TYPE_BUFFER];
+        [self.viewCache.dataLoader cancelAllOperationsOnQueue:DATALODER_TYPE_VISIABLE];
+        [self.viewCache.dataLoader cancelAllOperationsOnQueue:DATALODER_TYPE_BUFFER];
         
         [self.viewCache loadBigThumbnailForCacheViews];
     }
@@ -231,8 +231,8 @@
     if (dataGroupUID && self.dataLibraryHelper) {
         
         [self.viewCache clearOperations];
-        [[DCDataLoader defaultDataLoader] terminateAllOperationsOnQueue:DATALODER_TYPE_VISIABLE];
-        [[DCDataLoader defaultDataLoader] terminateAllOperationsOnQueue:DATALODER_TYPE_BUFFER];
+        [self.viewCache.dataLoader terminateAllOperationsOnQueue:DATALODER_TYPE_VISIABLE];
+        [self.viewCache.dataLoader terminateAllOperationsOnQueue:DATALODER_TYPE_BUFFER];
 
 //        NSUInteger index = [self.dataLibraryHelper indexForGroupUID:dataGroupUID];
 //        DCItemViewController *itemViewController = [[[DCItemViewController alloc] initWithDataLibraryHelper:self.dataLibraryHelper] autorelease];
@@ -278,6 +278,7 @@
         
         [pageScrollViewCtrl setViewCtrlsWithCurrent:currentItemViewCtrl previous:prevItemViewCtrl andNext:nextItemViewCtrl];
         [pageScrollViewCtrl setDelegate:self];
+        [pageScrollViewCtrl setDelegateForDCDataLoaderMgr:currentItemViewCtrl.viewCache];
         [pageScrollViewCtrl setScrollEnabled:YES];
         [pageScrollViewCtrl setHideNavigationBarEnabled:NO];
         [self.navigationController pushViewController:pageScrollViewCtrl animated:NO];
@@ -408,8 +409,8 @@
 
 - (void)clearOperations {
     [self.viewCache clearOperations];
-    [[DCDataLoader defaultDataLoader] cancelAllOperationsOnQueue:DATALODER_TYPE_VISIABLE];
-    [[DCDataLoader defaultDataLoader] cancelAllOperationsOnQueue:DATALODER_TYPE_BUFFER];
+    [self.viewCache.dataLoader cancelAllOperationsOnQueue:DATALODER_TYPE_VISIABLE];
+    [self.viewCache.dataLoader cancelAllOperationsOnQueue:DATALODER_TYPE_BUFFER];
 }
 
 - (void)actionForDidUnload {
@@ -444,8 +445,8 @@
         _cellSpace = tmpCellSpace;
         
         [self.viewCache clear];
-        [[DCDataLoader defaultDataLoader] cancelAllOperationsOnQueue:DATALODER_TYPE_VISIABLE];
-        [[DCDataLoader defaultDataLoader] cancelAllOperationsOnQueue:DATALODER_TYPE_BUFFER];
+        [self.viewCache.dataLoader cancelAllOperationsOnQueue:DATALODER_TYPE_VISIABLE];
+        [self.viewCache.dataLoader cancelAllOperationsOnQueue:DATALODER_TYPE_BUFFER];
         
         [self.tableView reloadData];
     }
@@ -481,8 +482,8 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSLog(@"DCGroupViewController tableView:cellForRowAtIndexPath: indexPath.row = %d", [indexPath row]);
-    [[DCDataLoader defaultDataLoader] queue:DATALODER_TYPE_VISIABLE pauseWithAutoResume:YES with:0.25];
-    [[DCDataLoader defaultDataLoader] queue:DATALODER_TYPE_BUFFER pauseWithAutoResume:YES with:0.25];
+    [self.viewCache.dataLoader queue:DATALODER_TYPE_VISIABLE pauseWithAutoResume:YES with:0.25];
+    [self.viewCache.dataLoader queue:DATALODER_TYPE_BUFFER pauseWithAutoResume:YES with:0.25];
     NSArray *views = [self.viewCache getViewsForTableCell:indexPath];
     
     DCGroupViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"DCGroupViewCell"];
@@ -574,6 +575,7 @@
         if (uid) {
             groupView = [[[DCGroupView alloc] InitWithDataLibraryHelper:self.dataLibraryHelper dataGroupUID:uid enumDataItemParam:_enumDataItemParam andFrame:CGRectZero] autorelease];
             groupView.delegate = self;
+            groupView.delegateForDCDataLoaderMgr = self.viewCache;
         }
     } while (NO);
     return groupView;

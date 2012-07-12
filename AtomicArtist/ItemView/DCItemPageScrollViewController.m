@@ -11,6 +11,8 @@
 
 @interface DCItemPageScrollViewController ()
 
+- (void)dataFirstScreenRefreshFinished:(NSNotification *)note;
+
 @end
 
 @implementation DCItemPageScrollViewController
@@ -28,10 +30,15 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
+    NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+    [notificationCenter addObserver:self selector:@selector(dataFirstScreenRefreshFinished:) name:NOTIFY_DATAITEM_ENUMFIRSTSCREEN_END object:nil];
 }
 
 - (void)viewDidUnload
 {
+    NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+    [notificationCenter removeObserver:self];
+    
     [super viewDidUnload];
     // Release any retained subviews of the main view.
 }
@@ -76,23 +83,6 @@
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
     NSLog(@"DCPageScrollViewController scrollViewDidEndDecelerating:");
-    // do action for prev or next
-//    scrollViewOffset = [scrollView contentOffset];
-//    CGPoint prevPageViewOffset = [[self previousPageView] frame].origin;
-//    CGPoint currentPageViewOffset = [[self currentPageView] frame].origin;
-//    CGPoint nextPageViewOffset = [[self nextPageView] frame].origin;
-//    DCItemViewController *itemViewCtrl = nil;
-//    if ([self previousViewCtrl] && scrollViewOffset.x == prevPageViewOffset.x) {
-//        itemViewCtrl = (DCItemViewController *)[self previousViewCtrl];
-//    } else if ([self currentViewCtrl] && scrollViewOffset.x == currentPageViewOffset.x) {
-//        itemViewCtrl = (DCItemViewController *)[self currentViewCtrl];
-//    } else if ([self nextViewCtrl] && scrollViewOffset.x == nextPageViewOffset.x) {
-//        itemViewCtrl = (DCItemViewController *)[self nextViewCtrl];
-//    } else {
-//        NSLog(@"Warning");
-//    }
-//    
-//    [self.navigationItem setTitle:itemViewCtrl.groupTitle];
     
     [super scrollViewDidEndDecelerating:scrollView];
 }
@@ -170,6 +160,16 @@
             [itemViewCtrl actionForDidUnload];
         }
     } while (NO);
+}
+
+- (void)dataFirstScreenRefreshFinished:(NSNotification *)note {
+    NSLog(@"DCItemPageScrollViewController dataFirstScreenRefreshFinished:");
+    if ([self.navigationController topViewController] == self) {
+        DCItemViewController *itemViewCtrl = (DCItemViewController *)[self currentViewCtrl];
+        if (itemViewCtrl) {
+            [itemViewCtrl dataFirstScreenRefreshFinished:note];
+        }
+    }
 }
 
 @end

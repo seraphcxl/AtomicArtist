@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "DCDataLoader.h"
 
 @protocol DCCacheOperationForBufferDelegate <NSObject>
 
@@ -20,6 +21,7 @@
     BOOL _canceled;
 }
 @property (assign, nonatomic) id<DCCacheOperationForBufferDelegate> delegate;
+@property (assign, nonatomic) id<DCDataLoaderMgrDelegate> delegateForDCDataLoaderMgr;
 
 @property (assign, nonatomic) NSInteger bufferBeginTableCellIndex;
 @property (assign, nonatomic) NSInteger bufferEndTableCellIndex;

@@ -43,6 +43,7 @@
 @implementation DCGroupView
 
 @synthesize delegate = _delegate;
+@synthesize delegateForDCDataLoaderMgr = _delegateForDCDataLoaderMgr;
 @synthesize dataGroupUID = _dataGroupUID;
 @synthesize posterImageSize = _posterImageSize;
 @synthesize titleFontSize = _titleFontSize;
@@ -57,7 +58,7 @@
             if (!self.dataGroupUID || !self.dataLibraryHelper) {
                 break;
             }
-            id <DCDataGroup> group = [self.dataLibraryHelper groupWithUID:self.dataGroupUID];
+            id<DCDataGroup> group = [self.dataLibraryHelper groupWithUID:self.dataGroupUID];
             if (!group) {
                 break;
             }
@@ -237,14 +238,14 @@
 
 - (void)runOperation:(NSNotification *)note {
     do {
-        if (note) {
+        if (note || !self.delegateForDCDataLoaderMgr) {
             NSString *dataGroupUID = (NSString *)[note object];
             if ([dataGroupUID isEqualToString:self.dataGroupUID]) {
                 NSString *itemUID = [self.dataLibraryHelper itemUIDAtIndex:0 inGroup:self.dataGroupUID];
                 if (!itemUID) {
                     itemUID = dataGroupUID;
                 }
-                id <DCDataGroup> group = [self.dataLibraryHelper groupWithUID:self.dataGroupUID];
+                id<DCDataGroup> group = [self.dataLibraryHelper groupWithUID:self.dataGroupUID];
                 if (!group) {
                     break;
                 }
@@ -252,13 +253,13 @@
                 if (_loadBigThumbnailInVisiableDataLoader) {
                     _loadBigThumbnailInVisiableDataLoader = NO;
                     NSOperation *loadPosterImageOperation = [group createOperationForLoadCachePosterImageWithItemUID:itemUID];
-                    [[DCDataLoader defaultDataLoader] queue:DATALODER_TYPE_VISIABLE addOperation:loadPosterImageOperation];
+                    [self.delegateForDCDataLoaderMgr queue:DATALODER_TYPE_VISIABLE addOperation:loadPosterImageOperation];
                 }
                 
                 if (_loadBigThumbnailInBufferDataLoader) {
                     _loadBigThumbnailInBufferDataLoader = NO;
                     NSOperation *loadPosterImageOperation = [group createOperationForLoadCachePosterImageWithItemUID:itemUID];
-                    [[DCDataLoader defaultDataLoader] queue:DATALODER_TYPE_BUFFER addOperation:loadPosterImageOperation];
+                    [self.delegateForDCDataLoaderMgr queue:DATALODER_TYPE_BUFFER addOperation:loadPosterImageOperation];
                 }
             }
         }
@@ -273,7 +274,7 @@
             break;
         }
         
-        id <DCDataGroup> group = [self.dataLibraryHelper groupWithUID:self.dataGroupUID];
+        id<DCDataGroup> group = [self.dataLibraryHelper groupWithUID:self.dataGroupUID];
         if (!group) {
             break;
         }

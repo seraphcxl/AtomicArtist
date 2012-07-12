@@ -7,11 +7,11 @@
 //
 
 #import "DCCacheOperationForBuffer.h"
-#import "DCDataLoader.h"
 
 @implementation DCCacheOperationForBuffer
 
 @synthesize delegate = _delegate;
+@synthesize delegateForDCDataLoaderMgr = _delegateForDCDataLoaderMgr;
 @synthesize bufferBeginTableCellIndex = _bufferBeginTableCellIndex;
 @synthesize bufferEndTableCellIndex = _bufferEndTableCellIndex;
 @synthesize visiableBeginTableCellIndex = _visiableBeginTableCellIndex;
@@ -32,7 +32,7 @@
 
 - (void)main {
     do {
-        if (!self.delegate) {
+        if (!self.delegate || !self.delegateForDCDataLoaderMgr) {
             break;
         }
         // createViewsAndLoadSmallThumbnailForBuffer
@@ -65,11 +65,11 @@
         
         [self.delegate createViewsAndLoadSmallThumbnailForBufferWithPrevIndexs:prevIndexs nextIndexs:nextIndexs andCancelFlag:&_canceled];
         // loadBigThumbnailForBuffer
-//        if (_canceled) {
-//            break;
-//        }
-//        [[DCDataLoader defaultDataLoader] cancelAllOperationsOnQueue:DATALODER_TYPE_BUFFER];
-//        [self.delegate loadBigThumbnailForBufferWithPrevIndexs:prevIndexs nextIndexs:nextIndexs andCancelFlag:&_canceled];
+        if (_canceled) {
+            break;
+        }
+        [self.delegateForDCDataLoaderMgr cancelAllOperationsOnQueue:DATALODER_TYPE_BUFFER];
+        [self.delegate loadBigThumbnailForBufferWithPrevIndexs:prevIndexs nextIndexs:nextIndexs andCancelFlag:&_canceled];
     } while (NO);
 }
 

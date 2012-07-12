@@ -13,8 +13,6 @@
 
 #define TIMEFORRESTART ((NSTimeInterval)1.0)
 
-static DCDataLoader *staticDCDataLoader = nil;
-
 @interface DCDataLoader () {
     NSOperationQueue *_queueForVisiable;
     NSTimer *_timerForRestartVisiable;
@@ -260,26 +258,6 @@ static DCDataLoader *staticDCDataLoader = nil;
     } else {
         return YES;
     }
-}
-
-+ (id)defaultDataLoader {
-    if (!staticDCDataLoader) {
-        staticDCDataLoader = [[super allocWithZone:nil] init];
-    }
-    
-    return staticDCDataLoader;
-}
-
-+ (void)staticRelease {
-    if (!staticDCDataLoader) {
-        [staticDCDataLoader release];
-        staticDCDataLoader = nil;
-    }
-}
-
-+ (id)allocWithZone:(NSZone *)zone
-{
-    return [self defaultDataLoader];
 }
 
 - (id)init {

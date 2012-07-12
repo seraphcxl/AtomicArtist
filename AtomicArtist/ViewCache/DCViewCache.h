@@ -27,7 +27,7 @@
 
 @end
 
-@interface DCViewCache : NSObject <DCCacheOperationForVisiableDelegate, DCCacheOperationForBufferDelegate, DCLoadCacheViewBigThumbnailOperationDelegate> {
+@interface DCViewCache : NSObject <DCCacheOperationForVisiableDelegate, DCCacheOperationForBufferDelegate, DCLoadCacheViewBigThumbnailOperationDelegate, DCDataLoaderMgrDelegate> {
     NSMutableDictionary *_tableCells;  // key:UIDForIndexPath; value:NSMutableDictionary *viewsInTableCell
     NSMutableDictionary *_views;  // key:UIDForView; value:view
     NSLock *_lockForViews;
@@ -39,6 +39,7 @@
 @property (assign, nonatomic) id<DCViewCacheDelegate> delegate;
 @property (readonly, nonatomic) NSUInteger lastRequireBufferIndex;
 @property (assign, nonatomic) NSUInteger bufferTableCellNumber;
+@property (readonly, nonatomic) DCDataLoader *dataLoader;
 
 //@property (assign, nonatomic) id<DCDataLibraryHelper> dataLibraryHelper;
 

@@ -16,7 +16,7 @@
 
 @interface DCGroupViewCell : UITableViewCell
 
-@property (assign, nonatomic) id <DCGroupViewCellDelegate> delegate;
+@property (assign, nonatomic) id<DCGroupViewCellDelegate> delegate;
 @property (readonly, nonatomic) double cellSpace;
 @property (readonly, nonatomic) double cellTopBottomMargin;
 @property (readonly, nonatomic) NSUInteger frameSize;

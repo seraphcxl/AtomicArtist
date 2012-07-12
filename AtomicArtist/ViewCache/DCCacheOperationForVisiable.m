@@ -7,11 +7,11 @@
 //
 
 #import "DCCacheOperationForVisiable.h"
-#import "DCDataLoader.h"
 
 @implementation DCCacheOperationForVisiable
 
 @synthesize delegate = _delegate;
+@synthesize delegateForDCDataLoaderMgr = _delegateForDCDataLoaderMgr;
 @synthesize currentTableCellIndex = _currentTableCellIndex;
 @synthesize visiableBeginTableCellIndex = _visiableBeginTableCellIndex;
 @synthesize visiableEndTableCellIndex = _visiableEndTableCellIndex;
@@ -30,10 +30,10 @@
 
 - (void)main {
     do {
-        if (!self.delegate) {
+        if (!self.delegate || !self.delegateForDCDataLoaderMgr) {
             break;
         }
-        [[DCDataLoader defaultDataLoader] cancelAllOperationsOnQueue:DATALODER_TYPE_VISIABLE];
+        [self.delegateForDCDataLoaderMgr cancelAllOperationsOnQueue:DATALODER_TYPE_VISIABLE];
         // loadBigThumbnailForCurrentTableCell
 //        if (_canceled) {
 //            break;
