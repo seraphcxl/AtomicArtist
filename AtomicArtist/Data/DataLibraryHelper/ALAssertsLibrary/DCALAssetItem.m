@@ -43,7 +43,7 @@
         _alAsset = alAsset;
         [_alAsset retain];
     }
-return self;
+    return self;
 }
 
 - (NSOperation *)createOperationForLoadCacheThumbnail {
