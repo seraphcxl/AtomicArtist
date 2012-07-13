@@ -104,6 +104,8 @@
         [nextDetailViewCtrl setDelegate:pageScrollViewCtrl];
     }
     [pageScrollViewCtrl setViewCtrlsWithCurrent:currentDetailViewCtrl previous:prevDetailViewCtrl andNext:nextDetailViewCtrl];
+    [pageScrollViewCtrl setDelegate:self];
+    [pageScrollViewCtrl setDelegateForDCDataLoaderMgr:nil];
     
     [currentDetailViewCtrl release];
     currentDetailViewCtrl = nil;
@@ -130,6 +132,8 @@
         [prevDetailViewCtrl setDelegate:pageScrollViewCtrl];
     }
     [pageScrollViewCtrl setViewCtrlsWithCurrent:currentDetailViewCtrl previous:prevDetailViewCtrl andNext:nextDetailViewCtrl];
+    [pageScrollViewCtrl setDelegate:self];
+    [pageScrollViewCtrl setDelegateForDCDataLoaderMgr:nil];
     
     [currentDetailViewCtrl release];
     currentDetailViewCtrl = nil;
@@ -262,7 +266,7 @@
         NSString *groupName = [group valueForProperty:kDATAGROUPPROPERTY_GROUPNAME withOptions:nil];
         NSInteger numberOfItems = [group itemsCountWithParam:self.enumDataItemParam];
         
-        _groupTitle = [[NSString alloc] initWithFormat:NSLocalizedString(@"AA_GroupTitle", nil), groupName, numberOfItems];
+        _groupTitle = [[NSString alloc] initWithFormat:NSLocalizedString(@"%@ (%d)", nil), groupName, numberOfItems];
         
         if (self.delegate) {
             [self.delegate itemViewCtrl:self setGroupTitle:self.groupTitle];
@@ -302,6 +306,8 @@
         
         [pageScrollViewCtrl setViewCtrlsWithCurrent:currentDetailViewCtrl previous:prevDetailViewCtrl andNext:nextDetailViewCtrl];
         [pageScrollViewCtrl setDelegate:self];
+        [pageScrollViewCtrl setDelegateForDCDataLoaderMgr:nil];
+        
         [pageScrollViewCtrl setScrollEnabled:YES];
         [pageScrollViewCtrl setHideNavigationBarEnabled:YES];
     } else {

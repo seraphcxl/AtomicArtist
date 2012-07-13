@@ -472,6 +472,29 @@ typedef enum {
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
+    UIViewController *viewCtrl = nil;
+    viewCtrl = [self currentViewCtrl];
+    if (viewCtrl) {
+        [viewCtrl viewWillDisappear:animated];
+    }
+    viewCtrl = [self previousViewCtrl];
+    if (viewCtrl) {
+        [viewCtrl viewWillDisappear:animated];
+    }
+    viewCtrl = [self nextViewCtrl];
+    if (viewCtrl) {
+        [viewCtrl viewWillDisappear:animated];
+    }
+    
+    [self setView:PAGEINDEX_CURRENT appearFlag:NO];
+    [self setView:PAGEINDEX_CURRENT rotateFlag:NO];
+    
+    [self setView:PAGEINDEX_PREVIOUS appearFlag:NO];
+    [self setView:PAGEINDEX_PREVIOUS rotateFlag:NO];
+    
+    [self setView:PAGEINDEX_NEXT appearFlag:NO];
+    [self setView:PAGEINDEX_NEXT rotateFlag:NO];
+    
     [super viewWillDisappear:animated];
 }
 

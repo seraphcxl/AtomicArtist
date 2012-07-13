@@ -13,8 +13,8 @@
 #define TITLELABEL_FONT_SIZE_IPHONE ((int)14)
 #define TITLELABEL_FONT_SIZE_IPAD ((int)16)
 
-#define THUMBNAIL_SIZE_IPHONE ((int)128)
-#define THUMBNAIL_SIZE_IPAD ((int)160)
+#define THUMBNAIL_SIZE_IPHONE ((int)96)
+#define THUMBNAIL_SIZE_IPAD ((int)128)
 
 #pragma mark DetailView
 #define BAR_THUMBNAIL_SIZE ((int)75)

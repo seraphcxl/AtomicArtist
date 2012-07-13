@@ -10,6 +10,7 @@
 #import "DCDataModelHelper.h"
 #import "Item.h"
 #import "DCDataLoader.h"
+#import "DCImageHelper.h"
 
 @interface DCItemView () {
     UITapGestureRecognizer *_singleTapGestureRecognizer;
@@ -55,7 +56,8 @@
             if (!item) {
                 break;
             }
-            self.thumbnail = (UIImage *)[item valueForProperty:kDATAITEMPROPERTY_THUMBNAIL withOptions:nil];
+            UIImage *thumbnail = (UIImage *)[item valueForProperty:kDATAITEMPROPERTY_THUMBNAIL withOptions:nil];
+            self.thumbnail = [DCImageHelper bezierImage:thumbnail withRadius:5.0 needCropSquare:YES];
         }
     } while (NO);
 }

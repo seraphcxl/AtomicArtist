@@ -80,6 +80,8 @@
         nextItemViewCtrl.delegateForItemView = (DCItemPageScrollViewController *)pageScrollViewCtrl;
     }
     [pageScrollViewCtrl setViewCtrlsWithCurrent:currentItemViewCtrl previous:prevItemViewCtrl andNext:nextItemViewCtrl];
+    [pageScrollViewCtrl setDelegate:self];
+    [pageScrollViewCtrl setDelegateForDCDataLoaderMgr:currentItemViewCtrl.viewCache];
     
     [currentItemViewCtrl release];
     currentItemViewCtrl = nil;
@@ -113,6 +115,8 @@
         prevItemViewCtrl.delegateForItemView = (DCItemPageScrollViewController *)pageScrollViewCtrl;
     }
     [pageScrollViewCtrl setViewCtrlsWithCurrent:currentItemViewCtrl previous:prevItemViewCtrl andNext:nextItemViewCtrl];
+    [pageScrollViewCtrl setDelegate:self];
+    [pageScrollViewCtrl setDelegateForDCDataLoaderMgr:currentItemViewCtrl.viewCache];
     
     [currentItemViewCtrl release];
     currentItemViewCtrl = nil;

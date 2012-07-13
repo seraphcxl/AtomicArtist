@@ -10,6 +10,7 @@
 #import "DCDataModelHelper.h"
 #import "Group.h"
 #import "DCDataLoader.h"
+#import "DCImageHelper.h"
 
 @interface DCGroupView () {
     UITapGestureRecognizer *_tapGestureRecognizer;
@@ -62,8 +63,8 @@
             if (!group) {
                 break;
             }
-            
-            self.posterImage = (UIImage *)[group valueForProperty:kDATAGROUPPROPERTY_POSTERIMAGE withOptions:nil];
+            UIImage *posterImage = (UIImage *)[group valueForProperty:kDATAGROUPPROPERTY_POSTERIMAGE withOptions:nil];
+            self.posterImage = [DCImageHelper bezierImage:posterImage withRadius:5.0 needCropSquare:YES];
         }
     } while (NO);
 }

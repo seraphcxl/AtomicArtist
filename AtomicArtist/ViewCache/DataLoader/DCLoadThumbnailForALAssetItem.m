@@ -44,7 +44,14 @@
         }
         CGSize thumbnailSize;
         thumbnailSize.width = thumbnailSize.height = [DCLoadThumbnailForALAssetItem calcThumbnailSize];
-        self.thumbnail = [DCImageHelper image:image fitInSize:thumbnailSize];
+        if (_canceled) {
+            break;
+        }
+        UIImage *tmpImage = [DCImageHelper image:image fillSize:thumbnailSize];
+        if (_canceled) {
+            break;
+        }
+        self.thumbnail = [DCImageHelper bezierImage:tmpImage withRadius:5.0 needCropSquare:YES];
         if (_canceled) {
             break;
         }
