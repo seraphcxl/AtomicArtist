@@ -66,7 +66,7 @@ static DCALAssetsLibraryHelper *staticALAssetsLibraryHelper = nil;
     if (_alAssetsLibrary) {
         [_alAssetsLibrary clearCache];
     } else {
-        [NSException raise:@"DCALAssetsLibraryHelper error" format:@"Reason: _alAssetsLibrary == nil"];
+//        [NSException raise:@"DCALAssetsLibraryHelper error" format:@"Reason: _alAssetsLibrary == nil"];
     }
 }
 
@@ -123,7 +123,7 @@ static DCALAssetsLibraryHelper *staticALAssetsLibraryHelper = nil;
 //            [NSException raise:@"DCALAssetsLibraryHelper error" format:@"Reason: can not find group id == %@", groupUID];
         }
     } else {
-        [NSException raise:@"DCALAssetsLibraryHelper error" format:@"Reason: _alAssetsLibrary == nil"];
+//        [NSException raise:@"DCALAssetsLibraryHelper error" format:@"Reason: _alAssetsLibrary == nil"];
     }
 }
 
