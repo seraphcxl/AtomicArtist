@@ -13,9 +13,47 @@
 
 - (void)dataFirstScreenRefreshFinished:(NSNotification *)note;
 
+- (void)showRefreshingMask;
+- (void)hideRefreshingMask;
+
 @end
 
 @implementation DCItemPageScrollViewController
+
+- (void)showRefreshingMask {
+    do {
+        [self.navigationItem setHidesBackButton:YES animated:NO];
+        
+        UIActivityIndicatorView *activityIndicatorView = [[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite] autorelease];
+        [activityIndicatorView startAnimating];
+        UIBarButtonItem *bbi = [[[UIBarButtonItem alloc] initWithCustomView:activityIndicatorView] autorelease];
+        [self.navigationItem setRightBarButtonItem:bbi];
+        
+        UIActivityIndicatorView *activityIndicatorViewForScreen = [[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge] autorelease];
+        [activityIndicatorViewForScreen setFrame:[self.view frame]];
+        //        [activityIndicatorViewForScreen setBackgroundColor:[UIColor blackColor]];
+        //        [activityIndicatorViewForScreen setAlpha:0.25];
+        [activityIndicatorViewForScreen startAnimating];
+        [self.view addSubview:activityIndicatorViewForScreen];
+        
+    } while (NO);
+}
+
+- (void)hideRefreshingMask {
+    do {
+        [self.navigationItem setHidesBackButton:NO animated:NO];
+        
+        UIBarButtonItem *bbi = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(refresh:)] autorelease];
+        [self.navigationItem setRightBarButtonItem:bbi];
+        
+        for (UIView *view in [self.view subviews]) {
+            if ([view isMemberOfClass:[UIActivityIndicatorView class]]) {
+                [view removeFromSuperview];
+            }
+        }
+        
+    } while (NO);
+}
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -32,6 +70,9 @@
 	// Do any additional setup after loading the view.
     NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
     [notificationCenter addObserver:self selector:@selector(dataFirstScreenRefreshFinished:) name:NOTIFY_DATAITEM_ENUMFIRSTSCREEN_END object:nil];
+    
+    [self performSelectorOnMainThread:@selector(showRefreshingMask) withObject:nil waitUntilDone:NO];
+
 }
 
 - (void)viewDidUnload
@@ -49,6 +90,8 @@
 }
 
 - (IBAction)refresh:(id)sender {
+    [self performSelectorOnMainThread:@selector(showRefreshingMask) withObject:nil waitUntilDone:NO];
+    
     DCItemViewController *itemViewCtrl = (DCItemViewController *)[self currentViewCtrl];
     [itemViewCtrl refresh:sender];
 }
@@ -109,29 +152,11 @@
 }
 
 - (void)dataRefreshStarted {
-    [self.navigationItem setRightBarButtonItem:nil];
-    /// /// ///
-    [self.navigationItem setHidesBackButton:YES animated:NO];
-    /// /// ///
-//    UIActivityIndicatorView *activityIndicatorView = [[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge] autorelease];
-//    [activityIndicatorView setFrame:[self.view frame]];
-//    [self.view addSubview:activityIndicatorView];
-//    [activityIndicatorView startAnimating];
+    [self performSelectorOnMainThread:@selector(showRefreshingMask) withObject:nil waitUntilDone:NO];
 }
 
 - (void)dataRefreshFinished {
-    UIBarButtonItem *bbi = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(refresh:)] autorelease];
-    [self.navigationItem setRightBarButtonItem:bbi];
-    /// /// ///
-    [self.navigationItem setHidesBackButton:NO animated:NO];
-    /// /// ///
-//    for (UIView *view in [self.view subviews]) {
-//        if ([view isMemberOfClass:[UIActivityIndicatorView class]]) {
-//            UIActivityIndicatorView *activityIndicatorView = (UIActivityIndicatorView *)view;
-//            [activityIndicatorView stopAnimating];
-//            [activityIndicatorView removeFromSuperview];
-//        }
-//    }
+    [self performSelectorOnMainThread:@selector(hideRefreshingMask) withObject:nil waitUntilDone:NO];
 }
 
 - (void)popFormNavigationCtrl {

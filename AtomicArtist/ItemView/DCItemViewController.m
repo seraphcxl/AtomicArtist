@@ -48,6 +48,7 @@
 - (void)pinch:(UIPinchGestureRecognizer *)gr;
 
 - (void)enumAllItems;
+- (void)forceEnumAllItems;
 
 @end
 
@@ -64,6 +65,10 @@
 
 - (void)enumAllItems {
     [self refreshItems:NO];
+}
+
+- (void)forceEnumAllItems {
+    [self refreshItems:YES];
 }
 
 - (void)pinch:(UIPinchGestureRecognizer *)gr {
@@ -203,7 +208,7 @@
             }
             [[NSNotificationCenter defaultCenter] postNotificationName:@"NotifyRefreshGroup" object:self];
         } else {
-            [self refreshItems:YES];
+            [self performSelectorInBackground:@selector(forceEnumAllItems) withObject:nil];
         }
     } else {
         [NSException raise:@"DCItemViewController error" format:@"Reason: self.dataLibraryHelper == nil"];

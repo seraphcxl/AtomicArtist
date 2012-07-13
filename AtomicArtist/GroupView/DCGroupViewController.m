@@ -44,6 +44,9 @@
 
 - (NSString *)title;
 
+- (void)showRefreshingMask;
+- (void)hideRefreshingMask;
+
 @end
 
 @interface DCGroupViewController ()
@@ -56,6 +59,26 @@
 @synthesize type = _type;
 @synthesize viewCache = _viewCache;
 //@synthesize interfaceOrientation = _interfaceOrientation;
+
+- (void)showRefreshingMask {
+    do {
+        [self.navigationItem.leftBarButtonItem setEnabled:NO];
+        
+        UIActivityIndicatorView *activityIndicatorView = [[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite] autorelease];
+        [activityIndicatorView startAnimating];
+        UIBarButtonItem *bbi = [[[UIBarButtonItem alloc] initWithCustomView:activityIndicatorView] autorelease];
+        [self.navigationItem setRightBarButtonItem:bbi];
+    } while (NO);
+}
+
+- (void)hideRefreshingMask {
+    do {
+        [self.navigationItem.leftBarButtonItem setEnabled:YES];
+        
+        UIBarButtonItem *bbi = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(refresh:)] autorelease];
+        [self.navigationItem setRightBarButtonItem:bbi];
+    } while (NO);
+}
 
 - (void)pageScrollViewCtrl:(DCPageScrollViewController *)pageScrollViewCtrl doNextActionWithCurrentViewCtrl:(UIViewController *)currentViewCtrl nextViewCtrl:(UIViewController *)nextViewCtrl {
     NSLog(@"DCGroupViewController pageScrollViewCtrl:doNextActionWithCurrentViewCtrl:nextViewCtrl:");
@@ -149,8 +172,8 @@
             [_viewCache setDelegate:self];
         }
         
-        UIBarButtonItem *bbi = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(refresh:)] autorelease];
-        [self.navigationItem setRightBarButtonItem:bbi];
+        [self performSelectorOnMainThread:@selector(showRefreshingMask) withObject:nil waitUntilDone:NO];
+
     }
     return self;
 }
@@ -212,10 +235,7 @@
         
         [_viewCache setBufferTableCellNumber:pageViewCount * CACHE_BUFFERPAGE_GROUP];
         
-        UIActivityIndicatorView *activityIndicatorView = [[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite] autorelease];
-        [activityIndicatorView startAnimating];
-        UIBarButtonItem *bbi = [[[UIBarButtonItem alloc] initWithCustomView:activityIndicatorView] autorelease];
-        [self.navigationItem setRightBarButtonItem:bbi];
+        [self performSelectorOnMainThread:@selector(showRefreshingMask) withObject:nil waitUntilDone:NO];
         
 //        [self clearCache];
         [self performSelectorOnMainThread:@selector(clearCache) withObject:nil waitUntilDone:YES];
@@ -351,8 +371,7 @@
 }
 
 - (void)dataRefreshFinished:(NSNotification *)note {
-    UIBarButtonItem *bbi = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(refresh:)] autorelease];
-    [self.navigationItem setRightBarButtonItem:bbi];
+    [self performSelectorOnMainThread:@selector(hideRefreshingMask) withObject:nil waitUntilDone:NO];
 }
 
 - (void)viewDidLoad
