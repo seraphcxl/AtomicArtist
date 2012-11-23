@@ -52,6 +52,7 @@
             break;
         }
         [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_POSTERIMAGELOADED object:self];
+        _finished = YES;
     } while (NO);
     NSLog(@"DCLoadPosterImageForALAssetsGroup main exit");
 }

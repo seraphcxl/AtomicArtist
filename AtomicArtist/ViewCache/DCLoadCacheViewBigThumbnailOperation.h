@@ -16,6 +16,7 @@
 
 @interface DCLoadCacheViewBigThumbnailOperation : NSOperation {
     BOOL _canceled;
+    BOOL _finished;
 }
 
 @property (assign, nonatomic) id<DCLoadCacheViewBigThumbnailOperationDelegate> delegate;

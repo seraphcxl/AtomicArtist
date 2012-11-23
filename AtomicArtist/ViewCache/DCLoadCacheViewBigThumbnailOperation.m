@@ -21,6 +21,7 @@
     self = [super init];
     if (self) {
         _canceled = NO;
+        _finished = NO;
     }
     return self;
 }
@@ -36,7 +37,20 @@
             break;
         }
         [self.delegate loadBigThumbnailForCacheViewsCancelFlag:&_canceled];
+        _finished = YES;
     } while (NO);
-
 }
+
+- (BOOL)isConcurrent {
+    return NO;
+}
+
+- (BOOL)isFinished {
+    if (_finished || _canceled) {
+        return YES;
+    } else {
+        return NO;
+    }
+}
+
 @end

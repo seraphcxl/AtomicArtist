@@ -22,6 +22,8 @@ NSString * const NOTIFY_THUMBNAILLOADED = @"NOTIFY_THUMBNAILLOADED";
 - (id)initWithItemUID:(NSString *)itemUID {
     self = [super init];
     if (self) {
+        _canceled = NO;
+        _finished = NO;
         _itemUID = itemUID;
         [_itemUID retain];
     }
@@ -37,6 +39,18 @@ NSString * const NOTIFY_THUMBNAILLOADED = @"NOTIFY_THUMBNAILLOADED";
     }
     
     [super dealloc];
+}
+
+- (BOOL)isConcurrent {
+    return YES;
+}
+
+- (BOOL)isFinished {
+    if (_finished || _canceled) {
+        return YES;
+    } else {
+        return NO;
+    }
 }
 
 @end

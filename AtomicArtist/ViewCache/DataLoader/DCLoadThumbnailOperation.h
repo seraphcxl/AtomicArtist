@@ -12,6 +12,7 @@ extern NSString * const NOTIFY_THUMBNAILLOADED;
 
 @interface DCLoadThumbnailOperation : NSOperation {
     BOOL _canceled;
+    BOOL _finished;
 }
 
 @property (retain, nonatomic) UIImage *thumbnail;
