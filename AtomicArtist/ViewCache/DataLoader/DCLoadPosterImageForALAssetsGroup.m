@@ -8,6 +8,7 @@
 
 #import "DCLoadPosterImageForALAssetsGroup.h"
 #import "DCImageHelper.h"
+#import <ImageIO/ImageIO.h>
 
 @interface DCLoadPosterImageForALAssetsGroup () {
 }
@@ -22,6 +23,8 @@
 
 - (void)main {
     debug_NSLog(@"DCLoadPosterImageForALAssetsGroup main enter");
+    CGImageSourceRef sourceRef = nil;
+    NSData *data = nil;
     do {
         if (_canceled) {
             break;
@@ -37,17 +40,38 @@
         if (_canceled) {
             break;
         }
-        UIImage *image = [[[UIImage alloc] initWithCGImage:[representation fullScreenImage]] autorelease];
-        if (_canceled) {
-            break;
+        Byte *buffer = (Byte *)malloc(representation.size);
+        NSUInteger buffered = [representation getBytes:buffer fromOffset:0.0 length:representation.size error:nil];
+        data = [NSData dataWithBytesNoCopy:buffer length:buffered freeWhenDone:YES];
+        sourceRef = CGImageSourceCreateWithData((CFDataRef) data,  NULL);
+        NSDictionary* options = [[NSDictionary alloc] initWithObjectsAndKeys:(id)kCFBooleanTrue, (id)kCGImageSourceCreateThumbnailWithTransform, (id)[NSNumber numberWithDouble:[DCLoadPosterImageForALAssetsGroup calcPosterImageSize] * 2], (id)kCGImageSourceThumbnailMaxPixelSize, nil];
+        CGImageRef thumbnailCGImage = CGImageSourceCreateThumbnailAtIndex(sourceRef, 0, (CFDictionaryRef)options);
+        debug_NSLog(@"image width = %zd %zd", CGImageGetWidth(thumbnailCGImage), CGImageGetHeight(thumbnailCGImage));
+        if (CGImageGetWidth(thumbnailCGImage) == 0 || CGImageGetHeight(thumbnailCGImage) == 0) {
+            UIImage *image = [[[UIImage alloc] initWithCGImage:[representation fullScreenImage]] autorelease];
+            if (_canceled) {
+                break;
+            }
+            CGSize thumbnailSize;
+            thumbnailSize.width = thumbnailSize.height = [DCLoadPosterImageForALAssetsGroup calcPosterImageSize];
+            if (_canceled) {
+                break;
+            }
+            self.thumbnail = [DCImageHelper image:image fillSize:thumbnailSize];
+            if (_canceled) {
+                break;
+            }
+        } else {
+            self.thumbnail = [UIImage imageWithCGImage:thumbnailCGImage];
         }
-        CGSize thumbnailSize;
-        thumbnailSize.width = thumbnailSize.height = [DCLoadPosterImageForALAssetsGroup calcPosterImageSize];
-        UIImage *tmpImage = [DCImageHelper image:image fillSize:thumbnailSize];
-        if (_canceled) {
-            break;
+        
+        debug_NSLog(@"thumbnail size width = %f, height = %f", self.thumbnail.size.width, self.thumbnail.size.height);
+        
+        self.thumbnail = [DCImageHelper bezierImage:self.thumbnail withRadius:5.0 needCropSquare:YES];
+        
+        if (sourceRef) {
+            CFRelease(sourceRef);
         }
-        self.thumbnail = [DCImageHelper bezierImage:tmpImage withRadius:5.0 needCropSquare:YES];
         if (_canceled) {
             break;
         }
