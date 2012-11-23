@@ -25,7 +25,7 @@
 
 - (void)actionForGroupEmpty:(NSNotification *)note {
     if (_enumDataGroupParam == (id)(ALAssetsGroupPhotoStream)) {
-        NSLog(@"PhotoStream is empty");
+        debug_NSLog(@"PhotoStream is empty");
         UIAlertView *alertView = [[[UIAlertView alloc] initWithTitle:@"Photo Stream not available!" message:@"Please sign in your iCloud account and turn on Photo Stream." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil] autorelease];
         [alertView show];
     }
@@ -33,7 +33,7 @@
 
 - (void)sourceSwitchValueChanged:(id)sender {
     if (self.sourceSwitch) {
-        NSLog(@"Select index is %d", self.sourceSwitch.selectedSegmentIndex);
+        debug_NSLog(@"Select index is %d", self.sourceSwitch.selectedSegmentIndex);
         if (self.sourceSwitch.selectedSegmentIndex == 0) {
             [self setEnumDataGroupParam:(id)(ALAssetsGroupAlbum | ALAssetsGroupSavedPhotos)];
         } else {

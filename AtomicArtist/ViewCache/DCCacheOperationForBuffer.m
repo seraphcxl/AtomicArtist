@@ -26,6 +26,7 @@
     self = [super init];
     if (self) {
         _canceled = NO;
+        _finished = NO;
     }
     return self;
 }
@@ -70,7 +71,20 @@
         }
         [self.delegateForDCDataLoaderMgr cancelAllOperationsOnQueue:DATALODER_TYPE_BUFFER];
         [self.delegate loadBigThumbnailForBufferWithPrevIndexs:prevIndexs nextIndexs:nextIndexs andCancelFlag:&_canceled];
+        _finished = YES;
     } while (NO);
+}
+
+- (BOOL)isConcurrent {
+    return NO;
+}
+
+- (BOOL)isFinished {
+    if (_finished || _canceled) {
+        return YES;
+    } else {
+        return NO;
+    }
 }
 
 @end

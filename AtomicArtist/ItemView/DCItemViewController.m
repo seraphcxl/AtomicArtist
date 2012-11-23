@@ -72,7 +72,7 @@
 }
 
 - (void)pinch:(UIPinchGestureRecognizer *)gr {
-    NSLog(@"DCItemViewController pinch:");
+    debug_NSLog(@"DCItemViewController pinch:");
     if (gr.state == UIGestureRecognizerStateBegan) {
         _pinchScale = gr.scale;
     } else if (gr.state == UIGestureRecognizerStateEnded) {
@@ -94,7 +94,7 @@
 }
 
 - (void)pageScrollViewCtrl:(DCPageScrollViewController *)pageScrollViewCtrl doNextActionWithCurrentViewCtrl:(UIViewController *)currentViewCtrl nextViewCtrl:(UIViewController *)nextViewCtrl {
-    NSLog(@"DCItemViewController pageScrollViewCtrl:doNextActionWithCurrentViewCtrl:nextViewCtrl:");
+    debug_NSLog(@"DCItemViewController pageScrollViewCtrl:doNextActionWithCurrentViewCtrl:nextViewCtrl:");
     DCDetailViewController *currentDetailViewCtrl = (DCDetailViewController *)nextViewCtrl;
     [currentDetailViewCtrl retain];
     DCDetailViewController *prevDetailViewCtrl = (DCDetailViewController *)currentViewCtrl;
@@ -122,7 +122,7 @@
 }
 
 - (void)pageScrollViewCtrl:(DCPageScrollViewController *)pageScrollViewCtrl doPreviousActionWithCurrentViewCtrl:(UIViewController *)currentViewCtrl previousViewCtrl:(UIViewController *)previousViewCtrl {
-    NSLog(@"DCItemViewController pageScrollViewCtrl:doPreviousActionWithCurrentViewCtrl:previousViewCtrl:");
+    debug_NSLog(@"DCItemViewController pageScrollViewCtrl:doPreviousActionWithCurrentViewCtrl:previousViewCtrl:");
     DCDetailViewController *currentDetailViewCtrl = (DCDetailViewController *)previousViewCtrl;
     [currentDetailViewCtrl retain];
     DCDetailViewController *prevDetailViewCtrl = nil;
@@ -201,7 +201,7 @@
 - (IBAction)refresh:(id)sender {
     if (self.dataLibraryHelper) {
         id<DCDataGroup> group = [self.dataLibraryHelper groupWithUID:self.dataGroupUID];
-        NSLog(@"groupID:%@ items count = %d", self.dataGroupUID, [group itemsCountWithParam:self.enumDataItemParam]);
+        debug_NSLog(@"groupID:%@ items count = %d", self.dataGroupUID, [group itemsCountWithParam:self.enumDataItemParam]);
         if ([group itemsCountWithParam:self.enumDataItemParam] == 0) {
             if (self.delegate) {
                 [self.delegate popFormNavigationCtrl];
@@ -216,7 +216,7 @@
 }
 
 - (void)refreshItems:(BOOL)force {
-    NSLog(@"DCItemViewController refreshItems:");
+    debug_NSLog(@"DCItemViewController refreshItems:");
     if (self.dataLibraryHelper) {
         if (force || ![self.dataLibraryHelper isGroupEnumerated:self.dataGroupUID]) {
             NSUInteger pageViewCount = _itemCountInCell * [self calcVisiableRowNumber];
@@ -240,7 +240,7 @@
 }
 
 - (void)refreshFirstScreen {
-    NSLog(@"DCItemViewController refreshFirstScreen");
+    debug_NSLog(@"DCItemViewController refreshFirstScreen");
     if (self.dataLibraryHelper) {
         if (![self.dataLibraryHelper isGroupEnumerated:self.dataGroupUID]) {
 //            if (self.delegate) {
@@ -261,7 +261,7 @@
 }
 
 - (void)refreshItemViewTitle {
-    NSLog(@"DCItemViewController refreshItemViewTitle");
+    debug_NSLog(@"DCItemViewController refreshItemViewTitle");
     if (self.dataLibraryHelper) {
         id<DCDataGroup> group = [self.dataLibraryHelper groupWithUID:self.dataGroupUID];
         if (!group) {
@@ -323,7 +323,7 @@
 - (void)reloadTableView:(NSNotification *)note {
     NSString *uid = (NSString *)[note object];
     if ([uid isEqualToString:self.dataGroupUID]) {
-        NSLog(@"DCItemViewController %@ reloadTableView:", self);
+        debug_NSLog(@"DCItemViewController %@ reloadTableView:", self);
         [self.tableView reloadData];
     }
 }
@@ -335,7 +335,7 @@
 }
 
 - (void)dataFirstScreenRefreshFinished:(NSNotification *)note {
-    NSLog(@"DCItemViewController dataFirstScreenRefreshFinished:");
+    debug_NSLog(@"DCItemViewController dataFirstScreenRefreshFinished:");
     [self performSelectorInBackground:@selector(enumAllItems) withObject:nil];
 }
 
@@ -407,7 +407,7 @@
 
 - (void)viewDidLoad
 {
-    NSLog(@"DCItemViewController %@ viewDidLoad:", self);
+    debug_NSLog(@"DCItemViewController %@ viewDidLoad:", self);
     [super viewDidLoad];
     
     // Uncomment the following line to preserve selection between presentations.
@@ -437,7 +437,7 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-    NSLog(@"DCItemViewController %@ viewWillAppear:", self);
+    debug_NSLog(@"DCItemViewController %@ viewWillAppear:", self);
     [super viewWillAppear:animated];
     
     _frameSize = [self calcFrameSize];
@@ -453,14 +453,14 @@
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
-    NSLog(@"DCItemViewController %@ viewWillDisappear:", self);
+    debug_NSLog(@"DCItemViewController %@ viewWillDisappear:", self);
     [self clearOperations];
     [super viewWillDisappear:animated];
 }
 
 - (void)viewDidUnload
 {
-    NSLog(@"DCItemViewController %@ viewDidUnload:", self);
+    debug_NSLog(@"DCItemViewController %@ viewDidUnload:", self);
     [self actionForDidUnload];
     [super viewDidUnload];
     // Release any retained subviews of the main view.
@@ -490,7 +490,7 @@
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
-    NSLog(@"DCItemViewController shouldAutorotateToInterfaceOrientation:");
+    debug_NSLog(@"DCItemViewController shouldAutorotateToInterfaceOrientation:");
     BOOL result = NO;
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
         result = (interfaceOrientation == UIInterfaceOrientationPortrait || interfaceOrientation == UIInterfaceOrientationLandscapeLeft || interfaceOrientation == UIInterfaceOrientationLandscapeRight);
@@ -526,13 +526,13 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     // Return the number of sections.
-    NSLog(@"DCItemViewController %@ numberOfSectionsInTableView:", self);
+    debug_NSLog(@"DCItemViewController %@ numberOfSectionsInTableView:", self);
     return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    NSLog(@"DCItemViewController %@ tableView:numberOfRowsInSection:", self);
+    debug_NSLog(@"DCItemViewController %@ tableView:numberOfRowsInSection:", self);
     // Return the number of rows in the section.
     if (_itemCountInCell == 0) {
         return 0;
@@ -548,7 +548,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSLog(@"DCItemViewController %@ tableView:cellForRowAtIndexPath:", self);
+    debug_NSLog(@"DCItemViewController %@ tableView:cellForRowAtIndexPath:", self);
     [self.viewCache.dataLoader queue:DATALODER_TYPE_VISIABLE pauseWithAutoResume:YES with:0.25];
     [self.viewCache.dataLoader queue:DATALODER_TYPE_BUFFER pauseWithAutoResume:YES with:0.25];
     DCItemViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"DCItemViewCell"];
@@ -628,7 +628,7 @@
         int maxIdx = MIN((index + 1) * _itemCountInCell, [self.dataLibraryHelper enumratedItemsCountWithParam:self.enumDataItemParam inGroup:self.dataGroupUID]); 
         for (int idx = 0 + index * _itemCountInCell; idx < maxIdx; ++idx) {
             [result addObject:[self.dataLibraryHelper itemUIDAtIndex:idx inGroup:self.dataGroupUID]];
-            NSLog(@"Get itemUID: %@ at index: %d", [self.dataLibraryHelper itemUIDAtIndex:idx inGroup:self.dataGroupUID], idx);
+            debug_NSLog(@"Get itemUID: %@ at index: %d", [self.dataLibraryHelper itemUIDAtIndex:idx inGroup:self.dataGroupUID], idx);
         }
     }
     return result;
@@ -652,7 +652,7 @@
 
 - (NSUInteger)tableCellCount {
     NSInteger itemsCount = [self.dataLibraryHelper enumratedItemsCountWithParam:self.enumDataItemParam inGroup:self.dataGroupUID];
-    NSLog(@"itemsCount = %d", itemsCount);
+    debug_NSLog(@"itemsCount = %d", itemsCount);
     NSInteger addLine = 0;
     if (itemsCount % _itemCountInCell != 0) {
         addLine = 1;

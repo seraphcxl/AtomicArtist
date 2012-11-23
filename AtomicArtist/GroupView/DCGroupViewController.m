@@ -81,7 +81,7 @@
 }
 
 - (void)pageScrollViewCtrl:(DCPageScrollViewController *)pageScrollViewCtrl doNextActionWithCurrentViewCtrl:(UIViewController *)currentViewCtrl nextViewCtrl:(UIViewController *)nextViewCtrl {
-    NSLog(@"DCGroupViewController pageScrollViewCtrl:doNextActionWithCurrentViewCtrl:nextViewCtrl:");
+    debug_NSLog(@"DCGroupViewController pageScrollViewCtrl:doNextActionWithCurrentViewCtrl:nextViewCtrl:");
     if (![pageScrollViewCtrl isMemberOfClass:[DCItemPageScrollViewController class]]) {
         [NSException raise:@"DCGroupViewController error" format:@"Reason: pageScrollViewCtrl class: %@", [pageScrollViewCtrl class]];
         return;
@@ -116,7 +116,7 @@
 }
 
 - (void)pageScrollViewCtrl:(DCPageScrollViewController *)pageScrollViewCtrl doPreviousActionWithCurrentViewCtrl:(UIViewController *)currentViewCtrl previousViewCtrl:(UIViewController *)previousViewCtrl {
-    NSLog(@"DCItemViewController pageScrollViewCtrl:doPreviousActionWithCurrentViewCtrl:previousViewCtrl:");
+    debug_NSLog(@"DCItemViewController pageScrollViewCtrl:doPreviousActionWithCurrentViewCtrl:previousViewCtrl:");
     if (![pageScrollViewCtrl isMemberOfClass:[DCItemPageScrollViewController class]]) {
         [NSException raise:@"DCGroupViewController error" format:@"Reason: pageScrollViewCtrl class: %@", [pageScrollViewCtrl class]];
         return;
@@ -151,11 +151,11 @@
 }
 
 - (void)setEnumDataGroupParam:(id)enumDataGroupParam {
-    NSLog(@"need override");
+    debug_NSLog(@"need override");
 }
 
 - (void)setEnumDataItemParam:(id)enumDataItemParam {
-    NSLog(@"need override");
+    debug_NSLog(@"need override");
 }
 
 - (id)initWithDataLibHelper:(id<DCDataLibraryHelper>)dataLibraryHelper {
@@ -229,7 +229,7 @@
 }
 
 - (void)refreshGroups:(BOOL)force {
-    NSLog(@"DCGroupViewController refreshAssetsGroups");
+    debug_NSLog(@"DCGroupViewController refreshAssetsGroups");
     if (force || [self.dataLibraryHelper groupsCount] == 0) {
         NSUInteger pageViewCount = _itemCountInCell * [self calcVisiableRowNumber];
         
@@ -376,7 +376,7 @@
 
 - (void)viewDidLoad
 {
-    NSLog(@"DCGroupViewController viewDidLoad:");
+    debug_NSLog(@"DCGroupViewController viewDidLoad:");
     [super viewDidLoad];
     
     // Uncomment the following line to preserve selection between presentations.
@@ -400,7 +400,7 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-    NSLog(@"DCGroupViewController viewWillAppear:");
+    debug_NSLog(@"DCGroupViewController viewWillAppear:");
     [super viewWillAppear:animated];
     
     _frameSize = [self calcFrameSize];
@@ -412,7 +412,7 @@
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
-    NSLog(@"DCGroupViewController viewWillDisappear:");
+    debug_NSLog(@"DCGroupViewController viewWillDisappear:");
     
     [self clearOperations];
     
@@ -421,7 +421,7 @@
 
 - (void)viewDidUnload
 {
-    NSLog(@"DCGroupViewController viewDidUnload:");
+    debug_NSLog(@"DCGroupViewController viewDidUnload:");
     /*** *** ***/
     [self actionForDidUnload];
     /*** *** ***/
@@ -446,7 +446,7 @@
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
-    NSLog(@"DCGroupViewController shouldAutorotateToInterfaceOrientation:");
+    debug_NSLog(@"DCGroupViewController shouldAutorotateToInterfaceOrientation:");
     BOOL result = NO;
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
         result = (interfaceOrientation == UIInterfaceOrientationPortrait || interfaceOrientation == UIInterfaceOrientationLandscapeLeft || interfaceOrientation == UIInterfaceOrientationLandscapeRight);
@@ -482,13 +482,13 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     // Return the number of sections.
-    NSLog(@"DCGroupViewController numberOfSectionsInTableView:");
+    debug_NSLog(@"DCGroupViewController numberOfSectionsInTableView:");
     return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    NSLog(@"DCGroupViewController tableView:numberOfRowsInSection:");
+    debug_NSLog(@"DCGroupViewController tableView:numberOfRowsInSection:");
     // Return the number of rows in the section.
     
     if (_itemCountInCell == 0) {
@@ -504,7 +504,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSLog(@"DCGroupViewController tableView:cellForRowAtIndexPath: indexPath.row = %d", [indexPath row]);
+    debug_NSLog(@"DCGroupViewController tableView:cellForRowAtIndexPath: indexPath.row = %d", [indexPath row]);
     [self.viewCache.dataLoader queue:DATALODER_TYPE_VISIABLE pauseWithAutoResume:YES with:0.25];
     [self.viewCache.dataLoader queue:DATALODER_TYPE_BUFFER pauseWithAutoResume:YES with:0.25];
     NSArray *views = [self.viewCache getViewsForTableCell:indexPath];
@@ -583,7 +583,7 @@
         int maxIdx = MIN((index + 1) * _itemCountInCell, [self.dataLibraryHelper groupsCount]); 
         for (int idx = 0 + index * _itemCountInCell; idx < maxIdx; ++idx) {
             [result addObject:[self.dataLibraryHelper groupUIDAtIndex:idx]];
-            NSLog(@"Get DataGoupUID: %@ at index: %d", [self.dataLibraryHelper groupUIDAtIndex:idx], idx);
+            debug_NSLog(@"Get DataGoupUID: %@ at index: %d", [self.dataLibraryHelper groupUIDAtIndex:idx], idx);
         }
     } else {
         [NSException raise:@"DCGroupViewController error" format:@"Reason: self.dataLibraryHelper == nil"];
@@ -610,7 +610,7 @@
 
 - (NSUInteger)tableCellCount {
     NSInteger dataGroupCount = [self.dataLibraryHelper groupsCount];
-    NSLog(@"dataGroupCount = %d", dataGroupCount);
+    debug_NSLog(@"dataGroupCount = %d", dataGroupCount);
     NSInteger addLine = 0;
     if (dataGroupCount % _itemCountInCell != 0) {
         addLine = 1;

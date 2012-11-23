@@ -189,7 +189,7 @@
 
 - (void)tap:(UITapGestureRecognizer *)gr {
     if (gr == _doubleTapGestureRecognizer && gr.numberOfTapsRequired == 2) {
-        NSLog(@"DCDetailViewController tap:double");
+        debug_NSLog(@"DCDetailViewController tap:double");
         [self changeDetailImageViewType];
     } else {
         ;

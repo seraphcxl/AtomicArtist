@@ -31,7 +31,7 @@
 //        ALAssetRepresentation *rep = [self.alAsset defaultRepresentation];
 //        UIImage *image = [[[UIImage alloc] initWithCGImage:[rep fullResolutionImage]] autorelease];
 //        CGSize size = [image size];
-//        NSLog(@"Full screen image: %f * %f", size.width, size.height);
+//        debug_NSLog(@"Full screen image: %f * %f", size.width, size.height);
 //        NSData *data = UIImageJPEGRepresentation(image, 1);
 //        [data writeToFile:filePath atomically:YES];
     } while (NO);

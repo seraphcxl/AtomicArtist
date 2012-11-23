@@ -54,4 +54,10 @@
 #define CACHE_BUFFERPAGE_GROUP ((int)2)
 #define CACHE_BUFFERPAGE_ITEM ((int)2)
 
+#ifdef DEBUG
+#define debug_NSLog(format, ...) NSLog(format, ## __VA_ARGS__)
+#else
+#define debug_NSLog(format, ...)
+#endif
+
 #endif

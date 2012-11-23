@@ -14,7 +14,7 @@
     NSError *err = nil;
     BOOL successful = [_context save:&err];
     if (!successful) {
-        NSLog(@"Error saving: %@", [err localizedDescription]);
+        debug_NSLog(@"Error saving: %@", [err localizedDescription]);
     }
 }
 

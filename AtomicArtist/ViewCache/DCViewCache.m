@@ -46,7 +46,7 @@
 
 - (void)actionForVisiableFrom:(NSInteger)begin to:(NSInteger)end andCurrent:(NSInteger)index {
     do {
-        NSLog(@"*** *** *** *** *** *** Add visiable op for from: %d to:%d current:%d", begin, end, index);
+        debug_NSLog(@"*** *** *** *** *** *** Add visiable op for from: %d to:%d current:%d", begin, end, index);
         [self createViewsAndLoadSmallThumbnailForTableCell:index];
         [_queueForVisiableOp cancelAllOperations];
         DCCacheOperationForVisiable *op = [[[DCCacheOperationForVisiable alloc] init] autorelease];
@@ -138,14 +138,14 @@
         
         for (UIView *view in allViews) {
             if (*cancel) {
-                NSLog(@"Cancel from loadBigThumbnailForTableCell:andCancelFlag:");
+                debug_NSLog(@"Cancel from loadBigThumbnailForTableCell:andCancelFlag:");
                 break;
             }
             [self.delegate loadBigThumbnailInQueue:type forView:view];
         }
         
         if (*cancel) {
-            NSLog(@"Cancel from loadBigThumbnailForTableCell:andCancelFlag:");
+            debug_NSLog(@"Cancel from loadBigThumbnailForTableCell:andCancelFlag:");
             break;
         }
 
@@ -346,7 +346,7 @@
         }
         for (NSUInteger index = begin; index <= end; ++index) {
             if (*cancel) {
-                NSLog(@"Cancel from createViewsAndLoadSmallThumbnailForVisiableFrom:to:except:andCancelFlag:");
+                debug_NSLog(@"Cancel from createViewsAndLoadSmallThumbnailForVisiableFrom:to:except:andCancelFlag:");
                 break;
             }
             if (index != current) {
@@ -372,7 +372,7 @@
         }
         for (NSUInteger index = begin; index <= end; ++index) {
             if (*cancel) {
-                NSLog(@"Cancel from loadBigThumbnailForVisiableFrom:to:except:andCancelFlag:");
+                debug_NSLog(@"Cancel from loadBigThumbnailForVisiableFrom:to:except:andCancelFlag:");
                 break;
             }
             [self loadBigThumbnailInQueue:DATALODER_TYPE_VISIABLE forTableCell:index andCancelFlag:cancel];
@@ -382,7 +382,7 @@
         }
         
         if (*cancel) {
-            NSLog(@"Cancel from loadBigThumbnailForVisiableFrom:to:except:andCancelFlag:");
+            debug_NSLog(@"Cancel from loadBigThumbnailForVisiableFrom:to:except:andCancelFlag:");
             break;
         }
     } while (NO);
@@ -400,7 +400,7 @@
         
         for (NSUInteger index = 0; index < count; ++index) {
             if (*cancel) {
-                NSLog(@"Cancel from createViewsAndLoadSmallThumbnailForBufferWithPrevIndexs:nextIndexs:andCancelFlag:");
+                debug_NSLog(@"Cancel from createViewsAndLoadSmallThumbnailForBufferWithPrevIndexs:nextIndexs:andCancelFlag:");
                 break;
             }
             if (index < nextIndexsCount) {
@@ -412,7 +412,7 @@
             }
             
             if (*cancel) {
-                NSLog(@"Cancel from createViewsAndLoadSmallThumbnailForBufferWithPrevIndexs:nextIndexs:andCancelFlag:");
+                debug_NSLog(@"Cancel from createViewsAndLoadSmallThumbnailForBufferWithPrevIndexs:nextIndexs:andCancelFlag:");
                 break;
             }
             if (index < prevIndexsCount) {
@@ -425,7 +425,7 @@
         }
         
         if (*cancel) {
-            NSLog(@"Cancel from createViewsAndLoadSmallThumbnailForBufferWithPrevIndexs:nextIndexs:andCancelFlag:");
+            debug_NSLog(@"Cancel from createViewsAndLoadSmallThumbnailForBufferWithPrevIndexs:nextIndexs:andCancelFlag:");
             break;
         }
     } while (NO);
@@ -442,7 +442,7 @@
         
         for (NSUInteger index = 0; index < count; ++index) {
             if (*cancel) {
-                NSLog(@"Cancel from loadBigThumbnailForBufferWithPrevIndexs:nextIndexs:andCancelFlag:");
+                debug_NSLog(@"Cancel from loadBigThumbnailForBufferWithPrevIndexs:nextIndexs:andCancelFlag:");
                 break;
             }
             if (index < nextIndexsCount) {
@@ -454,7 +454,7 @@
             }
             
             if (*cancel) {
-                NSLog(@"Cancel from loadBigThumbnailForBufferWithPrevIndexs:nextIndexs:andCancelFlag:");
+                debug_NSLog(@"Cancel from loadBigThumbnailForBufferWithPrevIndexs:nextIndexs:andCancelFlag:");
                 break;
             }
             if (index < prevIndexsCount) {
@@ -467,7 +467,7 @@
         }
         
         if (*cancel) {
-            NSLog(@"Cancel from loadBigThumbnailForBufferWithPrevIndexs:nextIndexs:andCancelFlag:");
+            debug_NSLog(@"Cancel from loadBigThumbnailForBufferWithPrevIndexs:nextIndexs:andCancelFlag:");
             break;
         }
     } while (NO);
@@ -484,7 +484,7 @@
         
         for (NSString *tableCellIndexStr in allTableCellIndexs) {
             if (*cancel) {
-                NSLog(@"Cancel from clearCacheWithBufferRangeFrom:to:andCancelFlag:");
+                debug_NSLog(@"Cancel from clearCacheWithBufferRangeFrom:to:andCancelFlag:");
                 break;
             }
             
@@ -496,7 +496,7 @@
             }
         }
         if (*cancel) {
-            NSLog(@"Cancel from clearCacheWithBufferRangeFrom:to:andCancelFlag:");
+            debug_NSLog(@"Cancel from clearCacheWithBufferRangeFrom:to:andCancelFlag:");
             break;
         }
     } while (NO);
@@ -514,7 +514,7 @@
         
         for (NSString *tableCellIndexStr in allTableCellIndexs) {
             if (*cancel) {
-                NSLog(@"Cancel from clearCacheWithBufferRangeFrom:to:andCancelFlag:");
+                debug_NSLog(@"Cancel from clearCacheWithBufferRangeFrom:to:andCancelFlag:");
                 break;
             }
             

@@ -161,14 +161,14 @@
 }
 
 - (void)tap:(UITapGestureRecognizer *)gr {
-    NSLog(@"DCGroupView tap:");
+    debug_NSLog(@"DCGroupView tap:");
     if (self.delegate && self.dataGroupUID) {
         [self.delegate selectGroup:self.dataGroupUID];
     }
 }
 
 - (void)pinch:(UIPinchGestureRecognizer *)gr {
-    NSLog(@"DCGroupView pinch:");
+    debug_NSLog(@"DCGroupView pinch:");
     if (gr.state == UIGestureRecognizerStateBegan) {
         _pinchScale = gr.scale;
     } else if (gr.state == UIGestureRecognizerStateEnded) {

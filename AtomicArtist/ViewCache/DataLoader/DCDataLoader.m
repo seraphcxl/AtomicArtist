@@ -71,7 +71,7 @@
 
 - (void)restart:(NSTimer *)timer {
     if (_timerForRestartVisiable == timer) {
-        NSLog(@"DCDataLoader restart visiable:");
+        debug_NSLog(@"DCDataLoader restart visiable:");
         if (_queueForVisiable) {
             [_queueForVisiable setSuspended:NO];
         }
@@ -79,7 +79,7 @@
         [_timerForRestartVisiable release];
         _timerForRestartVisiable = nil;
     } else if (_timerForRestartBuffer == timer) {
-        NSLog(@"DCDataLoader restart buffer:");
+        debug_NSLog(@"DCDataLoader restart buffer:");
         if (_queueForBuffer) {
             [_queueForBuffer setSuspended:NO];
         }
@@ -94,12 +94,12 @@
         if (type == DATALODER_TYPE_VISIABLE) {
             if (_queueForVisiable) {
                 [_queueForVisiable addOperation:operation];
-                NSLog(@"ops count in visiable queue: %d", [_queueForVisiable operationCount]);
+                debug_NSLog(@"ops count in visiable queue: %d", [_queueForVisiable operationCount]);
             }
         } else if (type == DATALODER_TYPE_BUFFER) {
             if (_queueForBuffer) {
                 [_queueForBuffer addOperation:operation];
-                NSLog(@"ops count in buffer queue: %d", [_queueForBuffer operationCount]);
+                debug_NSLog(@"ops count in buffer queue: %d", [_queueForBuffer operationCount]);
             }
         }
     }
@@ -108,12 +108,12 @@
 - (void)cancelAllOperationsOnQueue:(enum DATALODER_TYPE)type {
     if (type == DATALODER_TYPE_VISIABLE) {
         if (_queueForVisiable) {
-            NSLog(@"DataLoader visiable queue cancelAllOperations");
+            debug_NSLog(@"DataLoader visiable queue cancelAllOperations");
             [_queueForVisiable cancelAllOperations];
         }
     } else if (type == DATALODER_TYPE_BUFFER) {
         if (_queueForBuffer) {
-            NSLog(@"DataLoader buffer queue cancelAllOperations");
+            debug_NSLog(@"DataLoader buffer queue cancelAllOperations");
             [_queueForBuffer cancelAllOperations];
         }
     }
@@ -194,7 +194,7 @@
                 NSString *timeStr = [NSString stringWithFormat:@"%d", seconds];
                 [self performSelectorOnMainThread:@selector(createTimerForVisiableQueue:) withObject:timeStr waitUntilDone:YES];
             } else {
-                NSLog(@"No auto resume");
+                debug_NSLog(@"No auto resume");
             }
         }
     } else if (type == DATALODER_TYPE_BUFFER) {
@@ -207,7 +207,7 @@
                 NSString *timeStr = [NSString stringWithFormat:@"%d", seconds];
                 [self performSelectorOnMainThread:@selector(createTimerForBufferQueue:) withObject:timeStr waitUntilDone:YES];
             } else {
-                NSLog(@"No auto resume");
+                debug_NSLog(@"No auto resume");
             }
         }
     }
@@ -217,12 +217,12 @@
     if ([self isSuspendedQueue:type]) {
         if (type == DATALODER_TYPE_VISIABLE) {
             if (_queueForVisiable) {
-                NSLog(@"DCDataLoader resume visiable queue");
+                debug_NSLog(@"DCDataLoader resume visiable queue");
                 [self performSelectorOnMainThread:@selector(removeTimerForVisiableQueue) withObject:nil waitUntilDone:YES];
             }
         } else if (type == DATALODER_TYPE_BUFFER) {
             if (_queueForBuffer) {
-                NSLog(@"DCDataLoader resume buffer queue");
+                debug_NSLog(@"DCDataLoader resume buffer queue");
                 [self performSelectorOnMainThread:@selector(removeTimerForBufferQueue) withObject:nil waitUntilDone:YES];
             }
         }

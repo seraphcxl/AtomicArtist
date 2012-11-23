@@ -81,7 +81,7 @@
                 [_allALAssetsGroups setObject:alAssetsGroup forKey:groupPersistentID];
             }
 			//Don't mark this NSLog, it is a must. Otherwise, some thing bad would happen. HAHA~~
-			NSLog(@"Add group id: %@, count = %d", groupPersistentID, [group numberOfAssets]);
+			debug_NSLog(@"Add group id: %@, count = %d", groupPersistentID, [group numberOfAssets]);
             ++_enumCount;
             if (_enumCount == _frequency) {
                 [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_DATAGROUP_ADDED object:self];

@@ -19,6 +19,7 @@
 
 @interface DCCacheOperationForVisiable : NSOperation {
     BOOL _canceled;
+    BOOL _finished;
 }
 @property (assign, nonatomic) id<DCCacheOperationForVisiableDelegate> delegate;
 @property (assign, nonatomic) id<DCDataLoaderMgrDelegate> delegateForDCDataLoaderMgr;

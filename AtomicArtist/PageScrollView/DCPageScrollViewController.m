@@ -68,7 +68,7 @@ typedef enum {
 
 - (void)tap:(UITapGestureRecognizer *)gr {
     if (gr == _singleTapGestureRecognizer && gr.numberOfTapsRequired == 1) {
-        NSLog(@"DCPageScrollViewController tap:single");
+        debug_NSLog(@"DCPageScrollViewController tap:single");
         if (self.hideNavigationBarEnabled) {
             [self.navigationController.navigationBar setHidden:NO];
         }
@@ -182,7 +182,7 @@ typedef enum {
 }
 
 - (void)hideAssist:(NSTimer *)timer {
-    NSLog(@"DCPageScrollViewController hideAssist:");
+    debug_NSLog(@"DCPageScrollViewController hideAssist:");
     if (_timerForHideAssist == timer) {
         if (self.hideNavigationBarEnabled) {
             [self.navigationController.navigationBar setHidden:YES];
@@ -223,7 +223,7 @@ typedef enum {
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    NSLog(@"DCPageScrollViewController scrollViewDidScroll:");
+    debug_NSLog(@"DCPageScrollViewController scrollViewDidScroll:");
     CGPoint offset = [scrollView contentOffset];
     
     if (offset.x > 0) {
@@ -267,7 +267,7 @@ typedef enum {
 }
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
-    NSLog(@"DCPageScrollViewController scrollViewWillBeginDragging:");
+    debug_NSLog(@"DCPageScrollViewController scrollViewWillBeginDragging:");
     if (self.delegateForDCDataLoaderMgr) {
         [self.delegateForDCDataLoaderMgr queue:DATALODER_TYPE_VISIABLE pauseWithAutoResume:NO with:0.0];
         [self.delegateForDCDataLoaderMgr queue:DATALODER_TYPE_BUFFER pauseWithAutoResume:NO with:0.0];
@@ -275,11 +275,11 @@ typedef enum {
 }
 
 - (void)scrollViewWillBeginDecelerating:(UIScrollView *)scrollView {
-    NSLog(@"DCPageScrollViewController scrollViewWillBeginDecelerating:");
+    debug_NSLog(@"DCPageScrollViewController scrollViewWillBeginDecelerating:");
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
-    NSLog(@"DCPageScrollViewController scrollViewDidEndDecelerating:");
+    debug_NSLog(@"DCPageScrollViewController scrollViewDidEndDecelerating:");
     
     if (self.delegateForDCDataLoaderMgr) {
         [self.delegateForDCDataLoaderMgr queue:DATALODER_TYPE_VISIABLE pauseWithAutoResume:YES with:0.25];
@@ -295,7 +295,7 @@ typedef enum {
     } else if ([self nextViewCtrl] && scrollViewOffset.x == nextPageViewOffset.x) {
         [self next];
     } else {
-        NSLog(@"Warning");
+        debug_NSLog(@"Warning");
     }
 }
 
@@ -528,7 +528,7 @@ typedef enum {
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
-    NSLog(@"DCItemViewController shouldAutorotateToInterfaceOrientation:");
+    debug_NSLog(@"DCItemViewController shouldAutorotateToInterfaceOrientation:");
     BOOL result = NO;
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
         result = (interfaceOrientation == UIInterfaceOrientationPortrait || interfaceOrientation == UIInterfaceOrientationLandscapeLeft || interfaceOrientation == UIInterfaceOrientationLandscapeRight);

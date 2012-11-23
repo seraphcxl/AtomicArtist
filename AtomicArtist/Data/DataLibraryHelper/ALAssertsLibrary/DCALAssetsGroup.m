@@ -144,13 +144,13 @@
                 _assetType = (NSString *)param;
                 
                 if ([ALAssetTypePhoto isEqualToString:self.assetType]) {
-                    NSLog(@"ALAssetsGroup photo");
+                    debug_NSLog(@"ALAssetsGroup photo");
                     [self.alAssetsGroup setAssetsFilter:[ALAssetsFilter allPhotos]];
                 } else if ([ALAssetTypeVideo isEqualToString:self.assetType]) {
-                    NSLog(@"ALAssetsGroup video");
+                    debug_NSLog(@"ALAssetsGroup video");
                     [self.alAssetsGroup setAssetsFilter:[ALAssetsFilter allVideos]];
                 } else {
-                    NSLog(@"ALAssetsGroup photo and video");
+                    debug_NSLog(@"ALAssetsGroup photo and video");
                 }
             }
             
@@ -215,13 +215,13 @@
                 _assetType = (NSString *)param;
                 
                 if ([ALAssetTypePhoto isEqualToString:self.assetType]) {
-                    NSLog(@"ALAssetsGroup photo");
+                    debug_NSLog(@"ALAssetsGroup photo");
                     [self.alAssetsGroup setAssetsFilter:[ALAssetsFilter allPhotos]];
                 } else if ([ALAssetTypeVideo isEqualToString:self.assetType]) {
-                    NSLog(@"ALAssetsGroup video");
+                    debug_NSLog(@"ALAssetsGroup video");
                     [self.alAssetsGroup setAssetsFilter:[ALAssetsFilter allVideos]];
                 } else {
-                    NSLog(@"ALAssetsGroup photo and video");
+                    debug_NSLog(@"ALAssetsGroup photo and video");
                 }
             }
             
@@ -246,13 +246,13 @@
             _assetType = (NSString *)param;
             
             if ([ALAssetTypePhoto isEqualToString:self.assetType]) {
-                NSLog(@"ALAssetsGroup photo");
+                debug_NSLog(@"ALAssetsGroup photo");
                 [self.alAssetsGroup setAssetsFilter:[ALAssetsFilter allPhotos]];
             } else if ([ALAssetTypeVideo isEqualToString:self.assetType]) {
-                NSLog(@"ALAssetsGroup video");
+                debug_NSLog(@"ALAssetsGroup video");
                 [self.alAssetsGroup setAssetsFilter:[ALAssetsFilter allVideos]];
             } else {
-                NSLog(@"ALAssetsGroup photo and video");
+                debug_NSLog(@"ALAssetsGroup photo and video");
             }
         }
         
@@ -335,7 +335,7 @@
         if (find) {
             return index;
         } else {
-            NSLog(@"itemUID: %@ not find", itemUID);
+            debug_NSLog(@"itemUID: %@ not find", itemUID);
 //            [NSException raise:@"DCALAssetsGroup Error" format:@"Reason: itemUID: %@ not find", itemUID];
             return -1;
         }

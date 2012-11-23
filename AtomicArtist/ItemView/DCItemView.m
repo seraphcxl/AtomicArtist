@@ -144,7 +144,7 @@
 
 - (void)tap:(UITapGestureRecognizer *)gr {
     if (gr == _singleTapGestureRecognizer && gr.numberOfTapsRequired == 1) {
-        NSLog(@"DCItemView tap:single");
+        debug_NSLog(@"DCItemView tap:single");
         if (self.delegate && self.itemUID) {
             [self.delegate selectItem:self.itemUID];
         }

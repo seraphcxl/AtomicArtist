@@ -24,6 +24,7 @@
     self = [super init];
     if (self) {
         _canceled = NO;
+        _finished = NO;
     }
     return self;
 }
@@ -48,9 +49,22 @@
         if (_canceled) {
             break;
         }
-        NSLog(@"*** *** *** *** *** *** *** *** *** Visiable: %d to:%d", self.visiableBeginTableCellIndex, self.visiableEndTableCellIndex);
+        debug_NSLog(@"*** *** *** *** *** *** *** *** *** Visiable: %d to:%d", self.visiableBeginTableCellIndex, self.visiableEndTableCellIndex);
         [self.delegate loadBigThumbnailForVisiableFrom:self.visiableBeginTableCellIndex to:self.visiableEndTableCellIndex except:self.currentTableCellIndex andCancelFlag:&_canceled];
+        _finished = YES;
     } while (NO);
+}
+
+- (BOOL)isConcurrent {
+    return NO;
+}
+
+- (BOOL)isFinished {
+    if (_finished || _canceled) {
+        return YES;
+    } else {
+        return NO;
+    }
 }
 
 @end

@@ -21,7 +21,7 @@
 @synthesize alAsset = _alAsset;
 
 - (void)main {
-    NSLog(@"DCLoadPosterImageForALAssetsGroup main enter");
+    debug_NSLog(@"DCLoadPosterImageForALAssetsGroup main enter");
     do {
         if (_canceled) {
             break;
@@ -54,7 +54,7 @@
         [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_POSTERIMAGELOADED object:self];
         _finished = YES;
     } while (NO);
-    NSLog(@"DCLoadPosterImageForALAssetsGroup main exit");
+    debug_NSLog(@"DCLoadPosterImageForALAssetsGroup main exit");
 }
 
 + (NSUInteger)calcPosterImageSize {

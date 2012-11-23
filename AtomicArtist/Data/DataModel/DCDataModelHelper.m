@@ -158,7 +158,7 @@ static DCDataModelHelper *staticDefaultDataModelHelper = nil;
         
         // Read in AtomicArtistModel.xcdatamodeld
         _model = [NSManagedObjectModel mergedModelFromBundles:nil];
-        // NSLog(@"model = %@", model);
+        // debug_NSLog(@"model = %@", model);
         
         NSPersistentStoreCoordinator *psc = [[[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:_model] autorelease];
         
