@@ -22,7 +22,7 @@
         
         [request setSortDescriptors:nil];
         
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"uniqueID like %@", groupUID];
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"uniqueID == %@", groupUID];
         [request setPredicate:predicate];
         
         NSError *err = nil;
