@@ -1,0 +1,7 @@
+//
+// Prefix header for all source files of the 'Quartz' target in the 'Quartz' project
+//
+
+#ifdef __OBJC__
+    #import <Foundation/Foundation.h>
+#endif
