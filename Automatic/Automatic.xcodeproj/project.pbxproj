@@ -31,6 +31,7 @@
 		1B383B3D166DF2EE00C49DE8 /* Automatic-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Automatic-Prefix.pch"; sourceTree = "<group>"; };
 		1B383B3E166DF2EE00C49DE8 /* Automatic.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Automatic.h; sourceTree = "<group>"; };
 		1B383B40166DF2EE00C49DE8 /* Automatic.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Automatic.m; sourceTree = "<group>"; };
+		1BB8BBAA16746E9400CC150E /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -48,6 +49,7 @@
 		1B383B2B166DF2EE00C49DE8 = {
 			isa = PBXGroup;
 			children = (
+				1BB8BBAA16746E9400CC150E /* README.md */,
 				1B383B3B166DF2EE00C49DE8 /* Automatic */,
 				1B383B38166DF2EE00C49DE8 /* Frameworks */,
 				1B383B37166DF2EE00C49DE8 /* Products */,
@@ -238,6 +240,7 @@
 				1B383B46166DF2EE00C49DE8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

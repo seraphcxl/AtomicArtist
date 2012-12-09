@@ -31,6 +31,7 @@
 		1B383B1D166DF2BA00C49DE8 /* Quartz-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Quartz-Prefix.pch"; sourceTree = "<group>"; };
 		1B383B1E166DF2BA00C49DE8 /* Quartz.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Quartz.h; sourceTree = "<group>"; };
 		1B383B20166DF2BA00C49DE8 /* Quartz.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Quartz.m; sourceTree = "<group>"; };
+		1BB8BBA816746E8C00CC150E /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -48,6 +49,7 @@
 		1B383B0B166DF2BA00C49DE8 = {
 			isa = PBXGroup;
 			children = (
+				1BB8BBA816746E8C00CC150E /* README.md */,
 				1B383B1B166DF2BA00C49DE8 /* Quartz */,
 				1B383B18166DF2BA00C49DE8 /* Frameworks */,
 				1B383B17166DF2BA00C49DE8 /* Products */,

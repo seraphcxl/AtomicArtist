@@ -1,13 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Workspace
    version = "1.0">
-   <FileRef
-      location = "group:Tourbillon/Tourbillon.xcodeproj">
-   </FileRef>
-   <FileRef
-      location = "group:Quartz/Quartz.xcodeproj">
-   </FileRef>
-   <FileRef
-      location = "group:Automatic/Automatic.xcodeproj">
-   </FileRef>
+   <Group
+      location = "container:"
+      name = "Tourbillon">
+      <FileRef
+         location = "group:TourbillonApp/TourbillonApp.xcodeproj">
+      </FileRef>
+      <FileRef
+         location = "group:Tourbillon/Tourbillon.xcodeproj">
+      </FileRef>
+   </Group>
+   <Group
+      location = "container:"
+      name = "Automatic">
+      <FileRef
+         location = "group:AutomaticApp/AutomaticApp.xcodeproj">
+      </FileRef>
+      <FileRef
+         location = "group:Automatic/Automatic.xcodeproj">
+      </FileRef>
+   </Group>
+   <Group
+      location = "container:"
+      name = "Quartz">
+      <FileRef
+         location = "group:Quartz/Quartz.xcodeproj">
+      </FileRef>
+   </Group>
 </Workspace>

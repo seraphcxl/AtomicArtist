@@ -31,6 +31,7 @@
 		1BB8BB7116746B2100CC150E /* Tourbillon-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Tourbillon-Prefix.pch"; sourceTree = "<group>"; };
 		1BB8BB7216746B2100CC150E /* Tourbillon.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Tourbillon.h; sourceTree = "<group>"; };
 		1BB8BB7416746B2100CC150E /* Tourbillon.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Tourbillon.m; sourceTree = "<group>"; };
+		1BB8BBA716746E8200CC150E /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -48,6 +49,7 @@
 		1BB8BB5F16746B2100CC150E = {
 			isa = PBXGroup;
 			children = (
+				1BB8BBA716746E8200CC150E /* README.md */,
 				1BB8BB6F16746B2100CC150E /* Tourbillon */,
 				1BB8BB6C16746B2100CC150E /* Frameworks */,
 				1BB8BB6B16746B2100CC150E /* Products */,
