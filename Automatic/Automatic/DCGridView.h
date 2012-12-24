@@ -45,7 +45,7 @@ typedef enum {
 @property(nonatomic, dc_weak) IBOutlet NSObject<DCGridViewTransformationDelegate> *transformDelegate;  // Optional - to enable fullsize mode
 
 // Layout Strategy
-@property(nonatomic, strong) IBOutlet id<DCGridViewLayoutStrategy> layoutStrategy;  // Default is GMGridViewLayoutVerticalStrategy
+@property(nonatomic, strong) IBOutlet id<DCGridViewLayoutStrategy> layoutStrategy;  // Default is DCGridViewLayoutVerticalStrategy
 
 // Editing Mode
 @property(nonatomic, getter = isEditing) BOOL editing;  // Default is NO - When set to YES, all gestures are disabled and delete buttons shows up on cells
@@ -87,3 +87,73 @@ typedef enum {
 - (void)layoutSubviewsWithAnimation:(DCGridViewItemAnimation)animation;
 
 @end
+
+
+#pragma mark - protocol DCGridViewDataSource <NSObject>
+@protocol DCGridViewDataSource <NSObject>
+
+@required
+// Populating subview items
+- (NSInteger)numberOfItemsInDCGridView:(DCGridView *)gridView;
+- (CGSize)DCGridView:(DCGridView *)gridView sizeForItemsInInterfaceOrientation:(UIInterfaceOrientation)orientation;
+- (DCGridViewCell *)DCGridView:(DCGridView *)gridView cellForItemAtIndex:(NSInteger)index;
+
+@optional
+// Allow a cell to be deletable. If not implemented, YES is assumed.
+- (BOOL)DCGridView:(DCGridView *)gridView canDeleteItemAtIndex:(NSInteger)index;
+
+@end
+
+
+#pragma mark - protocol DCGridViewActionDelegate <NSObject>
+@protocol DCGridViewActionDelegate <NSObject>
+
+@required
+- (void)DCGridView:(DCGridView *)gridView didTapOnItemAtIndex:(NSInteger)position;
+
+@optional
+// Tap on space without any items
+- (void)DCGridViewDidTapOnEmptySpace:(DCGridView *)gridView;
+// Called when the delete-button has been pressed. Required to enable editing mode.
+// This method wont delete the cell automatically. Call the delete method of the gridView when appropriate.
+- (void)DCGridView:(DCGridView *)gridView processDeleteActionForItemAtIndex:(NSInteger)index;
+
+- (void)DCGridView:(DCGridView *)gridView changedEdit:(BOOL)edit;
+
+@end
+
+
+#pragma mark - protocol DCGridViewSortingDelegate <NSObject>
+@protocol DCGridViewSortingDelegate <NSObject>
+
+@required
+// Item moved - right place to update the data structure
+- (void)DCGridView:(DCGridView *)gridView moveItemAtIndex:(NSInteger)oldIndex toIndex:(NSInteger)newIndex;
+- (void)DCGridView:(DCGridView *)gridView exchangeItemAtIndex:(NSInteger)index1 withItemAtIndex:(NSInteger)index2;
+
+@optional
+// Sorting started/ended - indexes are not specified on purpose (not the right place to update data structure)
+- (void)DCGridView:(DCGridView *)gridView didStartMovingCell:(DCGridViewCell *)cell;
+- (void)DCGridView:(DCGridView *)gridView didEndMovingCell:(DCGridViewCell *)cell;
+// Enable/Disable the shaking behavior of an item being moved
+- (BOOL)DCGridView:(DCGridView *)gridView shouldAllowShakingBehaviorWhenMovingCell:(DCGridViewCell *)view atIndex:(NSInteger)index;
+
+@end
+
+
+#pragma mark - protocol DCGridViewTransformationDelegate <NSObject>
+@protocol DCGridViewTransformationDelegate <NSObject>
+
+@required
+// Fullsize
+- (CGSize)DCGridView:(DCGridView *)gridView sizeInFullSizeForCell:(DCGridViewCell *)cell atIndex:(NSInteger)index inInterfaceOrientation:(UIInterfaceOrientation)orientation;
+- (UIView *)DCGridView:(DCGridView *)gridView fullSizeViewForCell:(DCGridViewCell *)cell atIndex:(NSInteger)index;
+
+// Transformation (pinch, drag, rotate) of the item
+@optional
+- (void)DCGridView:(DCGridView *)gridView didStartTransformingCell:(DCGridViewCell *)cell;
+- (void)DCGridView:(DCGridView *)gridView didEnterFullSizeForCell:(DCGridViewCell *)cell;
+- (void)DCGridView:(DCGridView *)gridView didEndTransformingCell:(DCGridViewCell *)cell;
+
+@end
+
