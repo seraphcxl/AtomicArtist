@@ -8,8 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		1B383B3A166DF2EE00C49DE8 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B383B39166DF2EE00C49DE8 /* Foundation.framework */; };
-		1B383B3F166DF2EE00C49DE8 /* Automatic.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1B383B3E166DF2EE00C49DE8 /* Automatic.h */; };
-		1B383B41166DF2EE00C49DE8 /* Automatic.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B383B40166DF2EE00C49DE8 /* Automatic.m */; };
+		1BE2958416881F52009E3486 /* DCGridViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BE2958316881F52009E3486 /* DCGridViewCell.m */; };
+		1BE2958F16882FC0009E3486 /* DCGridViewLayoutStrategies.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BE2958E16882FC0009E3486 /* DCGridViewLayoutStrategies.m */; };
+		1BE295921688430C009E3486 /* DCGridView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BE295911688430C009E3486 /* DCGridView.m */; };
+		1BE29595168846E4009E3486 /* UIGestureRecognizer+DCGridViewAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BE29594168846E4009E3486 /* UIGestureRecognizer+DCGridViewAdditions.m */; };
+		1BE2959816884747009E3486 /* UIView+DCGridViewAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BE2959716884747009E3486 /* UIView+DCGridViewAdditions.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -19,7 +22,6 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
-				1B383B3F166DF2EE00C49DE8 /* Automatic.h in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -29,9 +31,18 @@
 		1B383B36166DF2EE00C49DE8 /* libAutomatic.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libAutomatic.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		1B383B39166DF2EE00C49DE8 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1B383B3D166DF2EE00C49DE8 /* Automatic-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Automatic-Prefix.pch"; sourceTree = "<group>"; };
-		1B383B3E166DF2EE00C49DE8 /* Automatic.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Automatic.h; sourceTree = "<group>"; };
-		1B383B40166DF2EE00C49DE8 /* Automatic.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Automatic.m; sourceTree = "<group>"; };
 		1BB8BBAA16746E9400CC150E /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
+		1BE2958216881F52009E3486 /* DCGridViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCGridViewCell.h; sourceTree = "<group>"; };
+		1BE2958316881F52009E3486 /* DCGridViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCGridViewCell.m; sourceTree = "<group>"; };
+		1BE29585168820CD009E3486 /* DCGridViewCell_Extended.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCGridViewCell_Extended.h; sourceTree = "<group>"; };
+		1BE2958D16882FC0009E3486 /* DCGridViewLayoutStrategies.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCGridViewLayoutStrategies.h; sourceTree = "<group>"; };
+		1BE2958E16882FC0009E3486 /* DCGridViewLayoutStrategies.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCGridViewLayoutStrategies.m; sourceTree = "<group>"; };
+		1BE295901688430C009E3486 /* DCGridView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCGridView.h; sourceTree = "<group>"; };
+		1BE295911688430C009E3486 /* DCGridView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCGridView.m; sourceTree = "<group>"; };
+		1BE29593168846E4009E3486 /* UIGestureRecognizer+DCGridViewAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIGestureRecognizer+DCGridViewAdditions.h"; sourceTree = "<group>"; };
+		1BE29594168846E4009E3486 /* UIGestureRecognizer+DCGridViewAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIGestureRecognizer+DCGridViewAdditions.m"; sourceTree = "<group>"; };
+		1BE2959616884747009E3486 /* UIView+DCGridViewAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+DCGridViewAdditions.h"; sourceTree = "<group>"; };
+		1BE2959716884747009E3486 /* UIView+DCGridViewAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+DCGridViewAdditions.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,9 +86,18 @@
 		1B383B3B166DF2EE00C49DE8 /* Automatic */ = {
 			isa = PBXGroup;
 			children = (
-				1B383B3E166DF2EE00C49DE8 /* Automatic.h */,
-				1B383B40166DF2EE00C49DE8 /* Automatic.m */,
 				1B383B3C166DF2EE00C49DE8 /* Supporting Files */,
+				1BE2958216881F52009E3486 /* DCGridViewCell.h */,
+				1BE29585168820CD009E3486 /* DCGridViewCell_Extended.h */,
+				1BE2958316881F52009E3486 /* DCGridViewCell.m */,
+				1BE2958D16882FC0009E3486 /* DCGridViewLayoutStrategies.h */,
+				1BE2958E16882FC0009E3486 /* DCGridViewLayoutStrategies.m */,
+				1BE295901688430C009E3486 /* DCGridView.h */,
+				1BE295911688430C009E3486 /* DCGridView.m */,
+				1BE29593168846E4009E3486 /* UIGestureRecognizer+DCGridViewAdditions.h */,
+				1BE29594168846E4009E3486 /* UIGestureRecognizer+DCGridViewAdditions.m */,
+				1BE2959616884747009E3486 /* UIView+DCGridViewAdditions.h */,
+				1BE2959716884747009E3486 /* UIView+DCGridViewAdditions.m */,
 			);
 			path = Automatic;
 			sourceTree = "<group>";
@@ -141,7 +161,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1B383B41166DF2EE00C49DE8 /* Automatic.m in Sources */,
+				1BE2958416881F52009E3486 /* DCGridViewCell.m in Sources */,
+				1BE2958F16882FC0009E3486 /* DCGridViewLayoutStrategies.m in Sources */,
+				1BE295921688430C009E3486 /* DCGridView.m in Sources */,
+				1BE29595168846E4009E3486 /* UIGestureRecognizer+DCGridViewAdditions.m in Sources */,
+				1BE2959816884747009E3486 /* UIView+DCGridViewAdditions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -201,6 +225,7 @@
 				DSTROOT = /tmp/Automatic.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Automatic/Automatic-Prefix.pch";
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/../Common";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -214,6 +239,7 @@
 				DSTROOT = /tmp/Automatic.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Automatic/Automatic-Prefix.pch";
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/../Common";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
