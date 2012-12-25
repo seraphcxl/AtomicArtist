@@ -3,6 +3,13 @@
    version = "1.0">
    <Group
       location = "container:"
+      name = "Common">
+      <FileRef
+         location = "group:Common/DCCommonConstants.h">
+      </FileRef>
+   </Group>
+   <Group
+      location = "container:"
       name = "Tourbillon">
       <FileRef
          location = "group:TourbillonApp/TourbillonApp.xcodeproj">

@@ -8,8 +8,14 @@
 
 /* Begin PBXBuildFile section */
 		1B383B1A166DF2BA00C49DE8 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B383B19166DF2BA00C49DE8 /* Foundation.framework */; };
-		1B383B1F166DF2BA00C49DE8 /* Quartz.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1B383B1E166DF2BA00C49DE8 /* Quartz.h */; };
-		1B383B21166DF2BA00C49DE8 /* Quartz.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B383B20166DF2BA00C49DE8 /* Quartz.m */; };
+		1BDF3D1216894F950034A191 /* MediaLib.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1BDF3D1016894F950034A191 /* MediaLib.xcdatamodeld */; };
+		1BDF3D52168980590034A191 /* Group.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BDF3D51168980590034A191 /* Group.m */; };
+		1BDF3D551689805A0034A191 /* Item.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BDF3D541689805A0034A191 /* Item.m */; };
+		1BDF3D56168983970034A191 /* Item.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1BDF3D531689805A0034A191 /* Item.h */; };
+		1BDF3D57168983970034A191 /* Group.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1BDF3D50168980590034A191 /* Group.h */; };
+		1BDF3D5A168984470034A191 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BDF3D59168984470034A191 /* CoreData.framework */; };
+		1BDF3D72168985250034A191 /* Quartz.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BDF3D71168985250034A191 /* Quartz.m */; };
+		1BDF3D73168985340034A191 /* Quartz.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1BDF3D70168985250034A191 /* Quartz.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -19,7 +25,9 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
-				1B383B1F166DF2BA00C49DE8 /* Quartz.h in CopyFiles */,
+				1BDF3D73168985340034A191 /* Quartz.h in CopyFiles */,
+				1BDF3D56168983970034A191 /* Item.h in CopyFiles */,
+				1BDF3D57168983970034A191 /* Group.h in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -29,9 +37,15 @@
 		1B383B16166DF2BA00C49DE8 /* libQuartz.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libQuartz.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		1B383B19166DF2BA00C49DE8 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1B383B1D166DF2BA00C49DE8 /* Quartz-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Quartz-Prefix.pch"; sourceTree = "<group>"; };
-		1B383B1E166DF2BA00C49DE8 /* Quartz.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Quartz.h; sourceTree = "<group>"; };
-		1B383B20166DF2BA00C49DE8 /* Quartz.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Quartz.m; sourceTree = "<group>"; };
 		1BB8BBA816746E8C00CC150E /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
+		1BDF3D1116894F950034A191 /* MediaLib.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = MediaLib.xcdatamodel; sourceTree = "<group>"; };
+		1BDF3D50168980590034A191 /* Group.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Group.h; sourceTree = "<group>"; };
+		1BDF3D51168980590034A191 /* Group.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Group.m; sourceTree = "<group>"; };
+		1BDF3D531689805A0034A191 /* Item.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Item.h; sourceTree = "<group>"; };
+		1BDF3D541689805A0034A191 /* Item.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Item.m; sourceTree = "<group>"; };
+		1BDF3D59168984470034A191 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		1BDF3D70168985250034A191 /* Quartz.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Quartz.h; sourceTree = "<group>"; };
+		1BDF3D71168985250034A191 /* Quartz.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Quartz.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -39,6 +53,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1BDF3D5A168984470034A191 /* CoreData.framework in Frameworks */,
 				1B383B1A166DF2BA00C49DE8 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -67,6 +82,7 @@
 		1B383B18166DF2BA00C49DE8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				1BDF3D59168984470034A191 /* CoreData.framework */,
 				1B383B19166DF2BA00C49DE8 /* Foundation.framework */,
 			);
 			name = Frameworks;
@@ -75,8 +91,9 @@
 		1B383B1B166DF2BA00C49DE8 /* Quartz */ = {
 			isa = PBXGroup;
 			children = (
-				1B383B1E166DF2BA00C49DE8 /* Quartz.h */,
-				1B383B20166DF2BA00C49DE8 /* Quartz.m */,
+				1BDF3D70168985250034A191 /* Quartz.h */,
+				1BDF3D71168985250034A191 /* Quartz.m */,
+				1BDF3D581689840E0034A191 /* MediaLib */,
 				1B383B1C166DF2BA00C49DE8 /* Supporting Files */,
 			);
 			path = Quartz;
@@ -88,6 +105,18 @@
 				1B383B1D166DF2BA00C49DE8 /* Quartz-Prefix.pch */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		1BDF3D581689840E0034A191 /* MediaLib */ = {
+			isa = PBXGroup;
+			children = (
+				1BDF3D1016894F950034A191 /* MediaLib.xcdatamodeld */,
+				1BDF3D531689805A0034A191 /* Item.h */,
+				1BDF3D541689805A0034A191 /* Item.m */,
+				1BDF3D50168980590034A191 /* Group.h */,
+				1BDF3D51168980590034A191 /* Group.m */,
+			);
+			name = MediaLib;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -141,7 +170,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1B383B21166DF2BA00C49DE8 /* Quartz.m in Sources */,
+				1BDF3D1216894F950034A191 /* MediaLib.xcdatamodeld in Sources */,
+				1BDF3D52168980590034A191 /* Group.m in Sources */,
+				1BDF3D551689805A0034A191 /* Item.m in Sources */,
+				1BDF3D72168985250034A191 /* Quartz.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -198,12 +230,14 @@
 		1B383B25166DF2BA00C49DE8 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CONFIGURATION_BUILD_DIR = "$(SRCROOT)/../Common/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
 				DSTROOT = /tmp/Quartz.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Quartz/Quartz-Prefix.pch";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = "$(SRCROOT)/../Common/include";
 				SKIP_INSTALL = YES;
 			};
 			name = Debug;
@@ -211,12 +245,14 @@
 		1B383B26166DF2BA00C49DE8 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CONFIGURATION_BUILD_DIR = "$(SRCROOT)/../Common/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
 				DSTROOT = /tmp/Quartz.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Quartz/Quartz-Prefix.pch";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = "$(SRCROOT)/../Common/include";
 				SKIP_INSTALL = YES;
 			};
 			name = Release;
@@ -243,6 +279,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		1BDF3D1016894F950034A191 /* MediaLib.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				1BDF3D1116894F950034A191 /* MediaLib.xcdatamodel */,
+			);
+			currentVersion = 1BDF3D1116894F950034A191 /* MediaLib.xcdatamodel */;
+			path = MediaLib.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 1B383B0D166DF2BA00C49DE8 /* Project object */;
 }
