@@ -1,19 +1,19 @@
 //
-//  MediaLibManger.m
+//  DCMediaLibManager.m
 //  Quartz
 //
-//  Created by Chen XiaoLiang on 12-12-25.
-//  Copyright (c) 2012年 Chen XiaoLiang. All rights reserved.
+//  Created by Chen XiaoLiang on 12/25/12.
+//  Copyright (c) 2012 Chen XiaoLiang. All rights reserved.
 //
 
-#import "MediaLibManger.h"
+#import "DCMediaLibManager.h"
 #import <CoreData/CoreData.h>
 #import "Item.h"
 #import "Group.h"
 
 
-#pragma mark - interface MediaLibManger
-@interface MediaLibManger () {
+#pragma mark - interface DCMediaLibManager
+@interface DCMediaLibManager () {
     NSManagedObjectContext *_context;
     NSManagedObjectModel *_model;
     
@@ -23,12 +23,12 @@
 @end
 
 
-#pragma mark - implementation MediaLibManger
-@implementation MediaLibManger
+#pragma mark - implementation DCMediaLibManager
+@implementation DCMediaLibManager
 
 @synthesize threadID = _threadID;
 
-#pragma mark - MediaLibManger - Public method
+#pragma mark - DCMediaLibManager - Public method
 + (NSString *)archivePath {
     NSString *result = nil;
     do {
@@ -60,7 +60,7 @@
             
             // Where does the SQLite file go?
             NSError *error = nil;
-            if (![psc addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:[NSURL fileURLWithPath:[MediaLibManger archivePath]] options:nil error:&error]) {
+            if (![psc addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:[NSURL fileURLWithPath:[DCMediaLibManager archivePath]] options:nil error:&error]) {
                 [NSException raise:@"MediaLibManger error" format:@"Reason: %@", [error localizedDescription]];
             }
             
@@ -76,6 +76,6 @@
     return result;
 }
 
-#pragma mark - MediaLibManger - Private method
+#pragma mark - DCMediaLibManager - Private method
 
 @end
