@@ -10,6 +10,9 @@
 		1B383B3A166DF2EE00C49DE8 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B383B39166DF2EE00C49DE8 /* Foundation.framework */; };
 		1BDF3CF01689384D0034A191 /* DCGridView.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1BE295901688430C009E3486 /* DCGridView.h */; };
 		1BDF3CF2168938520034A191 /* DCGridViewLayoutStrategies.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1BE2958D16882FC0009E3486 /* DCGridViewLayoutStrategies.h */; };
+		1BDF3DA11689A60A0034A191 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BDF3DA01689A60A0034A191 /* CoreGraphics.framework */; };
+		1BDF3DA41689A6110034A191 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BDF3DA31689A6110034A191 /* QuartzCore.framework */; };
+		1BDF3DA61689A61B0034A191 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BDF3DA51689A61B0034A191 /* UIKit.framework */; };
 		1BE2958416881F52009E3486 /* DCGridViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BE2958316881F52009E3486 /* DCGridViewCell.m */; };
 		1BE2958F16882FC0009E3486 /* DCGridViewLayoutStrategies.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BE2958E16882FC0009E3486 /* DCGridViewLayoutStrategies.m */; };
 		1BE295921688430C009E3486 /* DCGridView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BE295911688430C009E3486 /* DCGridView.m */; };
@@ -36,6 +39,9 @@
 		1B383B39166DF2EE00C49DE8 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1B383B3D166DF2EE00C49DE8 /* Automatic-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Automatic-Prefix.pch"; sourceTree = "<group>"; };
 		1BB8BBAA16746E9400CC150E /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
+		1BDF3DA01689A60A0034A191 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		1BDF3DA31689A6110034A191 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		1BDF3DA51689A61B0034A191 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		1BE2958216881F52009E3486 /* DCGridViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCGridViewCell.h; sourceTree = "<group>"; };
 		1BE2958316881F52009E3486 /* DCGridViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCGridViewCell.m; sourceTree = "<group>"; };
 		1BE29585168820CD009E3486 /* DCGridViewCell_Extended.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCGridViewCell_Extended.h; sourceTree = "<group>"; };
@@ -54,6 +60,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1BDF3DA61689A61B0034A191 /* UIKit.framework in Frameworks */,
+				1BDF3DA41689A6110034A191 /* QuartzCore.framework in Frameworks */,
+				1BDF3DA11689A60A0034A191 /* CoreGraphics.framework in Frameworks */,
 				1B383B3A166DF2EE00C49DE8 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -82,6 +91,9 @@
 		1B383B38166DF2EE00C49DE8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				1BDF3DA51689A61B0034A191 /* UIKit.framework */,
+				1BDF3DA31689A6110034A191 /* QuartzCore.framework */,
+				1BDF3DA01689A60A0034A191 /* CoreGraphics.framework */,
 				1B383B39166DF2EE00C49DE8 /* Foundation.framework */,
 			);
 			name = Frameworks;
