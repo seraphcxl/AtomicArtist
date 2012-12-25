@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1B0C67BE1689E20800B8CFD2 /* DCMediaLibManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B0C67BD1689E20800B8CFD2 /* DCMediaLibManager.m */; };
-		1B0C67C11689E23C00B8CFD2 /* DCMediaLibManagerCoordinator.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B0C67C01689E23C00B8CFD2 /* DCMediaLibManagerCoordinator.m */; };
+		1B0C67D91689E5AC00B8CFD2 /* DCMediaDBManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B0C67D81689E5AC00B8CFD2 /* DCMediaDBManager.m */; };
+		1B0C67DD1689E63E00B8CFD2 /* DCMediaDBOperator.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B0C67DC1689E63E00B8CFD2 /* DCMediaDBOperator.m */; };
 		1B383B1A166DF2BA00C49DE8 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B383B19166DF2BA00C49DE8 /* Foundation.framework */; };
 		1BDF3D1216894F950034A191 /* MediaLib.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1BDF3D1016894F950034A191 /* MediaLib.xcdatamodeld */; };
 		1BDF3D52168980590034A191 /* Group.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BDF3D51168980590034A191 /* Group.m */; };
@@ -33,10 +33,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		1B0C67BC1689E20800B8CFD2 /* DCMediaLibManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCMediaLibManager.h; sourceTree = "<group>"; };
-		1B0C67BD1689E20800B8CFD2 /* DCMediaLibManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCMediaLibManager.m; sourceTree = "<group>"; };
-		1B0C67BF1689E23C00B8CFD2 /* DCMediaLibManagerCoordinator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCMediaLibManagerCoordinator.h; sourceTree = "<group>"; };
-		1B0C67C01689E23C00B8CFD2 /* DCMediaLibManagerCoordinator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCMediaLibManagerCoordinator.m; sourceTree = "<group>"; };
+		1B0C67D71689E5AC00B8CFD2 /* DCMediaDBManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCMediaDBManager.h; sourceTree = "<group>"; };
+		1B0C67D81689E5AC00B8CFD2 /* DCMediaDBManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCMediaDBManager.m; sourceTree = "<group>"; };
+		1B0C67DB1689E63E00B8CFD2 /* DCMediaDBOperator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCMediaDBOperator.h; sourceTree = "<group>"; };
+		1B0C67DC1689E63E00B8CFD2 /* DCMediaDBOperator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCMediaDBOperator.m; sourceTree = "<group>"; };
 		1B383B16166DF2BA00C49DE8 /* libQuartz.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libQuartz.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		1B383B19166DF2BA00C49DE8 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1B383B1D166DF2BA00C49DE8 /* Quartz-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Quartz-Prefix.pch"; sourceTree = "<group>"; };
@@ -94,10 +94,10 @@
 			children = (
 				1B383B1C166DF2BA00C49DE8 /* Supporting Files */,
 				1BDF3D581689840E0034A191 /* MediaLib */,
-				1B0C67BC1689E20800B8CFD2 /* DCMediaLibManager.h */,
-				1B0C67BD1689E20800B8CFD2 /* DCMediaLibManager.m */,
-				1B0C67BF1689E23C00B8CFD2 /* DCMediaLibManagerCoordinator.h */,
-				1B0C67C01689E23C00B8CFD2 /* DCMediaLibManagerCoordinator.m */,
+				1B0C67D71689E5AC00B8CFD2 /* DCMediaDBManager.h */,
+				1B0C67D81689E5AC00B8CFD2 /* DCMediaDBManager.m */,
+				1B0C67DB1689E63E00B8CFD2 /* DCMediaDBOperator.h */,
+				1B0C67DC1689E63E00B8CFD2 /* DCMediaDBOperator.m */,
 			);
 			path = Quartz;
 			sourceTree = "<group>";
@@ -176,8 +176,8 @@
 				1BDF3D1216894F950034A191 /* MediaLib.xcdatamodeld in Sources */,
 				1BDF3D52168980590034A191 /* Group.m in Sources */,
 				1BDF3D551689805A0034A191 /* Item.m in Sources */,
-				1B0C67BE1689E20800B8CFD2 /* DCMediaLibManager.m in Sources */,
-				1B0C67C11689E23C00B8CFD2 /* DCMediaLibManagerCoordinator.m in Sources */,
+				1B0C67D91689E5AC00B8CFD2 /* DCMediaDBManager.m in Sources */,
+				1B0C67DD1689E63E00B8CFD2 /* DCMediaDBOperator.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

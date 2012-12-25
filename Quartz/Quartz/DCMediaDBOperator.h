@@ -1,5 +1,5 @@
 //
-//  DCMediaLibManager.h
+//  DCMediaDBOperator.h
 //  Quartz
 //
 //  Created by Chen XiaoLiang on 12/25/12.
@@ -8,7 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
-@interface DCMediaLibManager : NSObject {
+#define QUARTZ_DBFILE @"MediaDB.data"
+
+@interface DCMediaDBOperator : NSObject {
 }
 
 @property (nonatomic, readonly) NSString *threadID;

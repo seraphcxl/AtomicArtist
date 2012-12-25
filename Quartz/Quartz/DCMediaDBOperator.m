@@ -1,19 +1,19 @@
 //
-//  DCMediaLibManager.m
+//  DCMediaDBOperator.m
 //  Quartz
 //
 //  Created by Chen XiaoLiang on 12/25/12.
 //  Copyright (c) 2012 Chen XiaoLiang. All rights reserved.
 //
 
-#import "DCMediaLibManager.h"
+#import "DCMediaDBOperator.h"
 #import <CoreData/CoreData.h>
 #import "Item.h"
 #import "Group.h"
 
 
-#pragma mark - interface DCMediaLibManager
-@interface DCMediaLibManager () {
+#pragma mark - interface DCMediaDBOperator
+@interface DCMediaDBOperator () {
     NSManagedObjectContext *_context;
     NSManagedObjectModel *_model;
     
@@ -23,12 +23,12 @@
 @end
 
 
-#pragma mark - implementation DCMediaLibManager
-@implementation DCMediaLibManager
+#pragma mark - implementation DCMediaDBOperator
+@implementation DCMediaDBOperator
 
 @synthesize threadID = _threadID;
 
-#pragma mark - DCMediaLibManager - Public method
+#pragma mark - DCMediaDBOperator - Public method
 + (NSString *)archivePath {
     NSString *result = nil;
     do {
@@ -37,7 +37,7 @@
         // Get one and only document directory from that list
         NSString *documentDirectory = [documentDirectories objectAtIndex:0];
         
-        result = [documentDirectory stringByAppendingPathComponent:@"MediaLib.data"];
+        result = [documentDirectory stringByAppendingPathComponent:QUARTZ_DBFILE];
     } while (NO);
     return result;
 }
@@ -61,8 +61,8 @@
                 
                 // Where does the SQLite file go?
                 NSError *error = nil;
-                if (![psc addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:[NSURL fileURLWithPath:[DCMediaLibManager archivePath]] options:nil error:&error]) {
-                    [NSException raise:@"DCMediaLibManager error" format:@"Reason: %@", [error localizedDescription]];
+                if (![psc addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:[NSURL fileURLWithPath:[DCMediaDBOperator archivePath]] options:nil error:&error]) {
+                    [NSException raise:@"DCMediaDBOperator error" format:@"Reason: %@", [error localizedDescription]];
                 }
                 
                 // Create the managed object context
@@ -78,6 +78,6 @@
     return result;
 }
 
-#pragma mark - DCMediaLibManager - Private method
+#pragma mark - DCMediaDBOperator - Private method
 
 @end
