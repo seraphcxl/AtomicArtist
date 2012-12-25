@@ -8,6 +8,14 @@
 
 #import <Foundation/Foundation.h>
 
-@interface Quartz : NSObject
+@class MediaLibManger;
+
+@interface Quartz : NSObject {
+}
+
++ (Quartz *)defaultQuartz;
++ (void)staticRelease;
+
+- (MediaLibManger *)queryMediaLibMangerForThread:(NSThread *)aThread;
 
 @end

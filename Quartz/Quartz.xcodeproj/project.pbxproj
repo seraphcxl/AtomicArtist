@@ -16,6 +16,7 @@
 		1BDF3D5A168984470034A191 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BDF3D59168984470034A191 /* CoreData.framework */; };
 		1BDF3D72168985250034A191 /* Quartz.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BDF3D71168985250034A191 /* Quartz.m */; };
 		1BDF3D73168985340034A191 /* Quartz.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1BDF3D70168985250034A191 /* Quartz.h */; };
+		1BDF3D8216899B850034A191 /* MediaLibManger.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BDF3D8116899B850034A191 /* MediaLibManger.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -46,6 +47,8 @@
 		1BDF3D59168984470034A191 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		1BDF3D70168985250034A191 /* Quartz.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Quartz.h; sourceTree = "<group>"; };
 		1BDF3D71168985250034A191 /* Quartz.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Quartz.m; sourceTree = "<group>"; };
+		1BDF3D8016899B850034A191 /* MediaLibManger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MediaLibManger.h; sourceTree = "<group>"; };
+		1BDF3D8116899B850034A191 /* MediaLibManger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MediaLibManger.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -91,10 +94,12 @@
 		1B383B1B166DF2BA00C49DE8 /* Quartz */ = {
 			isa = PBXGroup;
 			children = (
+				1B383B1C166DF2BA00C49DE8 /* Supporting Files */,
+				1BDF3D581689840E0034A191 /* MediaLib */,
 				1BDF3D70168985250034A191 /* Quartz.h */,
 				1BDF3D71168985250034A191 /* Quartz.m */,
-				1BDF3D581689840E0034A191 /* MediaLib */,
-				1B383B1C166DF2BA00C49DE8 /* Supporting Files */,
+				1BDF3D8016899B850034A191 /* MediaLibManger.h */,
+				1BDF3D8116899B850034A191 /* MediaLibManger.m */,
 			);
 			path = Quartz;
 			sourceTree = "<group>";
@@ -174,6 +179,7 @@
 				1BDF3D52168980590034A191 /* Group.m in Sources */,
 				1BDF3D551689805A0034A191 /* Item.m in Sources */,
 				1BDF3D72168985250034A191 /* Quartz.m in Sources */,
+				1BDF3D8216899B850034A191 /* MediaLibManger.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
