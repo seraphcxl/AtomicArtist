@@ -13,6 +13,12 @@
 		1BC99E2A168A873200513F1A /* MediaDB.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1BC99E28168A873200513F1A /* MediaDB.xcdatamodeld */; };
 		1BC99E6F168A895000513F1A /* Item.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BC99E6E168A895000513F1A /* Item.m */; };
 		1BC99E72168A895F00513F1A /* Group.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BC99E71168A895F00513F1A /* Group.m */; };
+		1BC99E7E168A9DE800513F1A /* DCMediaDBCommonDefine.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BC99E7D168A9DE800513F1A /* DCMediaDBCommonDefine.m */; };
+		1BC99E7F168AA14200513F1A /* Item.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1BC99E6D168A895000513F1A /* Item.h */; };
+		1BC99E80168AA14200513F1A /* Group.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1BC99E70168A895F00513F1A /* Group.h */; };
+		1BC99E81168AA14200513F1A /* DCMediaDBCommonDefine.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1BC99E7C168A9DE800513F1A /* DCMediaDBCommonDefine.h */; };
+		1BC99E82168AA14200513F1A /* DCMediaDBManager.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1B0C67D71689E5AC00B8CFD2 /* DCMediaDBManager.h */; };
+		1BC99E83168AA14200513F1A /* DCMediaDBOperator.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1B0C67DB1689E63E00B8CFD2 /* DCMediaDBOperator.h */; };
 		1BDF3D5A168984470034A191 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BDF3D59168984470034A191 /* CoreData.framework */; };
 /* End PBXBuildFile section */
 
@@ -23,6 +29,11 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				1BC99E7F168AA14200513F1A /* Item.h in CopyFiles */,
+				1BC99E80168AA14200513F1A /* Group.h in CopyFiles */,
+				1BC99E81168AA14200513F1A /* DCMediaDBCommonDefine.h in CopyFiles */,
+				1BC99E82168AA14200513F1A /* DCMediaDBManager.h in CopyFiles */,
+				1BC99E83168AA14200513F1A /* DCMediaDBOperator.h in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -42,6 +53,8 @@
 		1BC99E6E168A895000513F1A /* Item.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Item.m; sourceTree = "<group>"; };
 		1BC99E70168A895F00513F1A /* Group.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Group.h; sourceTree = "<group>"; };
 		1BC99E71168A895F00513F1A /* Group.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Group.m; sourceTree = "<group>"; };
+		1BC99E7C168A9DE800513F1A /* DCMediaDBCommonDefine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCMediaDBCommonDefine.h; sourceTree = "<group>"; };
+		1BC99E7D168A9DE800513F1A /* DCMediaDBCommonDefine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCMediaDBCommonDefine.m; sourceTree = "<group>"; };
 		1BDF3D59168984470034A191 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -90,6 +103,8 @@
 			children = (
 				1BC99E27168A871000513F1A /* MediaDB */,
 				1B383B1C166DF2BA00C49DE8 /* Supporting Files */,
+				1BC99E7C168A9DE800513F1A /* DCMediaDBCommonDefine.h */,
+				1BC99E7D168A9DE800513F1A /* DCMediaDBCommonDefine.m */,
 				1B0C67D71689E5AC00B8CFD2 /* DCMediaDBManager.h */,
 				1B0C67D81689E5AC00B8CFD2 /* DCMediaDBManager.m */,
 				1B0C67DB1689E63E00B8CFD2 /* DCMediaDBOperator.h */,
@@ -174,6 +189,7 @@
 				1BC99E2A168A873200513F1A /* MediaDB.xcdatamodeld in Sources */,
 				1BC99E6F168A895000513F1A /* Item.m in Sources */,
 				1BC99E72168A895F00513F1A /* Group.m in Sources */,
+				1BC99E7E168A9DE800513F1A /* DCMediaDBCommonDefine.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -201,6 +217,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/../Common/**";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -221,6 +238,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/../Common/**";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;

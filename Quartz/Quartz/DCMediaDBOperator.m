@@ -10,15 +10,19 @@
 #import <CoreData/CoreData.h>
 #import "Item.h"
 #import "Group.h"
+#import "DCMediaDBCommonDefine.h"
 
 
 #pragma mark - interface DCMediaDBOperator
 @interface DCMediaDBOperator () {
     NSManagedObjectContext *_context;
     NSManagedObjectModel *_model;
-    
-    NSOperationQueue *_operationQueue;
 }
+
+- (void)mergeContextChanges:(NSNotification *)aNotification;
+- (void)mergeOnThread:(NSNotification *)aNotification;
+
+- (void)saveChanges;
 
 @end
 
@@ -27,6 +31,7 @@
 @implementation DCMediaDBOperator
 
 @synthesize threadID = _threadID;
+@synthesize thread = _thread;
 
 #pragma mark - DCMediaDBOperator - Public method
 + (NSString *)archivePath {
@@ -42,14 +47,15 @@
     return result;
 }
 
-- (id)initWithThreadID:(NSString *)threadID {
+- (id)initWithThread:(NSThread *)thread andThreadID:(NSString *)threadID {
     id result = nil;
     do {
-        if (!threadID) {
+        if (!thread || !threadID) {
             break;
         }
         self = [super init];
         if (self) {
+            _thread = thread;
             _threadID = [threadID copy];
             
             @synchronized(_context) {
@@ -71,6 +77,12 @@
                 
                 // The managed object context can manage undo, but we don't need it
                 [_context setUndoManager:nil];
+                [_context setStalenessInterval:0.0];
+                [_context setMergePolicy:NSOverwriteMergePolicy];
+                
+                [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(mergeContextChanges:) name:NSManagedObjectContextDidSaveNotification object:_context];
+                
+                dc_release(psc);
             }
         }
         result = self;
@@ -78,6 +90,202 @@
     return result;
 }
 
+- (void)dealloc {
+    do {
+        @synchronized(_context) {
+            [[NSNotificationCenter defaultCenter] removeObserver:self name:NSManagedObjectContextDidSaveNotification object:_context];
+            
+            if (_context) {
+                dc_release(_context);
+                _context = nil;
+            }
+            
+            if (_model) {
+                dc_release(_model);
+                _model = nil;
+            }
+        }
+        dc_dealloc(super);
+    } while (NO);
+}
+
+- (Item *)getItemWithUID:(NSString *)itemUID {
+    Item *result = nil;
+    do {
+        if (!itemUID) {
+            break;
+        }
+                
+        NSFetchRequest *request = [[NSFetchRequest alloc] init];
+        
+        NSEntityDescription *entityDescription = [[_model entitiesByName] objectForKey:@"Item"];
+        [request setEntity:entityDescription];
+        
+        [request setSortDescriptors:nil];
+        
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"uniqueID == %@", itemUID];
+        [request setPredicate:predicate];
+        
+        NSError *error = nil;
+        NSArray *resultArray = nil;
+        
+        @synchronized(_context) {
+            resultArray = [_context executeFetchRequest:request error:&error];
+        }
+        
+        if (!resultArray) {
+            [NSException raise:@"DCMediaDBOperator error" format:@"Reason: %@", [error localizedDescription]];
+        }
+        
+        if ([resultArray count] == 0) {
+            ;
+        } else {
+            if ([resultArray count] != 1) {
+                [NSException raise:@"DCMediaDBOperator error" format:@"Reason: The result count for get item from MeidaDB != 1"];
+            }
+            result = [resultArray objectAtIndex:0];
+        }
+        dc_release(request);
+
+    } while (NO);
+    return result;
+}
+
+- (void)createItemWithUID:(NSString *)itemUID andArguments:(NSDictionary *)args {
+    do {
+        if (!itemUID || !args) {
+            break;
+        }
+        @synchronized(_context) {
+            Item *item = [NSEntityDescription insertNewObjectForEntityForName:@"Item" inManagedObjectContext:_context];
+            
+            item.uniqueID = itemUID;
+            item.smallThumbnail = [args objectForKey:ITEM_SMALLTHUMBNAIL];
+            item.largeThumbnail = [args objectForKey:ITEM_LARGETHUMBNAIL];
+            item.previewImage = [args objectForKey:ITEM_PREVIEWIMAGE];
+            
+            [self saveChanges];
+        }
+    } while (NO);
+}
+
+- (Group *)getGroupWithUID:(NSString *)groupUID {
+    Group *result = nil;
+    do {
+        if (!groupUID) {
+            break;
+        }
+        
+        NSFetchRequest *request = [[NSFetchRequest alloc] init];
+        
+        NSEntityDescription *entityDescription = [[_model entitiesByName] objectForKey:@"Group"];
+        [request setEntity:entityDescription];
+        
+        [request setSortDescriptors:nil];
+        
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"uniqueID == %@", groupUID];
+        [request setPredicate:predicate];
+        
+        NSError *error = nil;
+        NSArray *resultArray = nil;
+        
+        @synchronized(_context) {
+            resultArray = [_context executeFetchRequest:request error:&error];
+        }
+        
+        if (!resultArray) {
+            [NSException raise:@"DCMediaDBOperator error" format:@"Reason: %@", [error localizedDescription]];
+        }
+        
+        if ([resultArray count] == 0) {
+            ;
+        } else {
+            if ([resultArray count] != 1) {
+                [NSException raise:@"DCMediaDBOperator error" format:@"Reason: The result count for get group from MeidaDB != 1"];
+            }
+            result = [resultArray objectAtIndex:0];
+        }
+        dc_release(request);
+    } while (NO);
+    return result;
+}
+
+- (void)createGroupWithUID:(NSString *)groupUID andArguments:(NSDictionary *)args {
+    do {
+        if (!groupUID || !args) {
+            break;
+        }
+        @synchronized(_context) {
+            Group *group = [NSEntityDescription insertNewObjectForEntityForName:@"Group" inManagedObjectContext:_context];
+            
+            group.uniqueID = groupUID;
+            group.posterItemID = [args objectForKey:GROUP_POSTERIMAGEITEMUID];
+            group.smallPosterImage = [args objectForKey:GROUP_SMALLPOSTERIMAGE];
+            group.largePosterImage = [args objectForKey:GROUP_LARGEPOSTERIMAGE];
+            
+            [self saveChanges];
+        }
+    } while (NO);
+}
+
+- (void)updateGroupWithUID:(NSString *)groupUID andArguments:(NSDictionary *)args {
+    do {
+        if (!groupUID || !args) {
+            break;
+        }
+        
+        Group *group = [self getGroupWithUID:groupUID];
+        if (group) {
+            @synchronized(_context) {
+                group.posterItemID = [args objectForKey:GROUP_POSTERIMAGEITEMUID];
+                group.smallPosterImage = [args objectForKey:GROUP_SMALLPOSTERIMAGE];
+                group.largePosterImage = [args objectForKey:GROUP_LARGEPOSTERIMAGE];
+                
+                [self saveChanges];
+            }
+        } else {
+            [self createGroupWithUID:groupUID andArguments:args];
+        }
+    } while (NO);
+}
+
 #pragma mark - DCMediaDBOperator - Private method
+- (void)saveChanges {
+    do {
+        if (_context) {
+            NSError *error = nil;
+            BOOL successful = [_context save:&error];
+            if (!successful) {
+                [NSException raise:@"DCMediaDBOperator error" format:@"Reason: %@", [error localizedDescription]];
+            }
+        }
+    } while (NO);
+}
+
+- (void)mergeContextChanges:(NSNotification *)aNotification {
+    do {
+        if (!aNotification || !self.thread) {
+            break;
+        }
+        if ([NSThread currentThread] == self.thread) {
+            [self mergeOnThread:aNotification];
+        } else {
+            [self performSelector:@selector(mergeOnThread:) onThread:self.thread withObject:aNotification waitUntilDone:YES];
+        }
+    } while (NO);
+}
+
+- (void)mergeOnThread:(NSNotification *)aNotification {
+    do {
+        if (!aNotification) {
+            break;
+        }
+        @synchronized(_context) {
+            if (_context) {
+                [_context mergeChangesFromContextDidSaveNotification:aNotification];
+            }
+        }
+    } while (NO);
+}
 
 @end

@@ -7,16 +7,30 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "DCCommonConstants.h"
 
 #define QUARTZ_DBFILE @"MediaDB.data"
+
+@class Item;
+@class Group;
 
 @interface DCMediaDBOperator : NSObject {
 }
 
 @property (nonatomic, readonly) NSString *threadID;
+@property (nonatomic, dc_weak, readonly) NSThread *thread;
 
 + (NSString *)archivePath;
 
-- (id)initWithThreadID:(NSString *)threadID;
+- (id)initWithThread:(NSThread *)thread andThreadID:(NSString *)threadID;
+
+#pragma mark - DCMediaDBOperator - Item
+- (Item *)getItemWithUID:(NSString *)itemUID;
+- (void)createItemWithUID:(NSString *)itemUID andArguments:(NSDictionary *)args;
+
+#pragma mark - DCMediaDBOperator - Group
+- (Group *)getGroupWithUID:(NSString *)groupUID;
+- (void)createGroupWithUID:(NSString *)groupUID andArguments:(NSDictionary *)args;
+- (void)updateGroupWithUID:(NSString *)groupUID andArguments:(NSDictionary *)args;
 
 @end

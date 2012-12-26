@@ -37,7 +37,7 @@ static DCMediaDBManager *staticDefaultMediaDBManager = nil;
 + (void)staticRelease {
     if (staticDefaultMediaDBManager) {
         [staticDefaultMediaDBManager cleanPool];
-//        [staticDefaultMediaDBManager release];
+        dc_release(staticDefaultMediaDBManager);
         staticDefaultMediaDBManager = nil;
     }
 }
@@ -47,7 +47,7 @@ static DCMediaDBManager *staticDefaultMediaDBManager = nil;
 }
 
 - (void)dealloc {
-//    [super dealloc];
+    dc_dealloc(super);
 }
 
 - (id)init {
@@ -77,7 +77,7 @@ static DCMediaDBManager *staticDefaultMediaDBManager = nil;
             }
             
             if (!result) {
-                result = [[DCMediaDBOperator alloc] initWithThreadID:threadID];
+                result = [[DCMediaDBOperator alloc] initWithThread:aThread andThreadID:threadID];
                 if (result) {
                     [_mediaDBOperatorPool setObject:result forKey:threadID];
                 }
@@ -87,13 +87,29 @@ static DCMediaDBManager *staticDefaultMediaDBManager = nil;
     return result;
 }
 
+- (void)removeMediaDBOperatorForThread:(NSThread *)aThread {
+    do {
+        if (!aThread) {
+            break;
+        }
+        
+        NSString *threadID = [NSString stringWithFormat:@"%8x", (NSUInteger)aThread];
+        
+        @synchronized(_mediaDBOperatorPool) {
+            if (_mediaDBOperatorPool) {
+                [_mediaDBOperatorPool removeObjectForKey:threadID];
+            }
+        }
+    } while (NO);
+}
+
 #pragma mark - DCMediaDBManager - Private method
 - (void)cleanPool {
     do {
         @synchronized(_mediaDBOperatorPool) {
             if (_mediaDBOperatorPool) {
                 [_mediaDBOperatorPool removeAllObjects];
-//                [_mediaDBOperatorPool release];
+                dc_release(_mediaDBOperatorPool);
                 _mediaDBOperatorPool = nil;
             }
         }

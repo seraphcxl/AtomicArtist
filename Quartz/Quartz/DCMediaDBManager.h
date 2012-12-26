@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "DCCommonConstants.h"
 
 @class DCMediaDBOperator;
 
@@ -18,5 +19,6 @@
 + (void)staticRelease;
 
 - (DCMediaDBOperator *)queryMediaDBOperatorForThread:(NSThread *)aThread;
+- (void)removeMediaDBOperatorForThread:(NSThread *)aThread;
 
 @end
