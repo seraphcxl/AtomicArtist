@@ -10,6 +10,14 @@
 		1BB8BB6E16746B2100CC150E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BB8BB6D16746B2100CC150E /* Foundation.framework */; };
 		1BB8BB7316746B2100CC150E /* Tourbillon.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1BB8BB7216746B2100CC150E /* Tourbillon.h */; };
 		1BB8BB7516746B2100CC150E /* Tourbillon.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BB8BB7416746B2100CC150E /* Tourbillon.m */; };
+		1BC99E8B168AA50600513F1A /* DCUniformDataProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BC99E8A168AA50600513F1A /* DCUniformDataProtocol.m */; };
+		1BC99E9B168AC20100513F1A /* DCALAssetItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BC99E9A168AC20100513F1A /* DCALAssetItem.m */; };
+		1BC99E9D168AC23500513F1A /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BC99E9C168AC23400513F1A /* AssetsLibrary.framework */; };
+		1BC99E9F168AC32100513F1A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BC99E9E168AC32100513F1A /* UIKit.framework */; };
+		1BC99EA1168AC68600513F1A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BC99EA0168AC68600513F1A /* CoreGraphics.framework */; };
+		1BC99EA3168AC68D00513F1A /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BC99EA2168AC68D00513F1A /* QuartzCore.framework */; };
+		1BC99EAA168ACC4600513F1A /* DCImageHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BC99EA9168ACC4600513F1A /* DCImageHelper.m */; };
+		1BC99EAC168ACC6500513F1A /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BC99EAB168ACC6500513F1A /* ImageIO.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -32,6 +40,17 @@
 		1BB8BB7216746B2100CC150E /* Tourbillon.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Tourbillon.h; sourceTree = "<group>"; };
 		1BB8BB7416746B2100CC150E /* Tourbillon.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Tourbillon.m; sourceTree = "<group>"; };
 		1BB8BBA716746E8200CC150E /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
+		1BC99E89168AA50600513F1A /* DCUniformDataProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DCUniformDataProtocol.h; path = DataLibraryManager/DCUniformDataProtocol.h; sourceTree = "<group>"; };
+		1BC99E8A168AA50600513F1A /* DCUniformDataProtocol.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DCUniformDataProtocol.m; path = DataLibraryManager/DCUniformDataProtocol.m; sourceTree = "<group>"; };
+		1BC99E99168AC20100513F1A /* DCALAssetItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DCALAssetItem.h; path = DataLibraryManager/ALAssetLib/DCALAssetItem.h; sourceTree = "<group>"; };
+		1BC99E9A168AC20100513F1A /* DCALAssetItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DCALAssetItem.m; path = DataLibraryManager/ALAssetLib/DCALAssetItem.m; sourceTree = "<group>"; };
+		1BC99E9C168AC23400513F1A /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
+		1BC99E9E168AC32100513F1A /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		1BC99EA0168AC68600513F1A /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		1BC99EA2168AC68D00513F1A /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		1BC99EA8168ACC4600513F1A /* DCImageHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DCImageHelper.h; path = ../../Common/DCImageHelper.h; sourceTree = "<group>"; };
+		1BC99EA9168ACC4600513F1A /* DCImageHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DCImageHelper.m; path = ../../Common/DCImageHelper.m; sourceTree = "<group>"; };
+		1BC99EAB168ACC6500513F1A /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -39,6 +58,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1BC99EAC168ACC6500513F1A /* ImageIO.framework in Frameworks */,
+				1BC99EA3168AC68D00513F1A /* QuartzCore.framework in Frameworks */,
+				1BC99EA1168AC68600513F1A /* CoreGraphics.framework in Frameworks */,
+				1BC99E9F168AC32100513F1A /* UIKit.framework in Frameworks */,
+				1BC99E9D168AC23500513F1A /* AssetsLibrary.framework in Frameworks */,
 				1BB8BB6E16746B2100CC150E /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -67,6 +91,11 @@
 		1BB8BB6C16746B2100CC150E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				1BC99EAB168ACC6500513F1A /* ImageIO.framework */,
+				1BC99EA2168AC68D00513F1A /* QuartzCore.framework */,
+				1BC99EA0168AC68600513F1A /* CoreGraphics.framework */,
+				1BC99E9E168AC32100513F1A /* UIKit.framework */,
+				1BC99E9C168AC23400513F1A /* AssetsLibrary.framework */,
 				1BB8BB6D16746B2100CC150E /* Foundation.framework */,
 			);
 			name = Frameworks;
@@ -75,6 +104,9 @@
 		1BB8BB6F16746B2100CC150E /* Tourbillon */ = {
 			isa = PBXGroup;
 			children = (
+				1BC99EA8168ACC4600513F1A /* DCImageHelper.h */,
+				1BC99EA9168ACC4600513F1A /* DCImageHelper.m */,
+				1BC99E84168AA49A00513F1A /* DataLibraryManager */,
 				1BB8BB7216746B2100CC150E /* Tourbillon.h */,
 				1BB8BB7416746B2100CC150E /* Tourbillon.m */,
 				1BB8BB7016746B2100CC150E /* Supporting Files */,
@@ -88,6 +120,25 @@
 				1BB8BB7116746B2100CC150E /* Tourbillon-Prefix.pch */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		1BC99E84168AA49A00513F1A /* DataLibraryManager */ = {
+			isa = PBXGroup;
+			children = (
+				1BC99E98168AC1F200513F1A /* ALAssetLib */,
+				1BC99E89168AA50600513F1A /* DCUniformDataProtocol.h */,
+				1BC99E8A168AA50600513F1A /* DCUniformDataProtocol.m */,
+			);
+			name = DataLibraryManager;
+			sourceTree = "<group>";
+		};
+		1BC99E98168AC1F200513F1A /* ALAssetLib */ = {
+			isa = PBXGroup;
+			children = (
+				1BC99E99168AC20100513F1A /* DCALAssetItem.h */,
+				1BC99E9A168AC20100513F1A /* DCALAssetItem.m */,
+			);
+			name = ALAssetLib;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -142,6 +193,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				1BB8BB7516746B2100CC150E /* Tourbillon.m in Sources */,
+				1BC99E8B168AA50600513F1A /* DCUniformDataProtocol.m in Sources */,
+				1BC99E9B168AC20100513F1A /* DCALAssetItem.m in Sources */,
+				1BC99EAA168ACC4600513F1A /* DCImageHelper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -169,6 +223,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/../Common/**";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -189,6 +244,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/../Common/**";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
@@ -238,6 +294,7 @@
 				1BB8BB7A16746B2100CC150E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

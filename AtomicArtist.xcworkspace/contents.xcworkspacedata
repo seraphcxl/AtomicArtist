@@ -5,6 +5,12 @@
       location = "container:"
       name = "Common">
       <FileRef
+         location = "group:Common/DCImageHelper.h">
+      </FileRef>
+      <FileRef
+         location = "group:Common/DCImageHelper.m">
+      </FileRef>
+      <FileRef
          location = "group:Common/DCCommonConstants.h">
       </FileRef>
    </Group>

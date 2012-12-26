@@ -20,15 +20,25 @@
 #define dc_nil(x)
 #define dc_release(x)
 #define dc_dealloc(x)
+#define dc_retain(x)
+#define dc_autorelease(x)
 
 #else
 
 #define dc_weak   unsafe_unretained
 #define __dc_weak __unsafe_unretained
 #define dc_nil(x) x = nil
-#define dc_release(x) [x release]
-#define dc_dealloc(x) [x dealloc]
+#define dc_release(x) {if (x) {[x release];}}
+#define dc_dealloc(x) {if (x) {[x dealloc];}}
+#define dc_retain(x) {if (x) {[x retain];}}
+#define dc_autorelease(x) {if (x) {[x autorelease];}}
 
+#endif
+
+#ifdef DEBUG
+#define dc_debug_NSLog(format, ...) NSLog(format, ## __VA_ARGS__)
+#else
+#define dc_debug_NSLog(format, ...)
 #endif
 
 #if defined(__MACH__)
