@@ -30,7 +30,7 @@
 #define __dc_weak __unsafe_unretained
 #define dc_nil(x) x = nil
 #define dc_release(x) {if (x) {[x release];}}
-#define dc_dealloc(x) {if (x) {[x dealloc];}}
+#define dc_dealloc(x) [x dealloc]
 #define dc_retain(x) {if (x) {[x retain];}}
 #define dc_autorelease(x) {if (x) {[x autorelease];}}
 #define dc_saferelease(x) {if (x) {[x release]; x = nil;}}
