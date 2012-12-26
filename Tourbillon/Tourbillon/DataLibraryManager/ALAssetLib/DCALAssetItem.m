@@ -11,67 +11,65 @@
 
 @implementation DCALAssetItem
 
-@synthesize alAsset = _alAsset;
+@synthesize asset = _asset;
 
 - (void)save:(NSString *)filePath {
     do {
         if (!filePath) {
             break;
         }
-        
-//        ALAssetRepresentation *rep = [self.alAsset defaultRepresentation];
-//        Byte *buffer = (Byte *)malloc(rep.size);
-//        NSUInteger buffered = [rep getBytes:buffer fromOffset:0.0 length:rep.size error:nil];
-//        NSData *data = [NSData dataWithBytesNoCopy:buffer length:buffered freeWhenDone:NO];
-//        [data writeToFile:filePath atomically:YES];
-//        free(buffer);
-        
-        // save to jpeg
-        ALAssetRepresentation *rep = [self.alAsset defaultRepresentation];
+        ALAssetRepresentation *rep = [self.asset defaultRepresentation];
         UIImage *image = [[UIImage alloc] initWithCGImage:[rep fullResolutionImage]];
         CGSize size = [image size];
         dc_debug_NSLog(@"Full screen image: %f * %f", size.width, size.height);
-        NSData *data = UIImageJPEGRepresentation(image, 1);
-        [data writeToFile:filePath atomically:YES];
+        NSData *data = nil;
+        if ([filePath hasSuffix:@".png"]) {
+            data = UIImagePNGRepresentation(image);
+        } else if ([filePath hasSuffix:@".jpg"] || [filePath hasSuffix:@".jpeg"]) {
+            data = UIImageJPEGRepresentation(image, 1);
+        }
+        if (data) {
+            [data writeToFile:filePath atomically:YES];
+        }
         dc_release(image);
     } while (NO);
 }
 
-- (id)initWithALAsset:(ALAsset *)alAsset {
+- (id)initWithALAsset:(ALAsset *)asset {
     self = [super init];
     if (self) {
-        _alAsset = alAsset;
-        dc_retain(_alAsset);
+        self.asset = asset;
     }
     return self;
 }
 
 - (void)dealloc {
-    if (_alAsset) {
-        dc_release(_alAsset);
-        _alAsset = nil;
-    }
-    dc_dealloc(super);
+    do {
+        self.asset = nil;
+        dc_dealloc(super);
+    } while (NO);
 }
 
 - (NSString *)uniqueID {
-    if (self.alAsset) {
-        ALAssetRepresentation *representation = [self.alAsset defaultRepresentation];
-        NSURL *url = [representation url];
-        return [url absoluteString];
-    } else {
-        return nil;
-    }
+    NSString *result = nil;
+    do {
+        if (self.asset) {
+            ALAssetRepresentation *representation = [self.asset defaultRepresentation];
+            NSURL *url = [representation url];
+            result = [url absoluteString];
+        }
+    } while (NO);
+    return result;
 }
 
 - (id)valueForProperty:(NSString *)property withOptions:(NSDictionary *)options {
     id result = nil;
     do {
-        if (!self.alAsset) {
-            [NSException raise:@"DCALAssetItem error" format:@"Reason: self.alAsset == nil"];
+        if (!self.asset) {
+            [NSException raise:@"DCALAssetItem error" format:@"Reason: self.asset == nil"];
             break;
         }
-        ALAssetRepresentation *representation = [self.alAsset defaultRepresentation];
+        ALAssetRepresentation *representation = [self.asset defaultRepresentation];
         if (!representation) {
             [NSException raise:@"DCALAssetItem error" format:@"Reason: representation == nil"];
             break;
@@ -84,13 +82,13 @@
         } else if ([property isEqualToString:kDATAITEMPROPERTY_URL]) {
             result = [representation url];
         } else if ([property isEqualToString:kDATAITEMPROPERTY_TYPE]) {
-            result = [self.alAsset valueForProperty:ALAssetPropertyType];
+            result = [self.asset valueForProperty:ALAssetPropertyType];
         } else if ([property isEqualToString:kDATAITEMPROPERTY_DATE]) {
-            result = [self.alAsset valueForProperty:ALAssetPropertyDate];
+            result = [self.asset valueForProperty:ALAssetPropertyDate];
         } else if ([property isEqualToString:kDATAITEMPROPERTY_ORIENTATION]) {
-            result = [self.alAsset valueForProperty:ALAssetPropertyOrientation];
+            result = [self.asset valueForProperty:ALAssetPropertyOrientation];
         } else if ([property isEqualToString:kDATAITEMPROPERTY_THUMBNAIL]) {
-            result = [[UIImage alloc] initWithCGImage:[self.alAsset thumbnail]];
+            result = [[UIImage alloc] initWithCGImage:[self.asset thumbnail]];
             dc_autorelease(result);
         } else if ([property isEqualToString:kDATAITEMPROPERTY_ORIGINIMAGE]) {
             result = [[UIImage alloc] initWithCGImage:[representation fullResolutionImage]];

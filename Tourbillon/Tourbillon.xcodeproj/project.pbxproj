@@ -18,6 +18,8 @@
 		1BC99EA3168AC68D00513F1A /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BC99EA2168AC68D00513F1A /* QuartzCore.framework */; };
 		1BC99EAA168ACC4600513F1A /* DCImageHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BC99EA9168ACC4600513F1A /* DCImageHelper.m */; };
 		1BC99EAC168ACC6500513F1A /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BC99EAB168ACC6500513F1A /* ImageIO.framework */; };
+		1BC99EB1168AD32500513F1A /* DCALAssetsGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BC99EAE168AD32400513F1A /* DCALAssetsGroup.m */; };
+		1BC99EB2168AD32500513F1A /* DCALAssetsLibrary.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BC99EB0168AD32400513F1A /* DCALAssetsLibrary.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -51,6 +53,10 @@
 		1BC99EA8168ACC4600513F1A /* DCImageHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DCImageHelper.h; path = ../../Common/DCImageHelper.h; sourceTree = "<group>"; };
 		1BC99EA9168ACC4600513F1A /* DCImageHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DCImageHelper.m; path = ../../Common/DCImageHelper.m; sourceTree = "<group>"; };
 		1BC99EAB168ACC6500513F1A /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
+		1BC99EAD168AD32400513F1A /* DCALAssetsGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DCALAssetsGroup.h; path = DataLibraryManager/ALAssetLib/DCALAssetsGroup.h; sourceTree = "<group>"; };
+		1BC99EAE168AD32400513F1A /* DCALAssetsGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DCALAssetsGroup.m; path = DataLibraryManager/ALAssetLib/DCALAssetsGroup.m; sourceTree = "<group>"; };
+		1BC99EAF168AD32400513F1A /* DCALAssetsLibrary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DCALAssetsLibrary.h; path = DataLibraryManager/ALAssetLib/DCALAssetsLibrary.h; sourceTree = "<group>"; };
+		1BC99EB0168AD32400513F1A /* DCALAssetsLibrary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DCALAssetsLibrary.m; path = DataLibraryManager/ALAssetLib/DCALAssetsLibrary.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -135,6 +141,10 @@
 		1BC99E98168AC1F200513F1A /* ALAssetLib */ = {
 			isa = PBXGroup;
 			children = (
+				1BC99EAF168AD32400513F1A /* DCALAssetsLibrary.h */,
+				1BC99EB0168AD32400513F1A /* DCALAssetsLibrary.m */,
+				1BC99EAD168AD32400513F1A /* DCALAssetsGroup.h */,
+				1BC99EAE168AD32400513F1A /* DCALAssetsGroup.m */,
 				1BC99E99168AC20100513F1A /* DCALAssetItem.h */,
 				1BC99E9A168AC20100513F1A /* DCALAssetItem.m */,
 			);
@@ -196,6 +206,8 @@
 				1BC99E8B168AA50600513F1A /* DCUniformDataProtocol.m in Sources */,
 				1BC99E9B168AC20100513F1A /* DCALAssetItem.m in Sources */,
 				1BC99EAA168ACC4600513F1A /* DCImageHelper.m in Sources */,
+				1BC99EB1168AD32500513F1A /* DCALAssetsGroup.m in Sources */,
+				1BC99EB2168AD32500513F1A /* DCALAssetsLibrary.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

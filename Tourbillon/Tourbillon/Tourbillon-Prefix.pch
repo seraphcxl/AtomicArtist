@@ -8,4 +8,6 @@
     #import <CoreGraphics/CoreGraphics.h>
     #import <QuartzCore/QuartzCore.h>
     #import <ImageIO/ImageIO.h>
+
+    #import "DCCommonConstants.h"
 #endif

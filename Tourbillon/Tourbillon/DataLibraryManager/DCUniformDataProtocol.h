@@ -18,7 +18,7 @@ extern NSString * const NOTIFY_DATAGROUP_ADDED;
 extern NSString * const NOTIFY_DATAGROUP_ENUM_END;
 extern NSString * const NOTIFY_DATAGROUP_EMPTY;
 
-#pragma mark - DCDataItem
+#pragma mark - DCDataItem - Property key
 extern NSString * const kDATAITEMPROPERTY_UID;
 extern NSString * const kDATAITEMPROPERTY_FILENAME;
 extern NSString * const kDATAITEMPROPERTY_URL;
@@ -37,7 +37,7 @@ extern NSString * const kDATAITEMPROPERTY_FULLSCREENIMAGE;
 
 @end
 
-#pragma mark - DCDataGroup
+#pragma mark - DCDataGroup - Property key
 extern NSString * const kDATAGROUPPROPERTY_UID;
 extern NSString * const kDATAGROUPPROPERTY_GROUPNAME;
 extern NSString * const kDATAGROUPPROPERTY_URL;
