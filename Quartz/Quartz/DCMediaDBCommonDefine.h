@@ -8,13 +8,13 @@
 
 #import <Foundation/Foundation.h>
 
-extern NSString * const ITEM_SMALLTHUMBNAIL;
-extern NSString * const ITEM_LARGETHUMBNAIL;
-extern NSString * const ITEM_PREVIEWIMAGE;
+extern NSString * const kITEM_SMALLTHUMBNAIL;
+extern NSString * const kITEM_LARGETHUMBNAIL;
+extern NSString * const kITEM_PREVIEWIMAGE;
 
-extern NSString * const GROUP_SMALLPOSTERIMAGE;
-extern NSString * const GROUP_LARGEPOSTERIMAGE;
-extern NSString * const GROUP_POSTERIMAGEITEMUID;
+extern NSString * const kGROUP_SMALLPOSTERIMAGE;
+extern NSString * const kGROUP_LARGEPOSTERIMAGE;
+extern NSString * const kGROUP_POSTERIMAGEITEMUID;
 
 @interface DCMediaDBCommonDefine : NSObject
 

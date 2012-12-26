@@ -160,9 +160,9 @@
             Item *item = [NSEntityDescription insertNewObjectForEntityForName:@"Item" inManagedObjectContext:_context];
             
             item.uniqueID = itemUID;
-            item.smallThumbnail = [args objectForKey:ITEM_SMALLTHUMBNAIL];
-            item.largeThumbnail = [args objectForKey:ITEM_LARGETHUMBNAIL];
-            item.previewImage = [args objectForKey:ITEM_PREVIEWIMAGE];
+            item.smallThumbnail = [args objectForKey:kITEM_SMALLTHUMBNAIL];
+            item.largeThumbnail = [args objectForKey:kITEM_LARGETHUMBNAIL];
+            item.previewImage = [args objectForKey:kITEM_PREVIEWIMAGE];
             
             [self saveChanges];
         }
@@ -219,9 +219,9 @@
             Group *group = [NSEntityDescription insertNewObjectForEntityForName:@"Group" inManagedObjectContext:_context];
             
             group.uniqueID = groupUID;
-            group.posterItemID = [args objectForKey:GROUP_POSTERIMAGEITEMUID];
-            group.smallPosterImage = [args objectForKey:GROUP_SMALLPOSTERIMAGE];
-            group.largePosterImage = [args objectForKey:GROUP_LARGEPOSTERIMAGE];
+            group.posterItemID = [args objectForKey:kGROUP_POSTERIMAGEITEMUID];
+            group.smallPosterImage = [args objectForKey:kGROUP_SMALLPOSTERIMAGE];
+            group.largePosterImage = [args objectForKey:kGROUP_LARGEPOSTERIMAGE];
             
             [self saveChanges];
         }
@@ -237,9 +237,9 @@
         Group *group = [self getGroupWithUID:groupUID];
         if (group) {
             @synchronized(_context) {
-                group.posterItemID = [args objectForKey:GROUP_POSTERIMAGEITEMUID];
-                group.smallPosterImage = [args objectForKey:GROUP_SMALLPOSTERIMAGE];
-                group.largePosterImage = [args objectForKey:GROUP_LARGEPOSTERIMAGE];
+                group.posterItemID = [args objectForKey:kGROUP_POSTERIMAGEITEMUID];
+                group.smallPosterImage = [args objectForKey:kGROUP_SMALLPOSTERIMAGE];
+                group.largePosterImage = [args objectForKey:kGROUP_LARGEPOSTERIMAGE];
                 
                 [self saveChanges];
             }
