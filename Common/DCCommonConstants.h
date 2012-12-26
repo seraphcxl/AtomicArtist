@@ -18,13 +18,16 @@
 #define dc_weak   weak
 #define __dc_weak __weak
 #define dc_nil(x)
-
+#define dc_release(x)
+#define dc_dealloc(x)
 
 #else
 
 #define dc_weak   unsafe_unretained
 #define __dc_weak __unsafe_unretained
 #define dc_nil(x) x = nil
+#define dc_release(x) [x release]
+#define dc_dealloc(x) [x dealloc]
 
 #endif
 
