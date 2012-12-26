@@ -6,17 +6,18 @@
         <attribute name="recordTimestamp" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="smallPosterImage" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="uniqueID" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="items" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Item" inverseName="group" inverseEntity="Item" syncable="YES"/>
+        <relationship name="items" optional="YES" toMany="YES" deletionRule="No Action" destinationEntity="Item" inverseName="group" inverseEntity="Item" syncable="YES"/>
     </entity>
     <entity name="Item" representedClassName="Item" syncable="YES">
         <attribute name="largeThumbnail" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="previewImage" optional="YES" syncable="YES"/>
         <attribute name="recordTimestamp" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="smallThumbnail" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="uniqueID" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="group" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Group" inverseName="items" inverseEntity="Group" syncable="YES"/>
+        <relationship name="group" optional="YES" minCount="1" maxCount="1" deletionRule="No Action" destinationEntity="Group" inverseName="items" inverseEntity="Group" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Item" positionX="160" positionY="192" width="128" height="120"/>
+        <element name="Item" positionX="160" positionY="192" width="128" height="135"/>
         <element name="Group" positionX="160" positionY="192" width="128" height="135"/>
     </elements>
 </model>

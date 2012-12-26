@@ -10,11 +10,7 @@
 		1B0C67D91689E5AC00B8CFD2 /* DCMediaDBManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B0C67D81689E5AC00B8CFD2 /* DCMediaDBManager.m */; };
 		1B0C67DD1689E63E00B8CFD2 /* DCMediaDBOperator.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B0C67DC1689E63E00B8CFD2 /* DCMediaDBOperator.m */; };
 		1B383B1A166DF2BA00C49DE8 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B383B19166DF2BA00C49DE8 /* Foundation.framework */; };
-		1BDF3D1216894F950034A191 /* MediaLib.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1BDF3D1016894F950034A191 /* MediaLib.xcdatamodeld */; };
-		1BDF3D52168980590034A191 /* Group.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BDF3D51168980590034A191 /* Group.m */; };
-		1BDF3D551689805A0034A191 /* Item.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BDF3D541689805A0034A191 /* Item.m */; };
-		1BDF3D56168983970034A191 /* Item.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1BDF3D531689805A0034A191 /* Item.h */; };
-		1BDF3D57168983970034A191 /* Group.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1BDF3D50168980590034A191 /* Group.h */; };
+		1BC99E2A168A873200513F1A /* MediaDB.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1BC99E28168A873200513F1A /* MediaDB.xcdatamodeld */; };
 		1BDF3D5A168984470034A191 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BDF3D59168984470034A191 /* CoreData.framework */; };
 /* End PBXBuildFile section */
 
@@ -25,8 +21,6 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
-				1BDF3D56168983970034A191 /* Item.h in CopyFiles */,
-				1BDF3D57168983970034A191 /* Group.h in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -41,11 +35,7 @@
 		1B383B19166DF2BA00C49DE8 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1B383B1D166DF2BA00C49DE8 /* Quartz-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Quartz-Prefix.pch"; sourceTree = "<group>"; };
 		1BB8BBA816746E8C00CC150E /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
-		1BDF3D1116894F950034A191 /* MediaLib.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = MediaLib.xcdatamodel; sourceTree = "<group>"; };
-		1BDF3D50168980590034A191 /* Group.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Group.h; sourceTree = "<group>"; };
-		1BDF3D51168980590034A191 /* Group.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Group.m; sourceTree = "<group>"; };
-		1BDF3D531689805A0034A191 /* Item.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Item.h; sourceTree = "<group>"; };
-		1BDF3D541689805A0034A191 /* Item.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Item.m; sourceTree = "<group>"; };
+		1BC99E29168A873200513F1A /* MediaDB.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = MediaDB.xcdatamodel; sourceTree = "<group>"; };
 		1BDF3D59168984470034A191 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -92,8 +82,8 @@
 		1B383B1B166DF2BA00C49DE8 /* Quartz */ = {
 			isa = PBXGroup;
 			children = (
+				1BC99E27168A871000513F1A /* MediaDB */,
 				1B383B1C166DF2BA00C49DE8 /* Supporting Files */,
-				1BDF3D581689840E0034A191 /* MediaLib */,
 				1B0C67D71689E5AC00B8CFD2 /* DCMediaDBManager.h */,
 				1B0C67D81689E5AC00B8CFD2 /* DCMediaDBManager.m */,
 				1B0C67DB1689E63E00B8CFD2 /* DCMediaDBOperator.h */,
@@ -110,16 +100,12 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		1BDF3D581689840E0034A191 /* MediaLib */ = {
+		1BC99E27168A871000513F1A /* MediaDB */ = {
 			isa = PBXGroup;
 			children = (
-				1BDF3D1016894F950034A191 /* MediaLib.xcdatamodeld */,
-				1BDF3D531689805A0034A191 /* Item.h */,
-				1BDF3D541689805A0034A191 /* Item.m */,
-				1BDF3D50168980590034A191 /* Group.h */,
-				1BDF3D51168980590034A191 /* Group.m */,
+				1BC99E28168A873200513F1A /* MediaDB.xcdatamodeld */,
 			);
-			name = MediaLib;
+			name = MediaDB;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -173,11 +159,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1BDF3D1216894F950034A191 /* MediaLib.xcdatamodeld in Sources */,
-				1BDF3D52168980590034A191 /* Group.m in Sources */,
-				1BDF3D551689805A0034A191 /* Item.m in Sources */,
 				1B0C67D91689E5AC00B8CFD2 /* DCMediaDBManager.m in Sources */,
 				1B0C67DD1689E63E00B8CFD2 /* DCMediaDBOperator.m in Sources */,
+				1BC99E2A168A873200513F1A /* MediaDB.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -285,13 +269,13 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
-		1BDF3D1016894F950034A191 /* MediaLib.xcdatamodeld */ = {
+		1BC99E28168A873200513F1A /* MediaDB.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				1BDF3D1116894F950034A191 /* MediaLib.xcdatamodel */,
+				1BC99E29168A873200513F1A /* MediaDB.xcdatamodel */,
 			);
-			currentVersion = 1BDF3D1116894F950034A191 /* MediaLib.xcdatamodel */;
-			path = MediaLib.xcdatamodeld;
+			currentVersion = 1BC99E29168A873200513F1A /* MediaDB.xcdatamodel */;
+			path = MediaDB.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
 		};
