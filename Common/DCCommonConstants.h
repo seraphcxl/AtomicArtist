@@ -22,6 +22,7 @@
 #define dc_dealloc(x)
 #define dc_retain(x)
 #define dc_autorelease(x)
+#define dc_saferelease(x)
 
 #else
 
@@ -32,6 +33,7 @@
 #define dc_dealloc(x) {if (x) {[x dealloc];}}
 #define dc_retain(x) {if (x) {[x retain];}}
 #define dc_autorelease(x) {if (x) {[x autorelease];}}
+#define dc_saferelease(x) {if (x) {[x release]; x = nil;}}
 
 #endif
 

@@ -95,15 +95,8 @@
         @synchronized(_context) {
             [[NSNotificationCenter defaultCenter] removeObserver:self name:NSManagedObjectContextDidSaveNotification object:_context];
             
-            if (_context) {
-                dc_release(_context);
-                _context = nil;
-            }
-            
-            if (_model) {
-                dc_release(_model);
-                _model = nil;
-            }
+            dc_saferelease(_context);
+            dc_saferelease(_model);
         }
         dc_dealloc(super);
     } while (NO);
