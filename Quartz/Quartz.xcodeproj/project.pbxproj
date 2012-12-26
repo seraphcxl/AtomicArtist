@@ -11,6 +11,8 @@
 		1B0C67DD1689E63E00B8CFD2 /* DCMediaDBOperator.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B0C67DC1689E63E00B8CFD2 /* DCMediaDBOperator.m */; };
 		1B383B1A166DF2BA00C49DE8 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B383B19166DF2BA00C49DE8 /* Foundation.framework */; };
 		1BC99E2A168A873200513F1A /* MediaDB.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1BC99E28168A873200513F1A /* MediaDB.xcdatamodeld */; };
+		1BC99E6F168A895000513F1A /* Item.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BC99E6E168A895000513F1A /* Item.m */; };
+		1BC99E72168A895F00513F1A /* Group.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BC99E71168A895F00513F1A /* Group.m */; };
 		1BDF3D5A168984470034A191 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BDF3D59168984470034A191 /* CoreData.framework */; };
 /* End PBXBuildFile section */
 
@@ -36,6 +38,10 @@
 		1B383B1D166DF2BA00C49DE8 /* Quartz-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Quartz-Prefix.pch"; sourceTree = "<group>"; };
 		1BB8BBA816746E8C00CC150E /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
 		1BC99E29168A873200513F1A /* MediaDB.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = MediaDB.xcdatamodel; sourceTree = "<group>"; };
+		1BC99E6D168A895000513F1A /* Item.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Item.h; sourceTree = "<group>"; };
+		1BC99E6E168A895000513F1A /* Item.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Item.m; sourceTree = "<group>"; };
+		1BC99E70168A895F00513F1A /* Group.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Group.h; sourceTree = "<group>"; };
+		1BC99E71168A895F00513F1A /* Group.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Group.m; sourceTree = "<group>"; };
 		1BDF3D59168984470034A191 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -104,6 +110,10 @@
 			isa = PBXGroup;
 			children = (
 				1BC99E28168A873200513F1A /* MediaDB.xcdatamodeld */,
+				1BC99E6D168A895000513F1A /* Item.h */,
+				1BC99E6E168A895000513F1A /* Item.m */,
+				1BC99E70168A895F00513F1A /* Group.h */,
+				1BC99E71168A895F00513F1A /* Group.m */,
 			);
 			name = MediaDB;
 			sourceTree = "<group>";
@@ -162,6 +172,8 @@
 				1B0C67D91689E5AC00B8CFD2 /* DCMediaDBManager.m in Sources */,
 				1B0C67DD1689E63E00B8CFD2 /* DCMediaDBOperator.m in Sources */,
 				1BC99E2A168A873200513F1A /* MediaDB.xcdatamodeld in Sources */,
+				1BC99E6F168A895000513F1A /* Item.m in Sources */,
+				1BC99E72168A895F00513F1A /* Group.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
