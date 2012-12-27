@@ -29,17 +29,20 @@
 - (BOOL)connect:(NSDictionary *)params {
     BOOL result = NO;
     do {
-        if (!_assetsLibrary) {
-            _assetsLibrary = [[ALAssetsLibrary alloc] init];
+        @synchronized(self) {
+            if (!_assetsLibrary) {
+                _assetsLibrary = [[ALAssetsLibrary alloc] init];
+            }
+            
+            if (!_allALAssetsGroups) {
+                _allALAssetsGroups = [[NSMutableDictionary alloc] init];
+            }
+            
+            if (!_allALAssetsGroupPersistentIDs) {
+                _allALAssetsGroupPersistentIDs = [[NSMutableArray alloc] init];
+            }
         }
         
-        if (!_allALAssetsGroups) {
-            _allALAssetsGroups = [[NSMutableDictionary alloc] init];
-        }
-        
-        if (!_allALAssetsGroupPersistentIDs) {
-            _allALAssetsGroupPersistentIDs = [[NSMutableArray alloc] init];
-        }
         result = YES;
     } while (NO);
     return result;
@@ -49,9 +52,13 @@
     BOOL result = NO;
     do {
         [self clearCache];
-        dc_saferelease(_allALAssetsGroupPersistentIDs);
-        dc_saferelease(_allALAssetsGroups);
-        self.assetsLibrary = nil;
+        
+        @synchronized(self) {
+            dc_saferelease(_allALAssetsGroupPersistentIDs);
+            dc_saferelease(_allALAssetsGroups);
+            self.assetsLibrary = nil;
+        }
+        
         result = YES;
     } while (NO);
     return result;
@@ -59,20 +66,35 @@
 
 - (void)clearCache {
     do {
-        _cancelEnum = YES;
-        
-        if (_allALAssetsGroupPersistentIDs) {
-            [_allALAssetsGroupPersistentIDs removeAllObjects];
-        }
-        
-        if (_allALAssetsGroups) {
-            [_allALAssetsGroups removeAllObjects];
+        @synchronized(self) {
+            _cancelEnum = YES;
+            
+            if (_allALAssetsGroupPersistentIDs) {
+                [_allALAssetsGroupPersistentIDs removeAllObjects];
+            }
+            
+            if (_allALAssetsGroups) {
+                [_allALAssetsGroups removeAllObjects];
+            }
         }
     } while (NO);
 }
 
 - (void)enumGroups:(id)groupParam notifyWithFrequency:(NSUInteger)frequency {
     do {
+        if (!_assetsLibrary) {
+            [NSException raise:@"DCALAssetsLibrary Error" format:@"Reason: _assetsLibrary == nil"];
+            break;
+        }
+        if (!_allALAssetsGroupPersistentIDs || !_allALAssetsGroups) {
+            [NSException raise:@"DCALAssetsLibrary Error" format:@"Reason: _allALAssetsGroupPersistentIDs == nil || _allALAssetsGroups == nil"];
+            break;
+        }
+        if (frequency == 0) {
+            [NSException raise:@"DCALAssetsLibrary Error" format:@"Reason: _frequency == 0"];
+            break;
+        }
+        
         @autoreleasepool {
             void (^enumerator)(ALAssetsGroup *group, BOOL *stop) = ^(ALAssetsGroup *group, BOOL *stop) {
                 do {
@@ -87,9 +109,13 @@
                         if (result == nil) {
                             DCALAssetsGroup *assetsGroup = [[DCALAssetsGroup alloc] initWithALAssetsGroup:group];
                             dc_autorelease(assetsGroup);
-                            NSUInteger index = [_allALAssetsGroupPersistentIDs count];
-                            [_allALAssetsGroupPersistentIDs insertObject:groupPersistentID atIndex:index];
-                            [_allALAssetsGroups setObject:assetsGroup forKey:groupPersistentID];
+                            @synchronized(self) {
+                                NSAssert(_allALAssetsGroupPersistentIDs, @"_allALAssetsGroupPersistentIDs == nil");
+                                NSAssert(_allALAssetsGroups, @"_allALAssetsGroups == nil");
+                                NSUInteger index = [_allALAssetsGroupPersistentIDs count];
+                                [_allALAssetsGroupPersistentIDs insertObject:groupPersistentID atIndex:index];
+                                [_allALAssetsGroups setObject:assetsGroup forKey:groupPersistentID];
+                            }
                         }
                         dc_debug_NSLog(@"Add group id: %@, count = %d", groupPersistentID, [group numberOfAssets]);
                         ++_enumCount;
@@ -102,6 +128,10 @@
                         if (_enumCount != 0) {
                             [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_DATAGROUP_ADDED object:self];
                         } else {
+                            NSInteger count = 0;
+                            @synchronized(self) {
+                                count = [_allALAssetsGroups count];
+                            }
                             if ([_allALAssetsGroups count] == 0) {
                                 [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_DATAGROUP_ADDED object:self];
                                 [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_DATAGROUP_EMPTY object:self];
@@ -120,14 +150,13 @@
             
             [self clearCache];
             
-            if (_assetsLibrary && frequency != 0) {
+            @synchronized(self) {
                 _frequency = frequency;
                 _enumCount = 0;
                 _cancelEnum = NO;
                 ALAssetsGroupType type = (ALAssetsGroupType)groupParam;
+                NSAssert(_assetsLibrary, @"_assetsLibrary == nil");
                 [_assetsLibrary enumerateGroupsWithTypes:type usingBlock:enumerator failureBlock:failureReporter];
-            } else {
-                [NSException raise:@"DCALAssetsLibrary error" format:@"Reason: _assetsLibrary is nil or frequency == 0"];
             }
         }
     } while (NO);
@@ -136,8 +165,10 @@
 - (NSUInteger)groupsCount {
     NSUInteger result = 0;
     do {
-        if (_allALAssetsGroups) {
-            result = [_allALAssetsGroups count];
+        @synchronized(self) {
+            if (_allALAssetsGroups) {
+                result = [_allALAssetsGroups count];
+            }
         }
     } while (NO);
     return result;
@@ -145,10 +176,12 @@
 
 - (id<DCDataGroup>)groupWithUID:(NSString *)uid {
     DCALAssetsGroup *result = nil;
-    if (_allALAssetsGroups) {
-        result = [_allALAssetsGroups objectForKey:uid];
-    } else {
-        [NSException raise:@"DCALAssetsLibrary error" format:@"Reason: allALGroups is nil"];
+    @synchronized(self) {
+        if (_allALAssetsGroups) {
+            result = [_allALAssetsGroups objectForKey:uid];
+        } else {
+            [NSException raise:@"DCALAssetsLibrary error" format:@"Reason: allALGroups is nil"];
+        }
     }
     return result;
 }
@@ -156,14 +189,16 @@
 - (NSString *)groupUIDAtIndex:(NSUInteger)index {
     NSString *result = nil;
     do {
-        if (_allALAssetsGroupPersistentIDs) {
-            if (index < [_allALAssetsGroupPersistentIDs count]) {
-                result = [_allALAssetsGroupPersistentIDs objectAtIndex:index];
+        @synchronized(self) {
+            if (_allALAssetsGroupPersistentIDs) {
+                if (index < [_allALAssetsGroupPersistentIDs count]) {
+                    result = [_allALAssetsGroupPersistentIDs objectAtIndex:index];
+                } else {
+                    [NSException raise:@"DCALAssetsLibrary Error" format:@"Reason: Index: %d >= allALGroupPersistentIDs count: %d", index, [_allALAssetsGroupPersistentIDs count]];
+                }
             } else {
-                [NSException raise:@"DCALAssetsLibrary Error" format:@"Reason: Index: %d >= allALGroupPersistentIDs count: %d", index, [_allALAssetsGroupPersistentIDs count]];
+                [NSException raise:@"DCALAssetsLibrary Error" format:@"Reason: allALGroupPersistentIDs is nil"];
             }
-        } else {
-            [NSException raise:@"DCALAssetsLibrary Error" format:@"Reason: allALGroupPersistentIDs is nil"];
         }
     } while (NO);
     return result;
@@ -173,23 +208,25 @@
     NSInteger result = -1;
     do {
         if (groupUID) {
-            NSUInteger index = 0;
-            NSUInteger count = [_allALAssetsGroupPersistentIDs count];
-            BOOL find = NO;
-            
-            do {
-                if ([_allALAssetsGroupPersistentIDs objectAtIndex:index] == groupUID) {
-                    find = YES;
-                    break;
+            @synchronized(self) {
+                NSUInteger index = 0;
+                NSUInteger count = [_allALAssetsGroupPersistentIDs count];
+                BOOL find = NO;
+                
+                do {
+                    if ([_allALAssetsGroupPersistentIDs objectAtIndex:index] == groupUID) {
+                        find = YES;
+                        break;
+                    } else {
+                        ++index;
+                    }
+                } while (index < count);
+                
+                if (find) {
+                    result = index;
                 } else {
-                    ++index;
+                    [NSException raise:@"DCALAssetsLibrary Error" format:@"Reason: groupUID: %@ not find", groupUID];
                 }
-            } while (index < count);
-            
-            if (find) {
-                result = index;
-            } else {
-                [NSException raise:@"DCALAssetsLibrary Error" format:@"Reason: groupUID: %@ not find", groupUID];
             }
         } else {
             [NSException raise:@"DCALAssetsLibrary Error" format:@"Reason: groupUID is nil"];
