@@ -132,7 +132,7 @@
                             @synchronized(self) {
                                 count = [_allALAssetsGroups count];
                             }
-                            if ([_allALAssetsGroups count] == 0) {
+                            if (count == 0) {
                                 [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_DATAGROUP_ADDED object:self];
                                 [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_DATAGROUP_EMPTY object:self];
                             }
