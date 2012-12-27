@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1B7CD43F168C38B1000189B2 /* DCImageInMemCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B7CD43E168C38B1000189B2 /* DCImageInMemCache.m */; };
 		1BB8BB6E16746B2100CC150E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BB8BB6D16746B2100CC150E /* Foundation.framework */; };
 		1BB8BB7316746B2100CC150E /* Tourbillon.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1BB8BB7216746B2100CC150E /* Tourbillon.h */; };
 		1BB8BB7516746B2100CC150E /* Tourbillon.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BB8BB7416746B2100CC150E /* Tourbillon.m */; };
@@ -36,6 +37,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		1B7CD43D168C38B1000189B2 /* DCImageInMemCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCImageInMemCache.h; sourceTree = "<group>"; };
+		1B7CD43E168C38B1000189B2 /* DCImageInMemCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCImageInMemCache.m; sourceTree = "<group>"; };
 		1BB8BB6A16746B2100CC150E /* libTourbillon.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libTourbillon.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		1BB8BB6D16746B2100CC150E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1BB8BB7116746B2100CC150E /* Tourbillon-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Tourbillon-Prefix.pch"; sourceTree = "<group>"; };
@@ -76,6 +79,36 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1B7CD430168C2CEE000189B2 /* GroupViewCtrl */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = GroupViewCtrl;
+			sourceTree = "<group>";
+		};
+		1B7CD431168C2CEE000189B2 /* ItemViewCtrl */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ItemViewCtrl;
+			sourceTree = "<group>";
+		};
+		1B7CD432168C2CEE000189B2 /* MediaPocketViewCtrl */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = MediaPocketViewCtrl;
+			sourceTree = "<group>";
+		};
+		1B7CD43C168C387C000189B2 /* LoaderAndCache */ = {
+			isa = PBXGroup;
+			children = (
+				1B7CD43D168C38B1000189B2 /* DCImageInMemCache.h */,
+				1B7CD43E168C38B1000189B2 /* DCImageInMemCache.m */,
+			);
+			path = LoaderAndCache;
+			sourceTree = "<group>";
+		};
 		1BB8BB5F16746B2100CC150E = {
 			isa = PBXGroup;
 			children = (
@@ -110,9 +143,13 @@
 		1BB8BB6F16746B2100CC150E /* Tourbillon */ = {
 			isa = PBXGroup;
 			children = (
+				1B7CD430168C2CEE000189B2 /* GroupViewCtrl */,
+				1B7CD431168C2CEE000189B2 /* ItemViewCtrl */,
+				1B7CD432168C2CEE000189B2 /* MediaPocketViewCtrl */,
+				1B7CD43C168C387C000189B2 /* LoaderAndCache */,
+				1BC99E84168AA49A00513F1A /* DataLibraryManager */,
 				1BC99EA8168ACC4600513F1A /* DCImageHelper.h */,
 				1BC99EA9168ACC4600513F1A /* DCImageHelper.m */,
-				1BC99E84168AA49A00513F1A /* DataLibraryManager */,
 				1BB8BB7216746B2100CC150E /* Tourbillon.h */,
 				1BB8BB7416746B2100CC150E /* Tourbillon.m */,
 				1BB8BB7016746B2100CC150E /* Supporting Files */,
@@ -208,6 +245,7 @@
 				1BC99EAA168ACC4600513F1A /* DCImageHelper.m in Sources */,
 				1BC99EB1168AD32500513F1A /* DCALAssetsGroup.m in Sources */,
 				1BC99EB2168AD32500513F1A /* DCALAssetsLibrary.m in Sources */,
+				1B7CD43F168C38B1000189B2 /* DCImageInMemCache.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
