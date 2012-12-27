@@ -27,18 +27,22 @@ static DCMediaDBManager *staticDefaultMediaDBManager = nil;
 
 #pragma mark - DCMediaDBManager - Public method
 + (DCMediaDBManager *)defaultManager {
-    if (!staticDefaultMediaDBManager) {
-        staticDefaultMediaDBManager = [[super allocWithZone:nil] init];
+    @synchronized (self) {
+        if (!staticDefaultMediaDBManager) {
+            staticDefaultMediaDBManager = [[super allocWithZone:nil] init];
+        }
+        
+        return staticDefaultMediaDBManager;
     }
-    
-    return staticDefaultMediaDBManager;
 }
 
 + (void)staticRelease {
-    if (staticDefaultMediaDBManager) {
-        [staticDefaultMediaDBManager cleanPool];
-        dc_release(staticDefaultMediaDBManager);
-        staticDefaultMediaDBManager = nil;
+    @synchronized (self) {
+        if (staticDefaultMediaDBManager) {
+            [staticDefaultMediaDBManager cleanPool];
+            dc_release(staticDefaultMediaDBManager);
+            staticDefaultMediaDBManager = nil;
+        }
     }
 }
 
