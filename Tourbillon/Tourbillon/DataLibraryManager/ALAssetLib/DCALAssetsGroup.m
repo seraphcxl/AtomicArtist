@@ -70,14 +70,14 @@
         [self clearCache];
         
         @synchronized(self) {
-            dc_saferelease(_allAssetUIDs);
-            dc_saferelease(_allAssetItems);
+            DC_SAFERELEASE(_allAssetUIDs);
+            DC_SAFERELEASE(_allAssetItems);
             
             self.assetsGroup = nil;
         }
         
-        dc_saferelease(_assetType);
-        dc_dealloc(super);
+        DC_SAFERELEASE(_assetType);
+        DC_DEALLOC(super);
     } while (NO);
 }
 
@@ -122,7 +122,7 @@
                             NSString *assetURLStr = [[representation url] absoluteString];
                             
                             DCALAssetItem *item = [[DCALAssetItem alloc] initWithALAsset:result];
-                            dc_autorelease(item);
+                            DC_AUTORELEASE(item);
                             
                             @synchronized(self) {
                                 NSAssert(_allAssetItems, @"_allAssetItems == nil");
@@ -209,7 +209,7 @@
                             NSString *assetURLStr = [url absoluteString];
                             
                             DCALAssetItem *item = [[DCALAssetItem alloc] initWithALAsset:result];
-                            dc_autorelease(item);
+                            DC_AUTORELEASE(item);
                             
                             @synchronized(self) {
                                 NSAssert(_allAssetItems, @"_allAssetItems == nil");
@@ -337,7 +337,7 @@
                 result = [self.assetsGroup valueForProperty:ALAssetsGroupPropertyType];
             } else if ([property isEqualToString:kDATAGROUPPROPERTY_POSTERIMAGE]) {
                 result = [[UIImage alloc] initWithCGImage:[self.assetsGroup posterImage]];
-                dc_autorelease(result);
+                DC_AUTORELEASE(result);
             } else {
                 [NSException raise:@"DCALAssetsGroup error" format:@"Reason: unknown property"];
             }

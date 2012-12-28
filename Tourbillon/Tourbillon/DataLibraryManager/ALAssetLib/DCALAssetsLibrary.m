@@ -54,8 +54,8 @@
         [self clearCache];
         
         @synchronized(self) {
-            dc_saferelease(_allALAssetsGroupPersistentIDs);
-            dc_saferelease(_allALAssetsGroups);
+            DC_SAFERELEASE(_allALAssetsGroupPersistentIDs);
+            DC_SAFERELEASE(_allALAssetsGroups);
             self.assetsLibrary = nil;
         }
         
@@ -108,7 +108,7 @@
                         ALAssetsGroup *result = [_allALAssetsGroups objectForKey:groupPersistentID];
                         if (result == nil) {
                             DCALAssetsGroup *assetsGroup = [[DCALAssetsGroup alloc] initWithALAssetsGroup:group];
-                            dc_autorelease(assetsGroup);
+                            DC_AUTORELEASE(assetsGroup);
                             @synchronized(self) {
                                 NSAssert(_allALAssetsGroupPersistentIDs, @"_allALAssetsGroupPersistentIDs == nil");
                                 NSAssert(_allALAssetsGroups, @"_allALAssetsGroups == nil");
@@ -144,7 +144,7 @@
             
             void (^failureReporter)(NSError *error) = ^(NSError *error) {
                 UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Enum ALAssetsGroup failed" message:[NSString stringWithFormat:@"%@", [error localizedDescription]] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                dc_autorelease(alertView);
+                DC_AUTORELEASE(alertView);
                 [alertView show];
             };
             

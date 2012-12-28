@@ -2,16 +2,19 @@
 <Workspace
    version = "1.0">
    <Group
-      location = "container:"
+      location = "group:Common"
       name = "Common">
       <FileRef
-         location = "group:Common/DCImageHelper.h">
+         location = "group:DCCommonConstants.h">
       </FileRef>
       <FileRef
-         location = "group:Common/DCImageHelper.m">
+         location = "group:DCImageHelper.h">
       </FileRef>
       <FileRef
-         location = "group:Common/DCCommonConstants.h">
+         location = "group:DCImageHelper.m">
+      </FileRef>
+      <FileRef
+         location = "group:DCSingletonTemplate.h">
       </FileRef>
    </Group>
    <Group

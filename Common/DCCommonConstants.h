@@ -17,23 +17,21 @@
 
 #define dc_weak   weak
 #define __dc_weak __weak
-#define dc_nil(x)
-#define dc_release(x)
-#define dc_dealloc(x)
-#define dc_retain(x)
-#define dc_autorelease(x)
-#define dc_saferelease(x)
+#define DC_NIL(x)
+#define DC_DEALLOC(x)
+#define DC_RETAIN(x)
+#define DC_AUTORELEASE(x)
+#define DC_SAFERELEASE(x)
 
 #else
 
 #define dc_weak   unsafe_unretained
 #define __dc_weak __unsafe_unretained
-#define dc_nil(x) x = nil
-#define dc_release(x) {if (x) {[x release];}}
-#define dc_dealloc(x) [x dealloc]
-#define dc_retain(x) {if (x) {[x retain];}}
-#define dc_autorelease(x) {if (x) {[x autorelease];}}
-#define dc_saferelease(x) {if (x) {[x release]; x = nil;}}
+#define DC_NIL(x) x = nil
+#define DC_DEALLOC(x) [x dealloc]
+#define DC_RETAIN(x) [x retain]
+#define DC_AUTORELEASE(x) [x autorelease]
+#define DC_SAFERELEASE(x) {[x release]; x = nil;}
 
 #endif
 

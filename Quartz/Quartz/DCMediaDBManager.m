@@ -9,9 +9,6 @@
 #import "DCMediaDBManager.h"
 #import "DCMediaDBOperator.h"
 
-static DCMediaDBManager *staticDefaultMediaDBManager = nil;
-
-
 #pragma mark - interface DCMediaDBManager ()
 @interface DCMediaDBManager () {
     NSMutableDictionary *_mediaDBOperatorPool;  // key: thread address; value: mediaDBOperator
@@ -26,44 +23,19 @@ static DCMediaDBManager *staticDefaultMediaDBManager = nil;
 @implementation DCMediaDBManager
 
 #pragma mark - DCMediaDBManager - Public method
-+ (DCMediaDBManager *)defaultManager {
-    @synchronized (self) {
-        if (!staticDefaultMediaDBManager) {
-            staticDefaultMediaDBManager = [[super allocWithZone:nil] init];
-        }
-        
-        return staticDefaultMediaDBManager;
-    }
-}
 
-+ (void)staticRelease {
-    @synchronized (self) {
-        if (staticDefaultMediaDBManager) {
-            [staticDefaultMediaDBManager cleanPool];
-            dc_release(staticDefaultMediaDBManager);
-            staticDefaultMediaDBManager = nil;
-        }
-    }
-}
-
-+ (id)allocWithZone:(NSZone *)zone {
-    return [self defaultManager];
-}
-
-- (void)dealloc {
-    dc_dealloc(super);
-}
+DEFINE_SINGLETON_FOR_CLASS(DCMediaDBManager);
 
 - (id)init {
-    self = [super init];
-    if (self) {
-        @synchronized(_mediaDBOperatorPool) {
+    @synchronized(self) {
+        self = [super init];
+        if (self) {
             if (!_mediaDBOperatorPool) {
                 _mediaDBOperatorPool = [NSMutableDictionary dictionary];
             }
         }
+        return self;
     }
-    return self;
 }
 
 - (DCMediaDBOperator *)queryMediaDBOperatorForThread:(NSThread *)aThread {
@@ -75,13 +47,14 @@ static DCMediaDBManager *staticDefaultMediaDBManager = nil;
         
         NSString *threadID = [NSString stringWithFormat:@"%8x", (NSUInteger)aThread];
         
-        @synchronized(_mediaDBOperatorPool) {
+        @synchronized(self) {
             if (_mediaDBOperatorPool) {
                 result = [_mediaDBOperatorPool objectForKey:threadID];
             }
             
             if (!result) {
                 result = [[DCMediaDBOperator alloc] initWithThread:aThread andThreadID:threadID];
+                DC_AUTORELEASE(result);
                 if (result) {
                     [_mediaDBOperatorPool setObject:result forKey:threadID];
                 }
@@ -99,7 +72,7 @@ static DCMediaDBManager *staticDefaultMediaDBManager = nil;
         
         NSString *threadID = [NSString stringWithFormat:@"%8x", (NSUInteger)aThread];
         
-        @synchronized(_mediaDBOperatorPool) {
+        @synchronized(self) {
             if (_mediaDBOperatorPool) {
                 [_mediaDBOperatorPool removeObjectForKey:threadID];
             }
@@ -110,10 +83,10 @@ static DCMediaDBManager *staticDefaultMediaDBManager = nil;
 #pragma mark - DCMediaDBManager - Private method
 - (void)cleanPool {
     do {
-        @synchronized(_mediaDBOperatorPool) {
+        @synchronized(self) {
             if (_mediaDBOperatorPool) {
                 [_mediaDBOperatorPool removeAllObjects];
-                dc_release(_mediaDBOperatorPool);
+                DC_SAFERELEASE(_mediaDBOperatorPool);
                 _mediaDBOperatorPool = nil;
             }
         }

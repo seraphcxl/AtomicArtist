@@ -8,14 +8,14 @@
 
 #import <Foundation/Foundation.h>
 #import "DCCommonConstants.h"
+#import "DCSingletonTemplate.h"
 
 #define IMAGEINMEMCACHE_MAXCOUNT 500
 
 @interface DCImageInMemCache : NSObject {
 }
 
-+ (DCImageInMemCache *)defaultImageInMemCache;
-+ (void)staticRelease;
+DEFINE_SINGLETON_FOR_HEADER(DCImageInMemCache);
 
 - (void)resetCache;
 

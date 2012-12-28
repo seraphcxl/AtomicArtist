@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "DCCommonConstants.h"
+#import "DCSingletonTemplate.h"
 
 @class DCMediaDBOperator;
 
@@ -15,8 +16,7 @@
 }
 
 
-+ (DCMediaDBManager *)defaultManager;
-+ (void)staticRelease;
+DEFINE_SINGLETON_FOR_HEADER(DCMediaDBManager);
 
 - (DCMediaDBOperator *)queryMediaDBOperatorForThread:(NSThread *)aThread;
 - (void)removeMediaDBOperatorForThread:(NSThread *)aThread;

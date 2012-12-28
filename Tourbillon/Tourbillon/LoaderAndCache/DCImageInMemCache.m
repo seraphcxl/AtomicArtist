@@ -8,8 +8,6 @@
 
 #import "DCImageInMemCache.h"
 
-static DCImageInMemCache *staticImageInMemCache = nil;
-
 @interface DCImageInMemCache () {
     NSMutableArray *_stack;  // key:(NSString *)
     NSMutableDictionary *_cache;  // key:(NSString *) valve:(UIImage *)
@@ -22,35 +20,23 @@ static DCImageInMemCache *staticImageInMemCache = nil;
 
 @implementation DCImageInMemCache
 
-+ (DCImageInMemCache *)defaultImageInMemCache {
-    @synchronized (self) {
-        if (!staticImageInMemCache) {
-            staticImageInMemCache = [[super allocWithZone:nil] init];
-        }
-        
-        return staticImageInMemCache;
-    }
-}
+DEFINE_SINGLETON_FOR_CLASS(DCImageInMemCache);
 
-+ (void)staticRelease {
-    @synchronized (self) {
-        if (!staticImageInMemCache) {
-            dc_release(staticImageInMemCache);
-            staticImageInMemCache = nil;
+- (id)init {
+    @synchronized(self) {
+        self = [super init];
+        if (self) {
+            [self resetCache];
         }
+        return self;
     }
-}
-
-+ (id)allocWithZone:(NSZone *)zone
-{
-    return [self defaultImageInMemCache];
 }
 
 - (void)dealloc {
     do {
         [self deallocCache];
         
-        dc_dealloc(super);
+        DC_DEALLOC(super);
     } while (NO);
 }
 
@@ -94,7 +80,7 @@ static DCImageInMemCache *staticImageInMemCache = nil;
         @synchronized (self) {
             if ([_stack count] == _countMax) {
                 NSString *keyForRemove = [[_stack lastObject] copy];
-                dc_autorelease(keyForRemove);
+                DC_AUTORELEASE(keyForRemove);
                 [_stack removeLastObject];
                 [_cache removeObjectForKey:keyForRemove];
             }
@@ -112,13 +98,13 @@ static DCImageInMemCache *staticImageInMemCache = nil;
         @synchronized (self) {
             if (_stack) {
                 [_stack removeAllObjects];
-                dc_release(_stack);
+                DC_SAFERELEASE(_stack);
                 _stack = nil;
             }
             
             if (_cache) {
                 [_cache removeAllObjects];
-                dc_release(_cache);
+                DC_SAFERELEASE(_cache);
                 _cache = nil;
             }
         }
