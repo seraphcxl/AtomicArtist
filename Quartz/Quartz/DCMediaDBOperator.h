@@ -18,7 +18,7 @@
 }
 
 @property (nonatomic, readonly) NSString *threadID;
-@property (nonatomic, dc_weak, readonly) NSThread *thread;
+@property (nonatomic, SAFE_ARC_PROP_WEAK, readonly) NSThread *thread;
 
 + (NSString *)archivePath;
 

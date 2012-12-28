@@ -82,7 +82,7 @@
                 
                 [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(mergeContextChanges:) name:NSManagedObjectContextDidSaveNotification object:_context];
                 
-                DC_SAFERELEASE(psc);
+                SAFE_ARC_SAFERELEASE(psc);
             }
         }
         result = self;
@@ -95,10 +95,10 @@
         @synchronized(_context) {
             [[NSNotificationCenter defaultCenter] removeObserver:self name:NSManagedObjectContextDidSaveNotification object:_context];
             
-            DC_SAFERELEASE(_context);
-            DC_SAFERELEASE(_model);
+            SAFE_ARC_SAFERELEASE(_context);
+            SAFE_ARC_SAFERELEASE(_model);
         }
-        DC_DEALLOC(super);
+        SAFE_ARC_SUPER_DEALLOC();
     } while (NO);
 }
 
@@ -138,7 +138,7 @@
             }
             result = [resultArray objectAtIndex:0];
         }
-        DC_SAFERELEASE(request);
+        SAFE_ARC_SAFERELEASE(request);
 
     } while (NO);
     return result;
@@ -198,7 +198,7 @@
             }
             result = [resultArray objectAtIndex:0];
         }
-        DC_SAFERELEASE(request);
+        SAFE_ARC_SAFERELEASE(request);
     } while (NO);
     return result;
 }

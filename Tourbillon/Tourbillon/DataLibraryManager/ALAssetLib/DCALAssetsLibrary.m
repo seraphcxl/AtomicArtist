@@ -54,8 +54,8 @@
         [self clearCache];
         
         @synchronized(self) {
-            DC_SAFERELEASE(_allALAssetsGroupPersistentIDs);
-            DC_SAFERELEASE(_allALAssetsGroups);
+            SAFE_ARC_SAFERELEASE(_allALAssetsGroupPersistentIDs);
+            SAFE_ARC_SAFERELEASE(_allALAssetsGroups);
             self.assetsLibrary = nil;
         }
         
@@ -95,70 +95,70 @@
             break;
         }
         
-        @autoreleasepool {
-            void (^enumerator)(ALAssetsGroup *group, BOOL *stop) = ^(ALAssetsGroup *group, BOOL *stop) {
-                do {
-                    if (_cancelEnum) {
-                        *stop = _cancelEnum;
-                        break;
+        SAFE_ARC_AUTORELEASE_POOL_START()
+        void (^enumerator)(ALAssetsGroup *group, BOOL *stop) = ^(ALAssetsGroup *group, BOOL *stop) {
+            do {
+                if (_cancelEnum) {
+                    *stop = _cancelEnum;
+                    break;
+                }
+                
+                if (group != nil && [group numberOfAssets] > 0) {
+                    NSString *groupPersistentID = [group valueForProperty:ALAssetsGroupPropertyPersistentID];
+                    ALAssetsGroup *result = [_allALAssetsGroups objectForKey:groupPersistentID];
+                    if (result == nil) {
+                        DCALAssetsGroup *assetsGroup = [[DCALAssetsGroup alloc] initWithALAssetsGroup:group];
+                        SAFE_ARC_AUTORELEASE(assetsGroup);
+                        @synchronized(self) {
+                            NSAssert(_allALAssetsGroupPersistentIDs, @"_allALAssetsGroupPersistentIDs == nil");
+                            NSAssert(_allALAssetsGroups, @"_allALAssetsGroups == nil");
+                            NSUInteger index = [_allALAssetsGroupPersistentIDs count];
+                            [_allALAssetsGroupPersistentIDs insertObject:groupPersistentID atIndex:index];
+                            [_allALAssetsGroups setObject:assetsGroup forKey:groupPersistentID];
+                        }
                     }
-                    
-                    if (group != nil && [group numberOfAssets] > 0) {
-                        NSString *groupPersistentID = [group valueForProperty:ALAssetsGroupPropertyPersistentID];
-                        ALAssetsGroup *result = [_allALAssetsGroups objectForKey:groupPersistentID];
-                        if (result == nil) {
-                            DCALAssetsGroup *assetsGroup = [[DCALAssetsGroup alloc] initWithALAssetsGroup:group];
-                            DC_AUTORELEASE(assetsGroup);
-                            @synchronized(self) {
-                                NSAssert(_allALAssetsGroupPersistentIDs, @"_allALAssetsGroupPersistentIDs == nil");
-                                NSAssert(_allALAssetsGroups, @"_allALAssetsGroups == nil");
-                                NSUInteger index = [_allALAssetsGroupPersistentIDs count];
-                                [_allALAssetsGroupPersistentIDs insertObject:groupPersistentID atIndex:index];
-                                [_allALAssetsGroups setObject:assetsGroup forKey:groupPersistentID];
-                            }
-                        }
-                        dc_debug_NSLog(@"Add group id: %@, count = %d", groupPersistentID, [group numberOfAssets]);
-                        ++_enumCount;
-                        if (_enumCount == _frequency) {
-                            [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_DATAGROUP_ADDED object:self];
-                            _enumCount = 0;
-                            _frequency *= ALASSETSLIBRARY_FREQUENCY_FACTOR;
-                        }
+                    dc_debug_NSLog(@"Add group id: %@, count = %d", groupPersistentID, [group numberOfAssets]);
+                    ++_enumCount;
+                    if (_enumCount == _frequency) {
+                        [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_DATAGROUP_ADDED object:self];
+                        _enumCount = 0;
+                        _frequency *= ALASSETSLIBRARY_FREQUENCY_FACTOR;
+                    }
+                } else {
+                    if (_enumCount != 0) {
+                        [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_DATAGROUP_ADDED object:self];
                     } else {
-                        if (_enumCount != 0) {
-                            [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_DATAGROUP_ADDED object:self];
-                        } else {
-                            NSInteger count = 0;
-                            @synchronized(self) {
-                                count = [_allALAssetsGroups count];
-                            }
-                            if (count == 0) {
-                                [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_DATAGROUP_ADDED object:self];
-                                [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_DATAGROUP_EMPTY object:self];
-                            }
+                        NSInteger count = 0;
+                        @synchronized(self) {
+                            count = [_allALAssetsGroups count];
                         }
-                        [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_DATAGROUP_ENUM_END object:self];
+                        if (count == 0) {
+                            [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_DATAGROUP_ADDED object:self];
+                            [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_DATAGROUP_EMPTY object:self];
+                        }
                     }
-                } while (NO);
-            };
-            
-            void (^failureReporter)(NSError *error) = ^(NSError *error) {
-                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Enum ALAssetsGroup failed" message:[NSString stringWithFormat:@"%@", [error localizedDescription]] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                DC_AUTORELEASE(alertView);
-                [alertView show];
-            };
-            
-            [self clearCache];
-            
-            @synchronized(self) {
-                _frequency = frequency;
-                _enumCount = 0;
-                _cancelEnum = NO;
-                ALAssetsGroupType type = (ALAssetsGroupType)groupParam;
-                NSAssert(_assetsLibrary, @"_assetsLibrary == nil");
-                [_assetsLibrary enumerateGroupsWithTypes:type usingBlock:enumerator failureBlock:failureReporter];
-            }
+                    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_DATAGROUP_ENUM_END object:self];
+                }
+            } while (NO);
+        };
+        
+        void (^failureReporter)(NSError *error) = ^(NSError *error) {
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Enum ALAssetsGroup failed" message:[NSString stringWithFormat:@"%@", [error localizedDescription]] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            SAFE_ARC_AUTORELEASE(alertView);
+            [alertView show];
+        };
+        
+        [self clearCache];
+        
+        @synchronized(self) {
+            _frequency = frequency;
+            _enumCount = 0;
+            _cancelEnum = NO;
+            ALAssetsGroupType type = (ALAssetsGroupType)groupParam;
+            NSAssert(_assetsLibrary, @"_assetsLibrary == nil");
+            [_assetsLibrary enumerateGroupsWithTypes:type usingBlock:enumerator failureBlock:failureReporter];
         }
+        SAFE_ARC_AUTORELEASE_POOL_END()
     } while (NO);
 }
 

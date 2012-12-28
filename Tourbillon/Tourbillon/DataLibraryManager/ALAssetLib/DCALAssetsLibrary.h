@@ -13,6 +13,6 @@
 
 @interface DCALAssetsLibrary : NSObject <DCDataLibrary>
 
-@property (nonatomic, strong) ALAssetsLibrary *assetsLibrary;
+@property (nonatomic, SAFE_ARC_PROP_STRONG) ALAssetsLibrary *assetsLibrary;
 
 @end

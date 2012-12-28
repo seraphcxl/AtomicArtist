@@ -17,7 +17,7 @@ typedef void (^DCGridViewCellDeleteBlock)(DCGridViewCell *);
 @interface DCGridViewCell () {
 }
 
-@property(nonatomic, strong) UIView *fullSizeView;
+@property(nonatomic, SAFE_ARC_PROP_STRONG) UIView *fullSizeView;
 @property(nonatomic, assign) CGSize fullSize;
 
 @property(nonatomic, readonly, getter = isInShakingMode) BOOL inShakingMode;
@@ -29,7 +29,7 @@ typedef void (^DCGridViewCellDeleteBlock)(DCGridViewCell *);
 @property(nonatomic, copy) DCGridViewCellDeleteBlock deleteBlock;
 
 @property(nonatomic, assign) UIViewAutoresizing defaultFullsizeViewResizingMask;
-@property(nonatomic, dc_weak) UIButton *deleteButton;
+@property(nonatomic, SAFE_ARC_PROP_WEAK) UIButton *deleteButton;
 
 - (void)prepareForReuse;
 - (void)shake:(BOOL)on; // shakes the contentView only, not the fullsize one

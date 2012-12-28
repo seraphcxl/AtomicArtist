@@ -13,7 +13,7 @@
 
 @interface DCALAssetItem : NSObject <DCDataItem>
 
-@property (nonatomic, strong)ALAsset *asset;
+@property (nonatomic, SAFE_ARC_PROP_STRONG)ALAsset *asset;
 
 - (id)initWithALAsset:(ALAsset *)asset;
 

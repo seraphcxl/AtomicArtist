@@ -39,20 +39,20 @@ typedef enum {
 @interface DCGridView : UIScrollView
 
 // Delegates
-@property(nonatomic, dc_weak) IBOutlet NSObject<DCGridViewDataSource> *dataSource;  // Required
-@property(nonatomic, dc_weak) IBOutlet NSObject<DCGridViewActionDelegate> *actionDelegate;  // Optional - to get taps callback & deleting item
-@property(nonatomic, dc_weak) IBOutlet NSObject<DCGridViewSortingDelegate> *sortingDelegate;  // Optional - to enable sorting
-@property(nonatomic, dc_weak) IBOutlet NSObject<DCGridViewTransformationDelegate> *transformDelegate;  // Optional - to enable fullsize mode
+@property(nonatomic, SAFE_ARC_PROP_WEAK) IBOutlet NSObject<DCGridViewDataSource> *dataSource;  // Required
+@property(nonatomic, SAFE_ARC_PROP_WEAK) IBOutlet NSObject<DCGridViewActionDelegate> *actionDelegate;  // Optional - to get taps callback & deleting item
+@property(nonatomic, SAFE_ARC_PROP_WEAK) IBOutlet NSObject<DCGridViewSortingDelegate> *sortingDelegate;  // Optional - to enable sorting
+@property(nonatomic, SAFE_ARC_PROP_WEAK) IBOutlet NSObject<DCGridViewTransformationDelegate> *transformDelegate;  // Optional - to enable fullsize mode
 
 // Layout Strategy
-@property(nonatomic, strong) IBOutlet id<DCGridViewLayoutStrategy> layoutStrategy;  // Default is DCGridViewLayoutVerticalStrategy
+@property(nonatomic, SAFE_ARC_PROP_STRONG) IBOutlet id<DCGridViewLayoutStrategy> layoutStrategy;  // Default is DCGridViewLayoutVerticalStrategy
 
 // Editing Mode
 @property(nonatomic, getter = isEditing) BOOL editing;  // Default is NO - When set to YES, all gestures are disabled and delete buttons shows up on cells
 - (void)setEditing:(BOOL)editing animated:(BOOL)animated;
 
 // Customizing Options
-@property(nonatomic, dc_weak) IBOutlet UIView *mainSuperView;  // Default is self
+@property(nonatomic, SAFE_ARC_PROP_WEAK) IBOutlet UIView *mainSuperView;  // Default is self
 @property(nonatomic) DCGridViewStyle style;  // Default is DCGridViewStyleSwap
 @property(nonatomic) NSInteger itemSpacing;  // Default is 8
 @property(nonatomic) BOOL centerGrid;  // Default is YES

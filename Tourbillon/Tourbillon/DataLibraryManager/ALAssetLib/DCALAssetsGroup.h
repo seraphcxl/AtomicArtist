@@ -13,8 +13,8 @@
 
 @interface DCALAssetsGroup : NSObject <DCDataGroup>
 
-@property (nonatomic, strong) ALAssetsGroup *assetsGroup;
-@property (nonatomic, strong) NSString *assetType;
+@property (nonatomic, SAFE_ARC_PROP_STRONG) ALAssetsGroup *assetsGroup;
+@property (nonatomic, SAFE_ARC_PROP_STRONG) NSString *assetType;
 
 - (id)initWithALAssetsGroup:(ALAssetsGroup *)assetsGroup;
 

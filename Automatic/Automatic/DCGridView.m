@@ -54,7 +54,7 @@ static const UIViewAnimationOptions kDefaultAnimationOptions = (UIViewAnimationO
 }
 
 @property(nonatomic, readonly) BOOL itemsSubviewsCacheIsValid;
-@property(nonatomic, strong) NSArray *itemSubviewsCache;
+@property(nonatomic, SAFE_ARC_PROP_STRONG) NSArray *itemSubviewsCache;
 @property(atomic) NSInteger firstPositionLoaded;
 @property(atomic) NSInteger lastPositionLoaded;
 
@@ -1042,7 +1042,7 @@ static const UIViewAnimationOptions kDefaultAnimationOptions = (UIViewAnimationO
         BOOL canEdit = self.editing && [self.dataSource DCGridView:self canDeleteItemAtIndex:position];
         [cell setEditing:canEdit animated:NO];
         
-        __dc_weak DCGridView *weakSelf = self;
+        __SAFE_ARC_PROP_WEAK DCGridView *weakSelf = self;
         cell.deleteBlock = ^(DCGridViewCell *aCell) {
             NSInteger index = [weakSelf positionForItemSubview:aCell];
             if (index != DCGV_INVALID_POSITION) {

@@ -70,14 +70,14 @@
         [self clearCache];
         
         @synchronized(self) {
-            DC_SAFERELEASE(_allAssetUIDs);
-            DC_SAFERELEASE(_allAssetItems);
+            SAFE_ARC_SAFERELEASE(_allAssetUIDs);
+            SAFE_ARC_SAFERELEASE(_allAssetItems);
             
             self.assetsGroup = nil;
         }
         
-        DC_SAFERELEASE(_assetType);
-        DC_DEALLOC(super);
+        SAFE_ARC_SAFERELEASE(_assetType);
+        SAFE_ARC_SUPER_DEALLOC();
     } while (NO);
 }
 
@@ -108,74 +108,74 @@
             break;
         }
         
-        @autoreleasepool {
-            void (^enumerator)(ALAsset *result, NSUInteger index, BOOL *stop) = ^(ALAsset *result, NSUInteger index, BOOL *stop) {
-                do {
-                    if (_cancelEnum) {
-                        *stop = YES;
-                        break;
-                    }
-                    
-                    if (result != nil) {
-                        if ([[result valueForProperty:ALAssetPropertyType] isEqualToString:self.assetType]) {
-                            ALAssetRepresentation *representation = [result defaultRepresentation];
-                            NSString *assetURLStr = [[representation url] absoluteString];
-                            
-                            DCALAssetItem *item = [[DCALAssetItem alloc] initWithALAsset:result];
-                            DC_AUTORELEASE(item);
-                            
-                            @synchronized(self) {
-                                NSAssert(_allAssetItems, @"_allAssetItems == nil");
-                                NSAssert(_allAssetUIDs, @"_allAssetUIDs == nil");
-                                [_allAssetItems setObject:item forKey:assetURLStr];
-                                NSUInteger indexForAsset = [_allAssetUIDs count];
-                                [_allAssetUIDs insertObject:assetURLStr atIndex:indexForAsset];
-                            }
-                            
-                            ++_enumCount;
-                            if (_enumCount == _frequency) {
-                                _enumerated = YES;
-                                [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_DATAITEM_ADDED object:[self uniqueID]];
-                                _enumCount = 0;
-                                _frequency *= ALASSETSGROUP_FREQUENCY_FACTOR;
-                            }
-                        } else {
-                            [NSException raise:@"DCALAssetsGroup Error" format:@"Result is %@ not %@", [result valueForProperty:ALAssetPropertyType], self.assetType];
-                        }
-                    } else {
-                        if (_enumCount != 0) {
-                            _enumerated = YES;
-                            [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_DATAITEM_ADDED object:[self uniqueID]];
-                        }
-                        [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_DATAITEM_ENUM_END object:self];
-                    }
-                } while (NO);
-            };
-            
-            [self clearCache];
-            
-            @synchronized(self) {
-                if (_assetType != (NSString *)param) {
-                    _assetType = (NSString *)param;
-                    
-                    if ([ALAssetTypePhoto isEqualToString:self.assetType]) {
-                        dc_debug_NSLog(@"ALAssetsGroup photo");
-                        [self.assetsGroup setAssetsFilter:[ALAssetsFilter allPhotos]];
-                    } else if ([ALAssetTypeVideo isEqualToString:self.assetType]) {
-                        dc_debug_NSLog(@"ALAssetsGroup video");
-                        [self.assetsGroup setAssetsFilter:[ALAssetsFilter allVideos]];
-                    } else {
-                        dc_debug_NSLog(@"ALAssetsGroup photo and video");
-                    }
+        SAFE_ARC_AUTORELEASE_POOL_START()
+        void (^enumerator)(ALAsset *result, NSUInteger index, BOOL *stop) = ^(ALAsset *result, NSUInteger index, BOOL *stop) {
+            do {
+                if (_cancelEnum) {
+                    *stop = YES;
+                    break;
                 }
                 
-                _frequency = frequency;
-                _enumCount = 0;
-                _cancelEnum = NO;
-                NSAssert(self.assetsGroup, @"self.assetsGroup == nil");
-                [self.assetsGroup enumerateAssetsUsingBlock:enumerator];
+                if (result != nil) {
+                    if ([[result valueForProperty:ALAssetPropertyType] isEqualToString:self.assetType]) {
+                        ALAssetRepresentation *representation = [result defaultRepresentation];
+                        NSString *assetURLStr = [[representation url] absoluteString];
+                        
+                        DCALAssetItem *item = [[DCALAssetItem alloc] initWithALAsset:result];
+                        SAFE_ARC_AUTORELEASE(item);
+                        
+                        @synchronized(self) {
+                            NSAssert(_allAssetItems, @"_allAssetItems == nil");
+                            NSAssert(_allAssetUIDs, @"_allAssetUIDs == nil");
+                            [_allAssetItems setObject:item forKey:assetURLStr];
+                            NSUInteger indexForAsset = [_allAssetUIDs count];
+                            [_allAssetUIDs insertObject:assetURLStr atIndex:indexForAsset];
+                        }
+                        
+                        ++_enumCount;
+                        if (_enumCount == _frequency) {
+                            _enumerated = YES;
+                            [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_DATAITEM_ADDED object:[self uniqueID]];
+                            _enumCount = 0;
+                            _frequency *= ALASSETSGROUP_FREQUENCY_FACTOR;
+                        }
+                    } else {
+                        [NSException raise:@"DCALAssetsGroup Error" format:@"Result is %@ not %@", [result valueForProperty:ALAssetPropertyType], self.assetType];
+                    }
+                } else {
+                    if (_enumCount != 0) {
+                        _enumerated = YES;
+                        [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_DATAITEM_ADDED object:[self uniqueID]];
+                    }
+                    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_DATAITEM_ENUM_END object:self];
+                }
+            } while (NO);
+        };
+        
+        [self clearCache];
+        
+        @synchronized(self) {
+            if (_assetType != (NSString *)param) {
+                _assetType = (NSString *)param;
+                
+                if ([ALAssetTypePhoto isEqualToString:self.assetType]) {
+                    dc_debug_NSLog(@"ALAssetsGroup photo");
+                    [self.assetsGroup setAssetsFilter:[ALAssetsFilter allPhotos]];
+                } else if ([ALAssetTypeVideo isEqualToString:self.assetType]) {
+                    dc_debug_NSLog(@"ALAssetsGroup video");
+                    [self.assetsGroup setAssetsFilter:[ALAssetsFilter allVideos]];
+                } else {
+                    dc_debug_NSLog(@"ALAssetsGroup photo and video");
+                }
             }
+            
+            _frequency = frequency;
+            _enumCount = 0;
+            _cancelEnum = NO;
+            NSAssert(self.assetsGroup, @"self.assetsGroup == nil");
+            [self.assetsGroup enumerateAssetsUsingBlock:enumerator];
         }
+        SAFE_ARC_AUTORELEASE_POOL_END()
     } while (NO);
 }
 
@@ -194,78 +194,78 @@
             break;
         }
         
-        @autoreleasepool {
-            void (^enumerator)(ALAsset *result, NSUInteger index, BOOL *stop) = ^(ALAsset *result, NSUInteger index, BOOL *stop) {
-                do {
-                    if (_cancelEnum) {
-                        *stop = YES;
-                        break;
-                    }
-                    
-                    if (result != nil) {
-                        if ([[result valueForProperty:ALAssetPropertyType] isEqualToString:self.assetType]) {
-                            ALAssetRepresentation *representation = [result defaultRepresentation];
-                            NSURL *url = [representation url];
-                            NSString *assetURLStr = [url absoluteString];
-                            
-                            DCALAssetItem *item = [[DCALAssetItem alloc] initWithALAsset:result];
-                            DC_AUTORELEASE(item);
-                            
-                            @synchronized(self) {
-                                NSAssert(_allAssetItems, @"_allAssetItems == nil");
-                                NSAssert(_allAssetUIDs, @"_allAssetUIDs == nil");
-                                [_allAssetItems setObject:item forKey:assetURLStr];
-                                NSUInteger indexForAsset = [_allAssetUIDs count];
-                                [_allAssetUIDs insertObject:assetURLStr atIndex:indexForAsset];
-                            }
-                            
-                            if (index == 0) {
-                                [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_DATAITEMFORPOSTERIMAGE_ADDED object:[self uniqueID]];
-                            }
-                            
-                            ++_enumCount;
-                            if (_enumCount == _frequency) {
-                                [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_DATAITEM_ADDED object:[self uniqueID]];
-                                _enumCount = 0;
-                                _frequency *= ALASSETSGROUP_FREQUENCY_FACTOR;
-                            }
-                        } else {
-                            [NSException raise:@"DCALAssetsGroup Error" format:@"Result is %@ not %@", [result valueForProperty:ALAssetPropertyType], self.assetType];
-                        }
-                    } else {
-                        if (_enumCount != 0) {
-                            [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_DATAITEM_ADDED object:[self uniqueID]];
-                        }
-                        [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_DATAITEM_ENUMFIRSTSCREEN_END object:self];
-                        
-                    }
-                } while (NO);
-            };
-            
-            [self clearCache];
-            
-            @synchronized(self) {
-                if (_assetType != (NSString *)param) {
-                    _assetType = (NSString *)param;
-                    
-                    if ([ALAssetTypePhoto isEqualToString:self.assetType]) {
-                        dc_debug_NSLog(@"ALAssetsGroup photo");
-                        [self.assetsGroup setAssetsFilter:[ALAssetsFilter allPhotos]];
-                    } else if ([ALAssetTypeVideo isEqualToString:self.assetType]) {
-                        dc_debug_NSLog(@"ALAssetsGroup video");
-                        [self.assetsGroup setAssetsFilter:[ALAssetsFilter allVideos]];
-                    } else {
-                        dc_debug_NSLog(@"ALAssetsGroup photo and video");
-                    }
+        SAFE_ARC_AUTORELEASE_POOL_START()
+        void (^enumerator)(ALAsset *result, NSUInteger index, BOOL *stop) = ^(ALAsset *result, NSUInteger index, BOOL *stop) {
+            do {
+                if (_cancelEnum) {
+                    *stop = YES;
+                    break;
                 }
                 
-                _frequency = frequency;
-                _enumCount = 0;
-                _cancelEnum = NO;
-                NSAssert(self.assetsGroup, @"self.assetsGroup == nil");
-                [self.assetsGroup enumerateAssetsAtIndexes:indexSet options:0 usingBlock:enumerator];
+                if (result != nil) {
+                    if ([[result valueForProperty:ALAssetPropertyType] isEqualToString:self.assetType]) {
+                        ALAssetRepresentation *representation = [result defaultRepresentation];
+                        NSURL *url = [representation url];
+                        NSString *assetURLStr = [url absoluteString];
+                        
+                        DCALAssetItem *item = [[DCALAssetItem alloc] initWithALAsset:result];
+                        SAFE_ARC_AUTORELEASE(item);
+                        
+                        @synchronized(self) {
+                            NSAssert(_allAssetItems, @"_allAssetItems == nil");
+                            NSAssert(_allAssetUIDs, @"_allAssetUIDs == nil");
+                            [_allAssetItems setObject:item forKey:assetURLStr];
+                            NSUInteger indexForAsset = [_allAssetUIDs count];
+                            [_allAssetUIDs insertObject:assetURLStr atIndex:indexForAsset];
+                        }
+                        
+                        if (index == 0) {
+                            [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_DATAITEMFORPOSTERIMAGE_ADDED object:[self uniqueID]];
+                        }
+                        
+                        ++_enumCount;
+                        if (_enumCount == _frequency) {
+                            [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_DATAITEM_ADDED object:[self uniqueID]];
+                            _enumCount = 0;
+                            _frequency *= ALASSETSGROUP_FREQUENCY_FACTOR;
+                        }
+                    } else {
+                        [NSException raise:@"DCALAssetsGroup Error" format:@"Result is %@ not %@", [result valueForProperty:ALAssetPropertyType], self.assetType];
+                    }
+                } else {
+                    if (_enumCount != 0) {
+                        [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_DATAITEM_ADDED object:[self uniqueID]];
+                    }
+                    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_DATAITEM_ENUMFIRSTSCREEN_END object:self];
+                    
+                }
+            } while (NO);
+        };
+        
+        [self clearCache];
+        
+        @synchronized(self) {
+            if (_assetType != (NSString *)param) {
+                _assetType = (NSString *)param;
+                
+                if ([ALAssetTypePhoto isEqualToString:self.assetType]) {
+                    dc_debug_NSLog(@"ALAssetsGroup photo");
+                    [self.assetsGroup setAssetsFilter:[ALAssetsFilter allPhotos]];
+                } else if ([ALAssetTypeVideo isEqualToString:self.assetType]) {
+                    dc_debug_NSLog(@"ALAssetsGroup video");
+                    [self.assetsGroup setAssetsFilter:[ALAssetsFilter allVideos]];
+                } else {
+                    dc_debug_NSLog(@"ALAssetsGroup photo and video");
+                }
             }
+            
+            _frequency = frequency;
+            _enumCount = 0;
+            _cancelEnum = NO;
+            NSAssert(self.assetsGroup, @"self.assetsGroup == nil");
+            [self.assetsGroup enumerateAssetsAtIndexes:indexSet options:0 usingBlock:enumerator];
         }
+        SAFE_ARC_AUTORELEASE_POOL_END()
     } while (NO);
 }
 
@@ -337,7 +337,7 @@
                 result = [self.assetsGroup valueForProperty:ALAssetsGroupPropertyType];
             } else if ([property isEqualToString:kDATAGROUPPROPERTY_POSTERIMAGE]) {
                 result = [[UIImage alloc] initWithCGImage:[self.assetsGroup posterImage]];
-                DC_AUTORELEASE(result);
+                SAFE_ARC_AUTORELEASE(result);
             } else {
                 [NSException raise:@"DCALAssetsGroup error" format:@"Reason: unknown property"];
             }

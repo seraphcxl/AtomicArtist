@@ -39,7 +39,7 @@
             }
         }
     } while (NO);
-    DC_SAFERELEASE(image);
+    SAFE_ARC_SAFERELEASE(image);
 }
 
 - (id)initWithALAsset:(ALAsset *)asset {
@@ -58,7 +58,7 @@
             self.asset = nil;
         }
         
-        DC_DEALLOC(super);
+        SAFE_ARC_SUPER_DEALLOC();
     } while (NO);
 }
 
@@ -104,13 +104,13 @@
                 result = [self.asset valueForProperty:ALAssetPropertyOrientation];
             } else if ([property isEqualToString:kDATAITEMPROPERTY_THUMBNAIL]) {
                 result = [[UIImage alloc] initWithCGImage:[self.asset thumbnail]];
-                DC_AUTORELEASE(result);
+                SAFE_ARC_AUTORELEASE(result);
             } else if ([property isEqualToString:kDATAITEMPROPERTY_ORIGINIMAGE]) {
                 result = [[UIImage alloc] initWithCGImage:[representation fullResolutionImage]];
-                DC_AUTORELEASE(result);
+                SAFE_ARC_AUTORELEASE(result);
             } else if ([property isEqualToString:kDATAITEMPROPERTY_FULLSCREENIMAGE]) {
                 result = [[UIImage alloc] initWithCGImage:[representation fullScreenImage]];
-                DC_AUTORELEASE(result);
+                SAFE_ARC_AUTORELEASE(result);
             } else {
                 [NSException raise:@"DCALAssetItem error" format:@"Reason: unknown property"];
             }

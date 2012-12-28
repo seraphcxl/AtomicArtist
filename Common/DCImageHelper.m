@@ -47,7 +47,7 @@
         sourceRef = CGImageSourceCreateWithData((__bridge CFDataRef)data,  NULL);
         NSDictionary *options = [[NSDictionary alloc] initWithObjectsAndKeys:(id)kCFBooleanTrue, (id)kCGImageSourceCreateThumbnailWithTransform, (id)kCFBooleanTrue, (id)kCGImageSourceCreateThumbnailFromImageAlways, (id)[NSNumber numberWithDouble:size], (id)kCGImageSourceThumbnailMaxPixelSize, nil];
         cgimage = CGImageSourceCreateThumbnailAtIndex(sourceRef, 0, (__bridge CFDictionaryRef)options);
-        DC_SAFERELEASE(options);
+        SAFE_ARC_SAFERELEASE(options);
         
         size_t imgWidth = CGImageGetWidth(cgimage);
         size_t imgHeight = CGImageGetHeight(cgimage);
@@ -191,7 +191,7 @@ const CGFloat kReflectDistance = 10.0f;
 	frame.origin = CGPointMake(0.0f, view.frame.size.height + kReflectDistance);
 	reflection.frame = frame;
 	[view addSubview:reflection];
-    DC_SAFERELEASE(reflection);
+    SAFE_ARC_SAFERELEASE(reflection);
 }
 
 const CGFloat kReflectPercent = 0.5f;
@@ -314,7 +314,7 @@ const CGFloat kReflectOpacity = 0.5f;
 	CGAffineTransform t = CGAffineTransformMakeRotation([self degreesToRadians:degrees]);
 	rotatedViewBox.transform = t;
 	CGSize rotatedSize = rotatedViewBox.bounds.size;
-    DC_SAFERELEASE(rotatedViewBox);
+    SAFE_ARC_SAFERELEASE(rotatedViewBox);
 	
 	// Create the bitmap context
 	UIGraphicsBeginImageContext(rotatedSize);

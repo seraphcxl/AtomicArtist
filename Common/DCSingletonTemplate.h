@@ -17,7 +17,7 @@
 #endif
 
 
-#if __IPHONE_OS_VERSION_MIN_REQUIRED >= __IPHONE_5_0 && !defined (DC_DONT_USE_ARC_WEAK_FEATURE)
+#if __has_feature(objc_arc)
 
 #define DEFINE_SINGLETON_FOR_CLASS(className) \
 \

@@ -54,7 +54,7 @@ DEFINE_SINGLETON_FOR_CLASS(DCMediaDBManager);
             
             if (!result) {
                 result = [[DCMediaDBOperator alloc] initWithThread:aThread andThreadID:threadID];
-                DC_AUTORELEASE(result);
+                SAFE_ARC_AUTORELEASE(result);
                 if (result) {
                     [_mediaDBOperatorPool setObject:result forKey:threadID];
                 }
@@ -86,7 +86,7 @@ DEFINE_SINGLETON_FOR_CLASS(DCMediaDBManager);
         @synchronized(self) {
             if (_mediaDBOperatorPool) {
                 [_mediaDBOperatorPool removeAllObjects];
-                DC_SAFERELEASE(_mediaDBOperatorPool);
+                SAFE_ARC_SAFERELEASE(_mediaDBOperatorPool);
                 _mediaDBOperatorPool = nil;
             }
         }

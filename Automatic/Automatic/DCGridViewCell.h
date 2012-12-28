@@ -13,10 +13,10 @@
 #pragma mark - interface DCGridViewCell : UIView
 @interface DCGridViewCell : UIView
 
-@property(nonatomic, strong) UIView *contentView;         // The contentView - default is nil
-@property(nonatomic, strong) UIImage *deleteButtonIcon;   // Delete button image
+@property(nonatomic, SAFE_ARC_PROP_STRONG) UIView *contentView;         // The contentView - default is nil
+@property(nonatomic, SAFE_ARC_PROP_STRONG) UIImage *deleteButtonIcon;   // Delete button image
 @property(nonatomic) CGPoint deleteButtonOffset;          // Delete button offset relative to the origin
-@property(nonatomic, strong) NSString *reuseIdentifier;
+@property(nonatomic, SAFE_ARC_PROP_STRONG) NSString *reuseIdentifier;
 @property(nonatomic, getter = isHighlighted) BOOL highlighted;
 
 - (void)prepareForReuse;

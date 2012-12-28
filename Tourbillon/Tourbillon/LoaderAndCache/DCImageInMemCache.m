@@ -36,7 +36,7 @@ DEFINE_SINGLETON_FOR_CLASS(DCImageInMemCache);
     do {
         [self deallocCache];
         
-        DC_DEALLOC(super);
+        SAFE_ARC_SUPER_DEALLOC();
     } while (NO);
 }
 
@@ -80,7 +80,7 @@ DEFINE_SINGLETON_FOR_CLASS(DCImageInMemCache);
         @synchronized (self) {
             if ([_stack count] == _countMax) {
                 NSString *keyForRemove = [[_stack lastObject] copy];
-                DC_AUTORELEASE(keyForRemove);
+                SAFE_ARC_AUTORELEASE(keyForRemove);
                 [_stack removeLastObject];
                 [_cache removeObjectForKey:keyForRemove];
             }
@@ -98,13 +98,13 @@ DEFINE_SINGLETON_FOR_CLASS(DCImageInMemCache);
         @synchronized (self) {
             if (_stack) {
                 [_stack removeAllObjects];
-                DC_SAFERELEASE(_stack);
+                SAFE_ARC_SAFERELEASE(_stack);
                 _stack = nil;
             }
             
             if (_cache) {
                 [_cache removeAllObjects];
-                DC_SAFERELEASE(_cache);
+                SAFE_ARC_SAFERELEASE(_cache);
                 _cache = nil;
             }
         }
