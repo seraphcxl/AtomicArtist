@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "DCCommonConstants.h"
+#import "SafeARC.h"
 #import "DCSingletonTemplate.h"
 
 #define IMAGEINMEMCACHE_MAXCOUNT 500

@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "DCCommonConstants.h"
-
+#import "SafeARC.h"
 
 #pragma mark - interface DCGridViewCell : UIView
 @interface DCGridViewCell : UIView

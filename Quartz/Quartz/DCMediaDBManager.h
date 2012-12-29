@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "DCCommonConstants.h"
 #import "DCSingletonTemplate.h"
+#import "SafeARC.h"
 
 @class DCMediaDBOperator;
 

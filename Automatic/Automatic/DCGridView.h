@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "DCCommonConstants.h"
+#import "SafeARC.h"
 #import "DCGridViewCell.h"
 
 @protocol DCGridViewDataSource;

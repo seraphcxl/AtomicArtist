@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "DCCommonConstants.h"
+#import "SafeARC.h"
 
 #define QUARTZ_DBFILE @"MediaDB.data"
 

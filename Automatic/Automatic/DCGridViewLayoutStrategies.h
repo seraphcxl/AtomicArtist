@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import "DCCommonConstants.h"
+#import "SafeARC.h"
 
 #define DCGV_INVALID_POSITION (-1)
 

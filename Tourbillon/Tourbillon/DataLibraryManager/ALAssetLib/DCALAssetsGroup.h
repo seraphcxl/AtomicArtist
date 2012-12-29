@@ -10,6 +10,7 @@
 #import "DCUniformDataProtocol.h"
 #import <AssetsLibrary/AssetsLibrary.h>
 #import "DCCommonConstants.h"
+#import "SafeARC.h"
 
 @interface DCALAssetsGroup : NSObject <DCDataGroup>
 

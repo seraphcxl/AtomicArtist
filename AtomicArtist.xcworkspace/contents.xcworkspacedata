@@ -16,6 +16,9 @@
       <FileRef
          location = "group:DCSingletonTemplate.h">
       </FileRef>
+      <FileRef
+         location = "group:SafeARC.h">
+      </FileRef>
    </Group>
    <Group
       location = "container:"
