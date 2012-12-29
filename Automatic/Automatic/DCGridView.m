@@ -190,16 +190,11 @@ static const UIViewAnimationOptions kDefaultAnimationOptions = (UIViewAnimationO
         ////////////////////////
         // Gesture dependencies
         UIPanGestureRecognizer *panGestureRecognizer = nil;
-        if ([self respondsToSelector:@selector(panGestureRecognizer)]) // iOS5 only
-        {
+        if ([self respondsToSelector:@selector(panGestureRecognizer)]) {  // iOS5 only
             panGestureRecognizer = self.panGestureRecognizer;
-        }
-        else
-        {
-            for (UIGestureRecognizer *gestureRecognizer in self.gestureRecognizers)
-            {
-                if ([gestureRecognizer  isKindOfClass:NSClassFromString(@"UIScrollViewPanGestureRecognizer")])
-                {
+        } else {
+            for (UIGestureRecognizer *gestureRecognizer in self.gestureRecognizers) {
+                if ([gestureRecognizer  isKindOfClass:NSClassFromString(@"UIScrollViewPanGestureRecognizer")]) {
                     panGestureRecognizer = (UIPanGestureRecognizer *) gestureRecognizer;
                 }
             }
@@ -602,7 +597,7 @@ static const UIViewAnimationOptions kDefaultAnimationOptions = (UIViewAnimationO
             if (offset.x != self.contentOffset.x || offset.y != self.contentOffset.y) {
                 [UIView animateWithDuration:kDefaultAnimationDuration delay:0 options:kDefaultAnimationOptions animations:^{
                     self.contentOffset = offset;
-                } completion:^(BOOL finished){
+                } completion:^(BOOL finished) {
                     self.contentOffset = offset;
                     if (_autoScrollActive) {
                         [self sortingMoveDidContinueToPoint:locationInScroll];
@@ -664,7 +659,7 @@ static const UIViewAnimationOptions kDefaultAnimationOptions = (UIViewAnimationO
         [UIView animateWithDuration:kDefaultAnimationDuration delay:0 options:0 animations:^{
             _sortMovingItem.transform = CGAffineTransformIdentity;
             _sortMovingItem.frame = newFrame;
-        } completion:^(BOOL finished){
+        } completion:^(BOOL finished) {
             if ([self.sortingDelegate respondsToSelector:@selector(DCGridView:didEndMovingCell:)]) { [self.sortingDelegate DCGridView:self didEndMovingCell:_sortMovingItem];
             }
             _sortMovingItem = nil;
@@ -972,7 +967,7 @@ static const UIViewAnimationOptions kDefaultAnimationOptions = (UIViewAnimationO
                     transformingView.contentView.transform = CGAffineTransformIdentity;
                     transformingView.contentView.frame = finalFrameInSuperview;
                     transformingView.backgroundColor = [UIColor clearColor];
-                } completion:^(BOOL finished){
+                } completion:^(BOOL finished) {
                     [transformingView removeFromSuperview];
                     transformingView.frame = finalFrameInScroll;
                     transformingView.contentView.frame = transformingView.bounds;
@@ -1088,10 +1083,8 @@ static const UIViewAnimationOptions kDefaultAnimationOptions = (UIViewAnimationO
 - (DCGridViewCell *)cellForItemAtIndex:(NSInteger)position {
     DCGridViewCell *view = nil;
     do {
-        for (DCGridViewCell *cell in [self itemSubviews])
-        {
-            if (cell.tag == position + kTagOffset)
-            {
+        for (DCGridViewCell *cell in [self itemSubviews]) {
+            if (cell.tag == position + kTagOffset) {
                 view = cell;
                 break;
             }
@@ -1353,7 +1346,7 @@ static const UIViewAnimationOptions kDefaultAnimationOptions = (UIViewAnimationO
             }
             currentView.alpha = 0;
             cell.alpha = 1;
-        } completion:^(BOOL finished){
+        } completion:^(BOOL finished) {
             [currentView removeFromSuperview];
         }];
         
@@ -1392,9 +1385,9 @@ static const UIViewAnimationOptions kDefaultAnimationOptions = (UIViewAnimationO
         }
         
         // Better performance animating ourselves instead of using animated:YES in scrollRectToVisible
-        [UIView animateWithDuration:animated ? kDefaultAnimationDuration : 0 delay:0 options:kDefaultAnimationOptions animations:^{
+        [UIView animateWithDuration:(animated ? kDefaultAnimationDuration : 0) delay:0 options:kDefaultAnimationOptions animations:^{
             [self scrollRectToVisible:targetRect animated:NO];
-        } completion:^(BOOL finished){
+        } completion:^(BOOL finished) {
         }];
     } while (NO);
 }
@@ -1433,7 +1426,7 @@ static const UIViewAnimationOptions kDefaultAnimationOptions = (UIViewAnimationO
         if (shouldScroll) {
             [UIView animateWithDuration:kDefaultAnimationDuration delay:0 options:kDefaultAnimationOptions animations:^{
                 [self scrollToObjectAtIndex:index atScrollPosition:DCGridViewScrollPositionNone animated:NO];
-            } completion:^(BOOL finished){
+            } completion:^(BOOL finished) {
                 [self layoutSubviewsWithAnimation:animation];
             }];
         } else {
