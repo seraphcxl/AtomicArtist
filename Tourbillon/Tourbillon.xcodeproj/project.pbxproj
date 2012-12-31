@@ -11,6 +11,12 @@
 		1BB8BB6E16746B2100CC150E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BB8BB6D16746B2100CC150E /* Foundation.framework */; };
 		1BB8BB7316746B2100CC150E /* Tourbillon.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1BB8BB7216746B2100CC150E /* Tourbillon.h */; };
 		1BB8BB7516746B2100CC150E /* Tourbillon.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BB8BB7416746B2100CC150E /* Tourbillon.m */; };
+		1BC3F2521691B17E00CFEEFF /* DCItemViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BC3F2501691B17E00CFEEFF /* DCItemViewController.m */; };
+		1BC3F25E1691B6DC00CFEEFF /* DCMediaPocketViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BC3F25C1691B6DC00CFEEFF /* DCMediaPocketViewController.m */; };
+		1BC3F2681691CE9900CFEEFF /* DCDataGroupView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BC3F2671691CE9900CFEEFF /* DCDataGroupView.m */; };
+		1BC3F26B1691CEA900CFEEFF /* DCDataItemView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BC3F26A1691CEA900CFEEFF /* DCDataItemView.m */; };
+		1BC3F26E1691CEC400CFEEFF /* DCALAssetsGroupView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BC3F26D1691CEC400CFEEFF /* DCALAssetsGroupView.m */; };
+		1BC3F2711691CEDF00CFEEFF /* DCALAssetItemView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BC3F2701691CEDF00CFEEFF /* DCALAssetItemView.m */; };
 		1BC99E9D168AC23500513F1A /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BC99E9C168AC23400513F1A /* AssetsLibrary.framework */; };
 		1BC99E9F168AC32100513F1A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BC99E9E168AC32100513F1A /* UIKit.framework */; };
 		1BC99EA1168AC68600513F1A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BC99EA0168AC68600513F1A /* CoreGraphics.framework */; };
@@ -42,6 +48,20 @@
 		1BB8BB7216746B2100CC150E /* Tourbillon.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Tourbillon.h; sourceTree = "<group>"; };
 		1BB8BB7416746B2100CC150E /* Tourbillon.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Tourbillon.m; sourceTree = "<group>"; };
 		1BB8BBA716746E8200CC150E /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
+		1BC3F24F1691B17E00CFEEFF /* DCItemViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCItemViewController.h; sourceTree = "<group>"; };
+		1BC3F2501691B17E00CFEEFF /* DCItemViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCItemViewController.m; sourceTree = "<group>"; };
+		1BC3F2511691B17E00CFEEFF /* DCItemViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DCItemViewController.xib; sourceTree = "<group>"; };
+		1BC3F25B1691B6DC00CFEEFF /* DCMediaPocketViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCMediaPocketViewController.h; sourceTree = "<group>"; };
+		1BC3F25C1691B6DC00CFEEFF /* DCMediaPocketViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCMediaPocketViewController.m; sourceTree = "<group>"; };
+		1BC3F25D1691B6DC00CFEEFF /* DCMediaPocketViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DCMediaPocketViewController.xib; sourceTree = "<group>"; };
+		1BC3F2661691CE9900CFEEFF /* DCDataGroupView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCDataGroupView.h; sourceTree = "<group>"; };
+		1BC3F2671691CE9900CFEEFF /* DCDataGroupView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCDataGroupView.m; sourceTree = "<group>"; };
+		1BC3F2691691CEA900CFEEFF /* DCDataItemView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCDataItemView.h; sourceTree = "<group>"; };
+		1BC3F26A1691CEA900CFEEFF /* DCDataItemView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCDataItemView.m; sourceTree = "<group>"; };
+		1BC3F26C1691CEC400CFEEFF /* DCALAssetsGroupView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCALAssetsGroupView.h; sourceTree = "<group>"; };
+		1BC3F26D1691CEC400CFEEFF /* DCALAssetsGroupView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCALAssetsGroupView.m; sourceTree = "<group>"; };
+		1BC3F26F1691CEDF00CFEEFF /* DCALAssetItemView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCALAssetItemView.h; sourceTree = "<group>"; };
+		1BC3F2701691CEDF00CFEEFF /* DCALAssetItemView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCALAssetItemView.m; sourceTree = "<group>"; };
 		1BC99E9C168AC23400513F1A /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		1BC99E9E168AC32100513F1A /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		1BC99EA0168AC68600513F1A /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -81,6 +101,9 @@
 		1B0B2B891691589C00973B8D /* ItemViewCtrl */ = {
 			isa = PBXGroup;
 			children = (
+				1BC3F24F1691B17E00CFEEFF /* DCItemViewController.h */,
+				1BC3F2501691B17E00CFEEFF /* DCItemViewController.m */,
+				1BC3F2511691B17E00CFEEFF /* DCItemViewController.xib */,
 			);
 			path = ItemViewCtrl;
 			sourceTree = "<group>";
@@ -88,6 +111,9 @@
 		1B0B2B8A1691589C00973B8D /* MediaPocketViewCtrl */ = {
 			isa = PBXGroup;
 			children = (
+				1BC3F25B1691B6DC00CFEEFF /* DCMediaPocketViewController.h */,
+				1BC3F25C1691B6DC00CFEEFF /* DCMediaPocketViewController.m */,
+				1BC3F25D1691B6DC00CFEEFF /* DCMediaPocketViewController.xib */,
 			);
 			path = MediaPocketViewCtrl;
 			sourceTree = "<group>";
@@ -126,6 +152,7 @@
 		1BB8BB6F16746B2100CC150E /* Tourbillon */ = {
 			isa = PBXGroup;
 			children = (
+				1BC3F2651691CE8600CFEEFF /* Views */,
 				1B0B2B881691589C00973B8D /* GroupViewCtrl */,
 				1B0B2B891691589C00973B8D /* ItemViewCtrl */,
 				1B0B2B8A1691589C00973B8D /* MediaPocketViewCtrl */,
@@ -144,6 +171,21 @@
 				1BB8BB7116746B2100CC150E /* Tourbillon-Prefix.pch */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		1BC3F2651691CE8600CFEEFF /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				1BC3F2661691CE9900CFEEFF /* DCDataGroupView.h */,
+				1BC3F2671691CE9900CFEEFF /* DCDataGroupView.m */,
+				1BC3F2691691CEA900CFEEFF /* DCDataItemView.h */,
+				1BC3F26A1691CEA900CFEEFF /* DCDataItemView.m */,
+				1BC3F26C1691CEC400CFEEFF /* DCALAssetsGroupView.h */,
+				1BC3F26D1691CEC400CFEEFF /* DCALAssetsGroupView.m */,
+				1BC3F26F1691CEDF00CFEEFF /* DCALAssetItemView.h */,
+				1BC3F2701691CEDF00CFEEFF /* DCALAssetItemView.m */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -200,6 +242,12 @@
 				1BB8BB7516746B2100CC150E /* Tourbillon.m in Sources */,
 				1BC99EAA168ACC4600513F1A /* DCImageHelper.m in Sources */,
 				1B0B2B8E169158AA00973B8D /* DCGroupViewController.m in Sources */,
+				1BC3F2521691B17E00CFEEFF /* DCItemViewController.m in Sources */,
+				1BC3F25E1691B6DC00CFEEFF /* DCMediaPocketViewController.m in Sources */,
+				1BC3F2681691CE9900CFEEFF /* DCDataGroupView.m in Sources */,
+				1BC3F26B1691CEA900CFEEFF /* DCDataItemView.m in Sources */,
+				1BC3F26E1691CEC400CFEEFF /* DCALAssetsGroupView.m in Sources */,
+				1BC3F2711691CEDF00CFEEFF /* DCALAssetItemView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

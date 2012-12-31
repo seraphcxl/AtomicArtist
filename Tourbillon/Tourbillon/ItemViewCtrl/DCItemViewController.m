@@ -1,23 +1,23 @@
 //
-//  DCGroupViewController.m
+//  DCItemViewController.m
 //  Tourbillon
 //
 //  Created by Chen XiaoLiang on 12/31/12.
 //  Copyright (c) 2012 Chen XiaoLiang. All rights reserved.
 //
 
-#import "DCGroupViewController.h"
-#import "DCALAssetsGroupView.h"
+#import "DCItemViewController.h"
+#import "DCALAssetItemView.h"
 
-@interface DCGroupViewController () <DCGridViewDataSource, DCGridViewSortingDelegate, DCGridViewTransformationDelegate, DCGridViewActionDelegate, UIScrollViewDelegate> {
+@interface DCItemViewController () <DCGridViewDataSource, DCGridViewSortingDelegate, DCGridViewTransformationDelegate, DCGridViewActionDelegate, UIScrollViewDelegate> {
 }
 
 @end
 
-@implementation DCGroupViewController
+@implementation DCItemViewController
 
 @synthesize gridView = _gridView;
-@synthesize dataLib = _dataLib;
+@synthesize dataGroup = _dataGroup;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -84,20 +84,20 @@
     // Dispose of any resources that can be recreated.
 }
 
+
 - (void)dealloc {
     do {
         self.gridView = nil;
         
-        if (_dataLib) {
-            [_dataLib disconnect];
-            SAFE_ARC_SAFERELEASE(_dataLib);
+        if (_dataGroup) {
+            SAFE_ARC_SAFERELEASE(_dataGroup);
         }
         
         SAFE_ARC_SUPER_DEALLOC();
     } while (NO);
 }
 
-#pragma mark - DCGroupViewController - DCGridViewDataSource
+#pragma mark - DCItemViewController - DCGridViewDataSource
 - (NSInteger)numberOfItemsInDCGridView:(DCGridView *)gridView {
     NSInteger result = 0;
     do {
@@ -138,7 +138,7 @@
     return result;
 }
 
-#pragma mark - DCGroupViewController - DCGridViewSortingDelegate
+#pragma mark - DCItemViewController - DCGridViewSortingDelegate
 - (void)DCGridView:(DCGridView *)gridView moveItemAtIndex:(NSInteger)oldIndex toIndex:(NSInteger)newIndex {
     do {
         if (gridView != self.gridView) {
@@ -155,7 +155,7 @@
     } while (NO);
 }
 
-#pragma mark - DCGroupViewController - DCGridViewTransformationDelegate
+#pragma mark - DCItemViewController - DCGridViewTransformationDelegate
 - (CGSize)DCGridView:(DCGridView *)gridView sizeInFullSizeForCell:(DCGridViewCell *)cell atIndex:(NSInteger)index inInterfaceOrientation:(UIInterfaceOrientation)orientation {
     CGSize result = CGSizeZero;
     do {
@@ -176,7 +176,7 @@
     return result;
 }
 
-#pragma mark - DCGroupViewController - DCGridViewActionDelegate
+#pragma mark - DCItemViewController - DCGridViewActionDelegate
 - (void)DCGridView:(DCGridView *)gridView didTapOnItemAtIndex:(NSInteger)position {
     do {
         if (gridView != self.gridView) {

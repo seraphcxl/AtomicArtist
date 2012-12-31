@@ -1,5 +1,5 @@
 //
-//  DCGroupViewController.h
+//  DCMediaPocketViewController.h
 //  Tourbillon
 //
 //  Created by Chen XiaoLiang on 12/31/12.
@@ -12,15 +12,13 @@
 #import "DCGridView.h"
 #import "DCUniformDataProtocol.h"
 
-@class DCALAssetsGroupView;
-
-@interface DCGroupViewController : UIViewController {
+@interface DCMediaPocketViewController : UIViewController {
 }
 
-#pragma mark - DCGroupViewController - property - UI
+#pragma mark - DCMediaPocketViewController - property - UI
 @property (nonatomic, SAFE_ARC_PROP_STRONG) DCGridView *gridView;
 
-#pragma mark - DCGroupViewController - property - Data
-@property (nonatomic, SAFE_ARC_PROP_STRONG) id<DCDataLibrary> dataLib;
+#pragma mark - DCMediaPocketViewController - property - Data
+@property (nonatomic, readonly) NSMutableArray *dataArray;
 
 @end

@@ -1,5 +1,5 @@
 //
-//  DCGroupViewController.h
+//  DCItemViewController.h
 //  Tourbillon
 //
 //  Created by Chen XiaoLiang on 12/31/12.
@@ -12,15 +12,15 @@
 #import "DCGridView.h"
 #import "DCUniformDataProtocol.h"
 
-@class DCALAssetsGroupView;
+@class DCALAssetItemView;
 
-@interface DCGroupViewController : UIViewController {
+@interface DCItemViewController : UIViewController {
 }
 
-#pragma mark - DCGroupViewController - property - UI
+#pragma mark - DCItemViewController - property - UI
 @property (nonatomic, SAFE_ARC_PROP_STRONG) DCGridView *gridView;
 
-#pragma mark - DCGroupViewController - property - Data
-@property (nonatomic, SAFE_ARC_PROP_STRONG) id<DCDataLibrary> dataLib;
+#pragma mark - DCItemViewController - property - Data
+@property (nonatomic, SAFE_ARC_PROP_STRONG) id<DCDataGroup> dataGroup;
 
 @end
