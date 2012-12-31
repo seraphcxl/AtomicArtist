@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1B0B2BC91691604400973B8D /* DCGridViewCell.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1BE2958216881F52009E3486 /* DCGridViewCell.h */; };
 		1B383B3A166DF2EE00C49DE8 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B383B39166DF2EE00C49DE8 /* Foundation.framework */; };
 		1BDF3CF01689384D0034A191 /* DCGridView.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1BE295901688430C009E3486 /* DCGridView.h */; };
 		1BDF3CF2168938520034A191 /* DCGridViewLayoutStrategies.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1BE2958D16882FC0009E3486 /* DCGridViewLayoutStrategies.h */; };
@@ -27,6 +28,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				1B0B2BC91691604400973B8D /* DCGridViewCell.h in CopyFiles */,
 				1BDF3CF2168938520034A191 /* DCGridViewLayoutStrategies.h in CopyFiles */,
 				1BDF3CF01689384D0034A191 /* DCGridView.h in CopyFiles */,
 			);

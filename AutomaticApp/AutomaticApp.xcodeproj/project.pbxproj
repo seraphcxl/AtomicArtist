@@ -243,6 +243,7 @@
 				GCC_PREFIX_HEADER = "AutomaticApp/AutomaticApp-Prefix.pch";
 				INFOPLIST_FILE = "AutomaticApp/AutomaticApp-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 2;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -254,6 +255,7 @@
 				GCC_PREFIX_HEADER = "AutomaticApp/AutomaticApp-Prefix.pch";
 				INFOPLIST_FILE = "AutomaticApp/AutomaticApp-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 2;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -277,6 +279,7 @@
 				1BB8BBD716746EB200CC150E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

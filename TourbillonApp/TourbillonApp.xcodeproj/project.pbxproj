@@ -243,6 +243,7 @@
 				GCC_PREFIX_HEADER = "TourbillonApp/TourbillonApp-Prefix.pch";
 				INFOPLIST_FILE = "TourbillonApp/TourbillonApp-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 2;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -254,6 +255,7 @@
 				GCC_PREFIX_HEADER = "TourbillonApp/TourbillonApp-Prefix.pch";
 				INFOPLIST_FILE = "TourbillonApp/TourbillonApp-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 2;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -277,6 +279,7 @@
 				1BB8BBA616746E6000CC150E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

@@ -12,6 +12,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import <ImageIO/ImageIO.h>
 #import "DCCommonConstants.h"
+#import "SafeARC.h"
 
 #define ALASSETLIB_AVAILABLE 1
 

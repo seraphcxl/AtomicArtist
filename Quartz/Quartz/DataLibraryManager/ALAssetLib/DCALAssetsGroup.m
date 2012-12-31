@@ -8,6 +8,7 @@
 
 #import "DCALAssetsGroup.h"
 #import "DCALAssetItem.h"
+#import <UIKit/UIKit.h>
 
 #define ALASSETSGROUP_FREQUENCY_FACTOR (8)
 

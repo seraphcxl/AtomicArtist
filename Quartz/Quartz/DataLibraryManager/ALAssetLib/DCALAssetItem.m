@@ -8,6 +8,7 @@
 
 #import "DCALAssetItem.h"
 #import <ImageIO/ImageIO.h>
+#import <UIKit/UIKit.h>
 
 @implementation DCALAssetItem
 

@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 #import "DCCommonConstants.h"
 #import "SafeARC.h"
 #import "DCSingletonTemplate.h"
