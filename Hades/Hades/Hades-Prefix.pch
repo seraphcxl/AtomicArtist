@@ -1,0 +1,7 @@
+//
+// Prefix header for all source files of the 'Hades' target in the 'Hades' project
+//
+
+#ifdef __OBJC__
+    #import <Foundation/Foundation.h>
+#endif
