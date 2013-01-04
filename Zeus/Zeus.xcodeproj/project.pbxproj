@@ -82,7 +82,7 @@
 		1BE3FBB116966E76004DDEAF /* Item.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Item.h; sourceTree = "<group>"; };
 		1BE3FBB216966E76004DDEAF /* Item.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Item.m; sourceTree = "<group>"; };
 		1BE3FBB416966E76004DDEAF /* MediaDB.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = MediaDB.xcdatamodel; sourceTree = "<group>"; };
-		1BE3FBD1169670BD004DDEAF /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
+		1BE3FC0C169677A2004DDEAF /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -140,7 +140,7 @@
 		1BE3FAFC16966D71004DDEAF /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				1BE3FBD1169670BD004DDEAF /* README.md */,
+				1BE3FC0C169677A2004DDEAF /* README.md */,
 				1BE3FAFD16966D71004DDEAF /* Zeus-Prefix.pch */,
 			);
 			name = "Supporting Files";
