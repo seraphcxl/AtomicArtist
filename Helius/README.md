@@ -1,4 +1,4 @@
-Helius
+Hermes
 ============
 
-A simple photo brower and picker for iOS written by Objective-C.
+A simple photo brower and picker for iPhone written by Objective-C.

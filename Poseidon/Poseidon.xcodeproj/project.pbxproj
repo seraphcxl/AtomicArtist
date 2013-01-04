@@ -51,10 +51,10 @@
 		1BE3FBCB169670A9004DDEAF /* UIGestureRecognizer+DCGridViewAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIGestureRecognizer+DCGridViewAdditions.m"; sourceTree = "<group>"; };
 		1BE3FBCC169670A9004DDEAF /* UIView+DCGridViewAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+DCGridViewAdditions.h"; sourceTree = "<group>"; };
 		1BE3FBCD169670A9004DDEAF /* UIView+DCGridViewAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+DCGridViewAdditions.m"; sourceTree = "<group>"; };
-		1BE3FBD0169670B1004DDEAF /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
 		1BE3FBD2169670E2004DDEAF /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		1BE3FBD4169670EE004DDEAF /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		1BE3FBD6169670F6004DDEAF /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		1BE3FC10169678D5004DDEAF /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -122,7 +122,7 @@
 		1BE3FB1816966D99004DDEAF /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				1BE3FBD0169670B1004DDEAF /* README.md */,
+				1BE3FC10169678D5004DDEAF /* README.md */,
 				1BE3FB1916966D99004DDEAF /* Poseidon-Prefix.pch */,
 			);
 			name = "Supporting Files";

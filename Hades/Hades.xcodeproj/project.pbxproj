@@ -31,6 +31,7 @@
 		1BE3FB3516966DC2004DDEAF /* Hades-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Hades-Prefix.pch"; sourceTree = "<group>"; };
 		1BE3FB3616966DC2004DDEAF /* Hades.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Hades.h; sourceTree = "<group>"; };
 		1BE3FB3816966DC2004DDEAF /* Hades.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Hades.m; sourceTree = "<group>"; };
+		1BE3FC0F169678A2004DDEAF /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,6 +84,7 @@
 		1BE3FB3416966DC2004DDEAF /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				1BE3FC0F169678A2004DDEAF /* README.md */,
 				1BE3FB3516966DC2004DDEAF /* Hades-Prefix.pch */,
 			);
 			name = "Supporting Files";
