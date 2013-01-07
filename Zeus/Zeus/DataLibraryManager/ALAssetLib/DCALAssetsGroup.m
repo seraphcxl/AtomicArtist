@@ -118,7 +118,7 @@
                 }
                 
                 if (result != nil) {
-                    if ([[result valueForProperty:ALAssetPropertyType] isEqualToString:self.assetType]) {
+                    if (!self.assetType || (self.assetType && [[result valueForProperty:ALAssetPropertyType] isEqualToString:self.assetType])) {
                         ALAssetRepresentation *representation = [result defaultRepresentation];
                         NSString *assetURLStr = [[representation url] absoluteString];
                         
@@ -167,6 +167,7 @@
                     [self.assetsGroup setAssetsFilter:[ALAssetsFilter allVideos]];
                 } else {
                     dc_debug_NSLog(@"ALAssetsGroup photo and video");
+                    [self.assetsGroup setAssetsFilter:[ALAssetsFilter allAssets]];
                 }
             }
             
@@ -204,7 +205,7 @@
                 }
                 
                 if (result != nil) {
-                    if ([[result valueForProperty:ALAssetPropertyType] isEqualToString:self.assetType]) {
+                    if (!self.assetType || (self.assetType && [[result valueForProperty:ALAssetPropertyType] isEqualToString:self.assetType])) {
                         ALAssetRepresentation *representation = [result defaultRepresentation];
                         NSURL *url = [representation url];
                         NSString *assetURLStr = [url absoluteString];
@@ -257,6 +258,7 @@
                     [self.assetsGroup setAssetsFilter:[ALAssetsFilter allVideos]];
                 } else {
                     dc_debug_NSLog(@"ALAssetsGroup photo and video");
+                    [self.assetsGroup setAssetsFilter:[ALAssetsFilter allAssets]];
                 }
             }
             
