@@ -1,21 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Workspace
    version = "1.0">
-   <FileRef
-      location = "group:Hermes/Hermes.xcodeproj">
-   </FileRef>
-   <FileRef
-      location = "group:Helius/Helius.xcodeproj">
-   </FileRef>
-   <FileRef
-      location = "group:Hades/Hades.xcodeproj">
-   </FileRef>
-   <FileRef
-      location = "group:Poseidon/Poseidon.xcodeproj">
-   </FileRef>
-   <FileRef
-      location = "group:Zeus/Zeus.xcodeproj">
-   </FileRef>
    <Group
       location = "group:Common"
       name = "Common">
@@ -35,4 +20,22 @@
          location = "group:SafeARC.h">
       </FileRef>
    </Group>
+   <FileRef
+      location = "group:Hermes/Hermes.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:Helius/Helius.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:Hades/Hades.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:Poseidon/Poseidon.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:Zeus/Zeus.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:Ares/Ares.xcodeproj">
+   </FileRef>
 </Workspace>

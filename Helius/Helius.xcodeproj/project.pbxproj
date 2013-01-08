@@ -346,6 +346,7 @@
 				GCC_PREFIX_HEADER = "Helius/Helius-Prefix.pch";
 				HEADER_SEARCH_PATHS = "$(SRCROOT)/../Common/**";
 				INFOPLIST_FILE = "Helius/Helius-Info.plist";
+				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/../Common/**";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PUBLIC_HEADERS_FOLDER_PATH = "$(SRCROOT)/../Common/include";
 				WRAPPER_EXTENSION = app;
@@ -360,6 +361,7 @@
 				GCC_PREFIX_HEADER = "Helius/Helius-Prefix.pch";
 				HEADER_SEARCH_PATHS = "$(SRCROOT)/../Common/**";
 				INFOPLIST_FILE = "Helius/Helius-Info.plist";
+				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/../Common/**";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PUBLIC_HEADERS_FOLDER_PATH = "$(SRCROOT)/../Common/include";
 				WRAPPER_EXTENSION = app;
@@ -385,6 +387,7 @@
 				1BE3FB6A16966DDA004DDEAF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
