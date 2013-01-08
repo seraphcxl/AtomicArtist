@@ -52,29 +52,27 @@
         
         // init _iconContentView
         locX = DCPULLOUTVIEW_DefultEdgeInset.left;
-        locY = frame.size.height - DCPULLOUTVIEW_DefultEdgeInset.top - DCPULLOUTVIEW_ActionSwitchHeight;
+        locY = DCPULLOUTVIEW_DefultEdgeInset.top + DCPULLOUTVIEW_ActionSwitchHeight;
         _iconContentView = [[UIView alloc] initWithFrame:CGRectMake(locX, locY, DCPULLOUTVIEW_IconContentSize, DCPULLOUTVIEW_IconContentSize)];
-        self.iconContentView.backgroundColor = [UIColor clearColor];
+        self.iconContentView.backgroundColor = [UIColor redColor];
         [self addSubview:self.iconContentView];
         CGSize sizeForIconContentView = self.iconContentView.frame.size;
         
         // init _arrowView
         _arrowView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"blueArrow.png"]];
         CGSize newSizeForArrowView = [self getNewSizeFrom:self.arrowView.frame.size toFit:sizeForIconContentView];
-        self.arrowView.frame = CGRectMake(self.arrowView.frame.origin.x, self.arrowView.frame.origin.y, newSizeForArrowView.width, newSizeForArrowView.height);
-        _arrowView.center = self.iconContentView.center;
+        self.arrowView.frame = CGRectMake((DCPULLOUTVIEW_IconContentSize - newSizeForArrowView.width) / 2, (DCPULLOUTVIEW_IconContentSize - newSizeForArrowView.height) / 2, newSizeForArrowView.width, newSizeForArrowView.height);
         [self.iconContentView addSubview:self.arrowView];
         
         // init _activityIndicatorView
         _activityIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
         CGSize newSizeForActivityIndicatorView = [self getNewSizeFrom:self.activityIndicatorView.frame.size toFit:sizeForIconContentView];
-        self.activityIndicatorView.frame = CGRectMake(self.activityIndicatorView.frame.origin.x, self.activityIndicatorView.frame.origin.y, newSizeForActivityIndicatorView.width, newSizeForActivityIndicatorView.height);
-        self.activityIndicatorView.center = self.iconContentView.center;
+        self.activityIndicatorView.frame = CGRectMake((DCPULLOUTVIEW_IconContentSize - newSizeForArrowView.width) / 2, (DCPULLOUTVIEW_IconContentSize - newSizeForArrowView.height) / 2, newSizeForActivityIndicatorView.width, newSizeForActivityIndicatorView.height);
         [self.iconContentView addSubview:self.activityIndicatorView];
         
         // init _titleLabel
         locX = DCPULLOUTVIEW_DefultEdgeInset.left + DCPULLOUTVIEW_IconContentSize + DCPULLOUTVIEW_InnerSpacing;
-        locY = frame.size.height - DCPULLOUTVIEW_DefultEdgeInset.top - DCPULLOUTVIEW_ActionSwitchHeight;
+        locY = DCPULLOUTVIEW_DefultEdgeInset.top + DCPULLOUTVIEW_ActionSwitchHeight;
         width = frame.size.width - locX - DCPULLOUTVIEW_DefultEdgeInset.right;
         height = DCPULLOUTVIEW_TitleLabelHeight;
         _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(locX, locY, width, height)];
@@ -83,27 +81,27 @@
 		self.titleLabel.textColor = DCPULLOUTVIEW_TextColor;
 		self.titleLabel.shadowColor = [UIColor colorWithWhite:0.9f alpha:1.0f];
 		self.titleLabel.shadowOffset = CGSizeMake(0.0f, 1.0f);
-		self.titleLabel.backgroundColor = [UIColor clearColor];
+		self.titleLabel.backgroundColor = [UIColor greenColor];
 		self.titleLabel.textAlignment = NSTextAlignmentCenter;
         [self addSubview:self.titleLabel];
         
         // init _detailTextLabel
         locX = DCPULLOUTVIEW_DefultEdgeInset.left + DCPULLOUTVIEW_IconContentSize + DCPULLOUTVIEW_InnerSpacing;
-        locY = frame.size.height - DCPULLOUTVIEW_DefultEdgeInset.top - DCPULLOUTVIEW_ActionSwitchHeight - DCPULLOUTVIEW_InnerSpacing - self.titleLabel.frame.size.height;
+        locY = DCPULLOUTVIEW_DefultEdgeInset.top + DCPULLOUTVIEW_ActionSwitchHeight + DCPULLOUTVIEW_InnerSpacing + self.titleLabel.frame.size.height;
         width = frame.size.width - locX - DCPULLOUTVIEW_DefultEdgeInset.right;
-        height = DCPULLOUTVIEW_TitleLabelHeight;
+        height = DCPULLOUTVIEW_DetailTextLabelHeight;
         _detailTextLabel = [[UILabel alloc] initWithFrame:CGRectMake(locX, locY, width, height)];
         self.detailTextLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 		self.detailTextLabel.font = [UIFont boldSystemFontOfSize:12.0f];
 		self.detailTextLabel.textColor = DCPULLOUTVIEW_TextColor;
 		self.detailTextLabel.shadowColor = [UIColor colorWithWhite:0.9f alpha:1.0f];
 		self.detailTextLabel.shadowOffset = CGSizeMake(0.0f, 1.0f);
-		self.detailTextLabel.backgroundColor = [UIColor clearColor];
+		self.detailTextLabel.backgroundColor = [UIColor blueColor];
 		self.detailTextLabel.textAlignment = NSTextAlignmentCenter;
         [self addSubview:self.detailTextLabel];
         
         self.state = DCPullOutViewState_Common;
-    }      
+    }
     return self;
 }
 
@@ -152,7 +150,7 @@
                 self.detailText = [self.delegate dcPullOutViewDataSourceDetailText];
             }
                 break;
-            case DCPullOutViewState_Loading: {
+            case DCPullOutViewState_Working: {
                 self.title = [self.delegate dcPullOutViewDataSourceTitle];
                 [self.activityIndicatorView startAnimating];
                 [CATransaction begin];
@@ -199,16 +197,16 @@
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     do {
-        if (self.state == DCPullOutViewState_Loading) {
+        if (self.state == DCPullOutViewState_Working) {
             CGFloat offset = MAX(scrollView.contentOffset.y * -1, 0);
             offset = MIN(offset, (self.frame.size.height - DCPULLOUTVIEW_ActionSwitchHeight));
             scrollView.contentInset = UIEdgeInsetsMake(offset, 0.0f, 0.0f, 0.0f);
         } else if (scrollView.isDragging) {
-            BOOL loading = [self.delegate dcPullOutViewDataSourceIsLoading:self];
+            BOOL working = [self.delegate dcPullOutViewDataSourceIsWorking:self];
             
-            if (self.state == DCPullOutViewState_Pulling && scrollView.contentOffset.y > -(self.frame.size.height - DCPULLOUTVIEW_ActionSwitchHeight) && scrollView.contentOffset.y < 0.0f && !loading) {
+            if (self.state == DCPullOutViewState_Pulling && scrollView.contentOffset.y > -(self.frame.size.height - DCPULLOUTVIEW_ActionSwitchHeight) && scrollView.contentOffset.y < 0.0f && !working) {
                 self.state = DCPullOutViewState_Common;
-            } else if (self.state == DCPullOutViewState_Common && scrollView.contentOffset.y < -(self.frame.size.height - DCPULLOUTVIEW_ActionSwitchHeight) && !loading) {
+            } else if (self.state == DCPullOutViewState_Common && scrollView.contentOffset.y < -(self.frame.size.height - DCPULLOUTVIEW_ActionSwitchHeight) && !working) {
                 self.state = DCPullOutViewState_Pulling;
             }
             
@@ -222,12 +220,12 @@
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView {
     do {
-        BOOL loading = [self.delegate dcPullOutViewDataSourceIsLoading:self];
+        BOOL working = [self.delegate dcPullOutViewDataSourceIsWorking:self];
         
-        if (scrollView.contentOffset.y < -(self.frame.size.height - DCPULLOUTVIEW_ActionSwitchHeight) && !loading) {
-            [self.delegate dcPullOutViewDidTriggerRefresh:self];
+        if (scrollView.contentOffset.y < -(self.frame.size.height - DCPULLOUTVIEW_ActionSwitchHeight) && !working) {
+            [self.delegate dcPullOutViewDidAction:self];
             
-            self.state = DCPullOutViewState_Loading;
+            self.state = DCPullOutViewState_Working;
             [UIView beginAnimations:nil context:NULL];
             [UIView setAnimationDuration:0.25];
             scrollView.contentInset = UIEdgeInsetsMake((self.frame.size.height - DCPULLOUTVIEW_ActionSwitchHeight), 0.0f, 0.0f, 0.0f);
@@ -237,7 +235,7 @@
     } while (NO);
 }
 
-- (void)scrollViewDataSourceDidFinishedLoading:(UIScrollView *)scrollView {
+- (void)scrollViewDataSourceDidFinishedWorking:(UIScrollView *)scrollView {
     do {
         [UIView beginAnimations:nil context:NULL];
         [UIView setAnimationDuration:0.25];

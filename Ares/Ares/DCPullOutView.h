@@ -19,12 +19,14 @@
 #define DCPULLOUTVIEW_TitleLabelHeight (32.0)
 #define DCPULLOUTVIEW_DetailTextLabelHeight (24.0)
 
-#define DCPULLOUTVIEW_TextColor [UIColor colorWithRed:DC_RGB(87.0) green:DC_RGB(108.0) blue:DC_RGB(137.0) alpha:1.0]
-#define DCPULLOUTVIEW_FlipAnimationDuration 0.2f
+#define DCPULLOUTVIEW_TextColor [UIColor darkTextColor]
+#define DCPULLOUTVIEW_FlipAnimationDuration 0.25f
+
+
 typedef enum{
     DCPullOutViewState_Common = 0,
 	DCPullOutViewState_Pulling,
-	DCPullOutViewState_Loading,
+	DCPullOutViewState_Working,
 } DCPullOutViewState;
 
 @class DCPullOutView;
@@ -35,8 +37,8 @@ typedef enum{
 - (NSString *)dcPullOutViewDataSourceTitle;
 - (NSString *)dcPullOutViewDataSourceDetailText;
 
-- (void)dcPullOutViewDidTriggerRefresh:(DCPullOutView *)view;
-- (BOOL)dcPullOutViewDataSourceIsLoading:(DCPullOutView *)view;
+- (void)dcPullOutViewDidAction:(DCPullOutView *)view;
+- (BOOL)dcPullOutViewDataSourceIsWorking:(DCPullOutView *)view;
 
 @optional
 - (NSDate *)dcPullOutViewDataSourceLastUpdated:(DCPullOutView *)view;
@@ -60,6 +62,6 @@ typedef enum{
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView;
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView;
-- (void)scrollViewDataSourceDidFinishedLoading:(UIScrollView *)scrollView;
+- (void)scrollViewDataSourceDidFinishedWorking:(UIScrollView *)scrollView;
 
 @end

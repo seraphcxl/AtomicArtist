@@ -276,7 +276,7 @@ static const UIViewAnimationOptions kDefaultAnimationOptions = (UIViewAnimationO
             
             // Updating all the items size
             
-            CGSize itemSize = [self.dataSource DCGridView:self sizeForItemsInInterfaceOrientation:[[UIApplication sharedApplication] statusBarOrientation]];
+            CGSize itemSize = [self.dataSource gridView:self sizeForItemsInInterfaceOrientation:[[UIApplication sharedApplication] statusBarOrientation]];
             
             if (!CGSizeEqualToSize(_itemSize, itemSize)) {
                 _itemSize = itemSize;
@@ -294,7 +294,7 @@ static const UIViewAnimationOptions kDefaultAnimationOptions = (UIViewAnimationO
             
             if (_transformingItem && _inFullSizeMode) {
                 NSInteger position = _transformingItem.tag - kTagOffset;
-                CGSize fullSize = [self.transformDelegate DCGridView:self sizeInFullSizeForCell:_transformingItem atIndex:position inInterfaceOrientation:[[UIApplication sharedApplication] statusBarOrientation]];
+                CGSize fullSize = [self.transformDelegate gridView:self sizeInFullSizeForCell:_transformingItem atIndex:position inInterfaceOrientation:[[UIApplication sharedApplication] statusBarOrientation]];
                 
                 if (!CGSizeEqualToSize(fullSize, _transformingItem.fullSize)) {
                     CGPoint center = _transformingItem.fullSizeView.center;
@@ -396,24 +396,65 @@ static const UIViewAnimationOptions kDefaultAnimationOptions = (UIViewAnimationO
     do {
         [self setEditing:editing animated:NO];
         
-        if ([self.actionDelegate respondsToSelector:@selector(DCGridView:changedEdit:)]) {
-            [self.actionDelegate DCGridView:self changedEdit:editing];
+        if ([self.actionDelegate respondsToSelector:@selector(gridView:changedEdit:)]) {
+            [self.actionDelegate gridView:self changedEdit:editing];
         }
     } while (NO);
 }
 
 - (void)setEditing:(BOOL)editing animated:(BOOL)animated {
     do {
-        if ([self.actionDelegate respondsToSelector:@selector(DCGridView:processDeleteActionForItemAtIndex:)] &&![self isInTransformingState] && ((self.isEditing && !editing) || (!self.isEditing && editing))) {
+        if ([self.actionDelegate respondsToSelector:@selector(gridView:processDeleteActionForItemAtIndex:)] &&![self isInTransformingState] && ((self.isEditing && !editing) || (!self.isEditing && editing))) {
             for (DCGridViewCell *cell in [self itemSubviews]) {
                 NSInteger index = [self positionForItemSubview:cell];
                 if (index != DCGV_INVALID_POSITION) {
-                    BOOL allowEdit = editing && [self.dataSource DCGridView:self canDeleteItemAtIndex:index];
+                    BOOL allowEdit = editing && [self.dataSource gridView:self canDeleteItemAtIndex:index];
                     [cell setEditing:allowEdit animated:animated];
                 }
             }
             
             _editing = editing;
+        }
+    } while (NO);
+}
+
+#pragma mark - DCGridView - UIScrollViewDelegate
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    do {
+        if ([self.actionDelegate respondsToSelector:@selector(gridViewDidScroll:)]) {
+            [self.actionDelegate gridViewDidScroll:self];
+        }
+    } while (NO);
+}
+
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
+    do {
+        if ([self.actionDelegate respondsToSelector:@selector(gridViewWillBeginDragging:)]) {
+            [self.actionDelegate gridViewWillBeginDragging:self];
+        }
+    } while (NO);
+}
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
+    do {
+        if ([self.actionDelegate respondsToSelector:@selector(gridViewDidEndDragging:willDecelerate:)]) {
+            [self.actionDelegate gridViewDidEndDragging:self willDecelerate:decelerate];
+        }
+    } while (NO);
+}
+
+- (void)scrollViewWillBeginDecelerating:(UIScrollView *)scrollView {
+    do {
+        if ([self.actionDelegate respondsToSelector:@selector(gridViewWillBeginDecelerating:)]) {
+            [self.actionDelegate gridViewWillBeginDecelerating:self];
+        }
+    } while (NO);
+}
+
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+    do {
+        if ([self.actionDelegate respondsToSelector:@selector(gridViewDidEndDecelerating:)]) {
+            [self.actionDelegate gridViewDidEndDecelerating:self];
         }
     } while (NO);
 }
@@ -629,12 +670,12 @@ static const UIViewAnimationOptions kDefaultAnimationOptions = (UIViewAnimationO
         _sortFuturePosition = (_sortMovingItem.tag - kTagOffset);
         _sortMovingItem.tag = 0;
         
-        if ([self.sortingDelegate respondsToSelector:@selector(DCGridView:didStartMovingCell:)]) {
-            [self.sortingDelegate DCGridView:self didStartMovingCell:_sortMovingItem];
+        if ([self.sortingDelegate respondsToSelector:@selector(gridView:didStartMovingCell:)]) {
+            [self.sortingDelegate gridView:self didStartMovingCell:_sortMovingItem];
         }
         
-        if ([self.sortingDelegate respondsToSelector:@selector(DCGridView:shouldAllowShakingBehaviorWhenMovingCell:atIndex:)]) {
-            [_sortMovingItem shake:[self.sortingDelegate DCGridView:self shouldAllowShakingBehaviorWhenMovingCell:_sortMovingItem atIndex:position]];
+        if ([self.sortingDelegate respondsToSelector:@selector(gridView:shouldAllowShakingBehaviorWhenMovingCell:atIndex:)]) {
+            [_sortMovingItem shake:[self.sortingDelegate gridView:self shouldAllowShakingBehaviorWhenMovingCell:_sortMovingItem atIndex:position]];
         } else {
             [_sortMovingItem shake:YES];
         }
@@ -660,7 +701,7 @@ static const UIViewAnimationOptions kDefaultAnimationOptions = (UIViewAnimationO
             _sortMovingItem.transform = CGAffineTransformIdentity;
             _sortMovingItem.frame = newFrame;
         } completion:^(BOOL finished) {
-            if ([self.sortingDelegate respondsToSelector:@selector(DCGridView:didEndMovingCell:)]) { [self.sortingDelegate DCGridView:self didEndMovingCell:_sortMovingItem];
+            if ([self.sortingDelegate respondsToSelector:@selector(DCGridView:didEndMovingCell:)]) { [self.sortingDelegate gridView:self didEndMovingCell:_sortMovingItem];
             }
             _sortMovingItem = nil;
             _sortFuturePosition = DCGV_INVALID_POSITION;
@@ -705,7 +746,7 @@ static const UIViewAnimationOptions kDefaultAnimationOptions = (UIViewAnimationO
                             }
                         }
                         
-                        [self.sortingDelegate DCGridView:self moveItemAtIndex:_sortFuturePosition toIndex:position];
+                        [self.sortingDelegate gridView:self moveItemAtIndex:_sortFuturePosition toIndex:position];
                         [self relayoutItemsAnimated:YES];
                         
                         break;
@@ -724,7 +765,7 @@ static const UIViewAnimationOptions kDefaultAnimationOptions = (UIViewAnimationO
                             } completion:nil];
                         }
                         
-                        [self.sortingDelegate DCGridView:self exchangeItemAtIndex:_sortFuturePosition withItemAtIndex:position];
+                        [self.sortingDelegate gridView:self exchangeItemAtIndex:_sortFuturePosition withItemAtIndex:position];
                         
                         break;
                     }
@@ -900,11 +941,11 @@ static const UIViewAnimationOptions kDefaultAnimationOptions = (UIViewAnimationO
             [self.mainSuperView addSubview:_transformingItem];
             [self.mainSuperView bringSubviewToFront:_transformingItem];
             
-            _transformingItem.fullSize = [self.transformDelegate DCGridView:self sizeInFullSizeForCell:_transformingItem atIndex:positionTouch inInterfaceOrientation:[[UIApplication sharedApplication] statusBarOrientation]];
-            _transformingItem.fullSizeView = [self.transformDelegate DCGridView:self fullSizeViewForCell:_transformingItem atIndex:positionTouch];
+            _transformingItem.fullSize = [self.transformDelegate gridView:self sizeInFullSizeForCell:_transformingItem atIndex:positionTouch inInterfaceOrientation:[[UIApplication sharedApplication] statusBarOrientation]];
+            _transformingItem.fullSizeView = [self.transformDelegate gridView:self fullSizeViewForCell:_transformingItem atIndex:positionTouch];
             
-            if ([self.transformDelegate respondsToSelector:@selector(DCGridView:didStartTransformingCell:)]) {
-                [self.transformDelegate DCGridView:self didStartTransformingCell:_transformingItem];
+            if ([self.transformDelegate respondsToSelector:@selector(gridView:didStartTransformingCell:)]) {
+                [self.transformDelegate gridView:self didStartTransformingCell:_transformingItem];
             }
         }
     } while (NO);
@@ -939,8 +980,8 @@ static const UIViewAnimationOptions kDefaultAnimationOptions = (UIViewAnimationO
                 _inTransformingState = YES;
                 _inFullSizeMode = YES;
                 
-                if ([self.transformDelegate respondsToSelector:@selector(DCGridView:didEnterFullSizeForCell:)]) {
-                    [self.transformDelegate DCGridView:self didEnterFullSizeForCell:_transformingItem];
+                if ([self.transformDelegate respondsToSelector:@selector(gridView:didEnterFullSizeForCell:)]) {
+                    [self.transformDelegate gridView:self didEnterFullSizeForCell:_transformingItem];
                 }
                 
                 // Transfer the gestures on the fullscreen to make is they are accessible (depends on self.mainSuperView)
@@ -976,8 +1017,8 @@ static const UIViewAnimationOptions kDefaultAnimationOptions = (UIViewAnimationO
                     transformingView.fullSizeView = nil;
                     _inFullSizeMode = NO;
                     
-                    if ([self.transformDelegate respondsToSelector:@selector(DCGridView:didEndTransformingCell:)]) {
-                        [self.transformDelegate DCGridView:self didEndTransformingCell:transformingView];
+                    if ([self.transformDelegate respondsToSelector:@selector(gridView:didEndTransformingCell:)]) {
+                        [self.transformDelegate gridView:self didEndTransformingCell:transformingView];
                     }
                     
                     // Transfer the gestures back
@@ -999,11 +1040,11 @@ static const UIViewAnimationOptions kDefaultAnimationOptions = (UIViewAnimationO
         if (position != DCGV_INVALID_POSITION) {
             if (!self.editing) {
                 [self cellForItemAtIndex:position].highlighted = NO;
-                [self.actionDelegate DCGridView:self didTapOnItemAtIndex:position];
+                [self.actionDelegate gridView:self didTapOnItemAtIndex:position];
             }
         } else {
             if([self.actionDelegate respondsToSelector:@selector(DCGridViewDidTapOnEmptySpace:)]) {
-                [self.actionDelegate DCGridViewDidTapOnEmptySpace:self];
+                [self.actionDelegate gridViewDidTapOnEmptySpace:self];
             }
             
             if (self.disableEditOnEmptySpaceTap) {
@@ -1023,7 +1064,7 @@ static const UIViewAnimationOptions kDefaultAnimationOptions = (UIViewAnimationO
 - (DCGridViewCell *)newItemSubViewForPosition:(NSInteger)position {
     DCGridViewCell *cell = nil;
     do {
-        cell = [self.dataSource DCGridView:self cellForItemAtIndex:position];
+        cell = [self.dataSource gridView:self cellForItemAtIndex:position];
         CGPoint origin = [self.layoutStrategy originForItemAtPosition:position];
         CGRect frame = CGRectMake(origin.x, origin.y, _itemSize.width, _itemSize.height);
         
@@ -1034,7 +1075,7 @@ static const UIViewAnimationOptions kDefaultAnimationOptions = (UIViewAnimationO
         }];
         
         cell.tag = position + kTagOffset;
-        BOOL canEdit = self.editing && [self.dataSource DCGridView:self canDeleteItemAtIndex:position];
+        BOOL canEdit = self.editing && [self.dataSource gridView:self canDeleteItemAtIndex:position];
         [cell setEditing:canEdit animated:NO];
         
         __SAFE_ARC_PROP_WEAK DCGridView *weakSelf = self;
@@ -1042,12 +1083,12 @@ static const UIViewAnimationOptions kDefaultAnimationOptions = (UIViewAnimationO
             NSInteger index = [weakSelf positionForItemSubview:aCell];
             if (index != DCGV_INVALID_POSITION) {
                 BOOL canDelete = YES;
-                if ([weakSelf.dataSource respondsToSelector:@selector(DCGridView:canDeleteItemAtIndex:)]) {
-                    canDelete = [weakSelf.dataSource DCGridView:weakSelf canDeleteItemAtIndex:index];
+                if ([weakSelf.dataSource respondsToSelector:@selector(gridView:canDeleteItemAtIndex:)]) {
+                    canDelete = [weakSelf.dataSource gridView:weakSelf canDeleteItemAtIndex:index];
                 }
                 
-                if (canDelete && [weakSelf.actionDelegate respondsToSelector:@selector(DCGridView:processDeleteActionForItemAtIndex:)]) {
-                    [weakSelf.actionDelegate DCGridView:weakSelf processDeleteActionForItemAtIndex:index];
+                if (canDelete && [weakSelf.actionDelegate respondsToSelector:@selector(gridView:processDeleteActionForItemAtIndex:)]) {
+                    [weakSelf.actionDelegate gridView:weakSelf processDeleteActionForItemAtIndex:index];
                 }
             }
         };
@@ -1304,7 +1345,7 @@ static const UIViewAnimationOptions kDefaultAnimationOptions = (UIViewAnimationO
         [self setSubviewsCacheAsInvalid];
         
         NSUInteger numberItems = [self.dataSource numberOfItemsInDCGridView:self];
-        _itemSize = [self.dataSource DCGridView:self sizeForItemsInInterfaceOrientation:[[UIApplication sharedApplication] statusBarOrientation]];
+        _itemSize = [self.dataSource gridView:self sizeForItemsInInterfaceOrientation:[[UIApplication sharedApplication] statusBarOrientation]];
         _numberTotalItems = numberItems;
         
         [self recomputeSizeAnimated:NO];

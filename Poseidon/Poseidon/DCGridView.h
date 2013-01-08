@@ -96,12 +96,12 @@ typedef enum {
 @required
 // Populating subview items
 - (NSInteger)numberOfItemsInDCGridView:(DCGridView *)gridView;
-- (CGSize)DCGridView:(DCGridView *)gridView sizeForItemsInInterfaceOrientation:(UIInterfaceOrientation)orientation;
-- (DCGridViewCell *)DCGridView:(DCGridView *)gridView cellForItemAtIndex:(NSInteger)index;
+- (CGSize)gridView:(DCGridView *)gridView sizeForItemsInInterfaceOrientation:(UIInterfaceOrientation)orientation;
+- (DCGridViewCell *)gridView:(DCGridView *)gridView cellForItemAtIndex:(NSInteger)index;
 
 @optional
 // Allow a cell to be deletable. If not implemented, YES is assumed.
-- (BOOL)DCGridView:(DCGridView *)gridView canDeleteItemAtIndex:(NSInteger)index;
+- (BOOL)gridView:(DCGridView *)gridView canDeleteItemAtIndex:(NSInteger)index;
 
 @end
 
@@ -110,16 +110,21 @@ typedef enum {
 @protocol DCGridViewActionDelegate <NSObject>
 
 @required
-- (void)DCGridView:(DCGridView *)gridView didTapOnItemAtIndex:(NSInteger)position;
+- (void)gridView:(DCGridView *)gridView didTapOnItemAtIndex:(NSInteger)position;
+- (void)gridViewDidScroll:(UIScrollView *)scrollView;
+- (void)gridViewWillBeginDragging:(UIScrollView *)scrollView;
+- (void)gridViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate;
+- (void)gridViewWillBeginDecelerating:(UIScrollView *)scrollView;
+- (void)gridViewDidEndDecelerating:(UIScrollView *)scrollView;
 
 @optional
 // Tap on space without any items
-- (void)DCGridViewDidTapOnEmptySpace:(DCGridView *)gridView;
+- (void)gridViewDidTapOnEmptySpace:(DCGridView *)gridView;
 // Called when the delete-button has been pressed. Required to enable editing mode.
 // This method wont delete the cell automatically. Call the delete method of the gridView when appropriate.
-- (void)DCGridView:(DCGridView *)gridView processDeleteActionForItemAtIndex:(NSInteger)index;
+- (void)gridView:(DCGridView *)gridView processDeleteActionForItemAtIndex:(NSInteger)index;
 
-- (void)DCGridView:(DCGridView *)gridView changedEdit:(BOOL)edit;
+- (void)gridView:(DCGridView *)gridView changedEdit:(BOOL)edit;
 
 @end
 
@@ -129,15 +134,15 @@ typedef enum {
 
 @required
 // Item moved - right place to update the data structure
-- (void)DCGridView:(DCGridView *)gridView moveItemAtIndex:(NSInteger)oldIndex toIndex:(NSInteger)newIndex;
-- (void)DCGridView:(DCGridView *)gridView exchangeItemAtIndex:(NSInteger)index1 withItemAtIndex:(NSInteger)index2;
+- (void)gridView:(DCGridView *)gridView moveItemAtIndex:(NSInteger)oldIndex toIndex:(NSInteger)newIndex;
+- (void)gridView:(DCGridView *)gridView exchangeItemAtIndex:(NSInteger)index1 withItemAtIndex:(NSInteger)index2;
 
 @optional
 // Sorting started/ended - indexes are not specified on purpose (not the right place to update data structure)
-- (void)DCGridView:(DCGridView *)gridView didStartMovingCell:(DCGridViewCell *)cell;
-- (void)DCGridView:(DCGridView *)gridView didEndMovingCell:(DCGridViewCell *)cell;
+- (void)gridView:(DCGridView *)gridView didStartMovingCell:(DCGridViewCell *)cell;
+- (void)gridView:(DCGridView *)gridView didEndMovingCell:(DCGridViewCell *)cell;
 // Enable/Disable the shaking behavior of an item being moved
-- (BOOL)DCGridView:(DCGridView *)gridView shouldAllowShakingBehaviorWhenMovingCell:(DCGridViewCell *)view atIndex:(NSInteger)index;
+- (BOOL)gridView:(DCGridView *)gridView shouldAllowShakingBehaviorWhenMovingCell:(DCGridViewCell *)view atIndex:(NSInteger)index;
 
 @end
 
@@ -147,14 +152,14 @@ typedef enum {
 
 @required
 // Fullsize
-- (CGSize)DCGridView:(DCGridView *)gridView sizeInFullSizeForCell:(DCGridViewCell *)cell atIndex:(NSInteger)index inInterfaceOrientation:(UIInterfaceOrientation)orientation;
-- (UIView *)DCGridView:(DCGridView *)gridView fullSizeViewForCell:(DCGridViewCell *)cell atIndex:(NSInteger)index;
+- (CGSize)gridView:(DCGridView *)gridView sizeInFullSizeForCell:(DCGridViewCell *)cell atIndex:(NSInteger)index inInterfaceOrientation:(UIInterfaceOrientation)orientation;
+- (UIView *)gridView:(DCGridView *)gridView fullSizeViewForCell:(DCGridViewCell *)cell atIndex:(NSInteger)index;
 
 // Transformation (pinch, drag, rotate) of the item
 @optional
-- (void)DCGridView:(DCGridView *)gridView didStartTransformingCell:(DCGridViewCell *)cell;
-- (void)DCGridView:(DCGridView *)gridView didEnterFullSizeForCell:(DCGridViewCell *)cell;
-- (void)DCGridView:(DCGridView *)gridView didEndTransformingCell:(DCGridViewCell *)cell;
+- (void)gridView:(DCGridView *)gridView didStartTransformingCell:(DCGridViewCell *)cell;
+- (void)gridView:(DCGridView *)gridView didEnterFullSizeForCell:(DCGridViewCell *)cell;
+- (void)gridView:(DCGridView *)gridView didEndTransformingCell:(DCGridViewCell *)cell;
 
 @end
 
