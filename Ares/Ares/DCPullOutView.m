@@ -67,7 +67,7 @@
         // init _activityIndicatorView
         _activityIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
         CGSize newSizeForActivityIndicatorView = [self getNewSizeFrom:self.activityIndicatorView.frame.size toFit:sizeForIconContentView];
-        self.activityIndicatorView.frame = CGRectMake((DCPULLOUTVIEW_IconContentSize - newSizeForArrowView.width) / 2, (DCPULLOUTVIEW_IconContentSize - newSizeForArrowView.height) / 2, newSizeForActivityIndicatorView.width, newSizeForActivityIndicatorView.height);
+        self.activityIndicatorView.frame = CGRectMake((DCPULLOUTVIEW_IconContentSize - newSizeForActivityIndicatorView.width) / 2, (DCPULLOUTVIEW_IconContentSize - newSizeForActivityIndicatorView.height) / 2, newSizeForActivityIndicatorView.width, newSizeForActivityIndicatorView.height);
         [self.iconContentView addSubview:self.activityIndicatorView];
         
         // init _titleLabel
@@ -124,6 +124,7 @@
 
 - (void)setState:(DCPullOutViewState)state {
     do {
+        _state = state;
         switch (state) {
             case DCPullOutViewState_Pulling: {
                 self.title = [self.delegate dcPullOutViewDataSourceTitle];
@@ -162,8 +163,6 @@
             default:
                 break;
         }
-        
-        _state = state;
     } while (NO);
 }
 
@@ -191,7 +190,7 @@
         _detailText = [detailText copy];
         SAFE_ARC_SAFERELEASE(tmpStr);
         
-        self.titleLabel.text = detailText;
+        self.detailTextLabel.text = detailText;
     } while (NO);
 }
 
