@@ -52,14 +52,14 @@
         width = frame.size.width;
         height = DCPULLRELEASEVIEW_ActionSwitchHeight;
         _actionSwitchView = [[UIView alloc] initWithFrame:CGRectMake(locX, locY, width, height)];
-        self.actionSwitchView.backgroundColor = [UIColor orangeColor];
+        self.actionSwitchView.backgroundColor = [UIColor clearColor];
         [self addSubview:self.actionSwitchView];
         
         // init _iconContentView
         locX = DCPULLRELEASEVIEW_DefultEdgeInset.left;
         locY = DCPULLRELEASEVIEW_DefultEdgeInset.top + DCPULLRELEASEVIEW_ActionSwitchHeight;
         _iconContentView = [[UIView alloc] initWithFrame:CGRectMake(locX, locY, DCPULLRELEASEVIEW_IconContentSize, DCPULLRELEASEVIEW_IconContentSize)];
-        self.iconContentView.backgroundColor = [UIColor redColor];
+        self.iconContentView.backgroundColor = [UIColor clearColor];
         [self addSubview:self.iconContentView];
         CGSize sizeForIconContentView = self.iconContentView.bounds.size;
         
@@ -70,7 +70,7 @@
 //        [self.iconContentView addSubview:self.arrowView];
         
         // init _activityIndicatorView
-        _activityIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+        _activityIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
         CGSize newSizeForActivityIndicatorView = [self getNewSizeFrom:self.activityIndicatorView.bounds.size toFit:sizeForIconContentView];
         self.activityIndicatorView.frame = CGRectMake((DCPULLRELEASEVIEW_IconContentSize - newSizeForActivityIndicatorView.width) / 2, (DCPULLRELEASEVIEW_IconContentSize - newSizeForActivityIndicatorView.height) / 2, newSizeForActivityIndicatorView.width, newSizeForActivityIndicatorView.height);
         [self.iconContentView addSubview:self.activityIndicatorView];
@@ -86,7 +86,7 @@
 		self.titleLabel.textColor = DCPULLRELEASEVIEW_TextColor;
 		self.titleLabel.shadowColor = [UIColor colorWithWhite:0.9f alpha:1.0f];
 		self.titleLabel.shadowOffset = CGSizeMake(0.0f, 1.0f);
-		self.titleLabel.backgroundColor = [UIColor greenColor];
+		self.titleLabel.backgroundColor = [UIColor clearColor];
 		self.titleLabel.textAlignment = NSTextAlignmentCenter;
         [self addSubview:self.titleLabel];
         
@@ -101,7 +101,7 @@
 		self.detailTextLabel.textColor = DCPULLRELEASEVIEW_TextColor;
 		self.detailTextLabel.shadowColor = [UIColor colorWithWhite:0.9f alpha:1.0f];
 		self.detailTextLabel.shadowOffset = CGSizeMake(0.0f, 1.0f);
-		self.detailTextLabel.backgroundColor = [UIColor blueColor];
+		self.detailTextLabel.backgroundColor = [UIColor clearColor];
 		self.detailTextLabel.textAlignment = NSTextAlignmentCenter;
         [self addSubview:self.detailTextLabel];
         
