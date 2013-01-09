@@ -8,8 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		1B01683D169BB66400E7291A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B01683C169BB66400E7291A /* Foundation.framework */; };
-		1B016850169BB76400E7291A /* DCPullOutView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B01684F169BB76400E7291A /* DCPullOutView.m */; };
 		1B01685B169BBE6700E7291A /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B01685A169BBE6700E7291A /* QuartzCore.framework */; };
+		1BBEDAAD169D4CE300B4323B /* DCPullReleaseView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BBEDAAC169D4CE300B4323B /* DCPullReleaseView.m */; };
+		1BBEDAAF169D50CB00B4323B /* DCPullReleaseView.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1BBEDAAB169D4CE300B4323B /* DCPullReleaseView.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -19,6 +20,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				1BBEDAAF169D50CB00B4323B /* DCPullReleaseView.h in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -28,8 +30,6 @@
 		1B016839169BB66400E7291A /* libAres.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libAres.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		1B01683C169BB66400E7291A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1B016840169BB66400E7291A /* Ares-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Ares-Prefix.pch"; sourceTree = "<group>"; };
-		1B01684E169BB76400E7291A /* DCPullOutView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCPullOutView.h; sourceTree = "<group>"; };
-		1B01684F169BB76400E7291A /* DCPullOutView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCPullOutView.m; sourceTree = "<group>"; };
 		1B01685A169BBE6700E7291A /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		1B01685D169BC16900E7291A /* grayArrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = grayArrow.png; sourceTree = "<group>"; };
 		1B01685E169BC16900E7291A /* grayArrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "grayArrow@2x.png"; sourceTree = "<group>"; };
@@ -40,6 +40,8 @@
 		1B016863169BC16900E7291A /* whiteArrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = whiteArrow.png; sourceTree = "<group>"; };
 		1B016864169BC16900E7291A /* whiteArrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "whiteArrow@2x.png"; sourceTree = "<group>"; };
 		1B01686D169BF66D00E7291A /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
+		1BBEDAAB169D4CE300B4323B /* DCPullReleaseView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCPullReleaseView.h; sourceTree = "<group>"; };
+		1BBEDAAC169D4CE300B4323B /* DCPullReleaseView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCPullReleaseView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -85,8 +87,8 @@
 			isa = PBXGroup;
 			children = (
 				1B01683F169BB66400E7291A /* Supporting Files */,
-				1B01684E169BB76400E7291A /* DCPullOutView.h */,
-				1B01684F169BB76400E7291A /* DCPullOutView.m */,
+				1BBEDAAB169D4CE300B4323B /* DCPullReleaseView.h */,
+				1BBEDAAC169D4CE300B4323B /* DCPullReleaseView.m */,
 			);
 			path = Ares;
 			sourceTree = "<group>";
@@ -159,7 +161,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1B016850169BB76400E7291A /* DCPullOutView.m in Sources */,
+				1BBEDAAD169D4CE300B4323B /* DCPullReleaseView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -262,6 +264,7 @@
 				1B016849169BB66400E7291A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
