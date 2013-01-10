@@ -234,6 +234,8 @@ static const UIViewAnimationOptions kDefaultAnimationOptions = (UIViewAnimationO
     do {
         [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidReceiveMemoryWarningNotification object:nil];
         [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationWillChangeStatusBarOrientationNotification object:nil];
+        
+        SAFE_ARC_SUPER_DEALLOC();
     } while (NO);
 }
 

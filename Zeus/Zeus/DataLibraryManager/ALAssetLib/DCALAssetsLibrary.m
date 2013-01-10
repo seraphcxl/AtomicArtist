@@ -22,6 +22,8 @@
     BOOL _enumerating;
 }
 
+- (void)assetsLibChanged:(NSNotification *)note;
+
 @end
 
 @implementation DCALAssetsLibrary
@@ -43,9 +45,12 @@
             if (!_allALAssetsGroupPersistentIDs) {
                 _allALAssetsGroupPersistentIDs = [[NSMutableArray alloc] init];
             }
+            _cancelEnum = NO;
+            _enumerating = NO;
+            
+            NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+            [notificationCenter addObserver:self selector:@selector(assetsLibChanged:) name:ALAssetsLibraryChangedNotification object:nil];
         }
-        _cancelEnum = NO;
-        _enumerating = NO;
         result = YES;
     } while (NO);
     return result;
@@ -57,6 +62,9 @@
         [self clearCache];
         
         @synchronized(self) {
+            NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+            [notificationCenter removeObserver:self];
+            
             SAFE_ARC_SAFERELEASE(_allALAssetsGroupPersistentIDs);
             SAFE_ARC_SAFERELEASE(_allALAssetsGroups);
             self.assetsLibrary = nil;
@@ -243,6 +251,12 @@
 
 - (BOOL)isEnumerating {
     return _enumerating;
+}
+
+- (void)assetsLibChanged:(NSNotification *)note {
+    do {
+        ;
+    } while (NO);
 }
 
 @end

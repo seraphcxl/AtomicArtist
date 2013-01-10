@@ -30,6 +30,7 @@
 		1BE3FC06169675AC004DDEAF /* DCMediaDBOperator.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1BE3FBAD16966E76004DDEAF /* DCMediaDBOperator.h */; };
 		1BE3FC07169675AC004DDEAF /* Group.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1BE3FBAF16966E76004DDEAF /* Group.h */; };
 		1BE6DF2E169E52C30063C01C /* Item.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BE6DF2D169E52C30063C01C /* Item.m */; };
+		1BE7472C169EB9A800E6EB52 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BE7472B169EB9A800E6EB52 /* AssetsLibrary.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -81,6 +82,7 @@
 		1BE3FC0C169677A2004DDEAF /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = SOURCE_ROOT; };
 		1BE6DF2C169E52C30063C01C /* Item.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Item.h; sourceTree = "<group>"; };
 		1BE6DF2D169E52C30063C01C /* Item.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Item.m; sourceTree = "<group>"; };
+		1BE7472B169EB9A800E6EB52 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -88,6 +90,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1BE7472C169EB9A800E6EB52 /* AssetsLibrary.framework in Frameworks */,
 				1BE3FB9A16966E67004DDEAF /* UIKit.framework in Frameworks */,
 				1BE3FB9816966E60004DDEAF /* CoreData.framework in Frameworks */,
 				1BE3FAFA16966D71004DDEAF /* Foundation.framework in Frameworks */,
@@ -117,6 +120,7 @@
 		1BE3FAF816966D71004DDEAF /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				1BE7472B169EB9A800E6EB52 /* AssetsLibrary.framework */,
 				1BE3FB9916966E67004DDEAF /* UIKit.framework */,
 				1BE3FB9716966E60004DDEAF /* CoreData.framework */,
 				1BE3FAF916966D71004DDEAF /* Foundation.framework */,
