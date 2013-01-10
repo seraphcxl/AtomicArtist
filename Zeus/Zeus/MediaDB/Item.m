@@ -1,16 +1,15 @@
 //
 //  Item.m
-//  Quartz
+//  Zeus
 //
-//  Created by Chen XiaoLiang on 12-12-26.
-//  Copyright (c) 2012年 Chen XiaoLiang. All rights reserved.
+//  Created by Chen XiaoLiang on 13-1-10.
+//  Copyright (c) 2013年 Chen XiaoLiang. All rights reserved.
 //
 
 #import "Item.h"
 #import "Group.h"
 
 
-#pragma mark - implementation Item
 @implementation Item
 
 @dynamic largeThumbnail;
@@ -18,6 +17,7 @@
 @dynamic recordTimestamp;
 @dynamic smallThumbnail;
 @dynamic uniqueID;
+@dynamic md5;
 @dynamic group;
 
 - (void)awakeFromFetch {

@@ -19,6 +19,7 @@
     NSUInteger _enumCount;
     BOOL _enumerated;
     BOOL _cancelEnum;
+    BOOL _enumerating;
 }
 
 @end
@@ -44,6 +45,8 @@
         }
         
         _enumerated = NO;
+        _cancelEnum = NO;
+        _enumerating = NO;
     }
     return self;
 }
@@ -114,6 +117,7 @@
             do {
                 if (_cancelEnum) {
                     *stop = YES;
+                    _enumerating = NO;
                     break;
                 }
                 
@@ -148,6 +152,7 @@
                         _enumerated = YES;
                         [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_DATAITEM_ADDED object:[self uniqueID]];
                     }
+                    _enumerating = NO;
                     [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_DATAITEM_ENUM_END object:self];
                 }
             } while (NO);
@@ -174,6 +179,7 @@
             _frequency = frequency;
             _enumCount = 0;
             _cancelEnum = NO;
+            _enumerating = YES;
             NSAssert(self.assetsGroup, @"self.assetsGroup == nil");
             [self.assetsGroup enumerateAssetsUsingBlock:enumerator];
         }
@@ -201,6 +207,7 @@
             do {
                 if (_cancelEnum) {
                     *stop = YES;
+                    _enumerating = NO;
                     break;
                 }
                 
@@ -238,6 +245,7 @@
                     if (_enumCount != 0) {
                         [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_DATAITEM_ADDED object:[self uniqueID]];
                     }
+                    _enumerating = NO;
                     [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_DATAITEM_ENUMFIRSTSCREEN_END object:self];
                     
                 }
@@ -265,6 +273,7 @@
             _frequency = frequency;
             _enumCount = 0;
             _cancelEnum = NO;
+            _enumerating = YES;
             NSAssert(self.assetsGroup, @"self.assetsGroup == nil");
             [self.assetsGroup enumerateAssetsAtIndexes:indexSet options:0 usingBlock:enumerator];
         }
@@ -401,6 +410,10 @@
 
 - (BOOL)isEnumerated {
     return _enumerated;
+}
+
+- (BOOL)isEnumerating {
+    return _enumerating;
 }
 
 @end

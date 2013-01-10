@@ -19,6 +19,7 @@
     NSUInteger _enumCount;
     
     BOOL _cancelEnum;
+    BOOL _enumerating;
 }
 
 @end
@@ -43,7 +44,8 @@
                 _allALAssetsGroupPersistentIDs = [[NSMutableArray alloc] init];
             }
         }
-        
+        _cancelEnum = NO;
+        _enumerating = NO;
         result = YES;
     } while (NO);
     return result;
@@ -101,6 +103,7 @@
             do {
                 if (_cancelEnum) {
                     *stop = _cancelEnum;
+                    _enumerating = NO;
                     break;
                 }
                 
@@ -138,6 +141,7 @@
                             [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_DATAGROUP_EMPTY object:self];
                         }
                     }
+                    _enumerating = NO;
                     [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_DATAGROUP_ENUM_END object:self];
                 }
             } while (NO);
@@ -155,6 +159,7 @@
             _frequency = frequency;
             _enumCount = 0;
             _cancelEnum = NO;
+            _enumerating = YES;
             ALAssetsGroupType type = (ALAssetsGroupType)groupParam;
             NSAssert(_assetsLibrary, @"_assetsLibrary == nil");
             [_assetsLibrary enumerateGroupsWithTypes:type usingBlock:enumerator failureBlock:failureReporter];
@@ -234,6 +239,10 @@
         }
     } while (NO);
     return result;
+}
+
+- (BOOL)isEnumerating {
+    return _enumerating;
 }
 
 @end

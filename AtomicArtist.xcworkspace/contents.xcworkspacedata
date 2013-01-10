@@ -33,9 +33,9 @@
       location = "group:Poseidon/Poseidon.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:Zeus/Zeus.xcodeproj">
+      location = "group:Ares/Ares.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:Ares/Ares.xcodeproj">
+      location = "group:Zeus/Zeus.xcodeproj">
    </FileRef>
 </Workspace>

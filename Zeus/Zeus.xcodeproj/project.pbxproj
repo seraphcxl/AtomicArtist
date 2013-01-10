@@ -19,7 +19,6 @@
 		1BE3FBBB16966E76004DDEAF /* DCMediaDBManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BE3FBAC16966E76004DDEAF /* DCMediaDBManager.m */; };
 		1BE3FBBC16966E76004DDEAF /* DCMediaDBOperator.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BE3FBAE16966E76004DDEAF /* DCMediaDBOperator.m */; };
 		1BE3FBBD16966E76004DDEAF /* Group.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BE3FBB016966E76004DDEAF /* Group.m */; };
-		1BE3FBBE16966E76004DDEAF /* Item.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BE3FBB216966E76004DDEAF /* Item.m */; };
 		1BE3FBBF16966E76004DDEAF /* MediaDB.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1BE3FBB316966E76004DDEAF /* MediaDB.xcdatamodeld */; };
 		1BE3FBFF169675AC004DDEAF /* DCALAssetItem.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1BE3FB9D16966E76004DDEAF /* DCALAssetItem.h */; };
 		1BE3FC00169675AC004DDEAF /* DCALAssetsGroup.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1BE3FB9F16966E76004DDEAF /* DCALAssetsGroup.h */; };
@@ -30,7 +29,7 @@
 		1BE3FC05169675AC004DDEAF /* DCMediaDBManager.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1BE3FBAB16966E76004DDEAF /* DCMediaDBManager.h */; };
 		1BE3FC06169675AC004DDEAF /* DCMediaDBOperator.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1BE3FBAD16966E76004DDEAF /* DCMediaDBOperator.h */; };
 		1BE3FC07169675AC004DDEAF /* Group.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1BE3FBAF16966E76004DDEAF /* Group.h */; };
-		1BE3FC08169675AC004DDEAF /* Item.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1BE3FBB116966E76004DDEAF /* Item.h */; };
+		1BE6DF2E169E52C30063C01C /* Item.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BE6DF2D169E52C30063C01C /* Item.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -49,7 +48,6 @@
 				1BE3FC05169675AC004DDEAF /* DCMediaDBManager.h in CopyFiles */,
 				1BE3FC06169675AC004DDEAF /* DCMediaDBOperator.h in CopyFiles */,
 				1BE3FC07169675AC004DDEAF /* Group.h in CopyFiles */,
-				1BE3FC08169675AC004DDEAF /* Item.h in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -79,10 +77,10 @@
 		1BE3FBAE16966E76004DDEAF /* DCMediaDBOperator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCMediaDBOperator.m; sourceTree = "<group>"; };
 		1BE3FBAF16966E76004DDEAF /* Group.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Group.h; sourceTree = "<group>"; };
 		1BE3FBB016966E76004DDEAF /* Group.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Group.m; sourceTree = "<group>"; };
-		1BE3FBB116966E76004DDEAF /* Item.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Item.h; sourceTree = "<group>"; };
-		1BE3FBB216966E76004DDEAF /* Item.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Item.m; sourceTree = "<group>"; };
 		1BE3FBB416966E76004DDEAF /* MediaDB.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = MediaDB.xcdatamodel; sourceTree = "<group>"; };
 		1BE3FC0C169677A2004DDEAF /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = SOURCE_ROOT; };
+		1BE6DF2C169E52C30063C01C /* Item.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Item.h; sourceTree = "<group>"; };
+		1BE6DF2D169E52C30063C01C /* Item.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Item.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -189,9 +187,9 @@
 				1BE3FBAE16966E76004DDEAF /* DCMediaDBOperator.m */,
 				1BE3FBAF16966E76004DDEAF /* Group.h */,
 				1BE3FBB016966E76004DDEAF /* Group.m */,
-				1BE3FBB116966E76004DDEAF /* Item.h */,
-				1BE3FBB216966E76004DDEAF /* Item.m */,
 				1BE3FBB316966E76004DDEAF /* MediaDB.xcdatamodeld */,
+				1BE6DF2C169E52C30063C01C /* Item.h */,
+				1BE6DF2D169E52C30063C01C /* Item.m */,
 			);
 			path = MediaDB;
 			sourceTree = "<group>";
@@ -256,8 +254,8 @@
 				1BE3FBBB16966E76004DDEAF /* DCMediaDBManager.m in Sources */,
 				1BE3FBBC16966E76004DDEAF /* DCMediaDBOperator.m in Sources */,
 				1BE3FBBD16966E76004DDEAF /* Group.m in Sources */,
-				1BE3FBBE16966E76004DDEAF /* Item.m in Sources */,
 				1BE3FBBF16966E76004DDEAF /* MediaDB.xcdatamodeld in Sources */,
+				1BE6DF2E169E52C30063C01C /* Item.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -366,6 +364,7 @@
 				1BE3FB0616966D71004DDEAF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 

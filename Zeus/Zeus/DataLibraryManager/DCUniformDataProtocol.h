@@ -57,6 +57,7 @@ extern NSString * const kDATAGROUPPROPERTY_POSTERIMAGE;
 - (NSString *)itemUIDAtIndex:(NSUInteger)index;
 - (NSInteger)indexForItemUID:(NSString *)itemUID;
 - (BOOL)isEnumerated;
+- (BOOL)isEnumerating;
 
 @end
 
@@ -71,6 +72,7 @@ extern NSString * const kDATAGROUPPROPERTY_POSTERIMAGE;
 - (id<DCDataGroup>)groupWithUID:(NSString *)uid;
 - (NSString *)groupUIDAtIndex:(NSUInteger)index;
 - (NSInteger)indexForGroupUID:(NSString *)groupUID;
+- (BOOL)isEnumerating;
 
 @end
 

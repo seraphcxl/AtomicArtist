@@ -1,9 +1,9 @@
 //
 //  Item.h
-//  Quartz
+//  Zeus
 //
-//  Created by Chen XiaoLiang on 12-12-26.
-//  Copyright (c) 2012年 Chen XiaoLiang. All rights reserved.
+//  Created by Chen XiaoLiang on 13-1-10.
+//  Copyright (c) 2013年 Chen XiaoLiang. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -18,6 +18,7 @@
 @property (nonatomic) NSTimeInterval recordTimestamp;
 @property (nonatomic, retain) NSString * smallThumbnail;
 @property (nonatomic, retain) NSString * uniqueID;
+@property (nonatomic, retain) NSString * md5;
 @property (nonatomic, retain) Group *group;
 
 @end
