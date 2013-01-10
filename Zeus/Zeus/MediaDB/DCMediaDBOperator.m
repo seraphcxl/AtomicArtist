@@ -153,6 +153,7 @@
             Item *item = [NSEntityDescription insertNewObjectForEntityForName:@"Item" inManagedObjectContext:_context];
             
             item.uniqueID = itemUID;
+            item.md5 = [args objectForKey:kITEM_MD5];
             item.smallThumbnail = [args objectForKey:kITEM_SMALLTHUMBNAIL];
             item.largeThumbnail = [args objectForKey:kITEM_LARGETHUMBNAIL];
             item.previewImage = [args objectForKey:kITEM_PREVIEWIMAGE];

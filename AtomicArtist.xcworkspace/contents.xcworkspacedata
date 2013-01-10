@@ -21,19 +21,19 @@
       </FileRef>
    </Group>
    <FileRef
+      location = "group:Helius/Helius.xcodeproj">
+   </FileRef>
+   <FileRef
       location = "group:Hermes/Hermes.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:Helius/Helius.xcodeproj">
+      location = "group:Ares/Ares.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:Hades/Hades.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:Poseidon/Poseidon.xcodeproj">
-   </FileRef>
-   <FileRef
-      location = "group:Ares/Ares.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:Zeus/Zeus.xcodeproj">

@@ -98,7 +98,7 @@
 }
 
 #pragma mark - DCGroupViewController - DCGridViewDataSource
-- (NSInteger)numberOfItemsInDCGridView:(DCGridView *)gridView {
+- (NSInteger)numberOfItemsInGridView:(DCGridView *)gridView {
     NSInteger result = 0;
     do {
         if (gridView != self.gridView) {
@@ -108,7 +108,7 @@
     return result;
 }
 
-- (CGSize)DCGridView:(DCGridView *)gridView sizeForItemsInInterfaceOrientation:(UIInterfaceOrientation)orientation {
+- (CGSize)gridView:(DCGridView *)gridView sizeForItemsInInterfaceOrientation:(UIInterfaceOrientation)orientation {
     CGSize result = CGSizeZero;
     do {
         if (gridView != self.gridView) {
@@ -118,7 +118,7 @@
     return result;
 }
 
-- (DCGridViewCell *)DCGridView:(DCGridView *)gridView cellForItemAtIndex:(NSInteger)index {
+- (DCGridViewCell *)gridView:(DCGridView *)gridView cellForItemAtIndex:(NSInteger)index {
     DCGridViewCell *result = nil;
     do {
         if (gridView != self.gridView) {
@@ -128,7 +128,7 @@
     return result;
 }
 
-- (BOOL)DCGridView:(DCGridView *)gridView canDeleteItemAtIndex:(NSInteger)index {
+- (BOOL)gridView:(DCGridView *)gridView canDeleteItemAtIndex:(NSInteger)index {
     BOOL result = NO;
     do {
         if (gridView != self.gridView) {
@@ -139,7 +139,7 @@
 }
 
 #pragma mark - DCGroupViewController - DCGridViewSortingDelegate
-- (void)DCGridView:(DCGridView *)gridView moveItemAtIndex:(NSInteger)oldIndex toIndex:(NSInteger)newIndex {
+- (void)gridView:(DCGridView *)gridView moveItemAtIndex:(NSInteger)oldIndex toIndex:(NSInteger)newIndex {
     do {
         if (gridView != self.gridView) {
             break;
@@ -147,7 +147,7 @@
     } while (NO);
 }
 
-- (void)DCGridView:(DCGridView *)gridView exchangeItemAtIndex:(NSInteger)index1 withItemAtIndex:(NSInteger)index2 {
+- (void)gridView:(DCGridView *)gridView exchangeItemAtIndex:(NSInteger)index1 withItemAtIndex:(NSInteger)index2 {
     do {
         if (gridView != self.gridView) {
             break;
@@ -156,7 +156,7 @@
 }
 
 #pragma mark - DCGroupViewController - DCGridViewTransformationDelegate
-- (CGSize)DCGridView:(DCGridView *)gridView sizeInFullSizeForCell:(DCGridViewCell *)cell atIndex:(NSInteger)index inInterfaceOrientation:(UIInterfaceOrientation)orientation {
+- (CGSize)gridView:(DCGridView *)gridView sizeInFullSizeForCell:(DCGridViewCell *)cell atIndex:(NSInteger)index inInterfaceOrientation:(UIInterfaceOrientation)orientation {
     CGSize result = CGSizeZero;
     do {
         if (gridView != self.gridView || !cell) {
@@ -166,7 +166,7 @@
     return result;
 }
 
-- (UIView *)DCGridView:(DCGridView *)gridView fullSizeViewForCell:(DCGridViewCell *)cell atIndex:(NSInteger)index {
+- (UIView *)gridView:(DCGridView *)gridView fullSizeViewForCell:(DCGridViewCell *)cell atIndex:(NSInteger)index {
     UIView *result = nil;
     do {
         if (gridView != self.gridView || !cell) {
@@ -177,7 +177,7 @@
 }
 
 #pragma mark - DCGroupViewController - DCGridViewActionDelegate
-- (void)DCGridView:(DCGridView *)gridView didTapOnItemAtIndex:(NSInteger)position {
+- (void)gridView:(DCGridView *)gridView didTapOnItemAtIndex:(NSInteger)position {
     do {
         if (gridView != self.gridView) {
             break;

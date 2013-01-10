@@ -346,6 +346,7 @@
 				GCC_PREFIX_HEADER = "Helius/Helius-Prefix.pch";
 				HEADER_SEARCH_PATHS = "$(SRCROOT)/../Common/**";
 				INFOPLIST_FILE = "Helius/Helius-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/../Common/**";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PUBLIC_HEADERS_FOLDER_PATH = "$(SRCROOT)/../Common/include";
@@ -361,6 +362,7 @@
 				GCC_PREFIX_HEADER = "Helius/Helius-Prefix.pch";
 				HEADER_SEARCH_PATHS = "$(SRCROOT)/../Common/**";
 				INFOPLIST_FILE = "Helius/Helius-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/../Common/**";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PUBLIC_HEADERS_FOLDER_PATH = "$(SRCROOT)/../Common/include";

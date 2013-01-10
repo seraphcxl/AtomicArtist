@@ -11,6 +11,7 @@
 extern NSString * const kITEM_SMALLTHUMBNAIL;
 extern NSString * const kITEM_LARGETHUMBNAIL;
 extern NSString * const kITEM_PREVIEWIMAGE;
+extern NSString * const kITEM_MD5;
 
 extern NSString * const kGROUP_SMALLPOSTERIMAGE;
 extern NSString * const kGROUP_LARGEPOSTERIMAGE;

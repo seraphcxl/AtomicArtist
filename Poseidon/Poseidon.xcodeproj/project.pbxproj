@@ -249,6 +249,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Poseidon/Poseidon-Prefix.pch";
 				HEADER_SEARCH_PATHS = "$(SRCROOT)/../Common/**";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PUBLIC_HEADERS_FOLDER_PATH = "$(SRCROOT)/../Common/include";
@@ -264,6 +265,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Poseidon/Poseidon-Prefix.pch";
 				HEADER_SEARCH_PATHS = "$(SRCROOT)/../Common/**";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PUBLIC_HEADERS_FOLDER_PATH = "$(SRCROOT)/../Common/include";
@@ -290,6 +292,7 @@
 				1BE3FB2216966D99004DDEAF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

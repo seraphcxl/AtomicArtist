@@ -95,7 +95,7 @@ typedef enum {
 
 @required
 // Populating subview items
-- (NSInteger)numberOfItemsInDCGridView:(DCGridView *)gridView;
+- (NSInteger)numberOfItemsInGridView:(DCGridView *)gridView;
 - (CGSize)gridView:(DCGridView *)gridView sizeForItemsInInterfaceOrientation:(UIInterfaceOrientation)orientation;
 - (DCGridViewCell *)gridView:(DCGridView *)gridView cellForItemAtIndex:(NSInteger)index;
 
@@ -111,11 +111,6 @@ typedef enum {
 
 @required
 - (void)gridView:(DCGridView *)gridView didTapOnItemAtIndex:(NSInteger)position;
-- (void)gridViewDidScroll:(UIScrollView *)scrollView;
-- (void)gridViewWillBeginDragging:(UIScrollView *)scrollView;
-- (void)gridViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate;
-- (void)gridViewWillBeginDecelerating:(UIScrollView *)scrollView;
-- (void)gridViewDidEndDecelerating:(UIScrollView *)scrollView;
 
 @optional
 // Tap on space without any items

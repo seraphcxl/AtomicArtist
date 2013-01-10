@@ -418,47 +418,6 @@ static const UIViewAnimationOptions kDefaultAnimationOptions = (UIViewAnimationO
     } while (NO);
 }
 
-#pragma mark - DCGridView - UIScrollViewDelegate
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    do {
-        if ([self.actionDelegate respondsToSelector:@selector(gridViewDidScroll:)]) {
-            [self.actionDelegate gridViewDidScroll:self];
-        }
-    } while (NO);
-}
-
-- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
-    do {
-        if ([self.actionDelegate respondsToSelector:@selector(gridViewWillBeginDragging:)]) {
-            [self.actionDelegate gridViewWillBeginDragging:self];
-        }
-    } while (NO);
-}
-
-- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
-    do {
-        if ([self.actionDelegate respondsToSelector:@selector(gridViewDidEndDragging:willDecelerate:)]) {
-            [self.actionDelegate gridViewDidEndDragging:self willDecelerate:decelerate];
-        }
-    } while (NO);
-}
-
-- (void)scrollViewWillBeginDecelerating:(UIScrollView *)scrollView {
-    do {
-        if ([self.actionDelegate respondsToSelector:@selector(gridViewWillBeginDecelerating:)]) {
-            [self.actionDelegate gridViewWillBeginDecelerating:self];
-        }
-    } while (NO);
-}
-
-- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
-    do {
-        if ([self.actionDelegate respondsToSelector:@selector(gridViewDidEndDecelerating:)]) {
-            [self.actionDelegate gridViewDidEndDecelerating:self];
-        }
-    } while (NO);
-}
-
 #pragma mark - DCGridView - UIScrollView delegate replacement
 - (void)contentOffset:(CGPoint)contentOffset {
     do {
@@ -701,7 +660,7 @@ static const UIViewAnimationOptions kDefaultAnimationOptions = (UIViewAnimationO
             _sortMovingItem.transform = CGAffineTransformIdentity;
             _sortMovingItem.frame = newFrame;
         } completion:^(BOOL finished) {
-            if ([self.sortingDelegate respondsToSelector:@selector(DCGridView:didEndMovingCell:)]) { [self.sortingDelegate gridView:self didEndMovingCell:_sortMovingItem];
+            if ([self.sortingDelegate respondsToSelector:@selector(gridView:didEndMovingCell:)]) { [self.sortingDelegate gridView:self didEndMovingCell:_sortMovingItem];
             }
             _sortMovingItem = nil;
             _sortFuturePosition = DCGV_INVALID_POSITION;
@@ -1043,7 +1002,7 @@ static const UIViewAnimationOptions kDefaultAnimationOptions = (UIViewAnimationO
                 [self.actionDelegate gridView:self didTapOnItemAtIndex:position];
             }
         } else {
-            if([self.actionDelegate respondsToSelector:@selector(DCGridViewDidTapOnEmptySpace:)]) {
+            if([self.actionDelegate respondsToSelector:@selector(gridViewDidTapOnEmptySpace:)]) {
                 [self.actionDelegate gridViewDidTapOnEmptySpace:self];
             }
             
@@ -1344,7 +1303,7 @@ static const UIViewAnimationOptions kDefaultAnimationOptions = (UIViewAnimationO
         
         [self setSubviewsCacheAsInvalid];
         
-        NSUInteger numberItems = [self.dataSource numberOfItemsInDCGridView:self];
+        NSUInteger numberItems = [self.dataSource numberOfItemsInGridView:self];
         _itemSize = [self.dataSource gridView:self sizeForItemsInInterfaceOrientation:[[UIApplication sharedApplication] statusBarOrientation]];
         _numberTotalItems = numberItems;
         
