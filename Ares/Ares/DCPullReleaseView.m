@@ -25,6 +25,7 @@
 @implementation DCPullReleaseView
 
 @synthesize state = _state;
+@synthesize type = _type;
 @synthesize delegate = _delegate;
 @synthesize title = _title;
 @synthesize detailText = _detailText;
@@ -36,11 +37,17 @@
 @synthesize activityIndicatorView = _activityIndicatorView;
 @synthesize actionSwitchView = _actionSwitchView;
 
-- (id)initWithFrame:(CGRect)frame
-{
+- (id)initWithFrame:(CGRect)frame {
+    [NSException raise:@"DCPullReleaseView error" format:@"use initWithFrame:andType: instead."];
+    return nil;
+}
+
+- (id)initWithFrame:(CGRect)frame andType:(DCPullReleaseViewType)type {
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
+        self.type = type;
+        
         CGFloat locX = 0.0;
         CGFloat locY = 0.0;
         CGFloat width = 0.0;
@@ -48,7 +55,25 @@
         
         // init _actionSwitchView
         locX = 0.0;
-        locY = 0.0;
+        switch (self.type) {
+            case DCPullReleaseViewType_Header:
+            {
+                locY = 0.0;
+            }
+                break;
+                
+            case DCPullReleaseViewType_Footer:
+            {
+                locY = DCPULLRELEASEVIEW_DefultEdgeInset.top + DCPULLRELEASEVIEW_IconContentSize + DCPULLRELEASEVIEW_DefultEdgeInset.bottom;
+            }
+                break;
+                
+            default:
+            {
+                [NSException raise:@"DCPullReleaseView error" format:@"unknown type"];
+            }
+                break;
+        }
         width = frame.size.width;
         height = DCPULLRELEASEVIEW_ActionSwitchHeight;
         _actionSwitchView = [[UIView alloc] initWithFrame:CGRectMake(locX, locY, width, height)];
@@ -57,17 +82,29 @@
         
         // init _iconContentView
         locX = DCPULLRELEASEVIEW_DefultEdgeInset.left;
-        locY = DCPULLRELEASEVIEW_DefultEdgeInset.top + DCPULLRELEASEVIEW_ActionSwitchHeight;
+        switch (self.type) {
+            case DCPullReleaseViewType_Header:
+            {
+                locY = DCPULLRELEASEVIEW_DefultEdgeInset.top + DCPULLRELEASEVIEW_ActionSwitchHeight;
+            }
+                break;
+                
+            case DCPullReleaseViewType_Footer:
+            {
+                locY = DCPULLRELEASEVIEW_DefultEdgeInset.top;
+            }
+                break;
+                
+            default:
+            {
+                [NSException raise:@"DCPullReleaseView error" format:@"unknown type"];
+            }
+                break;
+        }
         _iconContentView = [[UIView alloc] initWithFrame:CGRectMake(locX, locY, DCPULLRELEASEVIEW_IconContentSize, DCPULLRELEASEVIEW_IconContentSize)];
         self.iconContentView.backgroundColor = [UIColor clearColor];
         [self addSubview:self.iconContentView];
         CGSize sizeForIconContentView = self.iconContentView.bounds.size;
-        
-//        // init _arrowView
-//        _arrowView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"blueArrow.png"]];
-//        CGSize newSizeForArrowView = [self getNewSizeFrom:self.arrowView.frame.size toFit:sizeForIconContentView];
-//        self.arrowView.frame = CGRectMake((DCPULLRELEASEVIEW_IconContentSize - newSizeForArrowView.width) / 2, (DCPULLRELEASEVIEW_IconContentSize - newSizeForArrowView.height) / 2, newSizeForArrowView.width, newSizeForArrowView.height);
-//        [self.iconContentView addSubview:self.arrowView];
         
         // init _activityIndicatorView
         _activityIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
@@ -77,7 +114,25 @@
         
         // init _titleLabel
         locX = DCPULLRELEASEVIEW_DefultEdgeInset.left + DCPULLRELEASEVIEW_IconContentSize + DCPULLRELEASEVIEW_InnerSpacing;
-        locY = DCPULLRELEASEVIEW_DefultEdgeInset.top + DCPULLRELEASEVIEW_ActionSwitchHeight;
+        switch (self.type) {
+            case DCPullReleaseViewType_Header:
+            {
+                locY = DCPULLRELEASEVIEW_DefultEdgeInset.top + DCPULLRELEASEVIEW_ActionSwitchHeight;
+            }
+                break;
+                
+            case DCPullReleaseViewType_Footer:
+            {
+                locY = DCPULLRELEASEVIEW_DefultEdgeInset.top;
+            }
+                break;
+                
+            default:
+            {
+                [NSException raise:@"DCPullReleaseView error" format:@"unknown type"];
+            }
+                break;
+        }
         width = frame.size.width - locX - DCPULLRELEASEVIEW_DefultEdgeInset.right;
         height = DCPULLRELEASEVIEW_TitleLabelHeight;
         _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(locX, locY, width, height)];
@@ -92,7 +147,25 @@
         
         // init _detailTextLabel
         locX = DCPULLRELEASEVIEW_DefultEdgeInset.left + DCPULLRELEASEVIEW_IconContentSize + DCPULLRELEASEVIEW_InnerSpacing;
-        locY = DCPULLRELEASEVIEW_DefultEdgeInset.top + DCPULLRELEASEVIEW_ActionSwitchHeight + DCPULLRELEASEVIEW_InnerSpacing + self.titleLabel.frame.size.height;
+        switch (self.type) {
+            case DCPullReleaseViewType_Header:
+            {
+                locY = DCPULLRELEASEVIEW_DefultEdgeInset.top + DCPULLRELEASEVIEW_ActionSwitchHeight + DCPULLRELEASEVIEW_InnerSpacing + self.titleLabel.frame.size.height;
+            }
+                break;
+                
+            case DCPullReleaseViewType_Footer:
+            {
+                locY = DCPULLRELEASEVIEW_DefultEdgeInset.top + DCPULLRELEASEVIEW_InnerSpacing + self.titleLabel.frame.size.height;
+            }
+                break;
+                
+            default:
+            {
+                [NSException raise:@"DCPullReleaseView error" format:@"unknown type"];
+            }
+                break;
+        }
         width = frame.size.width - locX - DCPULLRELEASEVIEW_DefultEdgeInset.right;
         height = DCPULLRELEASEVIEW_DetailTextLabelHeight;
         _detailTextLabel = [[UILabel alloc] initWithFrame:CGRectMake(locX, locY, width, height)];
@@ -130,11 +203,11 @@
 
 - (void)setState:(DCPullReleaseViewState)state {
     do {
+        _state = state;
         dispatch_async(dispatch_get_main_queue(), ^(void){
-            _state = state;
             switch (state) {
                 case DCPullReleaseViewState_Pulling: {
-                    self.title = [self.delegate titleForPullReleaseView];
+                    self.title = [self.delegate titleForPullReleaseView:self];
                     [CATransaction begin];
                     [CATransaction setAnimationDuration:DCPULLRELEASEVIEW_FlipAnimationDuration];
                     self.arrowView.layer.transform = CATransform3DMakeRotation((M_PI / 180.0) * 180.0f, 0.0f, 0.0f, 1.0f);
@@ -148,18 +221,18 @@
                         self.arrowView.layer.transform = CATransform3DIdentity;
                         [CATransaction commit];
                     }
-                    self.title = [self.delegate titleForPullReleaseView];
+                    self.title = [self.delegate titleForPullReleaseView:self];
                     [self.activityIndicatorView stopAnimating];
                     [CATransaction begin];
                     [CATransaction setValue:(id)kCFBooleanTrue forKey:kCATransactionDisableActions];
                     self.arrowView.hidden = NO;
                     self.arrowView.layer.transform = CATransform3DIdentity;
                     [CATransaction commit];
-                    self.detailText = [self.delegate detailTextForPullReleaseView];
+                    self.detailText = [self.delegate detailTextForPullReleaseView:self];
                 }
                     break;
                 case DCPullReleaseViewState_Working: {
-                    self.title = [self.delegate titleForPullReleaseView];
+                    self.title = [self.delegate titleForPullReleaseView:self];
                     [self.activityIndicatorView startAnimating];
                     [CATransaction begin];
                     [CATransaction setValue:(id)kCFBooleanTrue forKey:kCATransactionDisableActions];
@@ -259,22 +332,73 @@
     } while (NO);
 }
 
+- (void)setActivityIndicatorColor:(UIColor *)color {
+    do {
+        if (!color) {
+            break;
+        }
+        self.activityIndicatorView.color = color;
+    } while (NO);
+}
+
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     do {
         CGFloat pullReleaseViewShowHeight = (self.bounds.size.height - DCPULLRELEASEVIEW_ActionSwitchHeight);
         if (self.state == DCPullReleaseViewState_Working) {
             dispatch_async(dispatch_get_main_queue(), ^(void){
-                CGFloat offset = MAX(scrollView.contentOffset.y * -1, 0);
-                offset = MIN(offset, pullReleaseViewShowHeight);
-                scrollView.contentInset = UIEdgeInsetsMake(offset, 0.0f, 0.0f, 0.0f);
+                CGFloat offset = 0.0;
+                switch (self.type) {
+                    case DCPullReleaseViewType_Header:
+                    {
+                        offset = MIN((MAX(scrollView.contentOffset.y * -1, 0)), pullReleaseViewShowHeight);
+                        scrollView.contentInset = UIEdgeInsetsMake(offset, 0.0f, 0.0f, 0.0f);
+                    }
+                        break;
+                        
+                    case DCPullReleaseViewType_Footer:
+                    {
+                        offset = MIN((MAX(scrollView.contentOffset.y, 0)), pullReleaseViewShowHeight);
+                        scrollView.contentInset = UIEdgeInsetsMake(0.0f, 0.0f, offset, 0.0f);
+                    }
+                        break;
+                        
+                    default:
+                    {
+                        [NSException raise:@"DCPullReleaseView error" format:@"unknown type"];
+                    }
+                        break;
+                }
+                
             });
         } else if (scrollView.isDragging) {
             BOOL working = [self.delegate isWorkingForPullReleaseView:self];
-            
-            if (self.state == DCPullReleaseViewState_Pulling && scrollView.contentOffset.y > -pullReleaseViewShowHeight && scrollView.contentOffset.y < 0.0f && !working) {
-                self.state = DCPullReleaseViewState_Common;
-            } else if (self.state == DCPullReleaseViewState_Common && scrollView.contentOffset.y < -pullReleaseViewShowHeight && !working) {
-                self.state = DCPullReleaseViewState_Pulling;
+            switch (self.type) {
+                case DCPullReleaseViewType_Header:
+                {
+                    if (self.state == DCPullReleaseViewState_Pulling && scrollView.contentOffset.y > -pullReleaseViewShowHeight && scrollView.contentOffset.y < 0.0f && !working) {
+                        self.state = DCPullReleaseViewState_Common;
+                    } else if (self.state == DCPullReleaseViewState_Common && scrollView.contentOffset.y < -pullReleaseViewShowHeight && !working) {
+                        self.state = DCPullReleaseViewState_Pulling;
+                    }
+                }
+                    break;
+                    
+                case DCPullReleaseViewType_Footer:
+                {
+                    CGFloat bottomOffsetY = scrollView.contentOffset.y + scrollView.bounds.size.height;
+                    if (self.state == DCPullReleaseViewState_Pulling && bottomOffsetY < scrollView.contentSize.height + pullReleaseViewShowHeight && bottomOffsetY > scrollView.contentSize.height && !working) {
+                        self.state = DCPullReleaseViewState_Common;
+                    } else if (self.state == DCPullReleaseViewState_Common && scrollView.contentOffset.y + scrollView.bounds.size.height > scrollView.contentSize.height + pullReleaseViewShowHeight && !working) {
+                        self.state = DCPullReleaseViewState_Pulling;
+                    }
+                }
+                    break;
+                    
+                default:
+                {
+                    [NSException raise:@"DCPullReleaseView error" format:@"unknown type"];
+                }
+                    break;
             }
             
             if (scrollView.contentInset.top != 0) {
@@ -290,17 +414,48 @@
     do {
         BOOL working = [self.delegate isWorkingForPullReleaseView:self];
         CGFloat pullReleaseViewShowHeight = (self.bounds.size.height - DCPULLRELEASEVIEW_ActionSwitchHeight);
-        if (scrollView.contentOffset.y < -pullReleaseViewShowHeight && !working) {
-            [self.delegate actionRequestFormPullReleaseView:self];
-            
-            self.state = DCPullReleaseViewState_Working;
-            
-            dispatch_async(dispatch_get_main_queue(), ^(void){
-                [UIView beginAnimations:nil context:NULL];
-                [UIView setAnimationDuration:0.25];
-                scrollView.contentInset = UIEdgeInsetsMake(pullReleaseViewShowHeight, 0.0f, 0.0f, 0.0f);
-                [UIView commitAnimations];
-            });
+        
+        switch (self.type) {
+            case DCPullReleaseViewType_Header:
+            {
+                if (scrollView.contentOffset.y < -pullReleaseViewShowHeight && !working) {
+                    [self.delegate actionRequestFormPullReleaseView:self];
+                    
+                    self.state = DCPullReleaseViewState_Working;
+                    
+                    dispatch_async(dispatch_get_main_queue(), ^(void){
+                        [UIView beginAnimations:nil context:NULL];
+                        [UIView setAnimationDuration:DCPULLRELEASEVIEW_EdgeInsetAnimationDuration];
+                        scrollView.contentInset = UIEdgeInsetsMake(pullReleaseViewShowHeight, 0.0f, 0.0f, 0.0f);
+                        [UIView commitAnimations];
+                    });
+                }
+            }
+                break;
+                
+            case DCPullReleaseViewType_Footer:
+            {
+                CGFloat bottomOffsetY = scrollView.contentOffset.y + scrollView.bounds.size.height;
+                if (bottomOffsetY > scrollView.contentSize.height + pullReleaseViewShowHeight && !working) {
+                    [self.delegate actionRequestFormPullReleaseView:self];
+                    
+                    self.state = DCPullReleaseViewState_Working;
+                    
+                    dispatch_async(dispatch_get_main_queue(), ^(void){
+                        [UIView beginAnimations:nil context:NULL];
+                        [UIView setAnimationDuration:DCPULLRELEASEVIEW_EdgeInsetAnimationDuration];
+                        scrollView.contentInset = UIEdgeInsetsMake(0.0f, 0.0f, pullReleaseViewShowHeight, 0.0f);
+                        [UIView commitAnimations];
+                    });
+                }
+            }
+                break;
+                
+            default:
+            {
+                [NSException raise:@"DCPullReleaseView error" format:@"unknown type"];
+            }
+                break;
         }
     } while (NO);
 }
@@ -311,7 +466,7 @@
         
         dispatch_async(dispatch_get_main_queue(), ^(void){
             [UIView beginAnimations:nil context:NULL];
-            [UIView setAnimationDuration:0.25];
+            [UIView setAnimationDuration:DCPULLRELEASEVIEW_EdgeInsetAnimationDuration];
             scrollView.contentInset = UIEdgeInsetsZero;
             [UIView commitAnimations];
         });
@@ -337,12 +492,12 @@
     return result;
 }
 /*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect
-{
-    // Drawing code
-}
-*/
+ // Only override drawRect: if you perform custom drawing.
+ // An empty implementation adversely affects performance during animation.
+ - (void)drawRect:(CGRect)rect
+ {
+ // Drawing code
+ }
+ */
 
 @end

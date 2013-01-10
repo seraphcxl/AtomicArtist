@@ -21,6 +21,7 @@
 
 #define DCPULLRELEASEVIEW_TextColor [UIColor darkTextColor]
 #define DCPULLRELEASEVIEW_FlipAnimationDuration 0.25f
+#define DCPULLRELEASEVIEW_EdgeInsetAnimationDuration 0.2f
 
 typedef enum{
     DCPullReleaseViewState_Common = 0,
@@ -28,18 +29,24 @@ typedef enum{
 	DCPullReleaseViewState_Working,
 } DCPullReleaseViewState;
 
+typedef enum{
+    DCPullReleaseViewType_Header = 0,
+	DCPullReleaseViewType_Footer,
+} DCPullReleaseViewType;
+
 @class DCPullReleaseView;
 
 @protocol DCPullReleaseViewDelegate <NSObject>
 
 @required
-- (NSString *)titleForPullReleaseView;
-- (NSString *)detailTextForPullReleaseView;
+- (NSString *)titleForPullReleaseView:(DCPullReleaseView *)view;
+- (NSString *)detailTextForPullReleaseView:(DCPullReleaseView *)view;
 
 - (void)actionRequestFormPullReleaseView:(DCPullReleaseView *)view;
 - (BOOL)isWorkingForPullReleaseView:(DCPullReleaseView *)view;
 
 @optional
+- (void)relocatePullReleaseView:(DCPullReleaseView *)view;
 - (NSDate *)getLastUpdatedDateForPullReleaseView:(DCPullReleaseView *)view;
 
 @end
@@ -48,6 +55,7 @@ typedef enum{
 }
 
 @property (nonatomic, assign) DCPullReleaseViewState state;
+@property (nonatomic, assign) DCPullReleaseViewType type;
 
 @property (nonatomic, SAFE_ARC_PROP_WEAK) id<DCPullReleaseViewDelegate> delegate;
 
@@ -55,8 +63,11 @@ typedef enum{
 @property (nonatomic, copy) NSString *detailText;
 @property (nonatomic, SAFE_ARC_PROP_STRONG) UIImage *arrowImage;
 
+- (id)initWithFrame:(CGRect)frame andType:(DCPullReleaseViewType)type;
+
 - (void)setTitleLabelFont:(UIFont *)font andColor:(UIColor *)color;
 - (void)setDetailLabelLabelFont:(UIFont *)font andColor:(UIColor *)color;
+- (void)setActivityIndicatorColor:(UIColor *)color;
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView;
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView;

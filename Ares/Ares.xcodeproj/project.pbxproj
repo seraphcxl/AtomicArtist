@@ -11,6 +11,10 @@
 		1B01685B169BBE6700E7291A /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B01685A169BBE6700E7291A /* QuartzCore.framework */; };
 		1BBEDAAD169D4CE300B4323B /* DCPullReleaseView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BBEDAAC169D4CE300B4323B /* DCPullReleaseView.m */; };
 		1BBEDAAF169D50CB00B4323B /* DCPullReleaseView.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1BBEDAAB169D4CE300B4323B /* DCPullReleaseView.h */; };
+		1BE6DF4D169E691B0063C01C /* DCHeaderActionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BE6DF4C169E691B0063C01C /* DCHeaderActionView.m */; };
+		1BE6DF50169E695F0063C01C /* DCFooterActionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BE6DF4F169E695F0063C01C /* DCFooterActionView.m */; };
+		1BE6DF51169E6A370063C01C /* DCHeaderActionView.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1BE6DF4B169E691B0063C01C /* DCHeaderActionView.h */; };
+		1BE6DF52169E6A3C0063C01C /* DCFooterActionView.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1BE6DF4E169E695F0063C01C /* DCFooterActionView.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -20,6 +24,8 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				1BE6DF52169E6A3C0063C01C /* DCFooterActionView.h in CopyFiles */,
+				1BE6DF51169E6A370063C01C /* DCHeaderActionView.h in CopyFiles */,
 				1BBEDAAF169D50CB00B4323B /* DCPullReleaseView.h in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -42,6 +48,10 @@
 		1B01686D169BF66D00E7291A /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
 		1BBEDAAB169D4CE300B4323B /* DCPullReleaseView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCPullReleaseView.h; sourceTree = "<group>"; };
 		1BBEDAAC169D4CE300B4323B /* DCPullReleaseView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCPullReleaseView.m; sourceTree = "<group>"; };
+		1BE6DF4B169E691B0063C01C /* DCHeaderActionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCHeaderActionView.h; sourceTree = "<group>"; };
+		1BE6DF4C169E691B0063C01C /* DCHeaderActionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCHeaderActionView.m; sourceTree = "<group>"; };
+		1BE6DF4E169E695F0063C01C /* DCFooterActionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCFooterActionView.h; sourceTree = "<group>"; };
+		1BE6DF4F169E695F0063C01C /* DCFooterActionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCFooterActionView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -89,6 +99,10 @@
 				1B01683F169BB66400E7291A /* Supporting Files */,
 				1BBEDAAB169D4CE300B4323B /* DCPullReleaseView.h */,
 				1BBEDAAC169D4CE300B4323B /* DCPullReleaseView.m */,
+				1BE6DF4B169E691B0063C01C /* DCHeaderActionView.h */,
+				1BE6DF4C169E691B0063C01C /* DCHeaderActionView.m */,
+				1BE6DF4E169E695F0063C01C /* DCFooterActionView.h */,
+				1BE6DF4F169E695F0063C01C /* DCFooterActionView.m */,
 			);
 			path = Ares;
 			sourceTree = "<group>";
@@ -162,6 +176,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				1BBEDAAD169D4CE300B4323B /* DCPullReleaseView.m in Sources */,
+				1BE6DF4D169E691B0063C01C /* DCHeaderActionView.m in Sources */,
+				1BE6DF50169E695F0063C01C /* DCFooterActionView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
