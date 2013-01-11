@@ -380,16 +380,31 @@
                     } else if (self.state == DCPullReleaseViewState_Common && scrollView.contentOffset.y < -pullReleaseViewShowHeight && !working) {
                         self.state = DCPullReleaseViewState_Pulling;
                     }
+                    
+                    CGFloat bottomOffsetY = scrollView.contentOffset.y + scrollView.bounds.size.height;
+                    CGFloat bottomlocY = MAX(scrollView.contentSize.height, scrollView.bounds.size.height);
+                    if (scrollView.contentInset.top != 0 && bottomOffsetY > bottomlocY) {
+                        dispatch_async(dispatch_get_main_queue(), ^(void){
+                            scrollView.contentInset = UIEdgeInsetsZero;
+                        });
+                    }
                 }
                     break;
                     
                 case DCPullReleaseViewType_Footer:
                 {
                     CGFloat bottomOffsetY = scrollView.contentOffset.y + scrollView.bounds.size.height;
-                    if (self.state == DCPullReleaseViewState_Pulling && bottomOffsetY < scrollView.contentSize.height + pullReleaseViewShowHeight && bottomOffsetY > scrollView.contentSize.height && !working) {
+                    CGFloat bottomlocY = MAX(scrollView.contentSize.height, scrollView.bounds.size.height);
+                    if (self.state == DCPullReleaseViewState_Pulling && bottomOffsetY < bottomlocY + pullReleaseViewShowHeight && bottomOffsetY > bottomlocY && !working) {
                         self.state = DCPullReleaseViewState_Common;
-                    } else if (self.state == DCPullReleaseViewState_Common && scrollView.contentOffset.y + scrollView.bounds.size.height > scrollView.contentSize.height + pullReleaseViewShowHeight && !working) {
+                    } else if (self.state == DCPullReleaseViewState_Common && bottomOffsetY > bottomlocY + pullReleaseViewShowHeight && !working) {
                         self.state = DCPullReleaseViewState_Pulling;
+                    }
+                    
+                    if (scrollView.contentInset.top != 0 && scrollView.contentOffset.y > 0) {
+                        dispatch_async(dispatch_get_main_queue(), ^(void){
+                            scrollView.contentInset = UIEdgeInsetsZero;
+                        });
                     }
                 }
                     break;
@@ -401,11 +416,7 @@
                     break;
             }
             
-            if (scrollView.contentInset.top != 0) {
-                dispatch_async(dispatch_get_main_queue(), ^(void){
-                    scrollView.contentInset = UIEdgeInsetsZero;
-                });
-            }
+            
         }
     } while (NO);
 }
@@ -436,7 +447,8 @@
             case DCPullReleaseViewType_Footer:
             {
                 CGFloat bottomOffsetY = scrollView.contentOffset.y + scrollView.bounds.size.height;
-                if (bottomOffsetY > scrollView.contentSize.height + pullReleaseViewShowHeight && !working) {
+                CGFloat bottomlocY = MAX(scrollView.contentSize.height, scrollView.bounds.size.height);
+                if (bottomOffsetY > bottomlocY + pullReleaseViewShowHeight && !working) {
                     [self.delegate actionRequestFormPullReleaseView:self];
                     
                     self.state = DCPullReleaseViewState_Working;
