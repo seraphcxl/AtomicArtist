@@ -30,6 +30,10 @@
 
 @synthesize assetsLibrary = _assetsLibrary;
 
+- (DataSourceType)type {
+    return DataSourceType_AssetsLib;
+}
+
 - (BOOL)connect:(NSDictionary *)params {
     BOOL result = NO;
     do {
@@ -59,9 +63,9 @@
 - (BOOL)disconnect {
     BOOL result = NO;
     do {
-        [self clearCache];
-        
         @synchronized(self) {
+            [self clearCache];
+            
             NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
             [notificationCenter removeObserver:self];
             
@@ -161,16 +165,18 @@
             [alertView show];
         };
         
-        [self clearCache];
-        
         @synchronized(self) {
-            _frequency = frequency;
-            _enumCount = 0;
-            _cancelEnum = NO;
-            _enumerating = YES;
-            ALAssetsGroupType type = (ALAssetsGroupType)groupParam;
-            NSAssert(_assetsLibrary, @"_assetsLibrary == nil");
-            [_assetsLibrary enumerateGroupsWithTypes:type usingBlock:enumerator failureBlock:failureReporter];
+            if (!_enumerating) {
+                [self clearCache];
+                
+                _frequency = frequency;
+                _enumCount = 0;
+                _cancelEnum = NO;
+                _enumerating = YES;
+                ALAssetsGroupType type = (ALAssetsGroupType)groupParam;
+                NSAssert(_assetsLibrary, @"_assetsLibrary == nil");
+                [_assetsLibrary enumerateGroupsWithTypes:type usingBlock:enumerator failureBlock:failureReporter];
+            }
         }
         SAFE_ARC_AUTORELEASE_POOL_END()
     } while (NO);

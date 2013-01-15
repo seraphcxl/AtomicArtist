@@ -8,6 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
+typedef enum {
+    DataSourceType_AssetsLib = 0,
+} DataSourceType;
 
 #pragma mark - Notify
 extern NSString * const NOTIFY_DATAITEM_ADDED;
@@ -31,6 +34,7 @@ extern NSString * const kDATAITEMPROPERTY_FULLSCREENIMAGE;
 
 @protocol DCDataItem <NSObject>
 
+- (DataSourceType)type;
 - (NSString *)uniqueID;
 - (id)valueForProperty:(NSString *)property withOptions:(NSDictionary *)options;
 - (void)save:(NSString *)filePath;
@@ -46,6 +50,7 @@ extern NSString * const kDATAGROUPPROPERTY_POSTERIMAGE;
 
 @protocol DCDataGroup <NSObject>
 
+- (DataSourceType)type;
 - (NSString *)uniqueID;
 - (void)clearCache;
 - (void)enumItems:(id)param notifyWithFrequency:(NSUInteger)frequency;
@@ -64,6 +69,7 @@ extern NSString * const kDATAGROUPPROPERTY_POSTERIMAGE;
 #pragma mark - DCDataLibrary
 @protocol DCDataLibrary <NSObject>
 
+- (DataSourceType)type;
 - (BOOL)connect:(NSDictionary *)params;
 - (BOOL)disconnect;
 - (void)clearCache;

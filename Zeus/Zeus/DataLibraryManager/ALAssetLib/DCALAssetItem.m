@@ -14,6 +14,10 @@
 
 @synthesize asset = _asset;
 
+- (DataSourceType)type {
+    return DataSourceType_AssetsLib;
+}
+
 - (void)save:(NSString *)filePath {
     UIImage *image = nil;
     do {
