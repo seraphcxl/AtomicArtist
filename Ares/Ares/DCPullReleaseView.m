@@ -430,8 +430,6 @@
             case DCPullReleaseViewType_Header:
             {
                 if (scrollView.contentOffset.y < -pullReleaseViewShowHeight && !working) {
-                    [self.delegate actionRequestFormPullReleaseView:self];
-                    
                     self.state = DCPullReleaseViewState_Working;
                     
                     dispatch_async(dispatch_get_main_queue(), ^(void){
@@ -440,6 +438,8 @@
                         scrollView.contentInset = UIEdgeInsetsMake(pullReleaseViewShowHeight, 0.0f, 0.0f, 0.0f);
                         [UIView commitAnimations];
                     });
+                    
+                    [self.delegate actionRequestFormPullReleaseView:self];
                 }
             }
                 break;
@@ -449,8 +449,6 @@
                 CGFloat bottomOffsetY = scrollView.contentOffset.y + scrollView.bounds.size.height;
                 CGFloat bottomlocY = MAX(scrollView.contentSize.height, scrollView.bounds.size.height);
                 if (bottomOffsetY > bottomlocY + pullReleaseViewShowHeight && !working) {
-                    [self.delegate actionRequestFormPullReleaseView:self];
-                    
                     self.state = DCPullReleaseViewState_Working;
                     
                     dispatch_async(dispatch_get_main_queue(), ^(void){
@@ -459,6 +457,8 @@
                         scrollView.contentInset = UIEdgeInsetsMake(0.0f, 0.0f, pullReleaseViewShowHeight, 0.0f);
                         [UIView commitAnimations];
                     });
+                    
+                    [self.delegate actionRequestFormPullReleaseView:self];
                 }
             }
                 break;
