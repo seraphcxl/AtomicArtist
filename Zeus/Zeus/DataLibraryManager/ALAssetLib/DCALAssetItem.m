@@ -63,6 +63,8 @@
 - (void)dealloc {
     do {
         @synchronized(self) {
+            self.actionDelegate = nil;
+            
             self.asset = nil;
         }
         

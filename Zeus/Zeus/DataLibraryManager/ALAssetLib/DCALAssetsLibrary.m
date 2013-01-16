@@ -9,7 +9,6 @@
 #import <UIKit/UIKit.h>
 #import "DCALAssetsLibrary.h"
 #import "DCALAssetsGroup.h"
-#import "DCAssetsLibNotificationAgent.h"
 
 #define ALASSETSLIBRARY_FREQUENCY_FACTOR (4)
 
@@ -26,8 +25,6 @@
 - (void)initAssetsLib;
 
 - (void)uninitAssetsLib;
-
-- (void)assetsLibEndChange:(NSNotification *)notification;
 
 @end
 
@@ -76,9 +73,6 @@
     do {
         @synchronized(self) {
             [self initAssetsLib];
-            
-            NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
-            [notificationCenter addObserver:self selector:@selector(assetsLibEndChange:) name:DCAssetsLibEndChange object:nil];
         }
         result = YES;
     } while (NO);
@@ -89,9 +83,6 @@
     BOOL result = NO;
     do {
         @synchronized(self) {
-            NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
-            [notificationCenter removeObserver:self];
-            
             [self uninitAssetsLib];
         }
         
@@ -285,7 +276,7 @@
     return _enumerating;
 }
 
-- (void)assetsLibEndChange:(NSNotification *)notification {
+- (void)nofityAssetsLibStable {
     do {
         @synchronized(self) {
             [self uninitAssetsLib];

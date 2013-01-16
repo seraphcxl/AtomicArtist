@@ -11,8 +11,9 @@
 #import <AssetsLibrary/AssetsLibrary.h>
 #import "DCCommonConstants.h"
 #import "SafeARC.h"
+#import "DCAssetsLibNotificationAgent.h"
 
-@interface DCALAssetsLibrary : NSObject <DCDataLibrary>
+@interface DCALAssetsLibrary : NSObject <DCDataLibrary, DCAssetsLibDataSource>
 
 @property (nonatomic, SAFE_ARC_PROP_STRONG) ALAssetsLibrary *assetsLibrary;
 

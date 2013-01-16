@@ -21,6 +21,7 @@ NSString *const DCAssetsLibEndChange = @"DCAssetsLibEndChange";
 
 @implementation DCAssetsLibNotificationAgent
 
+@synthesize assetsLibDataSource = _assetsLibDataSource;
 @synthesize state = _state;
 
 DEFINE_SINGLETON_FOR_CLASS(DCAssetsLibNotificationAgent);
@@ -42,10 +43,14 @@ DEFINE_SINGLETON_FOR_CLASS(DCAssetsLibNotificationAgent);
             NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
             [notificationCenter removeObserver:self];
             
-            if (_timerForStable) {
-                [_timerForStable invalidate];
-                SAFE_ARC_SAFERELEASE(_timerForStable);
-            }
+            dispatch_async(dispatch_get_main_queue(), ^(void){
+                if (_timerForStable) {
+                    [_timerForStable invalidate];
+                    SAFE_ARC_SAFERELEASE(_timerForStable);
+                }
+            });
+            
+            self.assetsLibDataSource = nil;
             
             SAFE_ARC_SUPER_DEALLOC();
         }
@@ -59,25 +64,32 @@ DEFINE_SINGLETON_FOR_CLASS(DCAssetsLibNotificationAgent);
                 _state = AssetsLibState_Invalid;
                 [[NSNotificationCenter defaultCenter] postNotificationName:DCAssetsLibStartChange object:nil];
             } else if (self.state == AssetsLibState_Invalid) {
+                ;
             }
             
-            if (_timerForStable) {
-                [_timerForStable invalidate];
-                SAFE_ARC_SAFERELEASE(_timerForStable);
-            }
-            _timerForStable = [NSTimer scheduledTimerWithTimeInterval:DCASSETSLIBNOTIFICATIONAGENT_StableDuration target:self selector:@selector(assetsLibStable:) userInfo:nil repeats:NO];
-            SAFE_ARC_RETAIN(_timerForStable);
+            dispatch_async(dispatch_get_main_queue(), ^(void){
+                if (_timerForStable) {
+                    [_timerForStable invalidate];
+                    SAFE_ARC_SAFERELEASE(_timerForStable);
+                }
+                _timerForStable = [NSTimer scheduledTimerWithTimeInterval:DCASSETSLIBNOTIFICATIONAGENT_StableDuration target:self selector:@selector(assetsLibStable:) userInfo:nil repeats:NO];
+                SAFE_ARC_RETAIN(_timerForStable);
+            });
         }
     } while (NO);
 }
 
-- (void)assetsLibStable:(NSTimer *)timer {
+- (void)assetsLibStable:(NSTimer *)timer {  // attention: this func should run in background thread
     do {
         @synchronized(self) {
             if (_timerForStable == timer) {
                 NSAssert(self.state == AssetsLibState_Invalid, @"state error");
                 _state = AssetsLibState_Valid;
-                [[NSNotificationCenter defaultCenter] postNotificationName:DCAssetsLibEndChange object:nil];
+                
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^(void){
+                    [self.assetsLibDataSource nofityAssetsLibStable];
+                    [[NSNotificationCenter defaultCenter] postNotificationName:DCAssetsLibEndChange object:nil];
+                });
                 
                 [_timerForStable invalidate];
                 SAFE_ARC_SAFERELEASE(_timerForStable);

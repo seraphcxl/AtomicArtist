@@ -44,6 +44,8 @@ extern NSString * const kDATAITEMPROPERTY_THUMBNAILURL;
 
 @protocol DCDataItem <NSObject>
 
+@property (nonatomic, assign) id<DCDataItemActionDelegate> actionDelegate;
+
 - (DataSourceType)type;
 - (NSString *)uniqueID;
 - (id)valueForProperty:(NSString *)property withOptions:(NSDictionary *)options;

@@ -22,8 +22,17 @@ typedef enum {
     AssetsLibState_Invalid,
 } AssetsLibState;
 
+@class DCAssetsLibNotificationAgent;
+
+@protocol DCAssetsLibDataSource <NSObject>
+
+- (void)nofityAssetsLibStable;
+
+@end
+
 @interface DCAssetsLibNotificationAgent : NSObject
 
+@property (nonatomic, assign) id<DCAssetsLibDataSource> assetsLibDataSource;
 @property (nonatomic, assign, readonly) AssetsLibState state;
 
 DEFINE_SINGLETON_FOR_HEADER(DCAssetsLibNotificationAgent);
