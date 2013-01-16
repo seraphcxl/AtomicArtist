@@ -47,6 +47,7 @@
 		1B016864169BC16900E7291A /* whiteArrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "whiteArrow@2x.png"; sourceTree = "<group>"; };
 		1BBEDAAB169D4CE300B4323B /* DCPullReleaseView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCPullReleaseView.h; sourceTree = "<group>"; };
 		1BBEDAAC169D4CE300B4323B /* DCPullReleaseView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCPullReleaseView.m; sourceTree = "<group>"; };
+		1BDD9D7516A6ABF1006B31CC /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = SOURCE_ROOT; };
 		1BE6DF4B169E691B0063C01C /* DCHeaderActionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCHeaderActionView.h; sourceTree = "<group>"; };
 		1BE6DF4C169E691B0063C01C /* DCHeaderActionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCHeaderActionView.m; sourceTree = "<group>"; };
 		1BE6DF4E169E695F0063C01C /* DCFooterActionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCFooterActionView.h; sourceTree = "<group>"; };
@@ -109,6 +110,7 @@
 		1B01683F169BB66400E7291A /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				1BDD9D7516A6ABF1006B31CC /* README.md */,
 				1B01685D169BC16900E7291A /* grayArrow.png */,
 				1B01685E169BC16900E7291A /* grayArrow@2x.png */,
 				1B01685F169BC16900E7291A /* blackArrow.png */,
