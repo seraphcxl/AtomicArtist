@@ -12,6 +12,7 @@
 
 @implementation DCALAssetItem
 
+@synthesize actionDelegate = _actionDelegate;
 @synthesize asset = _asset;
 
 - (DataSourceType)type {
@@ -42,6 +43,8 @@
             if (data) {
                 [data writeToFile:filePath atomically:YES];
             }
+            
+            [self.actionDelegate notifyFileSaved:self to:filePath];
         }
     } while (NO);
     SAFE_ARC_SAFERELEASE(image);

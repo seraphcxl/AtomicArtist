@@ -14,6 +14,7 @@
 
 @interface DCALAssetItem : NSObject <DCDataItem>
 
+@property (nonatomic, assign) id<DCDataItemActionDelegate> actionDelegate;
 @property (nonatomic, SAFE_ARC_PROP_STRONG)ALAsset *asset;
 
 - (id)initWithALAsset:(ALAsset *)asset;
