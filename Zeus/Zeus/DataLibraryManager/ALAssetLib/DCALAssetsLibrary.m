@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "DCALAssetsLibrary.h"
 #import "DCALAssetsGroup.h"
+#import "DCAssetsLibNotificationAgent.h"
 
 #define ALASSETSLIBRARY_FREQUENCY_FACTOR (4)
 
@@ -22,7 +23,11 @@
     BOOL _enumerating;
 }
 
-- (void)assetsLibChanged:(NSNotification *)note;
+- (void)initAssetsLib;
+
+- (void)uninitAssetsLib;
+
+- (void)assetsLibEndChange:(NSNotification *)notification;
 
 @end
 
@@ -34,8 +39,7 @@
     return DataSourceType_AssetsLib;
 }
 
-- (BOOL)connect:(NSDictionary *)params {
-    BOOL result = NO;
+- (void)initAssetsLib {
     do {
         @synchronized(self) {
             if (!_assetsLibrary) {
@@ -51,9 +55,30 @@
             }
             _cancelEnum = NO;
             _enumerating = NO;
+        }
+    } while (NO);
+}
+
+- (void)uninitAssetsLib {
+    do {
+        @synchronized(self) {
+            [self clearCache];
+            
+            SAFE_ARC_SAFERELEASE(_allALAssetsGroupPersistentIDs);
+            SAFE_ARC_SAFERELEASE(_allALAssetsGroups);
+            self.assetsLibrary = nil;
+        }
+    } while (NO);
+}
+
+- (BOOL)connect:(NSDictionary *)params {
+    BOOL result = NO;
+    do {
+        @synchronized(self) {
+            [self initAssetsLib];
             
             NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
-            [notificationCenter addObserver:self selector:@selector(assetsLibChanged:) name:ALAssetsLibraryChangedNotification object:nil];
+            [notificationCenter addObserver:self selector:@selector(assetsLibEndChange:) name:DCAssetsLibEndChange object:nil];
         }
         result = YES;
     } while (NO);
@@ -64,14 +89,10 @@
     BOOL result = NO;
     do {
         @synchronized(self) {
-            [self clearCache];
-            
             NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
             [notificationCenter removeObserver:self];
             
-            SAFE_ARC_SAFERELEASE(_allALAssetsGroupPersistentIDs);
-            SAFE_ARC_SAFERELEASE(_allALAssetsGroups);
-            self.assetsLibrary = nil;
+            [self uninitAssetsLib];
         }
         
         result = YES;
@@ -126,6 +147,11 @@
                         DCALAssetsGroup *assetsGroup = [[DCALAssetsGroup alloc] initWithALAssetsGroup:group];
                         SAFE_ARC_AUTORELEASE(assetsGroup);
                         @synchronized(self) {
+                            if (_cancelEnum) {
+                                *stop = _cancelEnum;
+                                _enumerating = NO;
+                                break;
+                            }
                             NSAssert(_allALAssetsGroupPersistentIDs, @"_allALAssetsGroupPersistentIDs == nil");
                             NSAssert(_allALAssetsGroups, @"_allALAssetsGroups == nil");
                             NSUInteger index = [_allALAssetsGroupPersistentIDs count];
@@ -259,9 +285,12 @@
     return _enumerating;
 }
 
-- (void)assetsLibChanged:(NSNotification *)note {
+- (void)assetsLibEndChange:(NSNotification *)notification {
     do {
-        ;
+        @synchronized(self) {
+            [self uninitAssetsLib];
+            [self initAssetsLib];
+        }
     } while (NO);
 }
 

@@ -10,6 +10,7 @@
 
 typedef enum {
     DataSourceType_AssetsLib = 0,
+    DataSourceType_Facebook,
 } DataSourceType;
 
 #pragma mark - Notify
@@ -21,6 +22,14 @@ extern NSString * const NOTIFY_DATAGROUP_ADDED;
 extern NSString * const NOTIFY_DATAGROUP_ENUM_END;
 extern NSString * const NOTIFY_DATAGROUP_EMPTY;
 
+@protocol DCDataItem;
+
+@protocol DCDataItemActionDelegate <NSObject>
+
+- (void)notifyFileSaved:(id<DCDataItem>)dataItem to:(id)param;
+
+@end
+
 #pragma mark - DCDataItem - Property key
 extern NSString * const kDATAITEMPROPERTY_UID;
 extern NSString * const kDATAITEMPROPERTY_FILENAME;
@@ -31,6 +40,7 @@ extern NSString * const kDATAITEMPROPERTY_ORIENTATION;
 extern NSString * const kDATAITEMPROPERTY_THUMBNAIL;
 extern NSString * const kDATAITEMPROPERTY_ORIGINIMAGE;
 extern NSString * const kDATAITEMPROPERTY_FULLSCREENIMAGE;
+extern NSString * const kDATAITEMPROPERTY_THUMBNAILURL;
 
 @protocol DCDataItem <NSObject>
 
@@ -47,6 +57,7 @@ extern NSString * const kDATAGROUPPROPERTY_GROUPNAME;
 extern NSString * const kDATAGROUPPROPERTY_URL;
 extern NSString * const kDATAGROUPPROPERTY_TYPE;
 extern NSString * const kDATAGROUPPROPERTY_POSTERIMAGE;
+extern NSString * const kDATAGROUPPROPERTY_POSTERIMAGEURL;
 
 @protocol DCDataGroup <NSObject>
 

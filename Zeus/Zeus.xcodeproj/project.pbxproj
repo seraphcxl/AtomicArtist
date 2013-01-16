@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1BE2313A16A65516002BF87F /* DCAssetsLibNotificationAgent.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BE2313916A65515002BF87F /* DCAssetsLibNotificationAgent.m */; };
 		1BE3FAFA16966D71004DDEAF /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BE3FAF916966D71004DDEAF /* Foundation.framework */; };
 		1BE3FB9816966E60004DDEAF /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BE3FB9716966E60004DDEAF /* CoreData.framework */; };
 		1BE3FB9A16966E67004DDEAF /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BE3FB9916966E67004DDEAF /* UIKit.framework */; };
@@ -55,6 +56,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		1BE2313816A65514002BF87F /* DCAssetsLibNotificationAgent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCAssetsLibNotificationAgent.h; sourceTree = "<group>"; };
+		1BE2313916A65515002BF87F /* DCAssetsLibNotificationAgent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCAssetsLibNotificationAgent.m; sourceTree = "<group>"; };
 		1BE3FAF616966D71004DDEAF /* libZeus.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libZeus.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		1BE3FAF916966D71004DDEAF /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1BE3FAFD16966D71004DDEAF /* Zeus-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Zeus-Prefix.pch"; sourceTree = "<group>"; };
@@ -167,6 +170,8 @@
 				1BE3FBA016966E76004DDEAF /* DCALAssetsGroup.m */,
 				1BE3FBA116966E76004DDEAF /* DCALAssetsLibrary.h */,
 				1BE3FBA216966E76004DDEAF /* DCALAssetsLibrary.m */,
+				1BE2313816A65514002BF87F /* DCAssetsLibNotificationAgent.h */,
+				1BE2313916A65515002BF87F /* DCAssetsLibNotificationAgent.m */,
 			);
 			path = ALAssetLib;
 			sourceTree = "<group>";
@@ -260,6 +265,7 @@
 				1BE3FBBD16966E76004DDEAF /* Group.m in Sources */,
 				1BE3FBBF16966E76004DDEAF /* MediaDB.xcdatamodeld in Sources */,
 				1BE6DF2E169E52C30063C01C /* Item.m in Sources */,
+				1BE2313A16A65516002BF87F /* DCAssetsLibNotificationAgent.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
