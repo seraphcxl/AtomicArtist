@@ -13,8 +13,134 @@
 
 @implementation DCImageHelper
 
++ (NSInteger)UIImageOrientationToCGImagePropertyOrientation:(UIImageOrientation)imageOrientation {
+    NSInteger result = 0;
+    switch (imageOrientation) {
+        case UIImageOrientationUp:
+            result = 1;
+            break;
+            
+        case UIImageOrientationDown:
+            result = 3;
+            break;
+            
+        case UIImageOrientationLeft:
+            result = 8;
+            break;
+            
+        case UIImageOrientationRight:
+            result = 6;
+            break;
+            
+        case UIImageOrientationUpMirrored:
+            result = 2;
+            break;
+            
+        case UIImageOrientationDownMirrored:
+            result = 4;
+            break;
+            
+        case UIImageOrientationLeftMirrored:
+            result = 5;
+            break;
+            
+        case UIImageOrientationRightMirrored:
+            result = 7;
+            break;
+            
+        default:
+            break;
+    }
+    return result;
+}
+
++ (CGImageSourceRef)loadImageSourceFromContentsOfFile:(NSString *)path {
+    CGImageSourceRef result = nil;
+    CGDataProviderRef cgDP = nil;
+    do {
+        if (!path) {
+            break;
+        }
+        cgDP = CGDataProviderCreateWithFilename([path fileSystemRepresentation]);
+        result = CGImageSourceCreateWithDataProvider(cgDP, NULL);
+    } while (NO);
+    if (cgDP) {
+        CGDataProviderRelease(cgDP);
+        cgDP = nil;
+    }
+    return result;
+}
+
++ (CGImageRef)loadImageFromContentsOfFile:(NSString *)path withMaxPixelSize:(CGFloat)pixelSize {
+    CGImageRef result = nil;
+    CGImageSourceRef sourceRef = nil;
+    do {
+        if (!path || pixelSize == 0) {
+            break;
+        }
+        sourceRef = [DCImageHelper loadImageSourceFromContentsOfFile:path];
+        if (!sourceRef) {
+            break;
+        }
+        NSDictionary *options = nil;
+        if (pixelSize > 0.0f) {
+            options = [[NSDictionary alloc] initWithObjectsAndKeys:(id)kCFBooleanTrue, (id)kCGImageSourceCreateThumbnailWithTransform, (id)kCFBooleanTrue, (id)kCGImageSourceCreateThumbnailFromImageAlways, (id)[NSNumber numberWithDouble:pixelSize], (id)kCGImageSourceThumbnailMaxPixelSize, nil];
+        } else {
+            options = [[NSDictionary alloc] initWithObjectsAndKeys:(id)kCFBooleanTrue, (id)kCGImageSourceCreateThumbnailWithTransform, (id)kCFBooleanTrue, (id)kCGImageSourceCreateThumbnailFromImageAlways, nil];
+        }
+        result = CGImageSourceCreateImageAtIndex(sourceRef, 0, (__bridge CFDictionaryRef)options);
+    } while (NO);
+    if (sourceRef) {
+        CFRelease(sourceRef);
+        sourceRef = nil;
+    }
+    return result;
+}
+
 #ifdef ALASSETLIB_AVAILABLE
-+ (UIImage *)loadImageFromALAsset:(ALAsset *)asset withShape:(DCImageShapeType)type andMaxPixelSize:(NSUInteger)pixelSize {
++ (CGImageSourceRef)loadImageSourceFromALAsset:(ALAsset *)asset {
+    CGImageSourceRef result = nil;
+    do {
+        if (!asset) {
+            break;
+        }
+        ALAssetRepresentation *representation = [asset defaultRepresentation];
+        Byte *buffer = (Byte *)malloc(representation.size);
+        NSUInteger buffered = [representation getBytes:buffer fromOffset:0.0 length:representation.size error:nil];
+        NSData *data = [NSData dataWithBytesNoCopy:buffer length:buffered freeWhenDone:YES];
+        result = CGImageSourceCreateWithData((__bridge CFDataRef)data,  NULL);
+    } while (NO);
+    return result;
+}
+
++ (CGImageRef)loadImageFromALAsset:(ALAsset *)asset withMaxPixelSize:(CGFloat)pixelSize {
+    CGImageRef result = nil;
+    CGImageSourceRef sourceRef = nil;
+    do {
+        if (!asset || pixelSize == 0) {
+            break;
+        }
+        sourceRef = [DCImageHelper loadImageSourceFromALAsset:asset];
+        if (!sourceRef) {
+            break;
+        }
+        NSDictionary *options = nil;
+        if (pixelSize > 0.0f) {
+            options = [[NSDictionary alloc] initWithObjectsAndKeys:(id)kCFBooleanTrue, (id)kCGImageSourceCreateThumbnailWithTransform, (id)kCFBooleanTrue, (id)kCGImageSourceCreateThumbnailFromImageAlways, (id)[NSNumber numberWithDouble:pixelSize], (id)kCGImageSourceThumbnailMaxPixelSize, nil];
+        } else {
+            options = [[NSDictionary alloc] initWithObjectsAndKeys:(id)kCFBooleanTrue, (id)kCGImageSourceCreateThumbnailWithTransform, (id)kCFBooleanTrue, (id)kCGImageSourceCreateThumbnailFromImageAlways, nil];
+        }
+        result = CGImageSourceCreateImageAtIndex(sourceRef, 0, (__bridge CFDictionaryRef)options);
+        SAFE_ARC_SAFERELEASE(options);
+    } while (NO);
+    if (sourceRef) {
+        CFRelease(sourceRef);
+        sourceRef = nil;
+    }
+    return result;
+}
+
++ (UIImage *)loadImageFromALAsset:(ALAsset *)asset withShape:(DCImageShapeType)type andMaxPixelSize:(CGFloat)pixelSize {
     UIImage *result = nil;
     CGImageSourceRef sourceRef = nil;
     CGImageRef cgimage = nil;
@@ -45,7 +171,12 @@
         NSUInteger buffered = [representation getBytes:buffer fromOffset:0.0 length:representation.size error:nil];
         NSData *data = [NSData dataWithBytesNoCopy:buffer length:buffered freeWhenDone:YES];
         sourceRef = CGImageSourceCreateWithData((__bridge CFDataRef)data,  NULL);
-        NSDictionary *options = [[NSDictionary alloc] initWithObjectsAndKeys:(id)kCFBooleanTrue, (id)kCGImageSourceCreateThumbnailWithTransform, (id)kCFBooleanTrue, (id)kCGImageSourceCreateThumbnailFromImageAlways, (id)[NSNumber numberWithDouble:size], (id)kCGImageSourceThumbnailMaxPixelSize, nil];
+        NSDictionary *options = nil;
+        if (pixelSize > 0.0f) {
+            options = [[NSDictionary alloc] initWithObjectsAndKeys:(id)kCFBooleanTrue, (id)kCGImageSourceCreateThumbnailWithTransform, (id)kCFBooleanTrue, (id)kCGImageSourceCreateThumbnailFromImageAlways, (id)[NSNumber numberWithDouble:pixelSize], (id)kCGImageSourceThumbnailMaxPixelSize, nil];
+        } else {
+            options = [[NSDictionary alloc] initWithObjectsAndKeys:(id)kCFBooleanTrue, (id)kCGImageSourceCreateThumbnailWithTransform, (id)kCFBooleanTrue, (id)kCGImageSourceCreateThumbnailFromImageAlways, nil];
+        }
         cgimage = CGImageSourceCreateThumbnailAtIndex(sourceRef, 0, (__bridge CFDictionaryRef)options);
         SAFE_ARC_SAFERELEASE(options);
         
@@ -97,10 +228,11 @@
     } while (NO);
     if (cgimage) {
         CGImageRelease(cgimage);
+        cgimage = nil;
     }
-    
     if (sourceRef) {
         CFRelease(sourceRef);
+        sourceRef = nil;
     }
     return result;
 }
@@ -340,6 +472,7 @@ const CGFloat kReflectOpacity = 0.5f;
 	CGImageRef src = [image CGImage];
 	CGImageRef dst = CGImageCreateWithImageInRect(src,rect);
 	UIImage *newImage = [UIImage imageWithCGImage:dst];
+    CGImageRelease(dst);
 	return newImage;
 }
 

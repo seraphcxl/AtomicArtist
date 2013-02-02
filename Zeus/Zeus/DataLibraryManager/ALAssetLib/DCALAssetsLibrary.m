@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "DCALAssetsLibrary.h"
 #import "DCALAssetsGroup.h"
+//#import "ASMediaPocket.h"
+#import "DCAssetsLibAgent.h"
 
 #define ALASSETSLIBRARY_FREQUENCY_FACTOR (4)
 
@@ -30,8 +32,6 @@
 
 @implementation DCALAssetsLibrary
 
-@synthesize assetsLibrary = _assetsLibrary;
-
 - (DataSourceType)type {
     return DataSourceType_AssetsLib;
 }
@@ -39,10 +39,6 @@
 - (void)initAssetsLib {
     do {
         @synchronized(self) {
-            if (!_assetsLibrary) {
-                _assetsLibrary = [[ALAssetsLibrary alloc] init];
-            }
-            
             if (!_allALAssetsGroups) {
                 _allALAssetsGroups = [[NSMutableDictionary alloc] init];
             }
@@ -52,6 +48,8 @@
             }
             _cancelEnum = NO;
             _enumerating = NO;
+            
+            [[DCAssetsLibAgent sharedDCAssetsLibAgent] addAssetsLibUser:self];
         }
     } while (NO);
 }
@@ -59,11 +57,12 @@
 - (void)uninitAssetsLib {
     do {
         @synchronized(self) {
+            [[DCAssetsLibAgent sharedDCAssetsLibAgent] removeAssetsLibUser:self];
+            
             [self clearCache];
             
             SAFE_ARC_SAFERELEASE(_allALAssetsGroupPersistentIDs);
             SAFE_ARC_SAFERELEASE(_allALAssetsGroups);
-            self.assetsLibrary = nil;
         }
     } while (NO);
 }
@@ -109,7 +108,8 @@
 
 - (void)enumGroups:(id)groupParam notifyWithFrequency:(NSUInteger)frequency {
     do {
-        if (!_assetsLibrary) {
+        ALAssetsLibrary *assetsLibrary = [DCAssetsLibAgent sharedDCAssetsLibAgent].assetsLibrary;
+        if (!assetsLibrary) {
             [NSException raise:@"DCALAssetsLibrary Error" format:@"Reason: _assetsLibrary == nil"];
             break;
         }
@@ -191,8 +191,8 @@
                 _cancelEnum = NO;
                 _enumerating = YES;
                 ALAssetsGroupType type = (ALAssetsGroupType)groupParam;
-                NSAssert(_assetsLibrary, @"_assetsLibrary == nil");
-                [_assetsLibrary enumerateGroupsWithTypes:type usingBlock:enumerator failureBlock:failureReporter];
+                NSAssert(assetsLibrary, @"_assetsLibrary == nil");
+                [assetsLibrary enumerateGroupsWithTypes:type usingBlock:enumerator failureBlock:failureReporter];
             }
         }
         SAFE_ARC_AUTORELEASE_POOL_END()
@@ -211,11 +211,11 @@
     return result;
 }
 
-- (id<DCDataGroup>)groupWithUID:(NSString *)uid {
+- (id<DCDataGroup>)groupWithUID:(NSString *)uniqueID {
     DCALAssetsGroup *result = nil;
     @synchronized(self) {
         if (_allALAssetsGroups) {
-            result = [_allALAssetsGroups objectForKey:uid];
+            result = [_allALAssetsGroups objectForKey:uniqueID];
         } else {
             [NSException raise:@"DCALAssetsLibrary error" format:@"Reason: allALGroups is nil"];
         }
@@ -281,6 +281,7 @@
         @synchronized(self) {
             [self uninitAssetsLib];
             [self initAssetsLib];
+            
         }
     } while (NO);
 }

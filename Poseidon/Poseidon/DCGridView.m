@@ -20,7 +20,7 @@ static const UIViewAnimationOptions kDefaultAnimationOptions = (UIViewAnimationO
 #pragma mark - interface DCGridView () <UIGestureRecognizerDelegate, UIScrollViewDelegate>
 @interface DCGridView () <UIGestureRecognizerDelegate, UIScrollViewDelegate> {
     // Sorting Gestures
-    UIPanGestureRecognizer *_sortingPanGesture;
+    UIPanGestureRecognizer *_dragdropPanGesture;
     UILongPressGestureRecognizer *_longPressGesture;
     
     // Moving gestures
@@ -35,8 +35,8 @@ static const UIViewAnimationOptions kDefaultAnimationOptions = (UIViewAnimationO
     NSMutableSet *_reusableCells;
     
     // Moving (sorting) control vars
-    DCGridViewCell *_sortMovingItem;
-    NSInteger _sortFuturePosition;
+    DCGridViewCell *_dragMovingItem;
+    NSInteger _dropFuturePosition;
     BOOL _autoScrollActive;
     
     CGPoint _minPossibleContentOffset;
@@ -53,26 +53,26 @@ static const UIViewAnimationOptions kDefaultAnimationOptions = (UIViewAnimationO
     BOOL _rotationActive;
 }
 
-@property(nonatomic, readonly) BOOL itemsSubviewsCacheIsValid;
-@property(nonatomic, SAFE_ARC_PROP_STRONG) NSArray *itemSubviewsCache;
-@property(atomic) NSInteger firstPositionLoaded;
-@property(atomic) NSInteger lastPositionLoaded;
+@property (nonatomic, readonly) BOOL itemsSubviewsCacheIsValid;
+@property (nonatomic, SAFE_ARC_PROP_STRONG) NSArray *itemSubviewsCache;
+@property (atomic) NSInteger firstPositionLoaded;
+@property (atomic) NSInteger lastPositionLoaded;
 
 - (void)commonInit;
 
 // Gestures
-- (void)sortingPanGestureUpdated:(UIPanGestureRecognizer *)panGesture;
+- (void)dragdropPanGestureUpdated:(UIPanGestureRecognizer *)panGesture;
 - (void)longPressGestureUpdated:(UILongPressGestureRecognizer *)longPressGesture;
 - (void)tapGestureUpdated:(UITapGestureRecognizer *)tapGesture;
 - (void)panGestureUpdated:(UIPanGestureRecognizer *)panGesture;
 - (void)pinchGestureUpdated:(UIPinchGestureRecognizer *)pinchGesture;
 - (void)rotationGestureUpdated:(UIRotationGestureRecognizer *)rotationGesture;
 
-// Sorting movement control
-- (void)sortingMoveDidStartAtPoint:(CGPoint)point;
-- (void)sortingMoveDidContinueToPoint:(CGPoint)point;
-- (void)sortingMoveDidStopAtPoint:(CGPoint)point;
-- (void)sortingAutoScrollMovementCheck;
+// DragDrop movement control
+- (void)dragdropMoveDidStartAtPoint:(CGPoint)point;
+- (void)dragdropMoveDidContinueToPoint:(CGPoint)point;
+- (void)dragdropMoveDidStopAtPoint:(CGPoint)point;
+- (void)dragdropAutoScrollMovementCheck;
 
 // Transformation control
 - (void)transformingGestureDidBeginWithGesture:(UIGestureRecognizer *)gesture;
@@ -106,14 +106,13 @@ static const UIViewAnimationOptions kDefaultAnimationOptions = (UIViewAnimationO
 #pragma mark - implementation DCGridView
 @implementation DCGridView
 
-@synthesize sortingDelegate = _sortingDelegate;
+@synthesize dragdropDelegate = _dragdropDelegate;
 @synthesize dataSource = _dataSource;
 @synthesize transformDelegate = _transformDelegate;
 @synthesize actionDelegate = _actionDelegate;
 @synthesize mainSuperView = _mainSuperView;
 @synthesize layoutStrategy = _layoutStrategy;
 @synthesize itemSpacing = _itemSpacing;
-@synthesize style = _style;
 @synthesize minimumPressDuration;
 @synthesize centerGrid = _centerGrid;
 @synthesize minEdgeInsets = _minEdgeInsets;
@@ -177,9 +176,9 @@ static const UIViewAnimationOptions kDefaultAnimationOptions = (UIViewAnimationO
         //////////////////////
         // Sorting gestures :
         
-        _sortingPanGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(sortingPanGestureUpdated:)];
-        _sortingPanGesture.delegate = self;
-        [self addGestureRecognizer:_sortingPanGesture];
+        _dragdropPanGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(dragdropPanGestureUpdated:)];
+        _dragdropPanGesture.delegate = self;
+        [self addGestureRecognizer:_dragdropPanGesture];
         
         _longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressGestureUpdated:)];
         _longPressGesture.numberOfTouchesRequired = 1;
@@ -200,20 +199,19 @@ static const UIViewAnimationOptions kDefaultAnimationOptions = (UIViewAnimationO
             }
         }
         [panGestureRecognizer setMaximumNumberOfTouches:1];
-        [panGestureRecognizer requireGestureRecognizerToFail:_sortingPanGesture];
+        [panGestureRecognizer requireGestureRecognizerToFail:_dragdropPanGesture];
         
         self.layoutStrategy = [DCGridViewLayoutStrategyFactory strategyFromType:DCGridViewLayoutVertical];
         
         self.mainSuperView = self;
         self.editing = NO;
         self.itemSpacing = 8;
-        self.style = DCGridViewStyleSwap;
         self.minimumPressDuration = 0.2;
         self.showFullSizeViewWithAlphaWhenTransforming = YES;
         self.minEdgeInsets = UIEdgeInsetsMake(4, 4, 4, 4);
         self.clipsToBounds = NO;
         
-        _sortFuturePosition = DCGV_INVALID_POSITION;
+        _dropFuturePosition = DCGV_INVALID_POSITION;
         _itemSize = CGSizeZero;
         _centerGrid = YES;
         
@@ -263,8 +261,8 @@ static const UIViewAnimationOptions kDefaultAnimationOptions = (UIViewAnimationO
 
 - (void)layoutSubviewsWithAnimation:(DCGridViewItemAnimation)animation {
     do {
-        [self recomputeSizeAnimated:!(animation & DCGridViewItemAnimationNone)];
-        [self relayoutItemsAnimated:animation & DCGridViewItemAnimationFade]; // only supported animation for now
+        [self recomputeSizeAnimated:!(animation & DCGridViewItemAnimation_Null)];
+        [self relayoutItemsAnimated:animation & DCGridViewItemAnimation_Fade]; // only supported animation for now
         [self loadRequiredItems];
     } while (NO);
 }
@@ -314,7 +312,7 @@ static const UIViewAnimationOptions kDefaultAnimationOptions = (UIViewAnimationO
             [self.layer addAnimation:transition forKey:@"rotationAnimation"];
             
             [self applyWithoutAnimation:^{
-                [self layoutSubviewsWithAnimation:DCGridViewItemAnimationNone];
+                [self layoutSubviewsWithAnimation:DCGridViewItemAnimation_Null];
             }];
             
             // Fixing the contentOffset when pagging enabled
@@ -323,7 +321,7 @@ static const UIViewAnimationOptions kDefaultAnimationOptions = (UIViewAnimationO
                 [self setContentOffset:[self rectForPoint:self.contentOffset inPaggingMode:YES].origin animated:YES];
             }
         } else {
-            [self layoutSubviewsWithAnimation:DCGridViewItemAnimationNone];
+            [self layoutSubviewsWithAnimation:DCGridViewItemAnimation_Null];
         }
     } while (NO);
 }
@@ -453,9 +451,9 @@ static const UIViewAnimationOptions kDefaultAnimationOptions = (UIViewAnimationO
                 valid = (!isScrolling && !self.isEditing && ![_longPressGesture hasRecognizedValidGesture]);
             }
         } else if (gestureRecognizer == _longPressGesture) {
-            valid = ((self.sortingDelegate || self.enableEditOnLongPress) && !isScrolling && !self.isEditing);
-        } else if (gestureRecognizer == _sortingPanGesture) {
-            valid = (_sortMovingItem != nil && [_longPressGesture hasRecognizedValidGesture]);
+            valid = ((self.dragdropDelegate || self.enableEditOnLongPress) && !isScrolling && !self.isEditing);
+        } else if (gestureRecognizer == _dragdropPanGesture) {
+            valid = (_dragMovingItem != nil && [_longPressGesture hasRecognizedValidGesture]);
         } else if (gestureRecognizer == _rotationGesture || gestureRecognizer == _pinchGesture || gestureRecognizer == _panGesture) {
             if (self.transformDelegate != nil && [gestureRecognizer numberOfTouches] == 2) {
                 CGPoint locationTouch1 = [gestureRecognizer locationOfTouch:0 inView:self];
@@ -474,7 +472,7 @@ static const UIViewAnimationOptions kDefaultAnimationOptions = (UIViewAnimationO
 }
 
 
-#pragma mark - DCGridView - Sorting gestures & logic
+#pragma mark - DCGridView - DragDrop gestures & logic
 - (void)longPressGestureUpdated:(UILongPressGestureRecognizer *)longPressGesture {
     do {
         if (self.enableEditOnLongPress && !self.editing) {
@@ -492,13 +490,22 @@ static const UIViewAnimationOptions kDefaultAnimationOptions = (UIViewAnimationO
         switch (longPressGesture.state) {
             case UIGestureRecognizerStateBegan:
             {
-                if (!_sortMovingItem) {
+                if (!_dragMovingItem) {
                     CGPoint location = [longPressGesture locationInView:self];
                     
-                    NSInteger position = [self.layoutStrategy itemPositionFromLocation:location];
+                    NSInteger position = [self.layoutStrategy itemPositionFromLocation:location];                    
                     
                     if (position != DCGV_INVALID_POSITION) {
-                        [self sortingMoveDidStartAtPoint:location];
+                        DCGridViewCell *cell = [self cellForItemAtIndex:position];
+                        if ([self.dragdropDelegate dragdropStyle] == DCGridViewDragDropStyle_Customizable) {
+                            if ([self.dragdropDelegate respondsToSelector:@selector(gridView:dragdropStateBegin:withGestureRecognizer:)]) {
+                                [self.dragdropDelegate gridView:self dragdropStateBegin:cell withGestureRecognizer:longPressGesture];
+                                                                
+                                _dragMovingItem = cell;
+                            }
+                        } else {
+                            [self dragdropMoveDidStartAtPoint:location];
+                        }
                     }
                 }
                 
@@ -508,11 +515,22 @@ static const UIViewAnimationOptions kDefaultAnimationOptions = (UIViewAnimationO
             case UIGestureRecognizerStateCancelled:
             case UIGestureRecognizerStateFailed:
             {
-                [_sortingPanGesture end];
+                [_dragdropPanGesture end];
                 
-                if (_sortMovingItem) {
+                if (_dragMovingItem) {
                     CGPoint location = [longPressGesture locationInView:self];
-                    [self sortingMoveDidStopAtPoint:location];
+                    if ([self.dragdropDelegate dragdropStyle] == DCGridViewDragDropStyle_Customizable) {
+                        if ([self.dragdropDelegate respondsToSelector:@selector(gridView:dragdropStateEnd:withGestureRecognizer:)]) {
+                            [self.dragdropDelegate gridView:self dragdropStateEnd:_dragMovingItem withGestureRecognizer:longPressGesture];
+                        }
+                        
+                        _dragMovingItem = nil;
+                        _dropFuturePosition = DCGV_INVALID_POSITION;
+                        
+                        [self setSubviewsCacheAsInvalid];
+                    } else {
+                        [self dragdropMoveDidStopAtPoint:location];
+                    }
                 }
                 
                 break;
@@ -523,32 +541,46 @@ static const UIViewAnimationOptions kDefaultAnimationOptions = (UIViewAnimationO
     } while (NO);
 }
 
-- (void)sortingPanGestureUpdated:(UIPanGestureRecognizer *)panGesture {
+- (void)dragdropPanGestureUpdated:(UIPanGestureRecognizer *)panGesture {
     do {
         switch (panGesture.state) {
             case UIGestureRecognizerStateEnded:
             case UIGestureRecognizerStateCancelled:
             case UIGestureRecognizerStateFailed:
             {
-                _autoScrollActive = NO;
+                if ([self.dragdropDelegate dragdropStyle] == DCGridViewDragDropStyle_Customizable) {
+                    ;
+                } else {
+                    _autoScrollActive = NO;
+                }
                 break;
             }
             case UIGestureRecognizerStateBegan:
             {
-                _autoScrollActive = YES;
-                [self sortingAutoScrollMovementCheck];
-                
+                if ([self.dragdropDelegate dragdropStyle] == DCGridViewDragDropStyle_Customizable) {
+                    ;
+                } else {
+                    _autoScrollActive = YES;
+                    [self dragdropAutoScrollMovementCheck];
+                }
                 break;
             }
             case UIGestureRecognizerStateChanged:
             {
-                CGPoint translation = [panGesture translationInView:self];
-                CGPoint offset = translation;
-                CGPoint locationInScroll = [panGesture locationInView:self];
-                
-                _sortMovingItem.transform = CGAffineTransformMakeTranslation(offset.x, offset.y);
-                [self sortingMoveDidContinueToPoint:locationInScroll];
-                
+                if (_dragMovingItem) {
+                    if ([self.dragdropDelegate dragdropStyle] == DCGridViewDragDropStyle_Customizable) {
+                        if ([self.dragdropDelegate respondsToSelector:@selector(gridView:dragdropStateChanged:withGestureRecognizer:)]) {
+                            [self.dragdropDelegate gridView:self dragdropStateChanged:_dragMovingItem withGestureRecognizer:panGesture];
+                        }
+                    } else {
+                        CGPoint translation = [panGesture translationInView:self];
+                        CGPoint offset = translation;
+                        CGPoint locationInScroll = [panGesture locationInView:self];
+                        
+                        _dragMovingItem.transform = CGAffineTransformMakeTranslation(offset.x, offset.y);
+                        [self dragdropMoveDidContinueToPoint:locationInScroll];
+                    }
+                }
                 break;
             }
             default:
@@ -557,15 +589,15 @@ static const UIViewAnimationOptions kDefaultAnimationOptions = (UIViewAnimationO
     } while (NO);
 }
 
-- (void)sortingAutoScrollMovementCheck {
+- (void)dragdropAutoScrollMovementCheck {
     do {
-        if (_sortMovingItem && _autoScrollActive) {
-            CGPoint locationInMainView = [_sortingPanGesture locationInView:self];
+        if (_dragMovingItem && _autoScrollActive) {
+            CGPoint locationInMainView = [_dragdropPanGesture locationInView:self];
             locationInMainView = CGPointMake(locationInMainView.x - self.contentOffset.x, locationInMainView.y -self.contentOffset.y);
             
             CGFloat threshhold = _itemSize.height;
             CGPoint offset = self.contentOffset;
-            CGPoint locationInScroll = [_sortingPanGesture locationInView:self];
+            CGPoint locationInScroll = [_dragdropPanGesture locationInView:self];
             
             if (locationInMainView.x + threshhold > self.bounds.size.width) {  // Going down
                 offset.x += _itemSize.width / 2;
@@ -602,9 +634,9 @@ static const UIViewAnimationOptions kDefaultAnimationOptions = (UIViewAnimationO
                 } completion:^(BOOL finished) {
                     self.contentOffset = offset;
                     if (_autoScrollActive) {
-                        [self sortingMoveDidContinueToPoint:locationInScroll];
+                        [self dragdropMoveDidContinueToPoint:locationInScroll];
                     }
-                    [self sortingAutoScrollMovementCheck];
+                    [self dragdropAutoScrollMovementCheck];
                 }];
             } else {
                 [self performSelector:@selector(sortingAutoScrollMovementCheck) withObject:nil afterDelay:0.5];
@@ -613,127 +645,128 @@ static const UIViewAnimationOptions kDefaultAnimationOptions = (UIViewAnimationO
     } while (NO);
 }
 
-- (void)sortingMoveDidStartAtPoint:(CGPoint)point {
+- (void)dragdropMoveDidStartAtPoint:(CGPoint)point {
     do {
         NSInteger position = [self.layoutStrategy itemPositionFromLocation:point];
         
         DCGridViewCell *item = [self cellForItemAtIndex:position];
         
         [self bringSubviewToFront:item];
-        _sortMovingItem = item;
+        _dragMovingItem = item;
         
-        CGRect frameInMainView = [self convertRect:_sortMovingItem.frame toView:self.mainSuperView];
+        CGRect frameInMainView = [self convertRect:_dragMovingItem.frame toView:self.mainSuperView];
         
-        [_sortMovingItem removeFromSuperview];
-        _sortMovingItem.frame = frameInMainView;
-        [self.mainSuperView addSubview:_sortMovingItem];
+        [_dragMovingItem removeFromSuperview];
+        _dragMovingItem.frame = frameInMainView;
+        [self.mainSuperView addSubview:_dragMovingItem];
         
-        _sortFuturePosition = (_sortMovingItem.tag - kTagOffset);
-        _sortMovingItem.tag = 0;
+        _dropFuturePosition = (_dragMovingItem.tag - kTagOffset);
+        _dragMovingItem.tag = 0;
         
-        if ([self.sortingDelegate respondsToSelector:@selector(gridView:didStartMovingCell:)]) {
-            [self.sortingDelegate gridView:self didStartMovingCell:_sortMovingItem];
+        if ([self.dragdropDelegate respondsToSelector:@selector(gridView:didStartMovingCell:)]) {
+            [self.dragdropDelegate gridView:self didStartMovingCell:_dragMovingItem];
         }
         
-        if ([self.sortingDelegate respondsToSelector:@selector(gridView:shouldAllowShakingBehaviorWhenMovingCell:atIndex:)]) {
-            [_sortMovingItem shake:[self.sortingDelegate gridView:self shouldAllowShakingBehaviorWhenMovingCell:_sortMovingItem atIndex:position]];
+        if ([self.dragdropDelegate respondsToSelector:@selector(gridView:shouldAllowShakingBehaviorWhenMovingCell:atIndex:)]) {
+            [_dragMovingItem shake:[self.dragdropDelegate gridView:self shouldAllowShakingBehaviorWhenMovingCell:_dragMovingItem atIndex:position]];
         } else {
-            [_sortMovingItem shake:YES];
+            [_dragMovingItem shake:YES];
         }
     } while (NO);
 }
 
-- (void)sortingMoveDidStopAtPoint:(CGPoint)point {
+- (void)dragdropMoveDidStopAtPoint:(CGPoint)point {
     do {
-        [_sortMovingItem shake:NO];
+        [_dragMovingItem shake:NO];
         
-        _sortMovingItem.tag = (_sortFuturePosition + kTagOffset);
+        _dragMovingItem.tag = (_dropFuturePosition + kTagOffset);
         
-        CGRect frameInScroll = [self.mainSuperView convertRect:_sortMovingItem.frame toView:self];
+        CGRect frameInScroll = [self.mainSuperView convertRect:_dragMovingItem.frame toView:self];
         
-        [_sortMovingItem removeFromSuperview];
-        _sortMovingItem.frame = frameInScroll;
-        [self addSubview:_sortMovingItem];
+        [_dragMovingItem removeFromSuperview];
+        _dragMovingItem.frame = frameInScroll;
+        [self addSubview:_dragMovingItem];
         
-        CGPoint newOrigin = [self.layoutStrategy originForItemAtPosition:_sortFuturePosition];
+        CGPoint newOrigin = [self.layoutStrategy originForItemAtPosition:_dropFuturePosition];
         CGRect newFrame = CGRectMake(newOrigin.x, newOrigin.y, _itemSize.width, _itemSize.height);
         
         [UIView animateWithDuration:kDefaultAnimationDuration delay:0 options:0 animations:^{
-            _sortMovingItem.transform = CGAffineTransformIdentity;
-            _sortMovingItem.frame = newFrame;
+            _dragMovingItem.transform = CGAffineTransformIdentity;
+            _dragMovingItem.frame = newFrame;
         } completion:^(BOOL finished) {
-            if ([self.sortingDelegate respondsToSelector:@selector(gridView:didEndMovingCell:)]) { [self.sortingDelegate gridView:self didEndMovingCell:_sortMovingItem];
+            if ([self.dragdropDelegate respondsToSelector:@selector(gridView:didEndMovingCell:)]) { [self.dragdropDelegate gridView:self didEndMovingCell:_dragMovingItem];
             }
-            _sortMovingItem = nil;
-            _sortFuturePosition = DCGV_INVALID_POSITION;
+            _dragMovingItem = nil;
+            _dropFuturePosition = DCGV_INVALID_POSITION;
             
             [self setSubviewsCacheAsInvalid];
         }];
     } while (NO);
 }
 
-- (void)sortingMoveDidContinueToPoint:(CGPoint)point {
+- (void)dragdropMoveDidContinueToPoint:(CGPoint)point {
     do {
         int position = [self.layoutStrategy itemPositionFromLocation:point];
         int tag = (position + kTagOffset);
         
-        if (position != DCGV_INVALID_POSITION && position != _sortFuturePosition && position < _numberTotalItems) {
+        if (position != DCGV_INVALID_POSITION && position != _dropFuturePosition && position < _numberTotalItems) {
             BOOL positionTaken = NO;
             
             for (UIView *v in [self itemSubviews]) {
-                if (v != _sortMovingItem && v.tag == tag) {
+                if (v != _dragMovingItem && v.tag == tag) {
                     positionTaken = YES;
                     break;
                 }
             }
             
             if (positionTaken) {
-                switch (self.style) {
-                    case DCGridViewStylePush:
+                switch ([self.dragdropDelegate dragdropStyle]) {
+                    case DCGridViewDragDropStyle_PushSort:
                     {
-                        if (position > _sortFuturePosition) {
+                        if (position > _dropFuturePosition) {
                             for (UIView *v in [self itemSubviews]) {
-                                if ((v.tag == tag || (v.tag < tag && v.tag >= _sortFuturePosition + kTagOffset)) && v != _sortMovingItem) {
+                                if ((v.tag == tag || (v.tag < tag && v.tag >= _dropFuturePosition + kTagOffset)) && v != _dragMovingItem) {
                                     v.tag = v.tag - 1;
                                     [self sendSubviewToBack:v];
                                 }
                             }
                         } else {
                             for (UIView *v in [self itemSubviews]) {
-                                if ((v.tag == tag || (v.tag > tag && v.tag <= _sortFuturePosition + kTagOffset)) && v != _sortMovingItem) {
+                                if ((v.tag == tag || (v.tag > tag && v.tag <= _dropFuturePosition + kTagOffset)) && v != _dragMovingItem) {
                                     v.tag = v.tag + 1;
                                     [self sendSubviewToBack:v];
                                 }
                             }
                         }
-                        
-                        [self.sortingDelegate gridView:self moveItemAtIndex:_sortFuturePosition toIndex:position];
+                        if ([self.dragdropDelegate respondsToSelector:@selector(gridView:moveItemAtIndex:toIndex:)]) {
+                            [self.dragdropDelegate gridView:self moveItemAtIndex:_dropFuturePosition toIndex:position];
+                        }
                         [self relayoutItemsAnimated:YES];
                         
                         break;
                     }
-                    case DCGridViewStyleSwap:
+                    case DCGridViewDragDropStyle_SwapSort:
                     default:
                     {
-                        if (_sortMovingItem) {
+                        if (_dragMovingItem) {
                             UIView *v = [self cellForItemAtIndex:position];
                             
-                            v.tag = (_sortFuturePosition + kTagOffset);
-                            CGPoint origin = [self.layoutStrategy originForItemAtPosition:_sortFuturePosition];
+                            v.tag = (_dropFuturePosition + kTagOffset);
+                            CGPoint origin = [self.layoutStrategy originForItemAtPosition:_dropFuturePosition];
                             
                             [UIView animateWithDuration:kDefaultAnimationDuration delay:0 options:kDefaultAnimationOptions animations:^{
                                 v.frame = CGRectMake(origin.x, origin.y, _itemSize.width, _itemSize.height);
                             } completion:nil];
                         }
-                        
-                        [self.sortingDelegate gridView:self exchangeItemAtIndex:_sortFuturePosition withItemAtIndex:position];
-                        
+                        if ([self.dragdropDelegate respondsToSelector:@selector(gridView:exchangeItemAtIndex:withItemAtIndex:)]) {
+                            [self.dragdropDelegate gridView:self exchangeItemAtIndex:_dropFuturePosition withItemAtIndex:position];
+                        }
                         break;
                     }
                 }
             }
             
-            _sortFuturePosition = position;
+            _dropFuturePosition = position;
         }
     } while (NO);
 }
@@ -1127,7 +1160,7 @@ static const UIViewAnimationOptions kDefaultAnimationOptions = (UIViewAnimationO
     do {
         void (^layoutBlock)(void) = ^{
             for (UIView *view in [self itemSubviews]) {
-                if (view != _sortMovingItem && view != _transformingItem) {
+                if (view != _dragMovingItem && view != _transformingItem) {
                     NSInteger index = view.tag - kTagOffset;
                     CGPoint origin = [self.layoutStrategy originForItemAtPosition:index];
                     CGRect newFrame = CGRectMake(origin.x, origin.y, _itemSize.width, _itemSize.height);
@@ -1324,7 +1357,7 @@ static const UIViewAnimationOptions kDefaultAnimationOptions = (UIViewAnimationO
 }
 
 - (void)reloadObjectAtIndex:(NSInteger)index animated:(BOOL)animated {
-    [self reloadObjectAtIndex:index withAnimation:(animated ? DCGridViewItemAnimationScroll : DCGridViewItemAnimationNone)];
+    [self reloadObjectAtIndex:index withAnimation:(animated ? DCGridViewItemAnimation_Scroll : DCGridViewItemAnimation_Null)];
 }
 
 - (void)reloadObjectAtIndex:(NSInteger)index withAnimation:(DCGridViewItemAnimation)animation {
@@ -1340,11 +1373,11 @@ static const UIViewAnimationOptions kDefaultAnimationOptions = (UIViewAnimationO
         [self addSubview:cell];
         
         currentView.tag = kTagOffset - 1;
-        BOOL shouldScroll = animation & DCGridViewItemAnimationScroll;
-        BOOL animate = animation & DCGridViewItemAnimationFade;
+        BOOL shouldScroll = animation & DCGridViewItemAnimation_Scroll;
+        BOOL animate = animation & DCGridViewItemAnimation_Fade;
         [UIView animateWithDuration:(animate ? kDefaultAnimationDuration : 0.f) delay:0.f options:kDefaultAnimationOptions animations:^{
             if (shouldScroll) {
-                [self scrollToObjectAtIndex:index atScrollPosition:DCGridViewScrollPositionNone animated:NO];
+                [self scrollToObjectAtIndex:index atScrollPosition:DCGridViewScrollPosition_Null animated:NO];
             }
             currentView.alpha = 0;
             cell.alpha = 1;
@@ -1367,20 +1400,20 @@ static const UIViewAnimationOptions kDefaultAnimationOptions = (UIViewAnimationO
         if (!self.pagingEnabled) {
             CGRect gridRect = CGRectMake(origin.x, origin.y, _itemSize.width, _itemSize.height);
             switch (scrollPosition) {
-                case DCGridViewScrollPositionNone:
+                case DCGridViewScrollPosition_Null:
                 default:
                     targetRect = gridRect;  // no special coordinate handling
                     break;
                     
-                case DCGridViewScrollPositionTop:
+                case DCGridViewScrollPosition_Top:
                     targetRect.origin.y = gridRect.origin.y;  // set target y origin to cell's y origin
                     break;
                     
-                case DCGridViewScrollPositionMiddle:
+                case DCGridViewScrollPosition_Middle:
                     targetRect.origin.y = MAX(gridRect.origin.y - (CGFloat)ceilf((targetRect.size.height - gridRect.size.height) * 0.5), 0.0);
                     break;
                     
-                case DCGridViewScrollPositionBottom:
+                case DCGridViewScrollPosition_Bottom:
                     targetRect.origin.y = MAX((CGFloat)floorf(gridRect.origin.y - (targetRect.size.height - gridRect.size.height)), 0.0);
                     break;
             }
@@ -1395,7 +1428,7 @@ static const UIViewAnimationOptions kDefaultAnimationOptions = (UIViewAnimationO
 }
 
 - (void)insertObjectAtIndex:(NSInteger)index animated:(BOOL)animated {
-    [self insertObjectAtIndex:index withAnimation:(animated ? DCGridViewItemAnimationScroll : DCGridViewItemAnimationNone)];
+    [self insertObjectAtIndex:index withAnimation:(animated ? DCGridViewItemAnimation_Scroll : DCGridViewItemAnimation_Null)];
 }
 
 - (void)insertObjectAtIndex:(NSInteger)index withAnimation:(DCGridViewItemAnimation)animation {
@@ -1410,7 +1443,7 @@ static const UIViewAnimationOptions kDefaultAnimationOptions = (UIViewAnimationO
                 oldView.tag = oldView.tag + 1;
             }
             
-            if (animation & DCGridViewItemAnimationFade) {
+            if (animation & DCGridViewItemAnimation_Fade) {
                 cell.alpha = 0;
                 [UIView beginAnimations:nil context:NULL];
                 [UIView setAnimationDelay:kDefaultAnimationDuration];
@@ -1422,12 +1455,12 @@ static const UIViewAnimationOptions kDefaultAnimationOptions = (UIViewAnimationO
         }
         
         ++_numberTotalItems;
-        [self recomputeSizeAnimated:!(animation & DCGridViewItemAnimationNone)];
+        [self recomputeSizeAnimated:!(animation & DCGridViewItemAnimation_Null)];
         
-        BOOL shouldScroll = (animation & DCGridViewItemAnimationScroll);
+        BOOL shouldScroll = (animation & DCGridViewItemAnimation_Scroll);
         if (shouldScroll) {
             [UIView animateWithDuration:kDefaultAnimationDuration delay:0 options:kDefaultAnimationOptions animations:^{
-                [self scrollToObjectAtIndex:index atScrollPosition:DCGridViewScrollPositionNone animated:NO];
+                [self scrollToObjectAtIndex:index atScrollPosition:DCGridViewScrollPosition_Null animated:NO];
             } completion:^(BOOL finished) {
                 [self layoutSubviewsWithAnimation:animation];
             }];
@@ -1440,7 +1473,7 @@ static const UIViewAnimationOptions kDefaultAnimationOptions = (UIViewAnimationO
 }
 
 - (void)removeObjectAtIndex:(NSInteger)index animated:(BOOL)animated {
-    [self removeObjectAtIndex:index withAnimation:DCGridViewItemAnimationNone];
+    [self removeObjectAtIndex:index withAnimation:DCGridViewItemAnimation_Null];
 }
 
 - (void)removeObjectAtIndex:(NSInteger)index withAnimation:(DCGridViewItemAnimation)animation {
@@ -1457,16 +1490,16 @@ static const UIViewAnimationOptions kDefaultAnimationOptions = (UIViewAnimationO
         cell.tag = kTagOffset - 1;
         --_numberTotalItems;
         
-        BOOL shouldScroll = animation & DCGridViewItemAnimationScroll;
-        BOOL animate = animation & DCGridViewItemAnimationFade;
+        BOOL shouldScroll = animation & DCGridViewItemAnimation_Scroll;
+        BOOL animate = animation & DCGridViewItemAnimation_Fade;
         [UIView animateWithDuration:(animate ? kDefaultAnimationDuration : 0.f) delay:0.f options:kDefaultAnimationOptions animations:^{
             cell.contentView.alpha = 0.3f;
             cell.alpha = 0.f;
             
             if (shouldScroll) {
-                [self scrollToObjectAtIndex:index atScrollPosition:DCGridViewScrollPositionNone animated:NO];
+                [self scrollToObjectAtIndex:index atScrollPosition:DCGridViewScrollPosition_Null animated:NO];
             }
-            [self recomputeSizeAnimated:!(animation & DCGridViewItemAnimationNone)];
+            [self recomputeSizeAnimated:!(animation & DCGridViewScrollPosition_Null)];
         } completion:^(BOOL finished) {
             cell.contentView.alpha = 1.f;
             [self queueReusableCell:cell];
@@ -1482,7 +1515,7 @@ static const UIViewAnimationOptions kDefaultAnimationOptions = (UIViewAnimationO
 }
 
 - (void)swapObjectAtIndex:(NSInteger)index1 withObjectAtIndex:(NSInteger)index2 animated:(BOOL)animated {
-    [self swapObjectAtIndex:index1 withObjectAtIndex:index2 withAnimation:(animated ? DCGridViewItemAnimationScroll : DCGridViewItemAnimationNone)];
+    [self swapObjectAtIndex:index1 withObjectAtIndex:index2 withAnimation:(animated ? DCGridViewItemAnimation_Scroll : DCGridViewItemAnimation_Null)];
 }
 
 - (void)swapObjectAtIndex:(NSInteger)index1 withObjectAtIndex:(NSInteger)index2 withAnimation:(DCGridViewItemAnimation)animation {
@@ -1506,13 +1539,13 @@ static const UIViewAnimationOptions kDefaultAnimationOptions = (UIViewAnimationO
         CGRect visibleRect = CGRectMake(self.contentOffset.x, self.contentOffset.y, self.contentSize.width, self.contentSize.height);
         
         // Better performance animating ourselves instead of using animated:YES in scrollRectToVisible
-        BOOL shouldScroll = animation & DCGridViewItemAnimationScroll;
+        BOOL shouldScroll = animation & DCGridViewItemAnimation_Scroll;
         [UIView animateWithDuration:kDefaultAnimationDuration delay:0 options:kDefaultAnimationOptions animations:^{
             if (shouldScroll) {
                 if (!CGRectIntersectsRect(view2.frame, visibleRect)) {
-                    [self scrollToObjectAtIndex:index1 atScrollPosition:DCGridViewScrollPositionNone animated:NO];
+                    [self scrollToObjectAtIndex:index1 atScrollPosition:DCGridViewScrollPosition_Null animated:NO];
                 } else if (!CGRectIntersectsRect(view1.frame, visibleRect)) {
-                    [self scrollToObjectAtIndex:index2 atScrollPosition:DCGridViewScrollPositionNone animated:NO];
+                    [self scrollToObjectAtIndex:index2 atScrollPosition:DCGridViewScrollPosition_Null animated:NO];
                 }
             }
         } completion:^(BOOL finished) {

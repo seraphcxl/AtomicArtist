@@ -9,6 +9,12 @@
 #import "DCALAssetItem.h"
 #import <ImageIO/ImageIO.h>
 #import <UIKit/UIKit.h>
+#import "DCCommonUtility.h"
+
+NSString * const kDCALAssetItem_MetaData_PixelWidth = @"PixelWidth";
+NSString * const kDCALAssetItem_MetaData_PixelHeight = @"PixelHeight";
+NSString * const kDCALAssetItem_MetaData_ExifDict = @"{Exif}";
+NSString * const kDCALAssetItem_MetaData_Exif_DateTimeOriginal = @"DateTimeOriginal";
 
 @implementation DCALAssetItem
 
@@ -64,7 +70,6 @@
     do {
         @synchronized(self) {
             self.actionDelegate = nil;
-            
             self.asset = nil;
         }
         
@@ -81,6 +86,47 @@
                 NSURL *url = [representation url];
                 result = [url absoluteString];
             }
+        }
+    } while (NO);
+    return result;
+}
+
+- (id)origin {
+    id result = nil;
+    do {
+        @synchronized(self) {
+            result = self.asset;
+        }
+    } while (NO);
+    return result;
+}
+
+- (NSString *)md5 {
+    NSString *result = nil;
+    do {
+        @synchronized(self) {
+            if (!self.asset) {
+                break;
+            }
+            NSMutableString *tmp = [NSMutableString stringWithString:[self uniqueID]];
+            ALAssetRepresentation *representation = [self.asset defaultRepresentation];
+            if (representation) {
+                NSDictionary *metadataDict = [representation metadata];
+                if (metadataDict) {
+                    long width = [[metadataDict valueForKey:kDCALAssetItem_MetaData_PixelWidth] intValue];
+                    long height = [[metadataDict valueForKey:kDCALAssetItem_MetaData_PixelHeight] intValue];
+                    [tmp appendFormat:@"<%ld,%ld>", width, height];
+                    NSDictionary* exifDict = [metadataDict valueForKey:kDCALAssetItem_MetaData_ExifDict];
+                    if (exifDict) {
+                        NSString *exifDateTimeOriginal = [exifDict valueForKey:kDCALAssetItem_MetaData_Exif_DateTimeOriginal];
+                        if (exifDateTimeOriginal) {
+                            [tmp appendString:exifDateTimeOriginal];
+                        }
+                    }
+                }
+            }
+            NSData *tmpData = [tmp dataUsingEncoding:NSUTF8StringEncoding];
+            result = [DCCommonUtility md5:tmpData];
         }
     } while (NO);
     return result;

@@ -7,6 +7,28 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1B55A7DA16B61420004FF438 /* DCLocalImageLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B55A7D916B61420004FF438 /* DCLocalImageLoader.m */; };
+		1B88584716B665870082F06C /* DCAssetsLibNotificationAgent.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1BE2313816A65514002BF87F /* DCAssetsLibNotificationAgent.h */; };
+		1B88584816B665870082F06C /* DCAssetsLibAgent.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1BDCDB0C16B2136600EF7BEA /* DCAssetsLibAgent.h */; };
+		1B88584916B665870082F06C /* DCLoaderWorkshop.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1BDCD98A16B0C63300222E08 /* DCLoaderWorkshop.h */; };
+		1B88584A16B665870082F06C /* DCRevokableLoader.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1BDCD98C16B0C63300222E08 /* DCRevokableLoader.h */; };
+		1B88584B16B665870082F06C /* DCWebImageLoader.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1BDCD98E16B0C63300222E08 /* DCWebImageLoader.h */; };
+		1B88584C16B665870082F06C /* DCLocalImageLoader.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1B55A7D816B61420004FF438 /* DCLocalImageLoader.h */; };
+		1B88585D16B6679E0082F06C /* DCImageHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B88585C16B6679E0082F06C /* DCImageHelper.m */; };
+		1B88586516B66A670082F06C /* Item.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1BCC890B16AF709100852851 /* Item.h */; };
+		1B88586A16B66C770082F06C /* DCMediaPocketDataItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B88586916B66C770082F06C /* DCMediaPocketDataItem.m */; };
+		1B88586D16B66C890082F06C /* DCMediaPocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B88586C16B66C890082F06C /* DCMediaPocket.m */; };
+		1B88586E16B671110082F06C /* DCMediaPocketDataProtocel.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1B88586716B66AED0082F06C /* DCMediaPocketDataProtocel.h */; };
+		1B88587016B671110082F06C /* DCMediaPocket.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1B88586B16B66C890082F06C /* DCMediaPocket.h */; };
+		1BBBDB4516BA0A5300735EDA /* DCCommonUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BBBDB4416BA0A5300735EDA /* DCCommonUtility.m */; };
+		1BCC890D16AF709100852851 /* Item.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BCC890C16AF709100852851 /* Item.m */; };
+		1BDCD99116B0C63300222E08 /* DCLoaderWorkshop.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BDCD98B16B0C63300222E08 /* DCLoaderWorkshop.m */; };
+		1BDCD99216B0C63300222E08 /* DCRevokableLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BDCD98D16B0C63300222E08 /* DCRevokableLoader.m */; };
+		1BDCD99316B0C63300222E08 /* DCWebImageLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BDCD98F16B0C63300222E08 /* DCWebImageLoader.m */; };
+		1BDCD99616B0C65D00222E08 /* CoreImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BDCD99516B0C65D00222E08 /* CoreImage.framework */; };
+		1BDCD9B316B0FD5300222E08 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BDCD9B216B0FD5200222E08 /* CoreGraphics.framework */; };
+		1BDCD9B516B0FD6700222E08 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BDCD9B416B0FD6700222E08 /* ImageIO.framework */; };
+		1BDCDB0E16B2136600EF7BEA /* DCAssetsLibAgent.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BDCDB0D16B2136600EF7BEA /* DCAssetsLibAgent.m */; };
 		1BE2313A16A65516002BF87F /* DCAssetsLibNotificationAgent.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BE2313916A65515002BF87F /* DCAssetsLibNotificationAgent.m */; };
 		1BE3FAFA16966D71004DDEAF /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BE3FAF916966D71004DDEAF /* Foundation.framework */; };
 		1BE3FB9816966E60004DDEAF /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BE3FB9716966E60004DDEAF /* CoreData.framework */; };
@@ -30,7 +52,6 @@
 		1BE3FC05169675AC004DDEAF /* DCMediaDBManager.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1BE3FBAB16966E76004DDEAF /* DCMediaDBManager.h */; };
 		1BE3FC06169675AC004DDEAF /* DCMediaDBOperator.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1BE3FBAD16966E76004DDEAF /* DCMediaDBOperator.h */; };
 		1BE3FC07169675AC004DDEAF /* Group.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1BE3FBAF16966E76004DDEAF /* Group.h */; };
-		1BE6DF2E169E52C30063C01C /* Item.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BE6DF2D169E52C30063C01C /* Item.m */; };
 		1BE7472C169EB9A800E6EB52 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BE7472B169EB9A800E6EB52 /* AssetsLibrary.framework */; };
 /* End PBXBuildFile section */
 
@@ -41,6 +62,15 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				1B88586E16B671110082F06C /* DCMediaPocketDataProtocel.h in CopyFiles */,
+				1B88587016B671110082F06C /* DCMediaPocket.h in CopyFiles */,
+				1B88586516B66A670082F06C /* Item.h in CopyFiles */,
+				1B88584716B665870082F06C /* DCAssetsLibNotificationAgent.h in CopyFiles */,
+				1B88584816B665870082F06C /* DCAssetsLibAgent.h in CopyFiles */,
+				1B88584916B665870082F06C /* DCLoaderWorkshop.h in CopyFiles */,
+				1B88584A16B665870082F06C /* DCRevokableLoader.h in CopyFiles */,
+				1B88584B16B665870082F06C /* DCWebImageLoader.h in CopyFiles */,
+				1B88584C16B665870082F06C /* DCLocalImageLoader.h in CopyFiles */,
 				1BE3FBFF169675AC004DDEAF /* DCALAssetItem.h in CopyFiles */,
 				1BE3FC00169675AC004DDEAF /* DCALAssetsGroup.h in CopyFiles */,
 				1BE3FC01169675AC004DDEAF /* DCALAssetsLibrary.h in CopyFiles */,
@@ -56,6 +86,28 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		1B55A7D816B61420004FF438 /* DCLocalImageLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCLocalImageLoader.h; sourceTree = "<group>"; };
+		1B55A7D916B61420004FF438 /* DCLocalImageLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCLocalImageLoader.m; sourceTree = "<group>"; };
+		1B88585C16B6679E0082F06C /* DCImageHelper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = DCImageHelper.m; path = ../Common/DCImageHelper.m; sourceTree = "<group>"; };
+		1B88586716B66AED0082F06C /* DCMediaPocketDataProtocel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCMediaPocketDataProtocel.h; sourceTree = "<group>"; };
+		1B88586816B66C770082F06C /* DCMediaPocketDataItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCMediaPocketDataItem.h; sourceTree = "<group>"; };
+		1B88586916B66C770082F06C /* DCMediaPocketDataItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCMediaPocketDataItem.m; sourceTree = "<group>"; };
+		1B88586B16B66C890082F06C /* DCMediaPocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCMediaPocket.h; sourceTree = "<group>"; };
+		1B88586C16B66C890082F06C /* DCMediaPocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCMediaPocket.m; sourceTree = "<group>"; };
+		1BBBDB4416BA0A5300735EDA /* DCCommonUtility.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = DCCommonUtility.m; path = ../Common/DCCommonUtility.m; sourceTree = "<group>"; };
+		1BCC890B16AF709100852851 /* Item.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Item.h; sourceTree = "<group>"; };
+		1BCC890C16AF709100852851 /* Item.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Item.m; sourceTree = "<group>"; };
+		1BDCD98A16B0C63300222E08 /* DCLoaderWorkshop.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCLoaderWorkshop.h; sourceTree = "<group>"; };
+		1BDCD98B16B0C63300222E08 /* DCLoaderWorkshop.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCLoaderWorkshop.m; sourceTree = "<group>"; };
+		1BDCD98C16B0C63300222E08 /* DCRevokableLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCRevokableLoader.h; sourceTree = "<group>"; };
+		1BDCD98D16B0C63300222E08 /* DCRevokableLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCRevokableLoader.m; sourceTree = "<group>"; };
+		1BDCD98E16B0C63300222E08 /* DCWebImageLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCWebImageLoader.h; sourceTree = "<group>"; };
+		1BDCD98F16B0C63300222E08 /* DCWebImageLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCWebImageLoader.m; sourceTree = "<group>"; };
+		1BDCD99516B0C65D00222E08 /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
+		1BDCD9B216B0FD5200222E08 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		1BDCD9B416B0FD6700222E08 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
+		1BDCDB0C16B2136600EF7BEA /* DCAssetsLibAgent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCAssetsLibAgent.h; sourceTree = "<group>"; };
+		1BDCDB0D16B2136600EF7BEA /* DCAssetsLibAgent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCAssetsLibAgent.m; sourceTree = "<group>"; };
 		1BE2313816A65514002BF87F /* DCAssetsLibNotificationAgent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCAssetsLibNotificationAgent.h; sourceTree = "<group>"; };
 		1BE2313916A65515002BF87F /* DCAssetsLibNotificationAgent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCAssetsLibNotificationAgent.m; sourceTree = "<group>"; };
 		1BE3FAF616966D71004DDEAF /* libZeus.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libZeus.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -83,8 +135,6 @@
 		1BE3FBB016966E76004DDEAF /* Group.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Group.m; sourceTree = "<group>"; };
 		1BE3FBB416966E76004DDEAF /* MediaDB.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = MediaDB.xcdatamodel; sourceTree = "<group>"; };
 		1BE3FC0C169677A2004DDEAF /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = SOURCE_ROOT; };
-		1BE6DF2C169E52C30063C01C /* Item.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Item.h; sourceTree = "<group>"; };
-		1BE6DF2D169E52C30063C01C /* Item.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Item.m; sourceTree = "<group>"; };
 		1BE7472B169EB9A800E6EB52 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -93,6 +143,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1BDCD9B516B0FD6700222E08 /* ImageIO.framework in Frameworks */,
+				1BDCD9B316B0FD5300222E08 /* CoreGraphics.framework in Frameworks */,
+				1BDCD99616B0C65D00222E08 /* CoreImage.framework in Frameworks */,
 				1BE7472C169EB9A800E6EB52 /* AssetsLibrary.framework in Frameworks */,
 				1BE3FB9A16966E67004DDEAF /* UIKit.framework in Frameworks */,
 				1BE3FB9816966E60004DDEAF /* CoreData.framework in Frameworks */,
@@ -103,9 +156,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1B88586616B66AB30082F06C /* MediaPocket */ = {
+			isa = PBXGroup;
+			children = (
+				1B88586716B66AED0082F06C /* DCMediaPocketDataProtocel.h */,
+				1B88586816B66C770082F06C /* DCMediaPocketDataItem.h */,
+				1B88586916B66C770082F06C /* DCMediaPocketDataItem.m */,
+				1B88586B16B66C890082F06C /* DCMediaPocket.h */,
+				1B88586C16B66C890082F06C /* DCMediaPocket.m */,
+			);
+			path = MediaPocket;
+			sourceTree = "<group>";
+		};
 		1BE3FAEB16966D71004DDEAF = {
 			isa = PBXGroup;
 			children = (
+				1BBBDB4416BA0A5300735EDA /* DCCommonUtility.m */,
+				1B88585C16B6679E0082F06C /* DCImageHelper.m */,
 				1BE3FAFB16966D71004DDEAF /* Zeus */,
 				1BE3FAF816966D71004DDEAF /* Frameworks */,
 				1BE3FAF716966D71004DDEAF /* Products */,
@@ -123,6 +190,9 @@
 		1BE3FAF816966D71004DDEAF /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				1BDCD9B416B0FD6700222E08 /* ImageIO.framework */,
+				1BDCD9B216B0FD5200222E08 /* CoreGraphics.framework */,
+				1BDCD99516B0C65D00222E08 /* CoreImage.framework */,
 				1BE7472B169EB9A800E6EB52 /* AssetsLibrary.framework */,
 				1BE3FB9916966E67004DDEAF /* UIKit.framework */,
 				1BE3FB9716966E60004DDEAF /* CoreData.framework */,
@@ -134,6 +204,7 @@
 		1BE3FAFB16966D71004DDEAF /* Zeus */ = {
 			isa = PBXGroup;
 			children = (
+				1B88586616B66AB30082F06C /* MediaPocket */,
 				1BE3FB9B16966E76004DDEAF /* DataLibraryManager */,
 				1BE3FBA516966E76004DDEAF /* LoaderAndCache */,
 				1BE3FBA816966E76004DDEAF /* MediaDB */,
@@ -172,6 +243,8 @@
 				1BE3FBA216966E76004DDEAF /* DCALAssetsLibrary.m */,
 				1BE2313816A65514002BF87F /* DCAssetsLibNotificationAgent.h */,
 				1BE2313916A65515002BF87F /* DCAssetsLibNotificationAgent.m */,
+				1BDCDB0C16B2136600EF7BEA /* DCAssetsLibAgent.h */,
+				1BDCDB0D16B2136600EF7BEA /* DCAssetsLibAgent.m */,
 			);
 			path = ALAssetLib;
 			sourceTree = "<group>";
@@ -179,6 +252,14 @@
 		1BE3FBA516966E76004DDEAF /* LoaderAndCache */ = {
 			isa = PBXGroup;
 			children = (
+				1BDCD98A16B0C63300222E08 /* DCLoaderWorkshop.h */,
+				1BDCD98B16B0C63300222E08 /* DCLoaderWorkshop.m */,
+				1BDCD98C16B0C63300222E08 /* DCRevokableLoader.h */,
+				1BDCD98D16B0C63300222E08 /* DCRevokableLoader.m */,
+				1BDCD98E16B0C63300222E08 /* DCWebImageLoader.h */,
+				1BDCD98F16B0C63300222E08 /* DCWebImageLoader.m */,
+				1B55A7D816B61420004FF438 /* DCLocalImageLoader.h */,
+				1B55A7D916B61420004FF438 /* DCLocalImageLoader.m */,
 				1BE3FBA616966E76004DDEAF /* DCImageInMemCache.h */,
 				1BE3FBA716966E76004DDEAF /* DCImageInMemCache.m */,
 			);
@@ -197,8 +278,8 @@
 				1BE3FBAF16966E76004DDEAF /* Group.h */,
 				1BE3FBB016966E76004DDEAF /* Group.m */,
 				1BE3FBB316966E76004DDEAF /* MediaDB.xcdatamodeld */,
-				1BE6DF2C169E52C30063C01C /* Item.h */,
-				1BE6DF2D169E52C30063C01C /* Item.m */,
+				1BCC890B16AF709100852851 /* Item.h */,
+				1BCC890C16AF709100852851 /* Item.m */,
 			);
 			path = MediaDB;
 			sourceTree = "<group>";
@@ -254,6 +335,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1BBBDB4516BA0A5300735EDA /* DCCommonUtility.m in Sources */,
+				1B88585D16B6679E0082F06C /* DCImageHelper.m in Sources */,
 				1BE3FBB516966E76004DDEAF /* DCALAssetItem.m in Sources */,
 				1BE3FBB616966E76004DDEAF /* DCALAssetsGroup.m in Sources */,
 				1BE3FBB716966E76004DDEAF /* DCALAssetsLibrary.m in Sources */,
@@ -264,8 +347,15 @@
 				1BE3FBBC16966E76004DDEAF /* DCMediaDBOperator.m in Sources */,
 				1BE3FBBD16966E76004DDEAF /* Group.m in Sources */,
 				1BE3FBBF16966E76004DDEAF /* MediaDB.xcdatamodeld in Sources */,
-				1BE6DF2E169E52C30063C01C /* Item.m in Sources */,
 				1BE2313A16A65516002BF87F /* DCAssetsLibNotificationAgent.m in Sources */,
+				1BCC890D16AF709100852851 /* Item.m in Sources */,
+				1BDCD99116B0C63300222E08 /* DCLoaderWorkshop.m in Sources */,
+				1BDCD99216B0C63300222E08 /* DCRevokableLoader.m in Sources */,
+				1BDCD99316B0C63300222E08 /* DCWebImageLoader.m in Sources */,
+				1BDCDB0E16B2136600EF7BEA /* DCAssetsLibAgent.m in Sources */,
+				1B55A7DA16B61420004FF438 /* DCLocalImageLoader.m in Sources */,
+				1B88586A16B66C770082F06C /* DCMediaPocketDataItem.m in Sources */,
+				1B88586D16B66C890082F06C /* DCMediaPocket.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -334,6 +424,7 @@
 				GCC_PREFIX_HEADER = "Zeus/Zeus-Prefix.pch";
 				HEADER_SEARCH_PATHS = "$(SRCROOT)/../Common/**";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/../Common/**";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PUBLIC_HEADERS_FOLDER_PATH = "$(SRCROOT)/../Common/include";
@@ -350,6 +441,7 @@
 				GCC_PREFIX_HEADER = "Zeus/Zeus-Prefix.pch";
 				HEADER_SEARCH_PATHS = "$(SRCROOT)/../Common/**";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/../Common/**";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PUBLIC_HEADERS_FOLDER_PATH = "$(SRCROOT)/../Common/include";

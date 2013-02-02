@@ -25,6 +25,7 @@
 #pragma mark - implementation DCGridViewCell
 @implementation DCGridViewCell
 
+@synthesize dragdropDataSource = _dragdropDataSource;
 @synthesize contentView = _contentView;
 @synthesize editing = _editing;
 @synthesize inShakingMode = _inShakingMode;

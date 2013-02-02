@@ -328,11 +328,11 @@
     return result;
 }
 
-- (id<DCDataItem>)itemWithUID:(NSString *)uid {
+- (id<DCDataItem>)itemWithUID:(NSString *)uniqueID {
     DCALAssetItem *item = nil;
     @synchronized(self) {
         if (_allAssetItems) {
-            item = [_allAssetItems objectForKey:uid];
+            item = [_allAssetItems objectForKey:uniqueID];
         }
     }
     return item;

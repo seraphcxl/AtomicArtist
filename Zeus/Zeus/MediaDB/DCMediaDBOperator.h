@@ -28,6 +28,7 @@
 #pragma mark - DCMediaDBOperator - Item
 - (Item *)getItemWithUID:(NSString *)itemUID;
 - (void)createItemWithUID:(NSString *)itemUID andArguments:(NSDictionary *)args;
+- (void)updateItemWithUID:(NSString *)itemUID andArguments:(NSDictionary *)args;
 
 #pragma mark - DCMediaDBOperator - Group
 - (Group *)getGroupWithUID:(NSString *)groupUID;

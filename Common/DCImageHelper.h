@@ -52,7 +52,16 @@ typedef enum {
     DCImageShapeType_Square,
 } DCImageShapeType;
 
-+ (UIImage *)loadImageFromALAsset:(ALAsset *)asset withShape:(DCImageShapeType)type andMaxPixelSize:(NSUInteger)pixelSize;
++ (UIImage *)loadImageFromALAsset:(ALAsset *)asset withShape:(DCImageShapeType)type andMaxPixelSize:(CGFloat)pixelSize;
+
++ (CGImageRef)loadImageFromALAsset:(ALAsset *)asset withMaxPixelSize:(CGFloat)pixelSize;
+
++ (CGImageSourceRef)loadImageSourceFromALAsset:(ALAsset *)asset;
 #endif
 
++ (NSInteger)UIImageOrientationToCGImagePropertyOrientation:(UIImageOrientation) imageOrientation;
+
++ (CGImageRef)loadImageFromContentsOfFile:(NSString *)path withMaxPixelSize:(CGFloat)pixelSize;
+
++ (CGImageSourceRef)loadImageSourceFromContentsOfFile:(NSString *)path;
 @end

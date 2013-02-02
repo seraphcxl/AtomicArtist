@@ -74,17 +74,17 @@ typedef enum {
     CGSize _contentSize;
 }
 
-@property(nonatomic, readonly) DCGridViewLayoutStrategyType type;
+@property (nonatomic, readonly) DCGridViewLayoutStrategyType type;
 
-@property(nonatomic, readonly) CGSize itemSize;
-@property(nonatomic, readonly) NSInteger itemSpacing;
-@property(nonatomic, readonly) UIEdgeInsets minEdgeInsets;
-@property(nonatomic, readonly) BOOL centeredGrid;
+@property (nonatomic, readonly) CGSize itemSize;
+@property (nonatomic, readonly) NSInteger itemSpacing;
+@property (nonatomic, readonly) UIEdgeInsets minEdgeInsets;
+@property (nonatomic, readonly) BOOL centeredGrid;
 
-@property(nonatomic, readonly) NSInteger itemCount;
-@property(nonatomic, readonly) UIEdgeInsets edgeInsets;
-@property(nonatomic, readonly) CGRect gridBounds;
-@property(nonatomic, readonly) CGSize contentSize;
+@property (nonatomic, readonly) NSInteger itemCount;
+@property (nonatomic, readonly) UIEdgeInsets edgeInsets;
+@property (nonatomic, readonly) CGRect gridBounds;
+@property (nonatomic, readonly) CGSize contentSize;
 
 // Protocol methods implemented in base class
 - (void)setupItemSize:(CGSize)itemSize andItemSpacing:(NSInteger)spacing withMinEdgeInsets:(UIEdgeInsets)edgeInsets andCenteredGrid:(BOOL)centered;
@@ -100,7 +100,7 @@ typedef enum {
     NSInteger _numberOfItemsPerRow;
 }
 
-@property(nonatomic, readonly) NSInteger numberOfItemsPerRow;
+@property (nonatomic, readonly) NSInteger numberOfItemsPerRow;
 
 @end
 

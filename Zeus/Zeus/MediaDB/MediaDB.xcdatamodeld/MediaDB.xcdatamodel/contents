@@ -9,6 +9,8 @@
         <relationship name="items" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Item" inverseName="group" inverseEntity="Item" syncable="YES"/>
     </entity>
     <entity name="Item" representedClassName="Item" syncable="YES">
+        <attribute name="faceFeatureArray" optional="YES" transient="YES" syncable="YES"/>
+        <attribute name="faceFeatureData" optional="YES" attributeType="Binary" syncable="YES"/>
         <attribute name="largeThumbnail" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="md5" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="previewImage" optional="YES" attributeType="String" syncable="YES"/>
@@ -19,6 +21,6 @@
     </entity>
     <elements>
         <element name="Group" positionX="160" positionY="192" width="128" height="135"/>
-        <element name="Item" positionX="160" positionY="192" width="128" height="150"/>
+        <element name="Item" positionX="160" positionY="192" width="128" height="180"/>
     </elements>
 </model>

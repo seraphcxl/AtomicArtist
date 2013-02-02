@@ -32,10 +32,20 @@ DEFINE_SINGLETON_FOR_CLASS(DCMediaDBManager);
         if (self) {
             if (!_mediaDBOperatorPool) {
                 _mediaDBOperatorPool = [NSMutableDictionary dictionary];
+                SAFE_ARC_RETAIN(_mediaDBOperatorPool);
             }
         }
         return self;
     }
+}
+
+- (void)dealloc {
+    do {
+        @synchronized(self) {
+            [self cleanPool];
+        }
+        SAFE_ARC_SUPER_DEALLOC();
+    } while (NO);
 }
 
 - (DCMediaDBOperator *)queryMediaDBOperatorForThread:(NSThread *)aThread {
@@ -87,7 +97,6 @@ DEFINE_SINGLETON_FOR_CLASS(DCMediaDBManager);
             if (_mediaDBOperatorPool) {
                 [_mediaDBOperatorPool removeAllObjects];
                 SAFE_ARC_SAFERELEASE(_mediaDBOperatorPool);
-                _mediaDBOperatorPool = nil;
             }
         }
     } while (NO);

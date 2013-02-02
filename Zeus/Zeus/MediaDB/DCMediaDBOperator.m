@@ -24,6 +24,8 @@
 
 - (void)saveChanges;
 
+- (NSData *)faceFeatureArrayToData:(NSArray *)faceFeatureArray;
+
 @end
 
 
@@ -61,6 +63,7 @@
             @synchronized(_context) {
                 // Read in AtomicArtistModel.xcdatamodeld
                 _model = [NSManagedObjectModel mergedModelFromBundles:nil];
+                SAFE_ARC_RETAIN(_model);
                 // debug_NSLog(@"model = %@", model);
                 
                 NSPersistentStoreCoordinator *psc = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:_model];
@@ -144,6 +147,19 @@
     return result;
 }
 
+- (NSData *)faceFeatureArrayToData:(NSArray *)faceFeatureArray {
+    NSMutableData *result = nil;
+    do {
+        result = [[NSMutableData alloc] init];
+        SAFE_ARC_AUTORELEASE(result);
+        NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:result];
+        SAFE_ARC_AUTORELEASE(archiver);
+        [archiver encodeObject:faceFeatureArray forKey:@"faceFeatureArray"];
+        [archiver finishEncoding];
+    } while (NO);
+    return result;
+}
+
 - (void)createItemWithUID:(NSString *)itemUID andArguments:(NSDictionary *)args {
     do {
         if (!itemUID || !args) {
@@ -157,8 +173,40 @@
             item.smallThumbnail = [args objectForKey:kITEM_SMALLTHUMBNAIL];
             item.largeThumbnail = [args objectForKey:kITEM_LARGETHUMBNAIL];
             item.previewImage = [args objectForKey:kITEM_PREVIEWIMAGE];
+            item.faceFeatureArray = [args objectForKey:kITEM_FACEFEATUREARRAY];
+            
+            SAFE_ARC_SAFERELEASE(item.faceFeatureData);
+            item.faceFeatureData = [[NSData alloc] initWithData:[self faceFeatureArrayToData:item.faceFeatureArray]];
+            SAFE_ARC_AUTORELEASE(item.faceFeatureData);
             
             [self saveChanges];
+        }
+    } while (NO);
+}
+
+- (void)updateItemWithUID:(NSString *)itemUID andArguments:(NSDictionary *)args {
+    do {
+        if (!itemUID || !args) {
+            break;
+        }
+        
+        Item *item = [self getItemWithUID:itemUID];
+        if (item) {
+            @synchronized(_context) {
+                item.md5 = [args objectForKey:kITEM_MD5];
+                item.smallThumbnail = [args objectForKey:kITEM_SMALLTHUMBNAIL];
+                item.largeThumbnail = [args objectForKey:kITEM_LARGETHUMBNAIL];
+                item.previewImage = [args objectForKey:kITEM_PREVIEWIMAGE];
+                item.faceFeatureArray = [args objectForKey:kITEM_FACEFEATUREARRAY];
+                
+                SAFE_ARC_SAFERELEASE(item.faceFeatureData);
+                item.faceFeatureData = [[NSData alloc] initWithData:[self faceFeatureArrayToData:item.faceFeatureArray]];
+                SAFE_ARC_AUTORELEASE(item.faceFeatureData);
+                
+                [self saveChanges];
+            }
+        } else {
+            [self createItemWithUID:itemUID andArguments:args];
         }
     } while (NO);
 }

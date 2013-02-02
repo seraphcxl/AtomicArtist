@@ -19,6 +19,12 @@
       <FileRef
          location = "group:SafeARC.h">
       </FileRef>
+      <FileRef
+         location = "group:DCCommonUtility.h">
+      </FileRef>
+      <FileRef
+         location = "group:DCCommonUtility.m">
+      </FileRef>
    </Group>
    <FileRef
       location = "group:Helius/Helius.xcodeproj">
@@ -38,4 +44,17 @@
    <FileRef
       location = "group:Zeus/Zeus.xcodeproj">
    </FileRef>
+   <FileRef
+      location = "group:Hera/Hera.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:Aphrodite/Aphrodite.xcodeproj">
+   </FileRef>
+   <Group
+      location = "group:Muses"
+      name = "Muses">
+      <FileRef
+         location = "group:Calliope/Calliope.xcodeproj">
+      </FileRef>
+   </Group>
 </Workspace>

@@ -14,25 +14,27 @@
 @protocol DCGridViewDataSource;
 @protocol DCGridViewActionDelegate;
 @protocol DCGridViewSortingDelegate;
+@protocol DCGridViewDragDropDelegate;
 @protocol DCGridViewTransformationDelegate;
 @protocol DCGridViewLayoutStrategy;
 
 typedef enum {
-    DCGridViewStylePush = 0,
-    DCGridViewStyleSwap,
-} DCGridViewStyle;
+    DCGridViewDragDropStyle_Customizable = 0,
+    DCGridViewDragDropStyle_PushSort,
+    DCGridViewDragDropStyle_SwapSort,
+} DCGridViewDragDropStyle;
 
 typedef enum {
-	DCGridViewScrollPositionNone = 0,
-	DCGridViewScrollPositionTop,
-	DCGridViewScrollPositionMiddle,
-	DCGridViewScrollPositionBottom,
+	DCGridViewScrollPosition_Null = 0,
+	DCGridViewScrollPosition_Top,
+	DCGridViewScrollPosition_Middle,
+	DCGridViewScrollPosition_Bottom,
 } DCGridViewScrollPosition;
 
 typedef enum {
-    DCGridViewItemAnimationNone = 0,
-    DCGridViewItemAnimationFade,
-    DCGridViewItemAnimationScroll = 1<<7 // scroll to the item before showing the animation
+    DCGridViewItemAnimation_Null = 0,
+    DCGridViewItemAnimation_Fade,
+    DCGridViewItemAnimation_Scroll = 1<<7 // scroll to the item before showing the animation
 } DCGridViewItemAnimation;
 
 
@@ -40,30 +42,29 @@ typedef enum {
 @interface DCGridView : UIScrollView
 
 // Delegates
-@property(nonatomic, SAFE_ARC_PROP_WEAK) IBOutlet NSObject<DCGridViewDataSource> *dataSource;  // Required
-@property(nonatomic, SAFE_ARC_PROP_WEAK) IBOutlet NSObject<DCGridViewActionDelegate> *actionDelegate;  // Optional - to get taps callback & deleting item
-@property(nonatomic, SAFE_ARC_PROP_WEAK) IBOutlet NSObject<DCGridViewSortingDelegate> *sortingDelegate;  // Optional - to enable sorting
-@property(nonatomic, SAFE_ARC_PROP_WEAK) IBOutlet NSObject<DCGridViewTransformationDelegate> *transformDelegate;  // Optional - to enable fullsize mode
+@property (nonatomic, SAFE_ARC_PROP_WEAK) IBOutlet NSObject<DCGridViewDataSource> *dataSource;  // Required
+@property (nonatomic, SAFE_ARC_PROP_WEAK) IBOutlet NSObject<DCGridViewActionDelegate> *actionDelegate;  // Optional - to get taps callback & deleting item
+@property (nonatomic, SAFE_ARC_PROP_WEAK) IBOutlet NSObject<DCGridViewDragDropDelegate> *dragdropDelegate;  // Optional - to enable dragdrop action
+@property (nonatomic, SAFE_ARC_PROP_WEAK) IBOutlet NSObject<DCGridViewTransformationDelegate> *transformDelegate;  // Optional - to enable fullsize mode
 
 // Layout Strategy
-@property(nonatomic, SAFE_ARC_PROP_STRONG) IBOutlet id<DCGridViewLayoutStrategy> layoutStrategy;  // Default is DCGridViewLayoutVerticalStrategy
+@property (nonatomic, SAFE_ARC_PROP_STRONG) IBOutlet id<DCGridViewLayoutStrategy> layoutStrategy;  // Default is DCGridViewLayoutVerticalStrategy
 
 // Editing Mode
-@property(nonatomic, getter = isEditing) BOOL editing;  // Default is NO - When set to YES, all gestures are disabled and delete buttons shows up on cells
+@property (nonatomic, getter = isEditing) BOOL editing;  // Default is NO - When set to YES, all gestures are disabled and delete buttons shows up on cells
 - (void)setEditing:(BOOL)editing animated:(BOOL)animated;
 
 // Customizing Options
-@property(nonatomic, SAFE_ARC_PROP_WEAK) IBOutlet UIView *mainSuperView;  // Default is self
-@property(nonatomic) DCGridViewStyle style;  // Default is DCGridViewStyleSwap
-@property(nonatomic) NSInteger itemSpacing;  // Default is 8
-@property(nonatomic) BOOL centerGrid;  // Default is YES
-@property(nonatomic) UIEdgeInsets minEdgeInsets;  // Default is (4, 4, 4, 4)
-@property(nonatomic) CFTimeInterval minimumPressDuration;  // Default is 0.2; if set to 0, the view wont be scrollable
-@property(nonatomic) BOOL showFullSizeViewWithAlphaWhenTransforming;  // Default is YES - not working right now
-@property(nonatomic) BOOL enableEditOnLongPress;  // Default is NO
-@property(nonatomic) BOOL disableEditOnEmptySpaceTap;  // Default is NO
+@property (nonatomic, SAFE_ARC_PROP_WEAK) IBOutlet UIView *mainSuperView;  // Default is self
+@property (nonatomic) NSInteger itemSpacing;  // Default is 8
+@property (nonatomic) BOOL centerGrid;  // Default is YES
+@property (nonatomic) UIEdgeInsets minEdgeInsets;  // Default is (4, 4, 4, 4)
+@property (nonatomic) CFTimeInterval minimumPressDuration;  // Default is 0.2; if set to 0, the view wont be scrollable
+@property (nonatomic) BOOL showFullSizeViewWithAlphaWhenTransforming;  // Default is YES - not working right now
+@property (nonatomic) BOOL enableEditOnLongPress;  // Default is NO
+@property (nonatomic) BOOL disableEditOnEmptySpaceTap;  // Default is NO
 
-@property(nonatomic, readonly) UIScrollView *scrollView __attribute__((deprecated));  // The grid now inherits directly from UIScrollView
+@property (nonatomic, readonly) UIScrollView *scrollView __attribute__((deprecated));  // The grid now inherits directly from UIScrollView
 
 // Reusable cells
 - (DCGridViewCell *)dequeueReusableCell;  // Should be called in DCGridView:cellForItemAtIndex: to reuse a cell
@@ -123,16 +124,24 @@ typedef enum {
 
 @end
 
-
-#pragma mark - protocol DCGridViewSortingDelegate <NSObject>
-@protocol DCGridViewSortingDelegate <NSObject>
+#pragma mark - protocol DCGridViewDragDropDelegate <NSObject>
+@protocol DCGridViewDragDropDelegate <NSObject>
 
 @required
+- (BOOL)isEnableDragDrop;
+- (DCGridViewDragDropStyle)dragdropStyle;
+
+@optional
+// Customizable dragdrop
+- (void)gridView:(DCGridView *)gridView dragdropStateBegin:(DCGridViewCell *)cell withGestureRecognizer:(UIGestureRecognizer *)gr;
+- (void)gridView:(DCGridView *)gridView dragdropStateChanged:(DCGridViewCell *)cell withGestureRecognizer:(UIGestureRecognizer *)gr;
+- (void)gridView:(DCGridView *)gridView dragdropStateEnd:(DCGridViewCell *)cell withGestureRecognizer:(UIGestureRecognizer *)gr;
+- (void)gridView:(DCGridView *)gridView dragdropStateCancelledWithGestureRecognizer:(UIGestureRecognizer *)gr;
+- (void)gridView:(DCGridView *)gridView dragdropStateFailedWithGestureRecognizer:(UIGestureRecognizer *)gr;
 // Item moved - right place to update the data structure
 - (void)gridView:(DCGridView *)gridView moveItemAtIndex:(NSInteger)oldIndex toIndex:(NSInteger)newIndex;
 - (void)gridView:(DCGridView *)gridView exchangeItemAtIndex:(NSInteger)index1 withItemAtIndex:(NSInteger)index2;
 
-@optional
 // Sorting started/ended - indexes are not specified on purpose (not the right place to update data structure)
 - (void)gridView:(DCGridView *)gridView didStartMovingCell:(DCGridViewCell *)cell;
 - (void)gridView:(DCGridView *)gridView didEndMovingCell:(DCGridViewCell *)cell;

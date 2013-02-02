@@ -9,8 +9,10 @@
 #import <Foundation/Foundation.h>
 
 typedef enum {
-    DataSourceType_AssetsLib = 0,
+    DataSourceType_Unknown = 0,
+    DataSourceType_AssetsLib,
     DataSourceType_Facebook,
+    DataSourceType_Flickr,
 } DataSourceType;
 
 #pragma mark - Notify
@@ -31,6 +33,8 @@ extern NSString * const NOTIFY_DATAGROUP_EMPTY;
 @end
 
 #pragma mark - DCDataItem - Property key
+extern NSString * const kDATAITEMPREFIX_AssetsLib;
+
 extern NSString * const kDATAITEMPROPERTY_UID;
 extern NSString * const kDATAITEMPROPERTY_FILENAME;
 extern NSString * const kDATAITEMPROPERTY_URL;
@@ -48,6 +52,8 @@ extern NSString * const kDATAITEMPROPERTY_THUMBNAILURL;
 
 - (DataSourceType)type;
 - (NSString *)uniqueID;
+- (id)origin;
+- (NSString *)md5;
 - (id)valueForProperty:(NSString *)property withOptions:(NSDictionary *)options;
 - (void)save:(NSString *)filePath;
 
@@ -70,7 +76,7 @@ extern NSString * const kDATAGROUPPROPERTY_POSTERIMAGEURL;
 - (void)enumItemAtIndexes:(NSIndexSet *)indexSet withParam:(id)param notifyWithFrequency:(NSUInteger)frequency;
 - (NSUInteger)itemsCountWithParam:(id)param;
 - (NSUInteger)enumratedItemsCountWithParam:(id)param;
-- (id<DCDataItem>)itemWithUID:(NSString *)uid;
+- (id<DCDataItem>)itemWithUID:(NSString *)uniqueID;
 - (id)valueForProperty:(NSString *)property withOptions:(NSDictionary *)options;
 - (NSString *)itemUIDAtIndex:(NSUInteger)index;
 - (NSInteger)indexForItemUID:(NSString *)itemUID;
@@ -88,7 +94,7 @@ extern NSString * const kDATAGROUPPROPERTY_POSTERIMAGEURL;
 - (void)clearCache;
 - (void)enumGroups:(id)groupParam notifyWithFrequency:(NSUInteger)frequency;
 - (NSUInteger)groupsCount;
-- (id<DCDataGroup>)groupWithUID:(NSString *)uid;
+- (id<DCDataGroup>)groupWithUID:(NSString *)uniqueID;
 - (NSString *)groupUIDAtIndex:(NSUInteger)index;
 - (NSInteger)indexForGroupUID:(NSString *)groupUID;
 - (BOOL)isEnumerating;

@@ -9,7 +9,7 @@
 #import "DCItemViewController.h"
 #import "DCALAssetItemView.h"
 
-@interface DCItemViewController () <DCGridViewDataSource, DCGridViewSortingDelegate, DCGridViewTransformationDelegate, DCGridViewActionDelegate, UIScrollViewDelegate> {
+@interface DCItemViewController () <DCGridViewDataSource, DCGridViewDragDropDelegate, DCGridViewTransformationDelegate, DCGridViewActionDelegate, UIScrollViewDelegate> {
 }
 
 @end
@@ -138,7 +138,55 @@
     return result;
 }
 
-#pragma mark - DCItemViewController - DCGridViewSortingDelegate
+#pragma mark - DCItemViewController - DCGridViewDragDropDelegate
+- (BOOL)isEnableDragDrop {
+    return YES;
+}
+
+- (DCGridViewDragDropStyle)dragdropStyle {
+    return DCGridViewDragDropStyle_Swap;
+}
+
+- (void)gridView:(DCGridView *)gridView dragdropStateBegin:(DCGridViewCell *)cell withGestureRecognizer:(UIGestureRecognizer *)gr {
+    do {
+        if (gridView != self.gridView) {
+            break;
+        }
+    } while (NO);
+}
+
+- (void)gridView:(DCGridView *)gridView dragdropStateChanged:(DCGridViewCell *)cell withGestureRecognizer:(UIGestureRecognizer *)gr {
+    do {
+        if (gridView != self.gridView) {
+            break;
+        }
+    } while (NO);
+}
+
+- (void)gridView:(DCGridView *)gridView dragdropStateEnd:(DCGridViewCell *)cell withGestureRecognizer:(UIGestureRecognizer *)gr {
+    do {
+        if (gridView != self.gridView) {
+            break;
+        }
+    } while (NO);
+}
+
+- (void)gridView:(DCGridView *)gridView dragdropStateCancelledWithGestureRecognizer:(UIGestureRecognizer *)gr {
+    do {
+        if (gridView != self.gridView) {
+            break;
+        }
+    } while (NO);
+}
+
+- (void)gridView:(DCGridView *)gridView dragdropStateFailedWithGestureRecognizer:(UIGestureRecognizer *)gr {
+    do {
+        if (gridView != self.gridView) {
+            break;
+        }
+    } while (NO);
+}
+
 - (void)gridView:(DCGridView *)gridView moveItemAtIndex:(NSInteger)oldIndex toIndex:(NSInteger)newIndex {
     do {
         if (gridView != self.gridView) {
@@ -153,6 +201,33 @@
             break;
         }
     } while (NO);
+}
+
+- (void)gridView:(DCGridView *)gridView didStartMovingCell:(DCGridViewCell *)cell {
+    do {
+        if (gridView != self.gridView) {
+            break;
+        }
+    } while (NO);
+}
+
+- (void)gridView:(DCGridView *)gridView didEndMovingCell:(DCGridViewCell *)cell {
+    do {
+        if (gridView != self.gridView) {
+            break;
+        }
+    } while (NO);
+}
+
+- (BOOL)gridView:(DCGridView *)gridView shouldAllowShakingBehaviorWhenMovingCell:(DCGridViewCell *)view atIndex:(NSInteger)index {
+    BOOL result = NO;
+    do {
+        if (gridView != self.gridView) {
+            break;
+        }
+        result = YES;
+    } while (NO);
+    return result;
 }
 
 #pragma mark - DCItemViewController - DCGridViewTransformationDelegate

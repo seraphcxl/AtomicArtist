@@ -1,4 +1,7 @@
 Zeus
 ============
 
-A simple media file DB using Core-Data for iOS written by Objective-C.
+A simple media file DB using Core-Data.
+A simple image in memory cache.
+A simple data library manager for ALAssetsLibrary.
+A simple loader system using NSOperationQueue.
