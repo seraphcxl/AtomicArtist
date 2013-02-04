@@ -84,6 +84,16 @@ DEFINE_SINGLETON_FOR_CLASS(DCMediaPocket);
     }
 }
 
+- (void)clearUseCountForItems {
+    do {
+        @synchronized (self) {
+            for (id<DCMediaPocketDataItemProtocol> item in _array) {
+                [item zeroUseCount];
+            }
+        }
+    } while (NO);
+}
+
 - (NSUInteger)itemCount {
     NSUInteger result = 0;
     do {
@@ -420,6 +430,9 @@ DEFINE_SINGLETON_FOR_CLASS(DCMediaPocket);
                     break;
                 }
                 
+//                NSConditionLock *_lock = [[NSConditionLock alloc] initWithCondition:0];
+//                SAFE_ARC_AUTORELEASE(_lock);
+                
                 void (^assetResultBlock)(ALAsset *asset) = ^(ALAsset *asset) {
                     do {
                         if (!asset) {
@@ -434,13 +447,21 @@ DEFINE_SINGLETON_FOR_CLASS(DCMediaPocket);
                             [self bottomInsertItem:mediaPocketDataItem];
                         }
                     } while (NO);
+//                    if ([_lock tryLockWhenCondition:0]) {
+//                        [_lock unlockWithCondition:1];
+//                    }
                 };
                 
                 void (^failureBlock)(NSError *error) = ^(NSError *error) {
                     dc_debug_NSLog(@"%@", [error localizedDescription]);
+//                    if ([_lock tryLockWhenCondition:0]) {
+//                        [_lock unlockWithCondition:1];
+//                    }
                 };
                 
                 [assetsLibrary assetForURL:[NSURL URLWithString:uniqueID] resultBlock:assetResultBlock failureBlock:failureBlock];
+//                [_lock lockWhenCondition:1];
+//                [_lock unlockWithCondition:0];
             }
                 break;
                 

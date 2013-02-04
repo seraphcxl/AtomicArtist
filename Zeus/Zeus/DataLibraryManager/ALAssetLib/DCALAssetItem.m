@@ -116,15 +116,17 @@ NSString * const kDCALAssetItem_MetaData_Exif_DateTimeOriginal = @"DateTimeOrigi
                     long width = [[metadataDict valueForKey:kDCALAssetItem_MetaData_PixelWidth] intValue];
                     long height = [[metadataDict valueForKey:kDCALAssetItem_MetaData_PixelHeight] intValue];
                     [tmp appendFormat:@"<%ld,%ld>", width, height];
-                    NSDictionary* exifDict = [metadataDict valueForKey:kDCALAssetItem_MetaData_ExifDict];
-                    if (exifDict) {
-                        NSString *exifDateTimeOriginal = [exifDict valueForKey:kDCALAssetItem_MetaData_Exif_DateTimeOriginal];
-                        if (exifDateTimeOriginal) {
-                            [tmp appendString:exifDateTimeOriginal];
-                        }
-                    }
+//                    NSDictionary* exifDict = [metadataDict valueForKey:kDCALAssetItem_MetaData_ExifDict];
+//                    if (exifDict) {
+//                        NSString *exifDateTimeOriginal = [exifDict valueForKey:kDCALAssetItem_MetaData_Exif_DateTimeOriginal];
+//                        if (exifDateTimeOriginal) {
+//                            [tmp appendString:exifDateTimeOriginal];
+//                        }
+//                    }
                 }
             }
+            NSDate *date = [self.asset valueForProperty:ALAssetPropertyDate];
+            [tmp appendString:[date description]];
             NSData *tmpData = [tmp dataUsingEncoding:NSUTF8StringEncoding];
             result = [DCCommonUtility md5:tmpData];
         }
@@ -166,6 +168,9 @@ NSString * const kDCALAssetItem_MetaData_Exif_DateTimeOriginal = @"DateTimeOrigi
                 SAFE_ARC_AUTORELEASE(result);
             } else if ([property isEqualToString:kDATAITEMPROPERTY_FULLSCREENIMAGE]) {
                 result = [[UIImage alloc] initWithCGImage:[representation fullScreenImage]];
+                SAFE_ARC_AUTORELEASE(result);
+            } else if ([property isEqualToString:kDATAITEMPROPERTY_PROPERTYDATE]) {
+                result = [self.asset valueForProperty:ALAssetPropertyDate];
                 SAFE_ARC_AUTORELEASE(result);
             } else {
                 [NSException raise:@"DCALAssetItem error" format:@"Reason: unknown property"];

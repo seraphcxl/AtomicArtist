@@ -144,4 +144,12 @@
     return result;
 }
 
+- (void)zeroUseCount {
+    do {
+        @synchronized(self) {
+            _useCount = 0;
+        }
+    } while (NO);
+}
+
 @end

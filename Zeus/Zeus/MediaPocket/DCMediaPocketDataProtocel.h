@@ -16,6 +16,7 @@
 - (NSUInteger)increaseUseCount;
 - (NSUInteger)decreaseUseCount;
 - (NSUInteger)useCount;
+- (void)zeroUseCount;
 
 - (NSURL *)URL;
 

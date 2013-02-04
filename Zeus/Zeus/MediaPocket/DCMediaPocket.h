@@ -36,6 +36,7 @@ DEFINE_SINGLETON_FOR_HEADER(DCMediaPocket);
 
 - (id)init;
 - (void)reset;
+- (void)clearUseCountForItems;
 
 - (NSUInteger)itemCount;
 

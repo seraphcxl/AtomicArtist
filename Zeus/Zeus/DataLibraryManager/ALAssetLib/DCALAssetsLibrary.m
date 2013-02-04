@@ -22,6 +22,8 @@
     
     BOOL _cancelEnum;
     BOOL _enumerating;
+    
+    id<DCDataGroup> _assetsTimelineGroup;
 }
 
 - (void)initAssetsLib;
@@ -59,7 +61,8 @@
         @synchronized(self) {
             [[DCAssetsLibAgent sharedDCAssetsLibAgent] removeAssetsLibUser:self];
             
-            [self clearCache];
+            [self clearGroupCache];
+            [self clearTimelineGroupCache];
             
             SAFE_ARC_SAFERELEASE(_allALAssetsGroupPersistentIDs);
             SAFE_ARC_SAFERELEASE(_allALAssetsGroups);
@@ -90,7 +93,7 @@
     return result;
 }
 
-- (void)clearCache {
+- (void)clearGroupCache {
     do {
         @synchronized(self) {
             _cancelEnum = YES;
@@ -102,6 +105,16 @@
             if (_allALAssetsGroups) {
                 [_allALAssetsGroups removeAllObjects];
             }
+        }
+    } while (NO);
+}
+
+- (void)clearTimelineGroupCache {
+    do {
+        @synchronized(self) {
+            _cancelEnum = YES;
+            
+            SAFE_ARC_SAFERELEASE(_assetsTimelineGroup);
         }
     } while (NO);
 }
@@ -184,7 +197,7 @@
         
         @synchronized(self) {
             if (!_enumerating) {
-                [self clearCache];
+                [self clearGroupCache];
                 
                 _frequency = frequency;
                 _enumCount = 0;
@@ -197,6 +210,82 @@
         }
         SAFE_ARC_AUTORELEASE_POOL_END()
     } while (NO);
+}
+
+- (id<DCDataGroup>)assetsTimelineGroup {
+    DCALAssetsGroup *result = nil;
+    do {
+        @synchronized(self) {
+            if (!_assetsTimelineGroup) {
+                ALAssetsLibrary *assetsLibrary = [DCAssetsLibAgent sharedDCAssetsLibAgent].assetsLibrary;
+                if (!assetsLibrary) {
+                    [NSException raise:@"DCALAssetsLibrary Error" format:@"Reason: _assetsLibrary == nil"];
+                    break;
+                }
+                
+                NSConditionLock *_lock = [[NSConditionLock alloc] initWithCondition:0];
+                SAFE_ARC_AUTORELEASE(_lock);
+                
+                SAFE_ARC_AUTORELEASE_POOL_START()
+                void (^enumerator)(ALAssetsGroup *group, BOOL *stop) = ^(ALAssetsGroup *group, BOOL *stop) {
+                    do {
+                        if (_cancelEnum) {
+                            *stop = _cancelEnum;
+                            _enumerating = NO;
+                            break;
+                        }
+                        
+                        if (group != nil && [group numberOfAssets] > 0) {
+                            NSString *groupPersistentID = [group valueForProperty:ALAssetsGroupPropertyPersistentID];
+                            ALAssetsGroup *result = [_allALAssetsGroups objectForKey:groupPersistentID];
+                            if (result == nil) {
+                                @synchronized(self) {
+                                    if (_cancelEnum) {
+                                        *stop = _cancelEnum;
+                                        _enumerating = NO;
+                                        break;
+                                    }
+                                    _assetsTimelineGroup = [[DCALAssetsGroup alloc] initWithALAssetsGroup:group];
+                                }
+                            }
+                            dc_debug_NSLog(@"Add group id: %@, count = %d", groupPersistentID, [group numberOfAssets]);
+                        } else {
+                            ;
+                        }
+                    } while (NO);
+                    
+                    if ([_lock tryLockWhenCondition:0]) {
+                        [_lock unlockWithCondition:1];
+                    }
+                };
+                
+                void (^failureReporter)(NSError *error) = ^(NSError *error) {
+                    if ([_lock tryLockWhenCondition:0]) {
+                        [_lock unlockWithCondition:1];
+                    }
+                    
+                    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Enum ALAssetsGroup failed" message:[NSString stringWithFormat:@"%@", [error localizedDescription]] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                    SAFE_ARC_AUTORELEASE(alertView);
+                    [alertView show];
+                };
+                
+                if (!_enumerating) {
+                    [self clearTimelineGroupCache];
+                    
+                    _cancelEnum = NO;
+                    _enumerating = YES;
+                    NSAssert(assetsLibrary, @"_assetsLibrary == nil");
+                    [assetsLibrary enumerateGroupsWithTypes:ALAssetsGroupLibrary usingBlock:enumerator failureBlock:failureReporter];
+                    [_lock lockWhenCondition:1];
+                    [_lock unlockWithCondition:0];
+                }
+                SAFE_ARC_AUTORELEASE_POOL_END()
+            }
+            NSAssert(_assetsTimelineGroup, @"_assetsTimelineGroup == nil");
+            result = _assetsTimelineGroup;
+        }
+    } while (NO);
+    return result;
 }
 
 - (NSUInteger)groupsCount {

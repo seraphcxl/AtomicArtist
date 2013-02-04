@@ -45,6 +45,7 @@ extern NSString * const kDATAITEMPROPERTY_THUMBNAIL;
 extern NSString * const kDATAITEMPROPERTY_ORIGINIMAGE;
 extern NSString * const kDATAITEMPROPERTY_FULLSCREENIMAGE;
 extern NSString * const kDATAITEMPROPERTY_THUMBNAILURL;
+extern NSString * const kDATAITEMPROPERTY_PROPERTYDATE;
 
 @protocol DCDataItem <NSObject>
 
@@ -91,8 +92,10 @@ extern NSString * const kDATAGROUPPROPERTY_POSTERIMAGEURL;
 - (DataSourceType)type;
 - (BOOL)connect:(NSDictionary *)params;
 - (BOOL)disconnect;
-- (void)clearCache;
+- (void)clearGroupCache;
+- (void)clearTimelineGroupCache;
 - (void)enumGroups:(id)groupParam notifyWithFrequency:(NSUInteger)frequency;
+- (id<DCDataGroup>)assetsTimelineGroup;
 - (NSUInteger)groupsCount;
 - (id<DCDataGroup>)groupWithUID:(NSString *)uniqueID;
 - (NSString *)groupUIDAtIndex:(NSUInteger)index;
