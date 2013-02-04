@@ -7,9 +7,9 @@
 //
 
 #import "DCFloweringBar.h"
-#import "DCBudView.h"
+#import "DCBudButton.h"
 #import "DCPetalView.h"
-#import "DCDewView.h"
+#import "DCDewButton.h"
 
 @interface DCFloweringBar () {
     NSMutableDictionary *_petals;  // key:(NSString *) value:(DCPetalView *)
@@ -24,7 +24,7 @@
 
 @synthesize anchor = _anchor;
 @synthesize floweringBranchView = _floweringBranchView;
-@synthesize budView = _budView;
+@synthesize budButton = _budButton;
 
 - (id)initWithAnchor:(CGPoint)aAnchor andFloweringBranch:(UIView *)aFloweringBranchView {
     @synchronized(self) {
@@ -47,8 +47,8 @@
         @synchronized(self) {
             [self petalWithered];
             
-            if (self.budView) {
-                [self.budView removeFromSuperview];
+            if (self.budButton) {
+                [self.budButton removeFromSuperview];
                 SAFE_ARC_SAFERELEASE(_budView);
             }
             
@@ -99,8 +99,8 @@
 }
 
 #pragma mark - DCFloweringBar - Dew
-- (DCDewView *)getDew:(CGFloat)radius onPetal:(CGFloat)angle {
-    DCDewView *result = nil;
+- (DCDewButton *)getDew:(CGFloat)radius onPetal:(CGFloat)angle {
+    DCDewButton *result = nil;
     do {
         if (!_petals || [_petals count] == 0) {
             break;
@@ -115,9 +115,9 @@
     return result;
 }
 
-- (void)addDew:(DCDewView *)aDewView atPetal:(DCPetalView *)aPetalView {
+- (void)addDew:(DCDewButton *)aDewButton atPetal:(DCPetalView *)aPetalView {
     do {
-        if (!aDewView || !aPetalView) {
+        if (!aDewButton || !aPetalView) {
             break;
         }
         @synchronized(self) {
@@ -125,13 +125,15 @@
             if (!petalView) {
                 petalView = [self createPetal:aPetalView.angle];
             }
+            NSAssert(petalView, @"petalView == nil");
+            [petalView addDew:aDewButton];
         }
     } while (NO);
 }
 
-- (void)addDew:(DCDewView *)aDewView atAngle:(CGFloat)angle {
+- (void)addDew:(DCDewButton *)aDewButton atAngle:(CGFloat)angle {
     do {
-        if (!aDewView) {
+        if (!aDewButton) {
             break;
         }
         @synchronized(self) {
@@ -140,6 +142,7 @@
                 petalView = [self createPetal:angle];
             }
             NSAssert(petalView, @"petalView == nil");
+            [petalView addDew:aDewButton];
         }
     } while (NO);
 }

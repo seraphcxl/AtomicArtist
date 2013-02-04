@@ -10,7 +10,7 @@
 #import "DCCommonConstants.h"
 #import "SafeARC.h"
 
-@class DCDewView;
+@class DCDewButton;
 
 @interface DCPetalView : UIView {
 }
@@ -21,8 +21,8 @@
 - (NSString *)uniqueID;
 
 // Dew
-- (DCDewView *)getDew:(CGFloat)radius;
+- (DCDewButton *)getDew:(CGFloat)radius;
 
-- (void)addDew:(DCDewView *)aDewView;
+- (void)addDew:(DCDewButton *)aDewButton;
 
 @end

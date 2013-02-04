@@ -7,7 +7,7 @@
 //
 
 #import "DCPetalView.h"
-#import "DCDewView.h"
+#import "DCDewButton.h"
 
 @interface DCPetalView () {
     NSMutableDictionary *_dews;  // key:(NSString *) value:(DCDewdropView *)
@@ -23,15 +23,17 @@
 
 - (id)initWithFrame:(CGRect)frame
 {
-    self = [super initWithFrame:frame];
-    if (self) {
-        // Initialization code
-        [self dewDrop];
-        _dews = [NSMutableDictionary dictionary];
-        SAFE_ARC_RETAIN(_dews);
-        
+    @synchronized(self) {
+        self = [super initWithFrame:frame];
+        if (self) {
+            // Initialization code
+            [self dewDrop];
+            _dews = [NSMutableDictionary dictionary];
+            SAFE_ARC_RETAIN(_dews);
+            
+        }
+        return self;
     }
-    return self;
 }
 
 - (void)dealloc {
@@ -67,8 +69,8 @@
 */
 
 #pragma mark - DCFloweringBar - Dew
-- (DCDewView *)getDew:(CGFloat)radius {
-    DCDewView *result = nil;
+- (DCDewButton *)getDew:(CGFloat)radius {
+    DCDewButton *result = nil;
     do {
         if (!_dews || [_dews count] == 0) {
             break;
@@ -85,7 +87,7 @@
     do {
         @synchronized(self) {
             if (_dews) {
-                for (DCDewView *dew in _dews) {
+                for (DCDewButton *dew in _dews) {
                     [dew removeFromSuperview];
                 }
                 
@@ -96,17 +98,17 @@
     } while (NO);
 }
 
-- (void)addDew:(DCDewView *)aDewView {
+- (void)addDew:(DCDewButton *)aDewButton {
     do {
-        if (!aDewView) {
+        if (!aDewButton) {
             break;
         }
         @synchronized(self) {
-            DCDewView *tmpDewView = [self getDew:aDewView.radius];
-            NSAssert(!tmpDewView, @"DewView at radius:%f was exsited", aDewView.radius);
-            [_dews setObject:aDewView forKey:[aDewView uniqueID]];
+            DCDewButton *tmpDewButton = [self getDew:aDewButton.radius];
+            NSAssert(!tmpDewButton, @"DewView at radius:%f was exsited", aDewButton.radius);
+            [_dews setObject:aDewButton forKey:[aDewButton uniqueID]];
             
-            [self addSubview:aDewView];
+            [self addSubview:aDewButton];
         }
     } while (NO);
 }

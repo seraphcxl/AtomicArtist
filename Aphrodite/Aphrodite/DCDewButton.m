@@ -1,25 +1,27 @@
 //
-//  DCDewView.m
+//  DCDewButton.m
 //  Aphrodite
 //
-//  Created by Chen XiaoLiang on 13-1-30.
+//  Created by Chen XiaoLiang on 13-2-4.
 //  Copyright (c) 2013年 Chen XiaoLiang. All rights reserved.
 //
 
-#import "DCDewView.h"
+#import "DCDewButton.h"
 
-@implementation DCDewView
+@implementation DCDewButton
 
 @synthesize radius = _radius;
 @synthesize anchor = _anchor;
 
 - (id)initWithFrame:(CGRect)frame
 {
-    self = [super initWithFrame:frame];
-    if (self) {
-        // Initialization code
+    @synchronized(self) {
+        self = [super initWithFrame:frame];
+        if (self) {
+            // Initialization code
+        }
+        return self;
     }
-    return self;
 }
 
 - (void)dealloc {

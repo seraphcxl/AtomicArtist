@@ -12,16 +12,16 @@
 #import "DCCommonConstants.h"
 #import "SafeARC.h"
 
-@class DCBudView;
+@class DCBudButton;
 @class DCPetalView;
-@class DCDewView;
+@class DCDewButton;
 
 @interface DCFloweringBar : NSObject {
 }
 
 @property (nonatomic, readonly) CGPoint anchor;  // The anchor point for flowering bar.
 @property (nonatomic, SAFE_ARC_PROP_WEAK) UIView *floweringBranchView;  // A view that flowering bar lay on.
-@property (nonatomic, SAFE_ARC_PROP_STRONG) DCBudView *budView;  // The central bud view.
+@property (nonatomic, SAFE_ARC_PROP_STRONG) DCBudButton *budButton;  // The central bud button.
 
 - (id)initWithAnchor:(CGPoint)aAnchor andFloweringBranch:(UIView *)aFloweringBranchView;
 
@@ -29,9 +29,9 @@
 - (DCPetalView *)getPetal:(CGFloat)angle;
 
 // Dew
-- (DCDewView *)getDew:(CGFloat)radius onPetal:(CGFloat)angle;
+- (DCDewButton *)getDew:(CGFloat)radius onPetal:(CGFloat)angle;
 
-- (void)addDew:(DCDewView *)aDewView atPetal:(DCPetalView *)aPetalView;
-- (void)addDew:(DCDewView *)aDewView atAngle:(CGFloat)angle;
+- (void)addDew:(DCDewButton *)aDewButton atPetal:(DCPetalView *)aPetalView;
+- (void)addDew:(DCDewButton *)aDewButton atAngle:(CGFloat)angle;
 
 @end

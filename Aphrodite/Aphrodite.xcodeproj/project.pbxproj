@@ -10,10 +10,14 @@
 		1BD9AF2F16B8A87600F6E9C1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BD9AF2E16B8A87600F6E9C1 /* Foundation.framework */; };
 		1BD9AF4316B8AB3100F6E9C1 /* DCPetalView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BD9AF4216B8AB3100F6E9C1 /* DCPetalView.m */; };
 		1BD9AF4816B8AC2000F6E9C1 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BD9AF4716B8AC2000F6E9C1 /* UIKit.framework */; };
-		1BD9AF4B16B8AF5E00F6E9C1 /* DCBudView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BD9AF4A16B8AF5E00F6E9C1 /* DCBudView.m */; };
 		1BD9AF4E16B8B37D00F6E9C1 /* DCFloweringBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BD9AF4D16B8B37D00F6E9C1 /* DCFloweringBar.m */; };
 		1BD9AF5016B8B50100F6E9C1 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BD9AF4F16B8B50100F6E9C1 /* CoreGraphics.framework */; };
-		1BD9AF5316B8C54B00F6E9C1 /* DCDewView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BD9AF5216B8C54B00F6E9C1 /* DCDewView.m */; };
+		1BF2263316BF84EB004A93F5 /* DCPetalView.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1BD9AF4116B8AB3100F6E9C1 /* DCPetalView.h */; };
+		1BF2263516BF84EB004A93F5 /* DCFloweringBar.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1BD9AF4C16B8B37D00F6E9C1 /* DCFloweringBar.h */; };
+		1BF2263D16BF8F6B004A93F5 /* DCBudButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BF2263C16BF8F6B004A93F5 /* DCBudButton.m */; };
+		1BF2263E16BF9120004A93F5 /* DCBudButton.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1BF2263B16BF8F6B004A93F5 /* DCBudButton.h */; };
+		1BF2264116BF92EA004A93F5 /* DCDewButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BF2264016BF92EA004A93F5 /* DCDewButton.m */; };
+		1BF2264216BF92F2004A93F5 /* DCDewButton.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1BF2263F16BF92EA004A93F5 /* DCDewButton.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -23,6 +27,10 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				1BF2264216BF92F2004A93F5 /* DCDewButton.h in CopyFiles */,
+				1BF2263E16BF9120004A93F5 /* DCBudButton.h in CopyFiles */,
+				1BF2263316BF84EB004A93F5 /* DCPetalView.h in CopyFiles */,
+				1BF2263516BF84EB004A93F5 /* DCFloweringBar.h in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -36,13 +44,13 @@
 		1BD9AF4116B8AB3100F6E9C1 /* DCPetalView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCPetalView.h; sourceTree = "<group>"; };
 		1BD9AF4216B8AB3100F6E9C1 /* DCPetalView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCPetalView.m; sourceTree = "<group>"; };
 		1BD9AF4716B8AC2000F6E9C1 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
-		1BD9AF4916B8AF5E00F6E9C1 /* DCBudView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCBudView.h; sourceTree = "<group>"; };
-		1BD9AF4A16B8AF5E00F6E9C1 /* DCBudView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCBudView.m; sourceTree = "<group>"; };
 		1BD9AF4C16B8B37D00F6E9C1 /* DCFloweringBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCFloweringBar.h; sourceTree = "<group>"; };
 		1BD9AF4D16B8B37D00F6E9C1 /* DCFloweringBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCFloweringBar.m; sourceTree = "<group>"; };
 		1BD9AF4F16B8B50100F6E9C1 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		1BD9AF5116B8C54B00F6E9C1 /* DCDewView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCDewView.h; sourceTree = "<group>"; };
-		1BD9AF5216B8C54B00F6E9C1 /* DCDewView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCDewView.m; sourceTree = "<group>"; };
+		1BF2263B16BF8F6B004A93F5 /* DCBudButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCBudButton.h; sourceTree = "<group>"; };
+		1BF2263C16BF8F6B004A93F5 /* DCBudButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCBudButton.m; sourceTree = "<group>"; };
+		1BF2263F16BF92EA004A93F5 /* DCDewButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCDewButton.h; sourceTree = "<group>"; };
+		1BF2264016BF92EA004A93F5 /* DCDewButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCDewButton.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,14 +98,14 @@
 			isa = PBXGroup;
 			children = (
 				1BD9AF3116B8A87600F6E9C1 /* Supporting Files */,
-				1BD9AF5116B8C54B00F6E9C1 /* DCDewView.h */,
-				1BD9AF5216B8C54B00F6E9C1 /* DCDewView.m */,
-				1BD9AF4116B8AB3100F6E9C1 /* DCPetalView.h */,
-				1BD9AF4216B8AB3100F6E9C1 /* DCPetalView.m */,
-				1BD9AF4916B8AF5E00F6E9C1 /* DCBudView.h */,
-				1BD9AF4A16B8AF5E00F6E9C1 /* DCBudView.m */,
 				1BD9AF4C16B8B37D00F6E9C1 /* DCFloweringBar.h */,
 				1BD9AF4D16B8B37D00F6E9C1 /* DCFloweringBar.m */,
+				1BD9AF4116B8AB3100F6E9C1 /* DCPetalView.h */,
+				1BD9AF4216B8AB3100F6E9C1 /* DCPetalView.m */,
+				1BF2263B16BF8F6B004A93F5 /* DCBudButton.h */,
+				1BF2263C16BF8F6B004A93F5 /* DCBudButton.m */,
+				1BF2263F16BF92EA004A93F5 /* DCDewButton.h */,
+				1BF2264016BF92EA004A93F5 /* DCDewButton.m */,
 			);
 			path = Aphrodite;
 			sourceTree = "<group>";
@@ -163,9 +171,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				1BD9AF4316B8AB3100F6E9C1 /* DCPetalView.m in Sources */,
-				1BD9AF4B16B8AF5E00F6E9C1 /* DCBudView.m in Sources */,
 				1BD9AF4E16B8B37D00F6E9C1 /* DCFloweringBar.m in Sources */,
-				1BD9AF5316B8C54B00F6E9C1 /* DCDewView.m in Sources */,
+				1BF2263D16BF8F6B004A93F5 /* DCBudButton.m in Sources */,
+				1BF2264116BF92EA004A93F5 /* DCDewButton.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -278,6 +286,7 @@
 				1BD9AF3B16B8A87600F6E9C1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

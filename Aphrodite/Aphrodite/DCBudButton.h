@@ -1,8 +1,8 @@
 //
-//  DCBudView.h
+//  DCBudButton.h
 //  Aphrodite
 //
-//  Created by Chen XiaoLiang on 13-1-30.
+//  Created by Chen XiaoLiang on 13-2-4.
 //  Copyright (c) 2013年 Chen XiaoLiang. All rights reserved.
 //
 
@@ -10,7 +10,6 @@
 #import "DCCommonConstants.h"
 #import "SafeARC.h"
 
-@interface DCBudView : UIView {
-}
+@interface DCBudButton : UIButton
 
 @end
