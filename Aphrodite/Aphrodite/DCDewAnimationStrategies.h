@@ -1,5 +1,5 @@
 //
-//  DCPetalLayoutStrategies.h
+//  DCDewAnimationStrategies.h
 //  Aphrodite
 //
 //  Created by Chen XiaoLiang on 13-2-4.
@@ -8,6 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-@interface DCPetalLayoutStrategies : NSObject
+@interface DCDewAnimationStrategies : NSObject
 
 @end
