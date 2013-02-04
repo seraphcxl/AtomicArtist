@@ -67,8 +67,7 @@
             break;
         }
         @synchronized(self) {
-            NSString *uid = [NSString stringWithFormat:@"%f", angle];
-            result = [_petals objectForKey:uid];
+            result = [_petals objectForKey:[DCPetalView uniqueIDForAngle:angle]];
         }
     } while (NO);
     return result;
@@ -92,7 +91,9 @@
 - (DCPetalView *)createPetal:(CGFloat)angle {
     DCPetalView *result = nil;
     do {
-        ;
+        result = [[DCPetalView alloc] init];
+        SAFE_ARC_AUTORELEASE(result);
+        [_petals setObject:result forKey:[DCPetalView uniqueIDForAngle:angle]];
     } while (NO);
     return result;
 }
@@ -105,9 +106,9 @@
             break;
         }
         @synchronized(self) {
-            DCPetalView *petal = [self getPetalView:angle];
+            DCPetalView *petal = [self getPetal:angle];
             if (petal) {
-                result = [petal getDewView:radius];
+                result = [petal getDew:radius];
             }
         }
     } while (NO);
@@ -120,6 +121,10 @@
             break;
         }
         @synchronized(self) {
+            DCPetalView *petalView = [self getPetal:aPetalView.angle];
+            if (!petalView) {
+                petalView = [self createPetal:aPetalView.angle];
+            }
         }
     } while (NO);
 }
@@ -132,7 +137,7 @@
         @synchronized(self) {
             DCPetalView *petalView = [self getPetal:angle];
             if (!petalView) {
-                petalView = [self addPetal:angle];
+                petalView = [self createPetal:angle];
             }
             NSAssert(petalView, @"petalView == nil");
         }

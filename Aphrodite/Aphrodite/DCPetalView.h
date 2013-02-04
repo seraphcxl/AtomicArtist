@@ -17,6 +17,7 @@
 
 @property (nonatomic, assign) CGFloat angle;
 
++ (NSString *)uniqueIDForAngle:(CGFloat)angle;
 - (NSString *)uniqueID;
 
 // Dew

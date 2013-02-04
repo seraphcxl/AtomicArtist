@@ -32,6 +32,10 @@
     } while (NO);
 }
 
++ (NSString *)uniqueIDForRadius:(CGFloat)radius {
+    return [NSString stringWithFormat:@"%f", radius];
+}
+
 - (NSString *)uniqueID {
     return [NSString stringWithFormat:@"%f", self.radius];
 }

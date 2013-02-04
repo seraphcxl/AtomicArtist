@@ -43,6 +43,10 @@
     } while (NO);
 }
 
++ (NSString *)uniqueIDForAngle:(CGFloat)angle {
+    return [NSString stringWithFormat:@"%f", angle];
+}
+
 - (NSString *)uniqueID {
     return [NSString stringWithFormat:@"%f", self.angle];
 }

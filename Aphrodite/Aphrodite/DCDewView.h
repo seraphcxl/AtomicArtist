@@ -16,6 +16,7 @@
 @property (nonatomic, assign) CGFloat radius;
 @property (nonatomic, readonly) CGPoint anchor;
 
++ (NSString *)uniqueIDForRadius:(CGFloat)radius;
 - (NSString *)uniqueID;
 
 @end
