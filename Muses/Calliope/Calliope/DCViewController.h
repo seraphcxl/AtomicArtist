@@ -8,6 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
+@class DCFloweringBar;
+
 @interface DCViewController : UIViewController
+
+@property (nonatomic, retain) DCFloweringBar *floweringBar;
 
 @end

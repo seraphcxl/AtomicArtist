@@ -19,6 +19,7 @@
 		1BB49B7A16B7C66E0058DD22 /* DCViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BB49B7916B7C66E0058DD22 /* DCViewController.m */; };
 		1BB49B7D16B7C66E0058DD22 /* DCViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1BB49B7B16B7C66E0058DD22 /* DCViewController.xib */; };
 		1BB49B8416B7C6900058DD22 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 1BB49B8316B7C6900058DD22 /* README.md */; };
+		1BF2263716BF84FE004A93F5 /* libAphrodite.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BF2263616BF84FE004A93F5 /* libAphrodite.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,6 +40,7 @@
 		1BB49B7916B7C66E0058DD22 /* DCViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DCViewController.m; sourceTree = "<group>"; };
 		1BB49B7C16B7C66E0058DD22 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/DCViewController.xib; sourceTree = "<group>"; };
 		1BB49B8316B7C6900058DD22 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = SOURCE_ROOT; };
+		1BF2263616BF84FE004A93F5 /* libAphrodite.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libAphrodite.a; path = "/Users/seraphcxl/Documents/Workspace/Project/github/AtomicArtist/Aphrodite/../Common/Release-iphoneos/libAphrodite.a"; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -46,6 +48,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1BF2263716BF84FE004A93F5 /* libAphrodite.a in Frameworks */,
 				1BB49B6116B7C66E0058DD22 /* UIKit.framework in Frameworks */,
 				1BB49B6316B7C66E0058DD22 /* Foundation.framework in Frameworks */,
 				1BB49B6516B7C66E0058DD22 /* CoreGraphics.framework in Frameworks */,
@@ -75,6 +78,7 @@
 		1BB49B5F16B7C66E0058DD22 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				1BF2263616BF84FE004A93F5 /* libAphrodite.a */,
 				1BB49B6016B7C66E0058DD22 /* UIKit.framework */,
 				1BB49B6216B7C66E0058DD22 /* Foundation.framework */,
 				1BB49B6416B7C66E0058DD22 /* CoreGraphics.framework */,
@@ -265,11 +269,15 @@
 		1BB49B8116B7C66E0058DD22 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CONFIGURATION_TEMP_DIR = "$(SRCROOT)/../../Common/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Calliope/Calliope-Prefix.pch";
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/../../Common/**";
 				INFOPLIST_FILE = "Calliope/Calliope-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/../../Common/**";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = "$(SRCROOT)/../../Common/include";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
@@ -278,11 +286,15 @@
 		1BB49B8216B7C66E0058DD22 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CONFIGURATION_TEMP_DIR = "$(SRCROOT)/../../Common/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Calliope/Calliope-Prefix.pch";
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/../../Common/**";
 				INFOPLIST_FILE = "Calliope/Calliope-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/../../Common/**";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = "$(SRCROOT)/../../Common/include";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
@@ -307,6 +319,7 @@
 				1BB49B8216B7C66E0058DD22 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

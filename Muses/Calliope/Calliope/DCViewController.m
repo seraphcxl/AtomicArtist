@@ -7,6 +7,7 @@
 //
 
 #import "DCViewController.h"
+#import "DCFloweringBar.h"
 
 @interface DCViewController ()
 
@@ -14,10 +15,35 @@
 
 @implementation DCViewController
 
+@synthesize floweringBar = _floweringBar;
+
+- (id)init {
+    self = [super init];
+    if (self) {
+        _floweringBar = [[DCFloweringBar alloc] initWithAnchor:CGPointZero andFloweringBranch:self.view];
+        SAFE_ARC_AUTORELEASE(_floweringBar);
+    }
+    return self;
+}
+
 - (void)viewDidLoad
 {
-    [super viewDidLoad];
-	// Do any additional setup after loading the view, typically from a nib.
+    do {
+        [super viewDidLoad];
+        // Do any additional setup after loading the view, typically from a nib.
+    } while (NO);
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    do {
+        [super viewWillAppear:animated];
+    } while (NO);
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    do {
+        [super viewWillDisappear:animated];
+    } while (NO);
 }
 
 - (void)didReceiveMemoryWarning

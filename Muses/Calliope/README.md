@@ -1,4 +1,4 @@
 AtomicArtist
 ============
 
-A test app for Ares.
+A test app for Aphrodite.
