@@ -10,6 +10,21 @@
 #import "DCCommonConstants.h"
 #import "SafeARC.h"
 
-@interface DCBudButton : UIButton
+@class DCBudButton;
+
+@protocol DCBudButtonActionDelegate <NSObject>
+
+- (void)DCBudButton:(DCBudButton *)budbutton bloom:(BOOL)bloomy;
+
+@end
+
+@interface DCBudButton : UIButton {
+}
+
+@property (nonatomic, SAFE_ARC_PROP_WEAK) id<DCBudButtonActionDelegate> actionDelegate;
+
+@property (atomic, readonly, getter = isBloomy) BOOL bloomy;
+
+- (id)initWithFrame:(CGRect)frame andBloomyState:(BOOL) bloomy;
 
 @end

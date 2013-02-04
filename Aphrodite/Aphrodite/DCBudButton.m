@@ -8,7 +8,17 @@
 
 #import "DCBudButton.h"
 
+@interface DCBudButton () {
+}
+
+- (void)actionForButtonClicked:(id)sender;
+
+@end
+
 @implementation DCBudButton
+
+@synthesize actionDelegate = _actionDelegate;
+@synthesize bloomy = _bloomy;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -21,12 +31,33 @@
     }
 }
 
+- (id)initWithFrame:(CGRect)frame andBloomyState:(BOOL)bloomy {
+    @synchronized(self) {
+        self = [super initWithFrame:frame];
+        if (self) {
+            // Initialization code
+            _bloomy = bloomy;
+            
+            [self addTarget:self action:@selector(actionForButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+        }
+        return self;
+    }
+}
+
 - (void)dealloc {
     do {
         @synchronized(self) {
+            [self removeTarget:self action:@selector(actionForButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
         }
         
         SAFE_ARC_SUPER_DEALLOC();
+    } while (NO);
+}
+
+- (void)actionForButtonClicked:(id)sender {
+    do {
+        @synchronized(self) {
+        }
     } while (NO);
 }
 

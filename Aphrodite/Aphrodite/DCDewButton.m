@@ -11,7 +11,8 @@
 @implementation DCDewButton
 
 @synthesize radius = _radius;
-@synthesize anchor = _anchor;
+@synthesize anchorDelegate = _anchorDelegate;
+@synthesize angleDelegate = _angleDelegate;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -27,8 +28,9 @@
 - (void)dealloc {
     do {
         @synchronized(self) {
+            _angleDelegate = nil;
+            _anchorDelegate = nil;
             _radius = 0.0f;
-            _anchor = CGPointZero;
         }
         SAFE_ARC_SUPER_DEALLOC();
     } while (NO);

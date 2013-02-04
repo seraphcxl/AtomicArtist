@@ -19,6 +19,7 @@
 
 @implementation DCPetalView
 
+@synthesize anchorDelegate = _anchorDelegate;
 @synthesize angle = _angle;
 
 - (id)initWithFrame:(CGRect)frame
@@ -40,6 +41,8 @@
     do {
         @synchronized(self) {
             [self dewDrop];
+            _anchorDelegate = nil;
+            _angle = 0.0f;
         }
         SAFE_ARC_SUPER_DEALLOC();
     } while (NO);

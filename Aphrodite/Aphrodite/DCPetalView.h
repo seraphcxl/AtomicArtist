@@ -10,10 +10,18 @@
 #import "DCCommonConstants.h"
 #import "SafeARC.h"
 
+@protocol DCPetalViewAnchorDelegate <NSObject>
+
+- (CGFloat)anchor;
+
+@end
+
 @class DCDewButton;
 
 @interface DCPetalView : UIView {
 }
+
+@property (nonatomic, SAFE_ARC_PROP_WEAK) id<DCPetalViewAnchorDelegate> anchorDelegate;
 
 @property (nonatomic, assign) CGFloat angle;
 

@@ -10,11 +10,25 @@
 #import "DCCommonConstants.h"
 #import "SafeARC.h"
 
+@protocol DCDewButtonAngleDelegate <NSObject>
+
+- (CGFloat)angle;
+
+@end
+
+@protocol DCDewButtonAnchorDelegate <NSObject>
+
+- (CGFloat)anchor;
+
+@end
+
 @interface DCDewButton : UIButton {
 }
 
+@property (nonatomic, SAFE_ARC_PROP_WEAK) id<DCDewButtonAnchorDelegate> anchorDelegate;
+@property (nonatomic, SAFE_ARC_PROP_WEAK) id<DCDewButtonAngleDelegate> angleDelegate;
+
 @property (nonatomic, assign) CGFloat radius;
-@property (nonatomic, readonly) CGPoint anchor;
 
 + (NSString *)uniqueIDForRadius:(CGFloat)radius;
 - (NSString *)uniqueID;

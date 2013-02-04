@@ -18,6 +18,8 @@
 		1BF2263E16BF9120004A93F5 /* DCBudButton.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1BF2263B16BF8F6B004A93F5 /* DCBudButton.h */; };
 		1BF2264116BF92EA004A93F5 /* DCDewButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BF2264016BF92EA004A93F5 /* DCDewButton.m */; };
 		1BF2264216BF92F2004A93F5 /* DCDewButton.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1BF2263F16BF92EA004A93F5 /* DCDewButton.h */; };
+		1BF2264516BFA77A004A93F5 /* DCDewLayoutStrategies.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BF2264416BFA77A004A93F5 /* DCDewLayoutStrategies.m */; };
+		1BF2264816BFA796004A93F5 /* DCPetalLayoutStrategies.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BF2264716BFA796004A93F5 /* DCPetalLayoutStrategies.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -51,6 +53,10 @@
 		1BF2263C16BF8F6B004A93F5 /* DCBudButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCBudButton.m; sourceTree = "<group>"; };
 		1BF2263F16BF92EA004A93F5 /* DCDewButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCDewButton.h; sourceTree = "<group>"; };
 		1BF2264016BF92EA004A93F5 /* DCDewButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCDewButton.m; sourceTree = "<group>"; };
+		1BF2264316BFA77A004A93F5 /* DCDewLayoutStrategies.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCDewLayoutStrategies.h; sourceTree = "<group>"; };
+		1BF2264416BFA77A004A93F5 /* DCDewLayoutStrategies.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCDewLayoutStrategies.m; sourceTree = "<group>"; };
+		1BF2264616BFA796004A93F5 /* DCPetalLayoutStrategies.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCPetalLayoutStrategies.h; sourceTree = "<group>"; };
+		1BF2264716BFA796004A93F5 /* DCPetalLayoutStrategies.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCPetalLayoutStrategies.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,6 +112,10 @@
 				1BF2263C16BF8F6B004A93F5 /* DCBudButton.m */,
 				1BF2263F16BF92EA004A93F5 /* DCDewButton.h */,
 				1BF2264016BF92EA004A93F5 /* DCDewButton.m */,
+				1BF2264316BFA77A004A93F5 /* DCDewLayoutStrategies.h */,
+				1BF2264416BFA77A004A93F5 /* DCDewLayoutStrategies.m */,
+				1BF2264616BFA796004A93F5 /* DCPetalLayoutStrategies.h */,
+				1BF2264716BFA796004A93F5 /* DCPetalLayoutStrategies.m */,
 			);
 			path = Aphrodite;
 			sourceTree = "<group>";
@@ -174,6 +184,8 @@
 				1BD9AF4E16B8B37D00F6E9C1 /* DCFloweringBar.m in Sources */,
 				1BF2263D16BF8F6B004A93F5 /* DCBudButton.m in Sources */,
 				1BF2264116BF92EA004A93F5 /* DCDewButton.m in Sources */,
+				1BF2264516BFA77A004A93F5 /* DCDewLayoutStrategies.m in Sources */,
+				1BF2264816BFA796004A93F5 /* DCPetalLayoutStrategies.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
