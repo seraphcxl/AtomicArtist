@@ -24,6 +24,7 @@
 		1BDC807916C0AFFF004D2C2E /* DCALAssetsLibraryBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BDC807816C0AFFF004D2C2E /* DCALAssetsLibraryBase.m */; };
 		1BDC808016C0CF3C004D2C2E /* DCALAssetsGroupBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BDC807F16C0CF3C004D2C2E /* DCALAssetsGroupBase.m */; };
 		1BDC808316C0D33A004D2C2E /* DCTimelineALAssetsLibrary.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BDC808216C0D33A004D2C2E /* DCTimelineALAssetsLibrary.m */; };
+		1BDC809216C0DBF3004D2C2E /* DCTimelineAssetsGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BDC809116C0DBF3004D2C2E /* DCTimelineAssetsGroup.m */; };
 		1BDCD99116B0C63300222E08 /* DCLoaderWorkshop.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BDCD98B16B0C63300222E08 /* DCLoaderWorkshop.m */; };
 		1BDCD99216B0C63300222E08 /* DCRevokableLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BDCD98D16B0C63300222E08 /* DCRevokableLoader.m */; };
 		1BDCD99316B0C63300222E08 /* DCWebImageLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BDCD98F16B0C63300222E08 /* DCWebImageLoader.m */; };
@@ -103,6 +104,8 @@
 		1BDC807F16C0CF3C004D2C2E /* DCALAssetsGroupBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCALAssetsGroupBase.m; sourceTree = "<group>"; };
 		1BDC808116C0D33A004D2C2E /* DCTimelineALAssetsLibrary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCTimelineALAssetsLibrary.h; sourceTree = "<group>"; };
 		1BDC808216C0D33A004D2C2E /* DCTimelineALAssetsLibrary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCTimelineALAssetsLibrary.m; sourceTree = "<group>"; };
+		1BDC809016C0DBF3004D2C2E /* DCTimelineAssetsGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCTimelineAssetsGroup.h; sourceTree = "<group>"; };
+		1BDC809116C0DBF3004D2C2E /* DCTimelineAssetsGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCTimelineAssetsGroup.m; sourceTree = "<group>"; };
 		1BDCD98A16B0C63300222E08 /* DCLoaderWorkshop.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCLoaderWorkshop.h; sourceTree = "<group>"; };
 		1BDCD98B16B0C63300222E08 /* DCLoaderWorkshop.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCLoaderWorkshop.m; sourceTree = "<group>"; };
 		1BDCD98C16B0C63300222E08 /* DCRevokableLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCRevokableLoader.h; sourceTree = "<group>"; };
@@ -247,6 +250,8 @@
 				1BDC807F16C0CF3C004D2C2E /* DCALAssetsGroupBase.m */,
 				1BE3FB9F16966E76004DDEAF /* DCALAssetsGroup.h */,
 				1BE3FBA016966E76004DDEAF /* DCALAssetsGroup.m */,
+				1BDC809016C0DBF3004D2C2E /* DCTimelineAssetsGroup.h */,
+				1BDC809116C0DBF3004D2C2E /* DCTimelineAssetsGroup.m */,
 				1BDC807716C0AFFF004D2C2E /* DCALAssetsLibraryBase.h */,
 				1BDC807816C0AFFF004D2C2E /* DCALAssetsLibraryBase.m */,
 				1BE3FBA116966E76004DDEAF /* DCALAssetsLibrary.h */,
@@ -366,6 +371,7 @@
 				1BDC807916C0AFFF004D2C2E /* DCALAssetsLibraryBase.m in Sources */,
 				1BDC808016C0CF3C004D2C2E /* DCALAssetsGroupBase.m in Sources */,
 				1BDC808316C0D33A004D2C2E /* DCTimelineALAssetsLibrary.m in Sources */,
+				1BDC809216C0DBF3004D2C2E /* DCTimelineAssetsGroup.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
