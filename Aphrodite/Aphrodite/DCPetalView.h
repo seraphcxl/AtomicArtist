@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "DCCommonConstants.h"
 #import "SafeARC.h"
+#import "DCPetalAnimationStrategies.h"
 
 @protocol DCPetalViewAnchorDelegate <NSObject>
 
@@ -22,6 +23,8 @@
 }
 
 @property (nonatomic, SAFE_ARC_PROP_WEAK) id<DCPetalViewAnchorDelegate> anchorDelegate;
+
+@property (nonatomic, SAFE_ARC_PROP_STRONG) id<DCPetalAnimationStrategy> animationStrategy;
 
 @property (nonatomic, assign) CGFloat angle;
 

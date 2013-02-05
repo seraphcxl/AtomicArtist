@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "DCCommonConstants.h"
 #import "SafeARC.h"
+#import "DCDewAnimationStrategies.h"
+#import "DCDewLayoutStrategies.h"
 
 @protocol DCDewButtonAngleDelegate <NSObject>
 
@@ -27,6 +29,9 @@
 
 @property (nonatomic, SAFE_ARC_PROP_WEAK) id<DCDewButtonAnchorDelegate> anchorDelegate;
 @property (nonatomic, SAFE_ARC_PROP_WEAK) id<DCDewButtonAngleDelegate> angleDelegate;
+
+@property (nonatomic, SAFE_ARC_PROP_STRONG) id<DCDewAnimationStrategy> animationStrategy;
+@property (nonatomic, SAFE_ARC_PROP_STRONG) id<DCDewLayoutStrategy> layoutStrategy;
 
 @property (nonatomic, assign) CGFloat radius;
 

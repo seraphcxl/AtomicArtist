@@ -7,7 +7,33 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <CoreGraphics/CoreGraphics.h>
+#import "DCCommonConstants.h"
+#import "SafeARC.h"
 
-@interface DCDewAnimationStrategies : NSObject
+typedef enum {
+    DCDewAnimation_Fade = 0,
+    DCDewAnimation_Path,
+} DCDewAnimationStrategyType;
+
+@class DCDewButton;
+
+@protocol DCDewAnimationStrategy <NSObject>
+
+- (void)actionForBloom:(DCDewButton *)dew;
+- (void)actionForDrop:(DCDewButton *)dew;
+
+@end
+
+@interface DCDewAnimationStrategyFactory : NSObject
+
++ (id<DCDewAnimationStrategy>)strategyFromType:(DCDewAnimationStrategyType)type;
+
+@end
+
+@interface DCDewAnimationStrategyBase : NSObject <DCDewAnimationStrategy> {
+}
+
+@property (nonatomic, assign) CFTimeInterval animationDuration;
 
 @end

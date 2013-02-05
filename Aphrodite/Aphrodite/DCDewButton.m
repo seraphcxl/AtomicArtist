@@ -13,6 +13,8 @@
 @synthesize radius = _radius;
 @synthesize anchorDelegate = _anchorDelegate;
 @synthesize angleDelegate = _angleDelegate;
+@synthesize animationStrategy = _animationStrategy;
+@synthesize layoutStrategy = _layoutStrategy;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -28,6 +30,8 @@
 - (void)dealloc {
     do {
         @synchronized(self) {
+            SAFE_ARC_SAFERELEASE(_layoutStrategy);
+            SAFE_ARC_SAFERELEASE(_animationStrategy);
             _angleDelegate = nil;
             _anchorDelegate = nil;
             _radius = 0.0f;

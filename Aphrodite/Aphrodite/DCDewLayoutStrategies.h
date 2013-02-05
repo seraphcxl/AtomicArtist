@@ -12,16 +12,13 @@
 #import "SafeARC.h"
 
 typedef enum {
-    DCDewLayout_Fade = 0,
-    DCDewLayout_Path,
+    DCDewLayout_Vertically = 0,
+    DCDewLayout_FixPetal,
 } DCDewLayoutStrategyType;
 
 @class DCDewButton;
 
 @protocol DCDewLayoutStrategy <NSObject>
-
-- (void)actionForBloom:(DCDewButton *)dew;
-- (void)actionForDrop:(DCDewButton *)dew;
 
 - (void)layout:(DCDewButton *)dew withAngle:(CGFloat)angle;
 

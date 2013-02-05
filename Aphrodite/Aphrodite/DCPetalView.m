@@ -21,6 +21,7 @@
 
 @synthesize anchorDelegate = _anchorDelegate;
 @synthesize angle = _angle;
+@synthesize animationStrategy = _animationStrategy;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -29,6 +30,7 @@
         if (self) {
             // Initialization code
             [self dewDrop];
+            
             _dews = [NSMutableDictionary dictionary];
             SAFE_ARC_RETAIN(_dews);
             
@@ -41,6 +43,8 @@
     do {
         @synchronized(self) {
             [self dewDrop];
+            
+            SAFE_ARC_SAFERELEASE(_animationStrategy);
             _anchorDelegate = nil;
             _angle = 0.0f;
         }
