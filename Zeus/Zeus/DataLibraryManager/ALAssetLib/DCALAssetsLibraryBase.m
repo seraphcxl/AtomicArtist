@@ -48,8 +48,8 @@
         @synchronized(self) {
             _cancelEnum = YES;
             
-            if (_allALAssetsGroupPersistentIDs) {
-                [_allALAssetsGroupPersistentIDs removeAllObjects];
+            if (_allALAssetsGroupUIDs) {
+                [_allALAssetsGroupUIDs removeAllObjects];
             }
             
             if (_allALAssetsGroups) {
@@ -87,11 +87,11 @@
     NSString *result = nil;
     do {
         @synchronized(self) {
-            if (_allALAssetsGroupPersistentIDs) {
-                if (index < [_allALAssetsGroupPersistentIDs count]) {
-                    result = [_allALAssetsGroupPersistentIDs objectAtIndex:index];
+            if (_allALAssetsGroupUIDs) {
+                if (index < [_allALAssetsGroupUIDs count]) {
+                    result = [_allALAssetsGroupUIDs objectAtIndex:index];
                 } else {
-                    [NSException raise:@"DCALAssetsLibrary Error" format:@"Reason: Index: %d >= allALGroupPersistentIDs count: %d", index, [_allALAssetsGroupPersistentIDs count]];
+                    [NSException raise:@"DCALAssetsLibrary Error" format:@"Reason: Index: %d >= allALGroupPersistentIDs count: %d", index, [_allALAssetsGroupUIDs count]];
                 }
             } else {
                 [NSException raise:@"DCALAssetsLibrary Error" format:@"Reason: allALGroupPersistentIDs is nil"];
@@ -107,11 +107,11 @@
         if (groupUID) {
             @synchronized(self) {
                 NSUInteger index = 0;
-                NSUInteger count = [_allALAssetsGroupPersistentIDs count];
+                NSUInteger count = [_allALAssetsGroupUIDs count];
                 BOOL find = NO;
                 
                 do {
-                    if ([_allALAssetsGroupPersistentIDs objectAtIndex:index] == groupUID) {
+                    if ([_allALAssetsGroupUIDs objectAtIndex:index] == groupUID) {
                         find = YES;
                         break;
                     } else {
@@ -155,8 +155,8 @@
                 _allALAssetsGroups = [[NSMutableDictionary alloc] init];
             }
             
-            if (!_allALAssetsGroupPersistentIDs) {
-                _allALAssetsGroupPersistentIDs = [[NSMutableArray alloc] init];
+            if (!_allALAssetsGroupUIDs) {
+                _allALAssetsGroupUIDs = [[NSMutableArray alloc] init];
             }
             _cancelEnum = NO;
             _enumerating = NO;
@@ -173,7 +173,7 @@
             
             [self clearCache];
             
-            SAFE_ARC_SAFERELEASE(_allALAssetsGroupPersistentIDs);
+            SAFE_ARC_SAFERELEASE(_allALAssetsGroupUIDs);
             SAFE_ARC_SAFERELEASE(_allALAssetsGroups);
         }
     } while (NO);

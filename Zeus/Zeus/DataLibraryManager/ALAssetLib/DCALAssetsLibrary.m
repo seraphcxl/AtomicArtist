@@ -27,8 +27,8 @@
             [NSException raise:@"DCALAssetsLibrary Error" format:@"Reason: _assetsLibrary == nil"];
             break;
         }
-        if (!_allALAssetsGroupPersistentIDs || !_allALAssetsGroups) {
-            [NSException raise:@"DCALAssetsLibrary Error" format:@"Reason: _allALAssetsGroupPersistentIDs == nil || _allALAssetsGroups == nil"];
+        if (!_allALAssetsGroupUIDs || !_allALAssetsGroups) {
+            [NSException raise:@"DCALAssetsLibrary Error" format:@"Reason: _allALAssetsGroupUIDs == nil || _allALAssetsGroups == nil"];
             break;
         }
         if (frequency == 0) {
@@ -57,10 +57,10 @@
                                 _enumerating = NO;
                                 break;
                             }
-                            NSAssert(_allALAssetsGroupPersistentIDs, @"_allALAssetsGroupPersistentIDs == nil");
+                            NSAssert(_allALAssetsGroupUIDs, @"_allALAssetsGroupUIDs == nil");
                             NSAssert(_allALAssetsGroups, @"_allALAssetsGroups == nil");
-                            NSUInteger index = [_allALAssetsGroupPersistentIDs count];
-                            [_allALAssetsGroupPersistentIDs insertObject:groupPersistentID atIndex:index];
+                            NSUInteger index = [_allALAssetsGroupUIDs count];
+                            [_allALAssetsGroupUIDs insertObject:groupPersistentID atIndex:index];
                             [_allALAssetsGroups setObject:assetsGroup forKey:groupPersistentID];
                         }
                     }

@@ -98,12 +98,13 @@ extern NSString * const kDATAGROUPPROPERTY_POSTERIMAGEURL;
 @end
 
 #pragma mark - protocol DCTimelineDataGroup <DCDataGroupBase>
+#define DCTimelineDataGroup_CountForRefine (48)
 @protocol DCTimelineDataGroup <DCDataGroupBase>
 
 @property (nonatomic, SAFE_ARC_PROP_STRONG, readonly) NSDate *earliestTime;
 @property (nonatomic, SAFE_ARC_PROP_STRONG, readonly) NSDate *latestTime;
 
-- (void)refining:(NSArray *)refinedGroups withTimeInterval:(CFGregorianUnits)gregorianUnit;
+- (void)refining:(NSMutableArray *)refinedGroups withTimeInterval:(CFGregorianUnits)gregorianUnit;
 
 @end
 

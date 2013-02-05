@@ -63,7 +63,7 @@
 }
 
 #pragma mark - DCTimelineAssetsGroup - DCTimelineDataGroup
-- (void)refining:(NSArray *)refinedGroups withTimeInterval:(CFGregorianUnits)gregorianUnit {
+- (void)refining:(NSMutableArray *)refinedGroups withTimeInterval:(CFGregorianUnits)gregorianUnit {
     do {
         ;
     } while (NO);
@@ -78,7 +78,7 @@
             SAFE_ARC_AUTORELEASE(dateFormatter);
             [dateFormatter setTimeStyle:NSDateFormatterLongStyle];
             [dateFormatter setDateStyle:NSDateFormatterMediumStyle];
-            result = [NSString stringWithFormat:@"%@ - %@", [dateFormatter stringFromDate:self.earliestTime], [dateFormatter stringFromDate:self.latestTime]];
+            result = [NSString stringWithFormat:@"%@", [dateFormatter stringFromDate:self.earliestTime]];
         }
     } while (NO);
     return result;

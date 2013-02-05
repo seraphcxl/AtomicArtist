@@ -9,13 +9,16 @@
 #import <UIKit/UIKit.h>
 #import "DCTimelineALAssetsLibrary.h"
 #import "DCCommonUtility.h"
+#import "DCTimelineAssetsGroup.h"
 
 @interface DCTimelineALAssetsLibrary () {
     ALAssetsGroup *_assetsTimelineGroup;
+    DCTimelineAssetsGroup *_currentGroup;
 }
 
 - (void)initAssetsTimelineGroup;
 - (void)clearTimelineGroupCache;
+- (void)refineCurrentGroup;
 
 @end
 
@@ -42,7 +45,7 @@
     do {
         @synchronized(self) {
             ZeroCFGregorianUnits(_refinedGregorianUnit);
-            
+            SAFE_ARC_SAFERELEASE(_currentGroup);
             result = [super disconnect];
             NSAssert(result, @"[super disconnect] error.");
         }
@@ -75,7 +78,14 @@
                 }
                 
                 if (result != nil) {
-                    ;
+                    if (!_currentGroup) {
+                        _currentGroup = [[DCTimelineAssetsGroup alloc] init];
+                    }
+                    NSAssert(_currentGroup, @"_currentGroup == nil");
+                    if ([_currentGroup itemsCountWithParam:nil] > DCTimelineDataGroup_CountForRefine) {
+                        [self refineCurrentGroup];
+                        NSAssert(_currentGroup, @"_currentGroup == nil");
+                    }
                 } else {
                     ;
                 }
@@ -227,6 +237,28 @@
             _cancelEnum = YES;
             
             SAFE_ARC_SAFERELEASE(_assetsTimelineGroup);
+        }
+    } while (NO);
+}
+
+- (void)refineCurrentGroup {
+    do {
+        @synchronized(self) {
+            NSMutableArray *refinedGroups = [NSMutableArray array];
+            [_currentGroup refining:refinedGroups withTimeInterval:self.refinedGregorianUnit];
+            if ([refinedGroups count] > 1) {
+                [_allALAssetsGroups removeObjectForKey:[_currentGroup uniqueID]];
+                [_allALAssetsGroupUIDs removeObject:[_currentGroup uniqueID]];
+                SAFE_ARC_SAFERELEASE(_currentGroup);
+                for (DCTimelineAssetsGroup *group in refinedGroups) {
+                    NSUInteger index = [_allALAssetsGroupUIDs count];
+                    NSString *uid = [group uniqueID];
+                    [_allALAssetsGroupUIDs insertObject:uid atIndex:index];
+                    [_allALAssetsGroups setObject:group forKey:uid];
+                    _currentGroup = group;
+                    SAFE_ARC_RETAIN(_currentGroup);
+                }
+            }
         }
     } while (NO);
 }

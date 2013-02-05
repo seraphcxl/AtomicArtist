@@ -14,7 +14,7 @@
 #import "DCAssetsLibAgent.h"
 
 @interface DCALAssetsLibraryBase : NSObject <DCDataLibraryBase, DCAssetsLibUser> {
-    NSMutableArray *_allALAssetsGroupPersistentIDs;
+    NSMutableArray *_allALAssetsGroupUIDs;
     NSMutableDictionary *_allALAssetsGroups; // Key:(NSString *)UID Value:(DCDataGroupBase *)assetsGroup
     NSUInteger _frequency;
     NSUInteger _enumCount;
