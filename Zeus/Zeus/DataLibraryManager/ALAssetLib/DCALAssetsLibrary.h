@@ -11,8 +11,8 @@
 #import <AssetsLibrary/AssetsLibrary.h>
 #import "DCCommonConstants.h"
 #import "SafeARC.h"
-#import "DCAssetsLibAgent.h"
+#import "DCALAssetsLibraryBase.h"
 
-@interface DCALAssetsLibrary : NSObject <DCDataLibrary, DCAssetsLibUser>
+@interface DCALAssetsLibrary : DCALAssetsLibraryBase <DCDataLibrary>
 
 @end

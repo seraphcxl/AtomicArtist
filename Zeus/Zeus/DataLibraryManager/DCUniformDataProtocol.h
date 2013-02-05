@@ -47,6 +47,7 @@ extern NSString * const kDATAITEMPROPERTY_FULLSCREENIMAGE;
 extern NSString * const kDATAITEMPROPERTY_THUMBNAILURL;
 extern NSString * const kDATAITEMPROPERTY_PROPERTYDATE;
 
+#pragma mark - protocol DCDataItem <NSObject>
 @protocol DCDataItem <NSObject>
 
 @property (nonatomic, assign) id<DCDataItemActionDelegate> actionDelegate;
@@ -60,6 +61,8 @@ extern NSString * const kDATAITEMPROPERTY_PROPERTYDATE;
 
 @end
 
+/**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/
+
 #pragma mark - DCDataGroup - Property key
 extern NSString * const kDATAGROUPPROPERTY_UID;
 extern NSString * const kDATAGROUPPROPERTY_GROUPNAME;
@@ -68,39 +71,70 @@ extern NSString * const kDATAGROUPPROPERTY_TYPE;
 extern NSString * const kDATAGROUPPROPERTY_POSTERIMAGE;
 extern NSString * const kDATAGROUPPROPERTY_POSTERIMAGEURL;
 
-@protocol DCDataGroup <NSObject>
+#pragma mark - protocol DCDataGroupBase <NSObject>
+@protocol DCDataGroupBase <NSObject>
 
 - (DataSourceType)type;
 - (NSString *)uniqueID;
 - (void)clearCache;
-- (void)enumItems:(id)param notifyWithFrequency:(NSUInteger)frequency;
-- (void)enumItemAtIndexes:(NSIndexSet *)indexSet withParam:(id)param notifyWithFrequency:(NSUInteger)frequency;
 - (NSUInteger)itemsCountWithParam:(id)param;
-- (NSUInteger)enumratedItemsCountWithParam:(id)param;
 - (id<DCDataItem>)itemWithUID:(NSString *)uniqueID;
-- (id)valueForProperty:(NSString *)property withOptions:(NSDictionary *)options;
 - (NSString *)itemUIDAtIndex:(NSUInteger)index;
 - (NSInteger)indexForItemUID:(NSString *)itemUID;
-- (BOOL)isEnumerated;
-- (BOOL)isEnumerating;
 
 @end
 
-#pragma mark - DCDataLibrary
-@protocol DCDataLibrary <NSObject>
+#pragma mark - protocol DCDataGroup <DCDataGroupBase>
+@protocol DCDataGroup <DCDataGroupBase>
+
+- (void)enumItems:(id)param notifyWithFrequency:(NSUInteger)frequency;
+- (void)enumItemAtIndexes:(NSIndexSet *)indexSet withParam:(id)param notifyWithFrequency:(NSUInteger)frequency;
+- (NSUInteger)enumratedItemsCountWithParam:(id)param;
+- (BOOL)isEnumerated;
+- (BOOL)isEnumerating;
+- (id)valueForProperty:(NSString *)property withOptions:(NSDictionary *)options;
+
+@end
+
+#pragma mark - protocol DCTimelineDataGroup <DCDataGroupBase>
+@protocol DCTimelineDataGroup <DCDataGroupBase>
+
+@property (nonatomic, assign, readonly) CFTimeInterval earliestTime;
+@property (nonatomic, assign, readonly) CFTimeInterval latestTime;
+
+- (void)refining:(NSArray *)refinedGroups withTimeInterval:(CFTimeInterval)timeInterval;
+
+@end
+
+/**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ 
+
+#pragma mark - protocol DCDataLibraryBase <NSObject>
+@protocol DCDataLibraryBase <NSObject>
 
 - (DataSourceType)type;
 - (BOOL)connect:(NSDictionary *)params;
 - (BOOL)disconnect;
-- (void)clearGroupCache;
-- (void)clearTimelineGroupCache;
-- (void)enumGroups:(id)groupParam notifyWithFrequency:(NSUInteger)frequency;
-- (id<DCDataGroup>)assetsTimelineGroup;
+- (void)clearCache;
 - (NSUInteger)groupsCount;
-- (id<DCDataGroup>)groupWithUID:(NSString *)uniqueID;
+- (id<DCDataGroupBase>)groupWithUID:(NSString *)uniqueID;
 - (NSString *)groupUIDAtIndex:(NSUInteger)index;
 - (NSInteger)indexForGroupUID:(NSString *)groupUID;
 - (BOOL)isEnumerating;
+
+@end
+
+#pragma mark - protocol DCDataLibrary <DCDataLibraryBase>
+@protocol DCDataLibrary <DCDataLibraryBase>
+
+- (void)enumGroups:(id)groupParam notifyWithFrequency:(NSUInteger)frequency;
+
+@end
+
+#pragma mark - protocol DCTimelineDataLibrary <DCDataLibraryBase>
+@protocol DCTimelineDataLibrary <DCDataLibraryBase>
+
+- (void)enumTimelineNotifyWithFrequency:(NSUInteger)frequency;
+- (void)enumTimelineAtIndexes:(NSIndexSet *)indexSet notifyWithFrequency:(NSUInteger)frequency;
 
 @end
 

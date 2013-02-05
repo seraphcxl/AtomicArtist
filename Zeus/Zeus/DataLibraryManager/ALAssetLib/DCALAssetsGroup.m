@@ -13,8 +13,6 @@
 #define ALASSETSGROUP_FREQUENCY_FACTOR (8)
 
 @interface DCALAssetsGroup () {
-    NSMutableArray *_allAssetUIDs;
-    NSMutableDictionary *_allAssetItems; // Key:(NSString *)assetUID Value:(DCALAssetItem *)item
     NSUInteger _frequency;
     NSUInteger _enumCount;
     BOOL _enumerated;
@@ -29,63 +27,16 @@
 @synthesize assetsGroup = _assetsGroup;
 @synthesize assetType = _assetType;
 
-- (DataSourceType)type {
-    return DataSourceType_AssetsLib;
-}
-
-- (id)initWithALAssetsGroup:(ALAssetsGroup *)assetsGroup {
-    self = [super init];
-    if (self) {
-        @synchronized(self) {
-            if (!_allAssetItems) {
-                _allAssetItems = [[NSMutableDictionary alloc] init];
-            }
-            
-            if (!_allAssetUIDs) {
-                _allAssetUIDs = [[NSMutableArray alloc] init];
-            }
-            
-            self.assetsGroup = assetsGroup;
-        }
-        
-        _enumerated = NO;
-        _cancelEnum = NO;
-        _enumerating = NO;
-    }
-    return self;
-}
-
+#pragma mark - DCALAssetsGroup - DCDataGroupBase
 - (void)clearCache {
     do {
         @synchronized(self) {
             _cancelEnum = YES;
             
-            if (_allAssetUIDs) {
-                [_allAssetUIDs removeAllObjects];
-            }
-            
-            if (_allAssetItems) {
-                [_allAssetItems removeAllObjects];
-            }
+            [super clearCache];
         }
         
         _enumerated = NO;
-    } while (NO);
-}
-
-- (void)dealloc {
-    do {
-        @synchronized(self) {
-            [self clearCache];
-            
-            SAFE_ARC_SAFERELEASE(_allAssetUIDs);
-            SAFE_ARC_SAFERELEASE(_allAssetItems);
-            
-            self.assetsGroup = nil;
-        }
-        
-        SAFE_ARC_SAFERELEASE(_assetType);
-        SAFE_ARC_SUPER_DEALLOC();
     } while (NO);
 }
 
@@ -101,6 +52,34 @@
     return result;
 }
 
+- (NSUInteger)itemsCountWithParam:(id)param {
+    NSUInteger result = 0;
+    do {
+        @synchronized(self) {
+            if (self.assetsGroup) {
+                
+                if (_assetType != (NSString *)param) {
+                    _assetType = (NSString *)param;
+                    
+                    if ([ALAssetTypePhoto isEqualToString:self.assetType]) {
+                        dc_debug_NSLog(@"ALAssetsGroup photo");
+                        [self.assetsGroup setAssetsFilter:[ALAssetsFilter allPhotos]];
+                    } else if ([ALAssetTypeVideo isEqualToString:self.assetType]) {
+                        dc_debug_NSLog(@"ALAssetsGroup video");
+                        [self.assetsGroup setAssetsFilter:[ALAssetsFilter allVideos]];
+                    } else {
+                        dc_debug_NSLog(@"ALAssetsGroup photo and video");
+                    }
+                }
+                
+                result = [self.assetsGroup numberOfAssets];
+            }
+        }
+    } while (NO);
+    return result;
+}
+
+#pragma mark - DCALAssetsGroup - DCDataGroup
 - (void)enumItems:(id)param notifyWithFrequency:(NSUInteger)frequency {
     do {
         if (!self.assetsGroup) {
@@ -289,33 +268,6 @@
     } while (NO);
 }
 
-- (NSUInteger)itemsCountWithParam:(id)param {
-    NSUInteger result = 0;
-    do {
-        @synchronized(self) {
-            if (self.assetsGroup) {
-                
-                if (_assetType != (NSString *)param) {
-                    _assetType = (NSString *)param;
-                    
-                    if ([ALAssetTypePhoto isEqualToString:self.assetType]) {
-                        dc_debug_NSLog(@"ALAssetsGroup photo");
-                        [self.assetsGroup setAssetsFilter:[ALAssetsFilter allPhotos]];
-                    } else if ([ALAssetTypeVideo isEqualToString:self.assetType]) {
-                        dc_debug_NSLog(@"ALAssetsGroup video");
-                        [self.assetsGroup setAssetsFilter:[ALAssetsFilter allVideos]];
-                    } else {
-                        dc_debug_NSLog(@"ALAssetsGroup photo and video");
-                    }
-                }
-                
-                result = [self.assetsGroup numberOfAssets];
-            }
-        }
-    } while (NO);
-    return result;
-}
-
 - (NSUInteger)enumratedItemsCountWithParam:(id)param {
     NSUInteger result = 0;
     do {
@@ -326,16 +278,6 @@
         }
     } while (NO);
     return result;
-}
-
-- (id<DCDataItem>)itemWithUID:(NSString *)uniqueID {
-    DCALAssetItem *item = nil;
-    @synchronized(self) {
-        if (_allAssetItems) {
-            item = [_allAssetItems objectForKey:uniqueID];
-        }
-    }
-    return item;
 }
 
 - (id)valueForProperty:(NSString *)property withOptions:(NSDictionary *)options {
@@ -366,62 +308,46 @@
     return result;
 }
 
-- (NSString *)itemUIDAtIndex:(NSUInteger)index {
-    NSString *result = nil;
-    do {
-        @synchronized(self) {
-            if (_allAssetUIDs) {
-                if (index < [_allAssetUIDs count]) {
-                    result = [_allAssetUIDs objectAtIndex:index];
-                } else {
-                    [NSException raise:@"DCALAssetsGroup Error" format:@"Reason: Index: %d >= _allAssetUIDs count: %d", index, [_allAssetUIDs count]];
-                }
-            } else {
-                [NSException raise:@"DCALAssetsGroup Error" format:@"Reason: _allAssetUIDs is nil"];
-            }
-        }
-    } while (NO);
-    return result;
-}
-
-- (NSInteger)indexForItemUID:(NSString *)itemUID {
-    NSInteger result = -1;
-    do {
-        if (itemUID) {
-            @synchronized(self) {
-                NSUInteger index = 0;
-                NSUInteger count = [_allAssetUIDs count];
-                BOOL find = NO;
-                
-                do {
-                    if ([_allAssetUIDs objectAtIndex:index] == itemUID) {
-                        find = YES;
-                        break;
-                    } else {
-                        ++index;
-                    }
-                } while (index < count);
-                
-                if (find) {
-                    result = index;
-                } else {
-                    dc_debug_NSLog(@"itemUID: %@ not find", itemUID);
-                    [NSException raise:@"DCALAssetsGroup Error" format:@"Reason: itemUID: %@ not find", itemUID];
-                }
-            }
-        } else {
-            [NSException raise:@"DCALAssetsGroup Error" format:@"Reason: itemUID is nil"];
-        }
-    } while (NO);
-    return result;
-}
-
 - (BOOL)isEnumerated {
     return _enumerated;
 }
 
 - (BOOL)isEnumerating {
     return _enumerating;
+}
+
+#pragma mark - DCALAssetsGroup - Public
+- (id)initWithALAssetsGroup:(ALAssetsGroup *)assetsGroup {
+    self = [super init];
+    if (self) {
+        @synchronized(self) {
+            if (!_allAssetItems) {
+                _allAssetItems = [[NSMutableDictionary alloc] init];
+            }
+            
+            if (!_allAssetUIDs) {
+                _allAssetUIDs = [[NSMutableArray alloc] init];
+            }
+            
+            self.assetsGroup = assetsGroup;
+        }
+        
+        _enumerated = NO;
+        _cancelEnum = NO;
+        _enumerating = NO;
+    }
+    return self;
+}
+
+- (void)dealloc {
+    do {
+        @synchronized(self) {
+            self.assetsGroup = nil;
+        }
+        
+        SAFE_ARC_SAFERELEASE(_assetType);
+        SAFE_ARC_SUPER_DEALLOC();
+    } while (NO);
 }
 
 @end

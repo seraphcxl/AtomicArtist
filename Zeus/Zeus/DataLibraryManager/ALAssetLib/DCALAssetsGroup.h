@@ -11,8 +11,9 @@
 #import <AssetsLibrary/AssetsLibrary.h>
 #import "DCCommonConstants.h"
 #import "SafeARC.h"
+#import "DCALAssetsGroupBase.h"
 
-@interface DCALAssetsGroup : NSObject <DCDataGroup>
+@interface DCALAssetsGroup : DCALAssetsGroupBase <DCDataGroup>
 
 @property (nonatomic, SAFE_ARC_PROP_STRONG) ALAssetsGroup *assetsGroup;
 @property (nonatomic, SAFE_ARC_PROP_STRONG) NSString *assetType;
