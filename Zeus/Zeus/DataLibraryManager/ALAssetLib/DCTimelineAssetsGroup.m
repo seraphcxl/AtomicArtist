@@ -8,6 +8,7 @@
 
 #import "DCTimelineAssetsGroup.h"
 #import "DCALAssetItem.h"
+#import "DCCommonUtility.h"
 
 @interface DCTimelineAssetsGroup () {
 }
@@ -18,6 +19,7 @@
 
 @synthesize earliestTime = _earliestTime;
 @synthesize latestTime = _latestTime;
+@synthesize currentTimeInterval = _currentTimeInterval;
 @synthesize notifyhFrequency = _notifyhFrequency;
 
 - (void)insertDataItem:(ALAsset *)asset {
@@ -51,9 +53,20 @@
     } while (NO);
 }
 
+- (id)init {
+    @synchronized(self) {
+        self = [super init];
+        if (self) {
+            ZeroCFGregorianUnits(_currentTimeInterval);
+        }
+        return self;
+    }
+}
+
 - (void)dealloc {
     do {
         @synchronized(self) {
+            ZeroCFGregorianUnits(_currentTimeInterval);
             SAFE_ARC_SAFERELEASE(_earliestTime);
             SAFE_ARC_SAFERELEASE(_latestTime);
         }

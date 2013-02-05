@@ -103,6 +103,7 @@ extern NSString * const kDATAGROUPPROPERTY_POSTERIMAGEURL;
 
 @property (nonatomic, SAFE_ARC_PROP_STRONG, readonly) NSDate *earliestTime;
 @property (nonatomic, SAFE_ARC_PROP_STRONG, readonly) NSDate *latestTime;
+@property (nonatomic, assign, readonly) CFGregorianUnits currentTimeInterval;
 
 - (void)refining:(NSMutableArray *)refinedGroups withTimeInterval:(CFGregorianUnits)gregorianUnit;
 

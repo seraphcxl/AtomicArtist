@@ -82,6 +82,7 @@
                         _currentGroup = [[DCTimelineAssetsGroup alloc] init];
                     }
                     NSAssert(_currentGroup, @"_currentGroup == nil");
+                    NSDate *currentAssetDate = [result valueForProperty:ALAssetPropertyDate];
                     if ([_currentGroup itemsCountWithParam:nil] > DCTimelineDataGroup_CountForRefine) {
                         [self refineCurrentGroup];
                         NSAssert(_currentGroup, @"_currentGroup == nil");
