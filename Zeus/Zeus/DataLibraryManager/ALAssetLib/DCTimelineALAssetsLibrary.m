@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "DCTimelineALAssetsLibrary.h"
+#import "DCCommonUtility.h"
 
 @interface DCTimelineALAssetsLibrary () {
     ALAssetsGroup *_assetsTimelineGroup;
@@ -20,7 +21,37 @@
 
 @implementation DCTimelineALAssetsLibrary
 
+@synthesize refinedGregorianUnit = _refinedGregorianUnit;
+
 #pragma mark - DCTimelineALAssetsLibrary - DCDataLibraryBase
+- (BOOL)connect:(NSDictionary *)params {
+    BOOL result = NO;
+    do {
+        @synchronized(self) {
+            result = [super connect:params];
+            NSAssert(result, @"[super connect:params] error.");
+            ZeroCFGregorianUnits(_refinedGregorianUnit);
+        }
+        result = YES;
+    } while (NO);
+    return result;
+}
+
+- (BOOL)disconnect {
+    BOOL result = NO;
+    do {
+        @synchronized(self) {
+            ZeroCFGregorianUnits(_refinedGregorianUnit);
+            
+            result = [super disconnect];
+            NSAssert(result, @"[super disconnect] error.");
+        }
+        
+        result = YES;
+    } while (NO);
+    return result;
+}
+
 - (void)clearCache {
     do {
         @synchronized(self) {

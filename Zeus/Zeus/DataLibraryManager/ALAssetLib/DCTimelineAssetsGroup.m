@@ -25,7 +25,7 @@
 }
 
 #pragma mark - DCTimelineAssetsGroup - DCTimelineDataGroup
-- (void)refining:(NSArray *)refinedGroups withTimeInterval:(CFTimeInterval)timeInterval {
+- (void)refining:(NSArray *)refinedGroups withTimeInterval:(CFGregorianUnits)gregorianUnit {
     do {
         ;
     } while (NO);
