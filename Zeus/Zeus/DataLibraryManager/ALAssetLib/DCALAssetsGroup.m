@@ -81,21 +81,8 @@
 
 #pragma mark - DCALAssetsGroup - DCDataGroup
 - (void)enumItems:(id)param notifyWithFrequency:(NSUInteger)frequency {
+    SAFE_ARC_AUTORELEASE_POOL_START()
     do {
-        if (!self.assetsGroup) {
-            [NSException raise:@"DCALAssetsGroup Error" format:@"Reason: self.assetsGroup == nil"];
-            break;
-        }
-        if (!_allAssetItems || !_allAssetUIDs) {
-            [NSException raise:@"DCALAssetsGroup Error" format:@"Reason: _allAssetItems == nil || _allAssetUIDs == nil"];
-            break;
-        }
-        if (frequency == 0) {
-            [NSException raise:@"DCALAssetsGroup Error" format:@"Reason: _frequency == 0"];
-            break;
-        }
-        
-        SAFE_ARC_AUTORELEASE_POOL_START()
         void (^enumerator)(ALAsset *result, NSUInteger index, BOOL *stop) = ^(ALAsset *result, NSUInteger index, BOOL *stop) {
             do {
                 if (_cancelEnum) {
@@ -142,6 +129,19 @@
         };
         
         @synchronized(self) {
+            if (!self.assetsGroup) {
+                [NSException raise:@"DCALAssetsGroup Error" format:@"Reason: self.assetsGroup == nil"];
+                break;
+            }
+            if (!_allAssetItems || !_allAssetUIDs) {
+                [NSException raise:@"DCALAssetsGroup Error" format:@"Reason: _allAssetItems == nil || _allAssetUIDs == nil"];
+                break;
+            }
+            if (frequency == 0) {
+                [NSException raise:@"DCALAssetsGroup Error" format:@"Reason: _frequency == 0"];
+                break;
+            }
+            
             if (!_enumerating) {
                 [self clearCache];
                 
@@ -168,26 +168,13 @@
                 [self.assetsGroup enumerateAssetsUsingBlock:enumerator];
             }
         }
-        SAFE_ARC_AUTORELEASE_POOL_END()
     } while (NO);
+    SAFE_ARC_AUTORELEASE_POOL_END()
 }
 
 - (void)enumItemAtIndexes:(NSIndexSet *)indexSet withParam:(id)param notifyWithFrequency:(NSUInteger)frequency {
+    SAFE_ARC_AUTORELEASE_POOL_START()
     do {
-        if (!self.assetsGroup) {
-            [NSException raise:@"DCALAssetsGroup Error" format:@"Reason: self.assetsGroup == nil"];
-            break;
-        }
-        if (!_allAssetItems || !_allAssetUIDs) {
-            [NSException raise:@"DCALAssetsGroup Error" format:@"Reason: _allAssetItems == nil || _allAssetUIDs == nil"];
-            break;
-        }
-        if (frequency == 0) {
-            [NSException raise:@"DCALAssetsGroup Error" format:@"Reason: _frequency == 0"];
-            break;
-        }
-        
-        SAFE_ARC_AUTORELEASE_POOL_START()
         void (^enumerator)(ALAsset *result, NSUInteger index, BOOL *stop) = ^(ALAsset *result, NSUInteger index, BOOL *stop) {
             do {
                 if (_cancelEnum) {
@@ -238,6 +225,19 @@
         };
         
         @synchronized(self) {
+            if (!self.assetsGroup) {
+                [NSException raise:@"DCALAssetsGroup Error" format:@"Reason: self.assetsGroup == nil"];
+                break;
+            }
+            if (!_allAssetItems || !_allAssetUIDs) {
+                [NSException raise:@"DCALAssetsGroup Error" format:@"Reason: _allAssetItems == nil || _allAssetUIDs == nil"];
+                break;
+            }
+            if (frequency == 0) {
+                [NSException raise:@"DCALAssetsGroup Error" format:@"Reason: _frequency == 0"];
+                break;
+            }
+            
             if (!_enumerating) {
                 [self clearCache];
                 
@@ -264,8 +264,8 @@
                 [self.assetsGroup enumerateAssetsAtIndexes:indexSet options:0 usingBlock:enumerator];
             }
         }
-        SAFE_ARC_AUTORELEASE_POOL_END()
     } while (NO);
+    SAFE_ARC_AUTORELEASE_POOL_END()
 }
 
 - (NSUInteger)enumratedItemsCountWithParam:(id)param {

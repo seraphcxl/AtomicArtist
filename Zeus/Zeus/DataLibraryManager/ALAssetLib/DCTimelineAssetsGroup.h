@@ -18,6 +18,8 @@
 @interface DCTimelineAssetsGroup : DCALAssetsGroupBase <DCTimelineDataGroup> {
 }
 
-- (void)insertDataItem:(DCALAssetItem *)assetItem;
+@property (nonatomic, assign) NSUInteger notifyhFrequency;
+
+- (void)insertDataItem:(ALAsset *)asset;
 
 @end

@@ -64,15 +64,89 @@
 
 #pragma mark - DCTimelineALAssetsLibrary - DCTimelineDataLibrary
 - (void)enumTimelineNotifyWithFrequency:(NSUInteger)frequency {
+    SAFE_ARC_AUTORELEASE_POOL_START()
     do {
-        ;
+        void (^enumerator)(ALAsset *result, NSUInteger index, BOOL *stop) = ^(ALAsset *result, NSUInteger index, BOOL *stop) {
+            do {
+                if (_cancelEnum) {
+                    *stop = YES;
+                    _enumerating = NO;
+                    break;
+                }
+                
+                if (result != nil) {
+                    ;
+                } else {
+                    ;
+                }
+            } while (NO);
+        };
+        
+        @synchronized(self) {
+            if (!_assetsTimelineGroup) {
+                [self initAssetsTimelineGroup];
+            }
+            NSAssert(_assetsTimelineGroup, @"_assetsTimelineGroup == nil");
+            if (frequency == 0) {
+                [NSException raise:@"DCTimelineALAssetsLibrary Error" format:@"Reason: _frequency == 0"];
+                break;
+            }
+            
+            if (!_enumerating) {
+                [self clearCache];
+                
+                _frequency = frequency;
+                _enumCount = 0;
+                _cancelEnum = NO;
+                _enumerating = YES;
+                [_assetsTimelineGroup enumerateAssetsUsingBlock:enumerator];
+            }
+        }
     } while (NO);
+    SAFE_ARC_AUTORELEASE_POOL_END()
 }
 
 - (void)enumTimelineAtIndexes:(NSIndexSet *)indexSet notifyWithFrequency:(NSUInteger)frequency {
+    SAFE_ARC_AUTORELEASE_POOL_START()
     do {
-        ;
+        void (^enumerator)(ALAsset *result, NSUInteger index, BOOL *stop) = ^(ALAsset *result, NSUInteger index, BOOL *stop) {
+            do {
+                if (_cancelEnum) {
+                    *stop = YES;
+                    _enumerating = NO;
+                    break;
+                }
+                
+                if (result != nil) {
+                    ;
+                } else {
+                    ;
+                }
+            } while (NO);
+        };
+        
+        @synchronized(self) {
+            if (!_assetsTimelineGroup) {
+                [self initAssetsTimelineGroup];
+            }
+            NSAssert(_assetsTimelineGroup, @"_assetsTimelineGroup == nil");
+            if (frequency == 0) {
+                [NSException raise:@"DCTimelineALAssetsLibrary Error" format:@"Reason: _frequency == 0"];
+                break;
+            }
+            
+            if (!_enumerating) {
+                [self clearCache];
+                
+                _frequency = frequency;
+                _enumCount = 0;
+                _cancelEnum = NO;
+                _enumerating = YES;
+                [_assetsTimelineGroup enumerateAssetsAtIndexes:indexSet options:0 usingBlock:enumerator];
+            }
+        }
     } while (NO);
+    SAFE_ARC_AUTORELEASE_POOL_END()
 }
 
 #pragma mark - DCTimelineALAssetsLibrary - Private

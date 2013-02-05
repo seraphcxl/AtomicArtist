@@ -7,6 +7,7 @@
 //
 
 #import "DCTimelineAssetsGroup.h"
+#import "DCALAssetItem.h"
 
 @interface DCTimelineAssetsGroup () {
 }
@@ -17,10 +18,36 @@
 
 @synthesize earliestTime = _earliestTime;
 @synthesize latestTime = _latestTime;
+@synthesize notifyhFrequency = _notifyhFrequency;
 
-- (void)insertDataItem:(DCALAssetItem *)assetItem {
+- (void)insertDataItem:(ALAsset *)asset {
     do {
-        ;
+        @synchronized(self) {
+            if (!_allAssetItems || !_allAssetUIDs) {
+                [NSException raise:@"DCTimelineAssetsGroup Error" format:@"Reason: _allAssetItems == nil || _allAssetUIDs == nil"];
+                break;
+            }
+            if (!asset) {
+                NSUInteger count = [_allAssetUIDs count];
+                if (count != (count / self.notifyhFrequency) * self.notifyhFrequency) {
+                    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_DATAITEM_ADDED object:[self uniqueID]];
+                }
+                [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_DATAITEM_ENUMFIRSTSCREEN_END object:self];
+            } else {
+                ALAssetRepresentation *representation = [asset defaultRepresentation];
+                NSURL *url = [representation url];
+                NSString *assetURLStr = [url absoluteString];
+                
+                DCALAssetItem *item = [[DCALAssetItem alloc] initWithALAsset:asset];
+                [_allAssetItems setObject:item forKey:assetURLStr];
+                NSUInteger indexForAsset = [_allAssetUIDs count];
+                [_allAssetUIDs insertObject:assetURLStr atIndex:indexForAsset];
+                NSUInteger count = [_allAssetUIDs count];
+                if (count == (count / self.notifyhFrequency) * self.notifyhFrequency) {
+                    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_DATAITEM_ADDED object:[self uniqueID]];
+                }
+            }
+        }
     } while (NO);
 }
 
