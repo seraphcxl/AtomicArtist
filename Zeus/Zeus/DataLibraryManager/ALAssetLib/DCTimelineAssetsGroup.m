@@ -24,6 +24,17 @@
     } while (NO);
 }
 
+- (void)dealloc {
+    do {
+        @synchronized(self) {
+            SAFE_ARC_SAFERELEASE(_earliestTime);
+            SAFE_ARC_SAFERELEASE(_latestTime);
+        }
+        
+        SAFE_ARC_SUPER_DEALLOC();
+    } while (NO);
+}
+
 #pragma mark - DCTimelineAssetsGroup - DCTimelineDataGroup
 - (void)refining:(NSArray *)refinedGroups withTimeInterval:(CFGregorianUnits)gregorianUnit {
     do {
@@ -36,7 +47,11 @@
     NSString *result = nil;
     do {
         @synchronized(self) {
-            ;
+            NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+            SAFE_ARC_AUTORELEASE(dateFormatter);
+            [dateFormatter setTimeStyle:NSDateFormatterLongStyle];
+            [dateFormatter setDateStyle:NSDateFormatterMediumStyle];
+            result = [NSString stringWithFormat:@"%@ - %@", [dateFormatter stringFromDate:self.earliestTime], [dateFormatter stringFromDate:self.latestTime]];
         }
     } while (NO);
     return result;

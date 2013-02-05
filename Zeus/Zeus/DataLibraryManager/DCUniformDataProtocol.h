@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "SafeARC.h"
 
 typedef enum {
     DataSourceType_Unknown = 0,
@@ -99,8 +100,8 @@ extern NSString * const kDATAGROUPPROPERTY_POSTERIMAGEURL;
 #pragma mark - protocol DCTimelineDataGroup <DCDataGroupBase>
 @protocol DCTimelineDataGroup <DCDataGroupBase>
 
-@property (nonatomic, assign, readonly) CFTimeInterval earliestTime;
-@property (nonatomic, assign, readonly) CFTimeInterval latestTime;
+@property (nonatomic, SAFE_ARC_PROP_STRONG, readonly) NSDate *earliestTime;
+@property (nonatomic, SAFE_ARC_PROP_STRONG, readonly) NSDate *latestTime;
 
 - (void)refining:(NSArray *)refinedGroups withTimeInterval:(CFGregorianUnits)gregorianUnit;
 

@@ -342,10 +342,10 @@
 - (void)dealloc {
     do {
         @synchronized(self) {
-            self.assetsGroup = nil;
+            SAFE_ARC_SAFERELEASE(_assetsGroup);
+            SAFE_ARC_SAFERELEASE(_assetType);
         }
         
-        SAFE_ARC_SAFERELEASE(_assetType);
         SAFE_ARC_SUPER_DEALLOC();
     } while (NO);
 }
