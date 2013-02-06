@@ -12,6 +12,7 @@
 #import "DCCommonConstants.h"
 #import "SafeARC.h"
 #import "DCALAssetsGroupBase.h"
+#import "DCTimelineCommonConstants.h"
 
 @class DCALAssetItem;
 
@@ -19,6 +20,8 @@
 }
 
 @property (nonatomic, assign) NSUInteger notifyhFrequency;
+
+- (id)initWithGregorianUnitIntervalFineness:(GregorianUnitIntervalFineness) intervalFineness;
 
 - (void)insertDataItem:(ALAsset *)asset;
 

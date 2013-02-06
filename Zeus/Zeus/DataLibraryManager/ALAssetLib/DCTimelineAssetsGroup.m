@@ -61,12 +61,12 @@
     } while (NO);
 }
 
-- (id)init {
+- (id)initWithGregorianUnitIntervalFineness:(GregorianUnitIntervalFineness)intervalFineness {
     @synchronized(self) {
         self = [super init];
         if (self) {
             ZeroCFGregorianUnits(_currentTimeInterval);
-            _intervalFineness = GUIF_1Month;
+            _intervalFineness = intervalFineness;
             _currentTimeInterval = CFGregorianUnits_IntervalArray[_intervalFineness];
         }
         return self;
@@ -87,9 +87,43 @@
 }
 
 #pragma mark - DCTimelineAssetsGroup - DCTimelineDataGroup
-- (void)refining:(NSMutableArray *)refinedGroups withTimeInterval:(CFGregorianUnits)gregorianUnit {
+- (void)refining:(NSMutableArray *)refinedGroups {
     do {
-        ;
+        @synchronized(self) {
+            if (!refinedGroups) {
+                break;
+            }
+            if (self.intervalFineness < GUIF_Count - 1) {
+                ++_intervalFineness;
+                _currentTimeInterval = CFGregorianUnits_IntervalArray[self.intervalFineness];
+                NSArray *items = [_allAssetItems allValues];
+                DCTimelineAssetsGroup *newGroup = [[DCTimelineAssetsGroup alloc] initWithGregorianUnitIntervalFineness:self.intervalFineness];
+                SAFE_ARC_AUTORELEASE(newGroup);
+                for (DCALAssetItem *item in items) {
+                    if ([newGroup itemsCountWithParam:nil] == 0) {
+                        [newGroup insertDataItem:[item origin]];
+                        [refinedGroups addObject:newGroup];
+                    } else {
+                        NSTimeInterval currentAssetTimeInterval = [[item valueForProperty:kDATAITEMPROPERTY_PROPERTYDATE withOptions:nil] timeIntervalSinceReferenceDate];
+                        NSTimeInterval currentGroupTimeInterval = [self.earliestTime timeIntervalSinceReferenceDate];
+                        CFGregorianUnits diff = CFAbsoluteTimeGetDifferenceAsGregorianUnits(currentAssetTimeInterval, currentGroupTimeInterval, NULL, kCFGregorianAllUnits);
+                        int compareResult = GregorianUnitCompare(diff, self.currentTimeInterval);
+                        if (compareResult > 0) {
+                            // Release old group
+                            SAFE_ARC_SAFERELEASE(newGroup);
+                            // Create a new group
+                            newGroup = [[DCTimelineAssetsGroup alloc] initWithGregorianUnitIntervalFineness:self.intervalFineness];
+                            SAFE_ARC_AUTORELEASE(newGroup);
+                            
+                        } else {  
+                            ;
+                        }
+                        // Insert into current group
+                        [newGroup insertDataItem:[item origin]];
+                    }
+                }
+            }
+        }
     } while (NO);
 }
 

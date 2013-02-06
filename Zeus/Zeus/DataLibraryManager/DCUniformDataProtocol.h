@@ -107,7 +107,7 @@ extern NSString * const kDATAGROUPPROPERTY_POSTERIMAGEURL;
 @property (nonatomic, assign, readonly) CFGregorianUnits currentTimeInterval;
 @property (nonatomic, assign, readonly) GregorianUnitIntervalFineness intervalFineness;
 
-- (void)refining:(NSMutableArray *)refinedGroups withTimeInterval:(CFGregorianUnits)gregorianUnit;
+- (void)refining:(NSMutableArray *)refinedGroups;
 
 @end
 
@@ -137,8 +137,6 @@ extern NSString * const kDATAGROUPPROPERTY_POSTERIMAGEURL;
 
 #pragma mark - protocol DCTimelineDataLibrary <DCDataLibraryBase>
 @protocol DCTimelineDataLibrary <DCDataLibraryBase>
-
-@property (nonatomic, assign, readonly) CFGregorianUnits refinedGregorianUnit;
 
 - (void)enumTimelineNotifyWithFrequency:(NSUInteger)frequency;
 - (void)enumTimelineAtIndexes:(NSIndexSet *)indexSet notifyWithFrequency:(NSUInteger)frequency;

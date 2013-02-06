@@ -24,8 +24,6 @@
 
 @implementation DCTimelineALAssetsLibrary
 
-@synthesize refinedGregorianUnit = _refinedGregorianUnit;
-
 #pragma mark - DCTimelineALAssetsLibrary - DCDataLibraryBase
 - (BOOL)connect:(NSDictionary *)params {
     BOOL result = NO;
@@ -33,7 +31,6 @@
         @synchronized(self) {
             result = [super connect:params];
             NSAssert(result, @"[super connect:params] error.");
-            ZeroCFGregorianUnits(_refinedGregorianUnit);
         }
         result = YES;
     } while (NO);
@@ -44,7 +41,6 @@
     BOOL result = NO;
     do {
         @synchronized(self) {
-            ZeroCFGregorianUnits(_refinedGregorianUnit);
             SAFE_ARC_SAFERELEASE(_currentGroup);
             result = [super disconnect];
             NSAssert(result, @"[super disconnect] error.");
@@ -79,7 +75,7 @@
                 
                 if (result != nil) {
                     if (!_currentGroup) {  // First group
-                        _currentGroup = [[DCTimelineAssetsGroup alloc] init];
+                        _currentGroup = [[DCTimelineAssetsGroup alloc] initWithGregorianUnitIntervalFineness:GUIF_1Month];
                         [_currentGroup insertDataItem:result];
                         NSUInteger index = [_allALAssetsGroupUIDs count];
                         NSString *uid = [_currentGroup uniqueID];
@@ -94,7 +90,7 @@
                         int compareResult = GregorianUnitCompare(diff, [_currentGroup currentTimeInterval]);
                         if (compareResult > 0) {  // Create a new group
                             SAFE_ARC_SAFERELEASE(_currentGroup);
-                            _currentGroup = [[DCTimelineAssetsGroup alloc] init];
+                            _currentGroup = [[DCTimelineAssetsGroup alloc] initWithGregorianUnitIntervalFineness:GUIF_1Month];
                             [_currentGroup insertDataItem:result];
                             NSUInteger index = [_allALAssetsGroupUIDs count];
                             NSString *uid = [_currentGroup uniqueID];
@@ -152,7 +148,7 @@
                 
                 if (result != nil) {
                     if (!_currentGroup) {  // First group
-                        _currentGroup = [[DCTimelineAssetsGroup alloc] init];
+                        _currentGroup = [[DCTimelineAssetsGroup alloc] initWithGregorianUnitIntervalFineness:GUIF_1Month];
                         [_currentGroup insertDataItem:result];
                         NSUInteger index = [_allALAssetsGroupUIDs count];
                         NSString *uid = [_currentGroup uniqueID];
@@ -167,7 +163,7 @@
                         int compareResult = GregorianUnitCompare(diff, [_currentGroup currentTimeInterval]);
                         if (compareResult > 0) {  // Create a new group
                             SAFE_ARC_SAFERELEASE(_currentGroup);
-                            _currentGroup = [[DCTimelineAssetsGroup alloc] init];
+                            _currentGroup = [[DCTimelineAssetsGroup alloc] initWithGregorianUnitIntervalFineness:GUIF_1Month];
                             [_currentGroup insertDataItem:result];
                             NSUInteger index = [_allALAssetsGroupUIDs count];
                             NSString *uid = [_currentGroup uniqueID];
@@ -298,7 +294,7 @@
     do {
         @synchronized(self) {
             NSMutableArray *refinedGroups = [NSMutableArray array];
-            [_currentGroup refining:refinedGroups withTimeInterval:self.refinedGregorianUnit];
+            [_currentGroup refining:refinedGroups];
             if ([refinedGroups count] > 1) {
                 [_allALAssetsGroups removeObjectForKey:[_currentGroup uniqueID]];
                 [_allALAssetsGroupUIDs removeObject:[_currentGroup uniqueID]];
