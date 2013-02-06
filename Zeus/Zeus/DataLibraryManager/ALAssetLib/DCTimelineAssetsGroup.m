@@ -8,7 +8,7 @@
 
 #import "DCTimelineAssetsGroup.h"
 #import "DCALAssetItem.h"
-#import "DCCommonUtility.h"
+#import "DCTimelineCommonConstants.h"
 
 @interface DCTimelineAssetsGroup () {
 }
@@ -20,6 +20,7 @@
 @synthesize earliestTime = _earliestTime;
 @synthesize latestTime = _latestTime;
 @synthesize currentTimeInterval = _currentTimeInterval;
+@synthesize intervalFineness = _intervalFineness;
 @synthesize notifyhFrequency = _notifyhFrequency;
 
 - (void)insertDataItem:(ALAsset *)asset {
@@ -36,6 +37,13 @@
                 }
                 [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_DATAITEM_ENUMFIRSTSCREEN_END object:self];
             } else {
+                NSUInteger count = [_allAssetUIDs count];
+                if (count == 0) {
+                    _earliestTime = [asset valueForProperty:ALAssetPropertyDate];
+                }
+                
+                _latestTime = [asset valueForProperty:ALAssetPropertyDate];
+                
                 ALAssetRepresentation *representation = [asset defaultRepresentation];
                 NSURL *url = [representation url];
                 NSString *assetURLStr = [url absoluteString];
@@ -44,7 +52,7 @@
                 [_allAssetItems setObject:item forKey:assetURLStr];
                 NSUInteger indexForAsset = [_allAssetUIDs count];
                 [_allAssetUIDs insertObject:assetURLStr atIndex:indexForAsset];
-                NSUInteger count = [_allAssetUIDs count];
+                count = [_allAssetUIDs count];
                 if (count == (count / self.notifyhFrequency) * self.notifyhFrequency) {
                     [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_DATAITEM_ADDED object:[self uniqueID]];
                 }
@@ -58,6 +66,8 @@
         self = [super init];
         if (self) {
             ZeroCFGregorianUnits(_currentTimeInterval);
+            _intervalFineness = GUIF_1Month;
+            _currentTimeInterval = CFGregorianUnits_IntervalArray[_intervalFineness];
         }
         return self;
     }
@@ -66,6 +76,7 @@
 - (void)dealloc {
     do {
         @synchronized(self) {
+            _intervalFineness = GUIF_Unknown;
             ZeroCFGregorianUnits(_currentTimeInterval);
             SAFE_ARC_SAFERELEASE(_earliestTime);
             SAFE_ARC_SAFERELEASE(_latestTime);

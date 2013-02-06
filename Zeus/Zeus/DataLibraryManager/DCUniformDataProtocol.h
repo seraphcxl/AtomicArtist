@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "SafeARC.h"
+#import "DCTimelineCommonConstants.h"
 
 typedef enum {
     DataSourceType_Unknown = 0,
@@ -104,6 +105,7 @@ extern NSString * const kDATAGROUPPROPERTY_POSTERIMAGEURL;
 @property (nonatomic, SAFE_ARC_PROP_STRONG, readonly) NSDate *earliestTime;
 @property (nonatomic, SAFE_ARC_PROP_STRONG, readonly) NSDate *latestTime;
 @property (nonatomic, assign, readonly) CFGregorianUnits currentTimeInterval;
+@property (nonatomic, assign, readonly) GregorianUnitIntervalFineness intervalFineness;
 
 - (void)refining:(NSMutableArray *)refinedGroups withTimeInterval:(CFGregorianUnits)gregorianUnit;
 

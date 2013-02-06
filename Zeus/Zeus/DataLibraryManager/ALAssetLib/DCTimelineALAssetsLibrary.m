@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "DCTimelineALAssetsLibrary.h"
-#import "DCCommonUtility.h"
+#import "DCTimelineCommonConstants.h"
 #import "DCTimelineAssetsGroup.h"
 
 @interface DCTimelineALAssetsLibrary () {
@@ -78,14 +78,36 @@
                 }
                 
                 if (result != nil) {
-                    if (!_currentGroup) {
+                    if (!_currentGroup) {  // First group
                         _currentGroup = [[DCTimelineAssetsGroup alloc] init];
-                    }
-                    NSAssert(_currentGroup, @"_currentGroup == nil");
-                    NSDate *currentAssetDate = [result valueForProperty:ALAssetPropertyDate];
-                    if ([_currentGroup itemsCountWithParam:nil] > DCTimelineDataGroup_CountForRefine) {
-                        [self refineCurrentGroup];
+                        [_currentGroup insertDataItem:result];
+                        NSUInteger index = [_allALAssetsGroupUIDs count];
+                        NSString *uid = [_currentGroup uniqueID];
+                        [_allALAssetsGroupUIDs insertObject:uid atIndex:index];
+                        [_allALAssetsGroups setObject:_currentGroup forKey:uid];
+                    } else {
                         NSAssert(_currentGroup, @"_currentGroup == nil");
+                        // calc time interval
+                        NSTimeInterval currentAssetTimeInterval = [[result valueForProperty:ALAssetPropertyDate] timeIntervalSinceReferenceDate];
+                        NSTimeInterval currentGroupTimeInterval = [[_currentGroup earliestTime] timeIntervalSinceReferenceDate];
+                        CFGregorianUnits diff = CFAbsoluteTimeGetDifferenceAsGregorianUnits(currentAssetTimeInterval, currentGroupTimeInterval, NULL, kCFGregorianAllUnits);
+                        int compareResult = GregorianUnitCompare(diff, [_currentGroup currentTimeInterval]);
+                        if (compareResult > 0) {  // Create a new group
+                            SAFE_ARC_SAFERELEASE(_currentGroup);
+                            _currentGroup = [[DCTimelineAssetsGroup alloc] init];
+                            [_currentGroup insertDataItem:result];
+                            NSUInteger index = [_allALAssetsGroupUIDs count];
+                            NSString *uid = [_currentGroup uniqueID];
+                            [_allALAssetsGroupUIDs insertObject:uid atIndex:index];
+                            [_allALAssetsGroups setObject:_currentGroup forKey:uid];
+                        } else {  // Insert into current group
+                            [_currentGroup insertDataItem:result];
+                            // Refine group
+                            if ([_currentGroup itemsCountWithParam:nil] > DCTimelineDataGroup_CountForRefine) {
+                                [self refineCurrentGroup];
+                                NSAssert(_currentGroup, @"_currentGroup == nil");
+                            }
+                        }
                     }
                 } else {
                     ;
@@ -129,7 +151,37 @@
                 }
                 
                 if (result != nil) {
-                    ;
+                    if (!_currentGroup) {  // First group
+                        _currentGroup = [[DCTimelineAssetsGroup alloc] init];
+                        [_currentGroup insertDataItem:result];
+                        NSUInteger index = [_allALAssetsGroupUIDs count];
+                        NSString *uid = [_currentGroup uniqueID];
+                        [_allALAssetsGroupUIDs insertObject:uid atIndex:index];
+                        [_allALAssetsGroups setObject:_currentGroup forKey:uid];
+                    } else {
+                        NSAssert(_currentGroup, @"_currentGroup == nil");
+                        // calc time interval
+                        NSTimeInterval currentAssetTimeInterval = [[result valueForProperty:ALAssetPropertyDate] timeIntervalSinceReferenceDate];
+                        NSTimeInterval currentGroupTimeInterval = [[_currentGroup earliestTime] timeIntervalSinceReferenceDate];
+                        CFGregorianUnits diff = CFAbsoluteTimeGetDifferenceAsGregorianUnits(currentAssetTimeInterval, currentGroupTimeInterval, NULL, kCFGregorianAllUnits);
+                        int compareResult = GregorianUnitCompare(diff, [_currentGroup currentTimeInterval]);
+                        if (compareResult > 0) {  // Create a new group
+                            SAFE_ARC_SAFERELEASE(_currentGroup);
+                            _currentGroup = [[DCTimelineAssetsGroup alloc] init];
+                            [_currentGroup insertDataItem:result];
+                            NSUInteger index = [_allALAssetsGroupUIDs count];
+                            NSString *uid = [_currentGroup uniqueID];
+                            [_allALAssetsGroupUIDs insertObject:uid atIndex:index];
+                            [_allALAssetsGroups setObject:_currentGroup forKey:uid];
+                        } else {  // Insert into current group
+                            [_currentGroup insertDataItem:result];
+                            // Refine group
+                            if ([_currentGroup itemsCountWithParam:nil] > DCTimelineDataGroup_CountForRefine) {
+                                [self refineCurrentGroup];
+                                NSAssert(_currentGroup, @"_currentGroup == nil");
+                            }
+                        }
+                    }
                 } else {
                     ;
                 }

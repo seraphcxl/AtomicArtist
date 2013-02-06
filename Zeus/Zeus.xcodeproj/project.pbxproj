@@ -21,6 +21,7 @@
 		1B88587016B671110082F06C /* DCMediaPocket.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1B88586B16B66C890082F06C /* DCMediaPocket.h */; };
 		1BBBDB4516BA0A5300735EDA /* DCCommonUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BBBDB4416BA0A5300735EDA /* DCCommonUtility.m */; };
 		1BCC890D16AF709100852851 /* Item.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BCC890C16AF709100852851 /* Item.m */; };
+		1BD25DCE16C1FE3F00943CC9 /* DCTimelineCommonConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BD25DCD16C1FE3F00943CC9 /* DCTimelineCommonConstants.m */; };
 		1BDC807916C0AFFF004D2C2E /* DCALAssetsLibraryBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BDC807816C0AFFF004D2C2E /* DCALAssetsLibraryBase.m */; };
 		1BDC808016C0CF3C004D2C2E /* DCALAssetsGroupBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BDC807F16C0CF3C004D2C2E /* DCALAssetsGroupBase.m */; };
 		1BDC808316C0D33A004D2C2E /* DCTimelineALAssetsLibrary.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BDC808216C0D33A004D2C2E /* DCTimelineALAssetsLibrary.m */; };
@@ -98,6 +99,8 @@
 		1BBBDB4416BA0A5300735EDA /* DCCommonUtility.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = DCCommonUtility.m; path = ../Common/DCCommonUtility.m; sourceTree = "<group>"; };
 		1BCC890B16AF709100852851 /* Item.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Item.h; sourceTree = "<group>"; };
 		1BCC890C16AF709100852851 /* Item.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Item.m; sourceTree = "<group>"; };
+		1BD25DCC16C1FE3F00943CC9 /* DCTimelineCommonConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCTimelineCommonConstants.h; sourceTree = "<group>"; };
+		1BD25DCD16C1FE3F00943CC9 /* DCTimelineCommonConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCTimelineCommonConstants.m; sourceTree = "<group>"; };
 		1BDC807716C0AFFF004D2C2E /* DCALAssetsLibraryBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCALAssetsLibraryBase.h; sourceTree = "<group>"; };
 		1BDC807816C0AFFF004D2C2E /* DCALAssetsLibraryBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCALAssetsLibraryBase.m; sourceTree = "<group>"; };
 		1BDC807E16C0CF3C004D2C2E /* DCALAssetsGroupBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCALAssetsGroupBase.h; sourceTree = "<group>"; };
@@ -235,6 +238,8 @@
 				1BE3FB9C16966E76004DDEAF /* ALAssetLib */,
 				1BE3FBA316966E76004DDEAF /* DCUniformDataProtocol.h */,
 				1BE3FBA416966E76004DDEAF /* DCUniformDataProtocol.m */,
+				1BD25DCC16C1FE3F00943CC9 /* DCTimelineCommonConstants.h */,
+				1BD25DCD16C1FE3F00943CC9 /* DCTimelineCommonConstants.m */,
 			);
 			path = DataLibraryManager;
 			sourceTree = "<group>";
@@ -372,6 +377,7 @@
 				1BDC808016C0CF3C004D2C2E /* DCALAssetsGroupBase.m in Sources */,
 				1BDC808316C0D33A004D2C2E /* DCTimelineALAssetsLibrary.m in Sources */,
 				1BDC809216C0DBF3004D2C2E /* DCTimelineAssetsGroup.m in Sources */,
+				1BD25DCE16C1FE3F00943CC9 /* DCTimelineCommonConstants.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
