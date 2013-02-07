@@ -68,6 +68,15 @@
             ZeroCFGregorianUnits(_currentTimeInterval);
             _intervalFineness = intervalFineness;
             _currentTimeInterval = CFGregorianUnits_IntervalArray[_intervalFineness];
+            @synchronized(self) {
+                if (!_allAssetItems) {
+                    _allAssetItems = [[NSMutableDictionary alloc] init];
+                }
+                
+                if (!_allAssetUIDs) {
+                    _allAssetUIDs = [[NSMutableArray alloc] init];
+                }
+            }
         }
         return self;
     }

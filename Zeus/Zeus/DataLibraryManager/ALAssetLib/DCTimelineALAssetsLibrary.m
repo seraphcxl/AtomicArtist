@@ -12,13 +12,14 @@
 #import "DCTimelineAssetsGroup.h"
 
 @interface DCTimelineALAssetsLibrary () {
-    ALAssetsGroup *_assetsTimelineGroup;
+    NSMutableArray *_assetsTimelineGroups;
     DCTimelineAssetsGroup *_currentGroup;
 }
 
 - (void)initAssetsTimelineGroup;
 - (void)clearTimelineGroupCache;
 - (void)refineCurrentGroup;
+- (void)insertAsset:(ALAsset *)asset fromIndex:(NSUInteger)index;
 
 @end
 
@@ -31,6 +32,7 @@
         @synchronized(self) {
             result = [super connect:params];
             NSAssert(result, @"[super connect:params] error.");
+            
         }
         result = YES;
     } while (NO);
@@ -42,6 +44,7 @@
     do {
         @synchronized(self) {
             SAFE_ARC_SAFERELEASE(_currentGroup);
+            [self clearTimelineGroupCache];
             result = [super disconnect];
             NSAssert(result, @"[super disconnect] error.");
         }
@@ -54,9 +57,56 @@
 - (void)clearCache {
     do {
         @synchronized(self) {
-            [super clearCache];
-            
-            SAFE_ARC_SAFERELEASE(_assetsTimelineGroup);
+            [super clearCache];            
+        }
+    } while (NO);
+}
+
+- (void)insertAsset:(ALAsset *)asset fromIndex:(NSUInteger)index{
+    do {
+        if (!asset) {
+            break;
+        }
+        @synchronized(self) {
+            if (index >= [_assetsTimelineGroups count]) {
+                break;
+            }
+            DCTimelineAssetsGroup *currentGroup = [_assetsTimelineGroups objectAtIndex:index];
+            if (!currentGroup) {
+                currentGroup = [[DCTimelineAssetsGroup alloc] initWithGregorianUnitIntervalFineness:GUIF_1Month];
+                currentGroup.notifyhFrequency = 16;
+                [currentGroup insertDataItem:asset];
+                NSUInteger index = [_allALAssetsGroupUIDs count];
+                NSString *uid = [currentGroup uniqueID];
+                [_allALAssetsGroupUIDs insertObject:uid atIndex:index];
+                [_allALAssetsGroups setObject:currentGroup forKey:uid];
+                [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_DATAGROUP_ADDED object:self];
+            } else {
+                NSAssert(currentGroup, @"currentGroup == nil");
+                // calc time interval
+                NSTimeInterval currentAssetTimeInterval = [[asset valueForProperty:ALAssetPropertyDate] timeIntervalSinceReferenceDate];
+                NSTimeInterval currentGroupTimeInterval = [[currentGroup earliestTime] timeIntervalSinceReferenceDate];
+                CFGregorianUnits diff = CFAbsoluteTimeGetDifferenceAsGregorianUnits(currentAssetTimeInterval, currentGroupTimeInterval, NULL, kCFGregorianAllUnits);
+                int compareResult = GregorianUnitCompare(diff, [currentGroup currentTimeInterval]);
+                if (compareResult > 0) {  // Create a new group
+                    SAFE_ARC_SAFERELEASE(_currentGroup);
+                    currentGroup = [[DCTimelineAssetsGroup alloc] initWithGregorianUnitIntervalFineness:GUIF_1Month];
+                    currentGroup.notifyhFrequency = 16;
+                    [currentGroup insertDataItem:asset];
+                    NSUInteger index = [_allALAssetsGroupUIDs count];
+                    NSString *uid = [currentGroup uniqueID];
+                    [_allALAssetsGroupUIDs insertObject:uid atIndex:index];
+                    [_allALAssetsGroups setObject:currentGroup forKey:uid];
+                    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_DATAGROUP_ADDED object:self];
+                } else {  // Insert into current group
+                    [currentGroup insertDataItem:asset];
+                    // Refine group
+                    if ([currentGroup itemsCountWithParam:nil] > DCTimelineDataGroup_CountForRefine) {
+                        [self refineCurrentGroup];
+                        NSAssert(currentGroup, @"currentGroup == nil");
+                    }
+                }
+            }
         }
     } while (NO);
 }
@@ -76,11 +126,13 @@
                 if (result != nil) {
                     if (!_currentGroup) {  // First group
                         _currentGroup = [[DCTimelineAssetsGroup alloc] initWithGregorianUnitIntervalFineness:GUIF_1Month];
+                        _currentGroup.notifyhFrequency = 16;
                         [_currentGroup insertDataItem:result];
                         NSUInteger index = [_allALAssetsGroupUIDs count];
                         NSString *uid = [_currentGroup uniqueID];
                         [_allALAssetsGroupUIDs insertObject:uid atIndex:index];
                         [_allALAssetsGroups setObject:_currentGroup forKey:uid];
+                        [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_DATAGROUP_ADDED object:self];
                     } else {
                         NSAssert(_currentGroup, @"_currentGroup == nil");
                         // calc time interval
@@ -91,11 +143,13 @@
                         if (compareResult > 0) {  // Create a new group
                             SAFE_ARC_SAFERELEASE(_currentGroup);
                             _currentGroup = [[DCTimelineAssetsGroup alloc] initWithGregorianUnitIntervalFineness:GUIF_1Month];
+                            _currentGroup.notifyhFrequency = 16;
                             [_currentGroup insertDataItem:result];
                             NSUInteger index = [_allALAssetsGroupUIDs count];
                             NSString *uid = [_currentGroup uniqueID];
                             [_allALAssetsGroupUIDs insertObject:uid atIndex:index];
                             [_allALAssetsGroups setObject:_currentGroup forKey:uid];
+                            [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_DATAGROUP_ADDED object:self];
                         } else {  // Insert into current group
                             [_currentGroup insertDataItem:result];
                             // Refine group
@@ -112,24 +166,24 @@
         };
         
         @synchronized(self) {
-            if (!_assetsTimelineGroup) {
-                [self initAssetsTimelineGroup];
-            }
-            NSAssert(_assetsTimelineGroup, @"_assetsTimelineGroup == nil");
-            if (frequency == 0) {
-                [NSException raise:@"DCTimelineALAssetsLibrary Error" format:@"Reason: _frequency == 0"];
-                break;
-            }
-            
-            if (!_enumerating) {
-                [self clearCache];
-                
-                _frequency = frequency;
-                _enumCount = 0;
-                _cancelEnum = NO;
-                _enumerating = YES;
-                [_assetsTimelineGroup enumerateAssetsUsingBlock:enumerator];
-            }
+//            if (!_assetsTimelineGroup) {
+//                [self initAssetsTimelineGroup];
+//            }
+//            NSAssert(_assetsTimelineGroup, @"_assetsTimelineGroup == nil");
+//            if (frequency == 0) {
+//                [NSException raise:@"DCTimelineALAssetsLibrary Error" format:@"Reason: _frequency == 0"];
+//                break;
+//            }
+//            
+//            if (!_enumerating) {
+//                [self clearCache];
+//                
+//                _frequency = frequency;
+//                _enumCount = 0;
+//                _cancelEnum = NO;
+//                _enumerating = YES;
+//                [_assetsTimelineGroup enumerateAssetsUsingBlock:enumerator];
+//            }
         }
     } while (NO);
     SAFE_ARC_AUTORELEASE_POOL_END()
@@ -149,6 +203,7 @@
                 if (result != nil) {
                     if (!_currentGroup) {  // First group
                         _currentGroup = [[DCTimelineAssetsGroup alloc] initWithGregorianUnitIntervalFineness:GUIF_1Month];
+                        _currentGroup.notifyhFrequency = 16;
                         [_currentGroup insertDataItem:result];
                         NSUInteger index = [_allALAssetsGroupUIDs count];
                         NSString *uid = [_currentGroup uniqueID];
@@ -164,6 +219,7 @@
                         if (compareResult > 0) {  // Create a new group
                             SAFE_ARC_SAFERELEASE(_currentGroup);
                             _currentGroup = [[DCTimelineAssetsGroup alloc] initWithGregorianUnitIntervalFineness:GUIF_1Month];
+                            _currentGroup.notifyhFrequency = 16;
                             [_currentGroup insertDataItem:result];
                             NSUInteger index = [_allALAssetsGroupUIDs count];
                             NSString *uid = [_currentGroup uniqueID];
@@ -185,24 +241,24 @@
         };
         
         @synchronized(self) {
-            if (!_assetsTimelineGroup) {
-                [self initAssetsTimelineGroup];
-            }
-            NSAssert(_assetsTimelineGroup, @"_assetsTimelineGroup == nil");
-            if (frequency == 0) {
-                [NSException raise:@"DCTimelineALAssetsLibrary Error" format:@"Reason: _frequency == 0"];
-                break;
-            }
-            
-            if (!_enumerating) {
-                [self clearCache];
-                
-                _frequency = frequency;
-                _enumCount = 0;
-                _cancelEnum = NO;
-                _enumerating = YES;
-                [_assetsTimelineGroup enumerateAssetsAtIndexes:indexSet options:0 usingBlock:enumerator];
-            }
+//            if (!_assetsTimelineGroup) {
+//                [self initAssetsTimelineGroup];
+//            }
+//            NSAssert(_assetsTimelineGroup, @"_assetsTimelineGroup == nil");
+//            if (frequency == 0) {
+//                [NSException raise:@"DCTimelineALAssetsLibrary Error" format:@"Reason: _frequency == 0"];
+//                break;
+//            }
+//            
+//            if (!_enumerating) {
+//                [self clearCache];
+//                
+//                _frequency = frequency;
+//                _enumCount = 0;
+//                _cancelEnum = NO;
+//                _enumerating = YES;
+//                [_assetsTimelineGroup enumerateAssetsAtIndexes:indexSet options:0 usingBlock:enumerator];
+//            }
         }
     } while (NO);
     SAFE_ARC_AUTORELEASE_POOL_END()
@@ -211,8 +267,8 @@
 #pragma mark - DCTimelineALAssetsLibrary - Private
 - (void)initAssetsTimelineGroup {
     do {
-        @synchronized(self) {
-            if (!_assetsTimelineGroup) {
+        
+            if (!_assetsTimelineGroups) {
                 ALAssetsLibrary *assetsLibrary = [DCAssetsLibAgent sharedDCAssetsLibAgent].assetsLibrary;
                 if (!assetsLibrary) {
                     [NSException raise:@"DCALAssetsLibrary Error" format:@"Reason: _assetsLibrary == nil"];
@@ -225,32 +281,17 @@
                 SAFE_ARC_AUTORELEASE_POOL_START()
                 void (^enumerator)(ALAssetsGroup *group, BOOL *stop) = ^(ALAssetsGroup *group, BOOL *stop) {
                     do {
-                        if (_cancelEnum) {
-                            *stop = _cancelEnum;
-                            _enumerating = NO;
-                            break;
-                        }
-                        
                         if (group != nil && [group numberOfAssets] > 0) {
-                            NSAssert(!_assetsTimelineGroup, @"_assetsTimelineGroup != nil");
-                            @synchronized(self) {
-                                if (_cancelEnum) {
-                                    *stop = _cancelEnum;
-                                    _enumerating = NO;
-                                    break;
-                                }
-                                _assetsTimelineGroup = group;
-                                SAFE_ARC_RETAIN(_assetsTimelineGroup);
-                            }
-                            dc_debug_NSLog(@"Add timeline group count = %d", [group numberOfAssets]);
+                            NSString *groupPersistentID = [group valueForProperty:ALAssetsGroupPropertyPersistentID];
+                            [_assetsTimelineGroups addObject:group];
+                            dc_debug_NSLog(@"Add group id: %@, count = %d", groupPersistentID, [group numberOfAssets]);
                         } else {
-                            ;
+                            _enumerating = NO;
+                            if ([_lock tryLockWhenCondition:0]) {
+                                [_lock unlockWithCondition:1];
+                            }
                         }
                     } while (NO);
-                    
-                    if ([_lock tryLockWhenCondition:0]) {
-                        [_lock unlockWithCondition:1];
-                    }
                 };
                 
                 void (^failureReporter)(NSError *error) = ^(NSError *error) {
@@ -264,19 +305,23 @@
                 };
                 
                 if (!_enumerating) {
-                    [self clearTimelineGroupCache];
-                    
-                    _cancelEnum = NO;
-                    _enumerating = YES;
-                    NSAssert(assetsLibrary, @"_assetsLibrary == nil");
-                    [assetsLibrary enumerateGroupsWithTypes:ALAssetsGroupLibrary usingBlock:enumerator failureBlock:failureReporter];
+                    @synchronized(self) {
+                        [self clearTimelineGroupCache];
+                        
+                        _assetsTimelineGroups = [NSMutableArray array];
+                        SAFE_ARC_RETAIN(_assetsTimelineGroups);
+                        
+                        _cancelEnum = NO;
+                        _enumerating = YES;
+                        NSAssert(assetsLibrary, @"_assetsLibrary == nil");
+                        [assetsLibrary enumerateGroupsWithTypes:ALAssetsGroupLibrary usingBlock:enumerator failureBlock:failureReporter];
+                    }
                     [_lock lockWhenCondition:1];
                     [_lock unlockWithCondition:0];
                 }
                 SAFE_ARC_AUTORELEASE_POOL_END()
             }
-            NSAssert(_assetsTimelineGroup, @"_assetsTimelineGroup == nil");
-        }
+            NSAssert(_assetsTimelineGroups, @"_assetsTimelineGroup == nil");
     } while (NO);
 }
 
@@ -284,8 +329,11 @@
     do {
         @synchronized(self) {
             _cancelEnum = YES;
-            
-            SAFE_ARC_SAFERELEASE(_assetsTimelineGroup);
+                        
+            if (_assetsTimelineGroups) {
+                [_assetsTimelineGroups removeAllObjects];
+                SAFE_ARC_SAFERELEASE(_assetsTimelineGroups);
+            }
         }
     } while (NO);
 }
@@ -307,6 +355,7 @@
                     _currentGroup = group;
                     SAFE_ARC_RETAIN(_currentGroup);
                 }
+                [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_DATAGROUP_ADDED object:self];
             }
         }
     } while (NO);
