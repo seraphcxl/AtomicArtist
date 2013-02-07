@@ -11,6 +11,20 @@
 int GregorianUnitCompare(CFGregorianUnits left, CFGregorianUnits right) {
     int result = 0;
     do {
+        left.years = ABS(left.years);
+        left.months = ABS(left.months);
+        left.days = ABS(left.days);
+        left.hours = ABS(left.hours);
+        left.minutes = ABS(left.minutes);
+        left.seconds = ABS(left.seconds);
+        
+        right.years = ABS(right.years);
+        right.months = ABS(right.months);
+        right.days = ABS(right.days);
+        right.hours = ABS(right.hours);
+        right.minutes = ABS(right.minutes);
+        right.seconds = ABS(right.seconds);
+        
         // Year
         if (left.years > right.years) {
             result = 1;

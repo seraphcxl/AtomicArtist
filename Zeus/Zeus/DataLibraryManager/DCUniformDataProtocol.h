@@ -99,7 +99,7 @@ extern NSString * const kDATAGROUPPROPERTY_POSTERIMAGEURL;
 @end
 
 #pragma mark - protocol DCTimelineDataGroup <DCDataGroupBase>
-#define DCTimelineDataGroup_CountForRefine (48)
+#define DCTimelineDataGroup_CountForRefine (24)
 @protocol DCTimelineDataGroup <DCDataGroupBase>
 
 @property (nonatomic, SAFE_ARC_PROP_STRONG, readonly) NSDate *earliestTime;
@@ -139,7 +139,7 @@ extern NSString * const kDATAGROUPPROPERTY_POSTERIMAGEURL;
 @protocol DCTimelineDataLibrary <DCDataLibraryBase>
 
 - (void)enumTimelineNotifyWithFrequency:(NSUInteger)frequency;
-- (void)enumTimelineAtIndexes:(NSIndexSet *)indexSet notifyWithFrequency:(NSUInteger)frequency;
+//- (void)enumTimelineAtIndexes:(NSIndexSet *)indexSet notifyWithFrequency:(NSUInteger)frequency;
 
 @end
 

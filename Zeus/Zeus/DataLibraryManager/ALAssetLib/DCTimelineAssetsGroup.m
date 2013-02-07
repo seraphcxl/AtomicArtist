@@ -40,10 +40,11 @@
                 NSUInteger count = [_allAssetUIDs count];
                 if (count == 0) {
                     _earliestTime = [asset valueForProperty:ALAssetPropertyDate];
+                    SAFE_ARC_RETAIN(_earliestTime);
                 }
-                
+                SAFE_ARC_SAFERELEASE(_latestTime);
                 _latestTime = [asset valueForProperty:ALAssetPropertyDate];
-                
+                SAFE_ARC_RETAIN(_latestTime);
                 ALAssetRepresentation *representation = [asset defaultRepresentation];
                 NSURL *url = [representation url];
                 NSString *assetURLStr = [url absoluteString];
@@ -52,6 +53,8 @@
                 [_allAssetItems setObject:item forKey:assetURLStr];
                 NSUInteger indexForAsset = [_allAssetUIDs count];
                 [_allAssetUIDs insertObject:assetURLStr atIndex:indexForAsset];
+                SAFE_ARC_AUTORELEASE(item);
+                
                 count = [_allAssetUIDs count];
                 if (count == (count / self.notifyhFrequency) * self.notifyhFrequency) {
                     [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_DATAITEM_ADDED object:[self uniqueID]];
@@ -70,11 +73,13 @@
             _currentTimeInterval = CFGregorianUnits_IntervalArray[_intervalFineness];
             @synchronized(self) {
                 if (!_allAssetItems) {
-                    _allAssetItems = [[NSMutableDictionary alloc] init];
+                    _allAssetItems = [NSMutableDictionary dictionary];
+                    SAFE_ARC_RETAIN(_allAssetItems);
                 }
                 
                 if (!_allAssetUIDs) {
-                    _allAssetUIDs = [[NSMutableArray alloc] init];
+                    _allAssetUIDs = [NSMutableArray array];
+                    SAFE_ARC_RETAIN(_allAssetUIDs);
                 }
             }
         }
@@ -105,25 +110,23 @@
             if (self.intervalFineness < GUIF_Count - 1) {
                 ++_intervalFineness;
                 _currentTimeInterval = CFGregorianUnits_IntervalArray[self.intervalFineness];
-                NSArray *items = [_allAssetItems allValues];
                 DCTimelineAssetsGroup *newGroup = [[DCTimelineAssetsGroup alloc] initWithGregorianUnitIntervalFineness:self.intervalFineness];
+                [refinedGroups addObject:newGroup];
                 SAFE_ARC_AUTORELEASE(newGroup);
-                for (DCALAssetItem *item in items) {
+                for (NSString *itemUID in _allAssetUIDs) {
+                    DCALAssetItem *item = [_allAssetItems objectForKey:itemUID];
                     if ([newGroup itemsCountWithParam:nil] == 0) {
                         [newGroup insertDataItem:[item origin]];
-                        [refinedGroups addObject:newGroup];
                     } else {
-                        NSTimeInterval currentAssetTimeInterval = [[item valueForProperty:kDATAITEMPROPERTY_PROPERTYDATE withOptions:nil] timeIntervalSinceReferenceDate];
-                        NSTimeInterval currentGroupTimeInterval = [self.earliestTime timeIntervalSinceReferenceDate];
+                        NSTimeInterval currentAssetTimeInterval = [[[item origin] valueForProperty:ALAssetPropertyDate] timeIntervalSinceReferenceDate];
+                        NSTimeInterval currentGroupTimeInterval = [newGroup.earliestTime timeIntervalSinceReferenceDate];
                         CFGregorianUnits diff = CFAbsoluteTimeGetDifferenceAsGregorianUnits(currentAssetTimeInterval, currentGroupTimeInterval, NULL, kCFGregorianAllUnits);
-                        int compareResult = GregorianUnitCompare(diff, self.currentTimeInterval);
+                        int compareResult = GregorianUnitCompare(diff, newGroup.currentTimeInterval);
                         if (compareResult > 0) {
-                            // Release old group
-                            SAFE_ARC_SAFERELEASE(newGroup);
                             // Create a new group
                             newGroup = [[DCTimelineAssetsGroup alloc] initWithGregorianUnitIntervalFineness:self.intervalFineness];
+                            [refinedGroups addObject:newGroup];
                             SAFE_ARC_AUTORELEASE(newGroup);
-                            
                         } else {  
                             ;
                         }

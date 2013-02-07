@@ -152,11 +152,13 @@
     do {
         @synchronized(self) {
             if (!_allALAssetsGroups) {
-                _allALAssetsGroups = [[NSMutableDictionary alloc] init];
+                _allALAssetsGroups = [NSMutableDictionary dictionary];
+                SAFE_ARC_RETAIN(_allALAssetsGroups);
             }
             
             if (!_allALAssetsGroupUIDs) {
-                _allALAssetsGroupUIDs = [[NSMutableArray alloc] init];
+                _allALAssetsGroupUIDs = [NSMutableArray array];
+                SAFE_ARC_RETAIN(_allALAssetsGroupUIDs);
             }
             _cancelEnum = NO;
             _enumerating = NO;

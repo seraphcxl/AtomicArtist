@@ -322,11 +322,13 @@
     if (self) {
         @synchronized(self) {
             if (!_allAssetItems) {
-                _allAssetItems = [[NSMutableDictionary alloc] init];
+                _allAssetItems = [NSMutableDictionary dictionary];
+                SAFE_ARC_RETAIN(_allAssetItems);
             }
             
             if (!_allAssetUIDs) {
-                _allAssetUIDs = [[NSMutableArray alloc] init];
+                _allAssetUIDs = [NSMutableArray array];
+                SAFE_ARC_RETAIN(_allAssetUIDs);
             }
             
             self.assetsGroup = assetsGroup;
