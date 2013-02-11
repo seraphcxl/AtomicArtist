@@ -24,6 +24,7 @@
 - (void)refineCurrentGroup;
 - (void)insertAsset:(ALAsset *)asset;
 - (void)enumTimelineGroupAtIndex:(NSUInteger)groupIndex NotifyWithFrequency:(NSUInteger)frequency;
+- (void)clearAssetArray;
 
 @end
 
@@ -48,9 +49,6 @@
     do {
         @synchronized(self) {
             SAFE_ARC_SAFERELEASE(_currentGroup);
-            
-            [self clearTimelineGroupCache];
-            SAFE_ARC_SAFERELEASE(_assetsTimelineGroups);
             
             result = [super disconnect];
             NSAssert(result, @"[super disconnect] error.");
@@ -78,14 +76,17 @@
 - (void)uninitAssetsLib {
     do {
         @synchronized(self) {
-            SAFE_ARC_SAFERELEASE(_sortedAssetArray);
+            [self clearTimelineGroupCache];
+            SAFE_ARC_SAFERELEASE(_assetsTimelineGroups);
+            [self clearAssetArray];
             SAFE_ARC_SAFERELEASE(_unsortedAssetArray);
+            SAFE_ARC_SAFERELEASE(_sortedAssetArray);
             [super uninitAssetsLib];
         }
     } while (NO);
 }
 
-- (void)clearCache {
+- (void)clearAssetArray {
     do {
         @synchronized(self) {
             if (_unsortedAssetArray) {
@@ -95,7 +96,13 @@
             if (_sortedAssetArray) {
                 [_sortedAssetArray removeAllObjects];
             }
-            
+        }
+    } while (NO);
+}
+
+- (void)clearCache {
+    do {
+        @synchronized(self) {
             [super clearCache];            
         }
     } while (NO);
@@ -208,8 +215,10 @@
             
             if (!_enumerating) {
                 if (groupIndex == 0) {
-                    [self clearCache];
+                    [self clearAssetArray];
                 }
+                
+                [self clearCache];
                 
                 _frequency = frequency;
                 _enumCount = 0;
