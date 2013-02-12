@@ -126,4 +126,8 @@
     return result;
 }
 
+- (id)valueForProperty:(NSString *)property withOptions:(NSDictionary *)options {
+    return nil;
+}
+
 @end

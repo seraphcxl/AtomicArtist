@@ -116,7 +116,7 @@
         @synchronized(self) {
             if (!_currentGroup) {
                 _currentGroup = [[DCTimelineAssetsGroup alloc] initWithGregorianUnitIntervalFineness:GUIF_1Month];
-                _currentGroup.notifyhFrequency = 16;
+                _currentGroup.notifyhFrequency = DCTimelineDataGroup_NotifyhFrequencyForAddItem;
                 [_currentGroup insertDataItem:asset];
                 NSUInteger index = [_allALAssetsGroupUIDs count];
                 NSString *uid = [_currentGroup uniqueID];
@@ -127,13 +127,13 @@
                 NSAssert(_currentGroup, @"_currentGroup == nil");
                 // calc time interval
                 NSTimeInterval currentAssetTimeInterval = [[asset valueForProperty:ALAssetPropertyDate] timeIntervalSinceReferenceDate];
-                NSTimeInterval currentGroupTimeInterval = [[_currentGroup earliestTime] timeIntervalSinceReferenceDate];
+                NSTimeInterval currentGroupTimeInterval = [_currentGroup.latestTime timeIntervalSinceReferenceDate];
                 CFGregorianUnits diff = CFAbsoluteTimeGetDifferenceAsGregorianUnits(currentAssetTimeInterval, currentGroupTimeInterval, NULL, kCFGregorianAllUnits);
                 int compareResult = GregorianUnitCompare(diff, [_currentGroup currentTimeInterval]);
                 if (compareResult > 0) {  // Create a new group
                     SAFE_ARC_SAFERELEASE(_currentGroup);
                     _currentGroup = [[DCTimelineAssetsGroup alloc] initWithGregorianUnitIntervalFineness:GUIF_1Month];
-                    _currentGroup.notifyhFrequency = 16;
+                    _currentGroup.notifyhFrequency = DCTimelineDataGroup_NotifyhFrequencyForAddItem;
                     [_currentGroup insertDataItem:asset];
                     NSUInteger index = [_allALAssetsGroupUIDs count];
                     NSString *uid = [_currentGroup uniqueID];

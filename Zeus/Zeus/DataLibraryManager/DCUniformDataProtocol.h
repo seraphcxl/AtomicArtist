@@ -83,6 +83,7 @@ extern NSString * const kDATAGROUPPROPERTY_POSTERIMAGEURL;
 - (id<DCDataItem>)itemWithUID:(NSString *)uniqueID;
 - (NSString *)itemUIDAtIndex:(NSUInteger)index;
 - (NSInteger)indexForItemUID:(NSString *)itemUID;
+- (id)valueForProperty:(NSString *)property withOptions:(NSDictionary *)options;
 
 @end
 
@@ -94,12 +95,12 @@ extern NSString * const kDATAGROUPPROPERTY_POSTERIMAGEURL;
 - (NSUInteger)enumratedItemsCountWithParam:(id)param;
 - (BOOL)isEnumerated;
 - (BOOL)isEnumerating;
-- (id)valueForProperty:(NSString *)property withOptions:(NSDictionary *)options;
 
 @end
 
 #pragma mark - protocol DCTimelineDataGroup <DCDataGroupBase>
 #define DCTimelineDataGroup_CountForRefine (24)
+#define DCTimelineDataGroup_NotifyhFrequencyForAddItem (16)
 @protocol DCTimelineDataGroup <DCDataGroupBase>
 
 @property (nonatomic, SAFE_ARC_PROP_STRONG, readonly) NSDate *earliestTime;

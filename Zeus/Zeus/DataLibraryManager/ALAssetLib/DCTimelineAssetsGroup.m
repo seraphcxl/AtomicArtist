@@ -39,12 +39,14 @@
             } else {
                 NSUInteger count = [_allAssetUIDs count];
                 if (count == 0) {
-                    _earliestTime = [asset valueForProperty:ALAssetPropertyDate];
-                    SAFE_ARC_RETAIN(_earliestTime);
+                    _latestTime = [asset valueForProperty:ALAssetPropertyDate];
+                    SAFE_ARC_RETAIN(_latestTime);
                 }
-                SAFE_ARC_SAFERELEASE(_latestTime);
-                _latestTime = [asset valueForProperty:ALAssetPropertyDate];
-                SAFE_ARC_RETAIN(_latestTime);
+                
+                SAFE_ARC_SAFERELEASE(_earliestTime);
+                _earliestTime = [asset valueForProperty:ALAssetPropertyDate];
+                SAFE_ARC_RETAIN(_earliestTime);
+                
                 ALAssetRepresentation *representation = [asset defaultRepresentation];
                 NSURL *url = [representation url];
                 NSString *assetURLStr = [url absoluteString];
@@ -119,7 +121,7 @@
                         [newGroup insertDataItem:[item origin]];
                     } else {
                         NSTimeInterval currentAssetTimeInterval = [[[item origin] valueForProperty:ALAssetPropertyDate] timeIntervalSinceReferenceDate];
-                        NSTimeInterval currentGroupTimeInterval = [newGroup.earliestTime timeIntervalSinceReferenceDate];
+                        NSTimeInterval currentGroupTimeInterval = [newGroup.latestTime timeIntervalSinceReferenceDate];
                         CFGregorianUnits diff = CFAbsoluteTimeGetDifferenceAsGregorianUnits(currentAssetTimeInterval, currentGroupTimeInterval, NULL, kCFGregorianAllUnits);
                         int compareResult = GregorianUnitCompare(diff, newGroup.currentTimeInterval);
                         if (compareResult > 0) {
@@ -146,9 +148,11 @@
         @synchronized(self) {
             NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
             SAFE_ARC_AUTORELEASE(dateFormatter);
-            [dateFormatter setTimeStyle:NSDateFormatterLongStyle];
-            [dateFormatter setDateStyle:NSDateFormatterMediumStyle];
-            result = [NSString stringWithFormat:@"%@", [dateFormatter stringFromDate:self.earliestTime]];
+            
+            [dateFormatter setTimeStyle:kCFDateFormatterFullStyle];
+            [dateFormatter setDateStyle:kCFDateFormatterFullStyle];
+            
+            result = [NSString stringWithFormat:@"%@", [dateFormatter stringFromDate:self.latestTime]];
         }
     } while (NO);
     return result;
@@ -160,6 +164,35 @@
         @synchronized(self) {
             if (_allAssetItems) {
                 result = [_allAssetItems count];
+            }
+        }
+    } while (NO);
+    return result;
+}
+
+- (id)valueForProperty:(NSString *)property withOptions:(NSDictionary *)options {
+    id result = nil;
+    do {
+        @synchronized(self) {
+            if ([property isEqualToString:kDATAGROUPPROPERTY_GROUPNAME]) {
+                NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+                SAFE_ARC_AUTORELEASE(dateFormatter);
+                
+                NSTimeInterval currentTimeInterval = [[NSDate date] timeIntervalSinceReferenceDate];
+                NSTimeInterval currentGroupTimeInterval = [self.latestTime timeIntervalSinceReferenceDate];
+                CFGregorianUnits diff = CFAbsoluteTimeGetDifferenceAsGregorianUnits(currentTimeInterval, currentGroupTimeInterval, NULL, kCFGregorianAllUnits);
+                
+                if (ABS(diff.years) == 0 && ABS(diff.months) == 0 && ABS(diff.days) == 0) {
+                    [dateFormatter setTimeStyle:NSDateFormatterNoStyle];
+                    [dateFormatter setDateStyle:NSDateFormatterShortStyle];
+                } else {
+                    [dateFormatter setTimeStyle:NSDateFormatterShortStyle];
+                    [dateFormatter setDateStyle:NSDateFormatterNoStyle];
+                }
+                
+                result = [NSString stringWithFormat:@"%@", [dateFormatter stringFromDate:self.latestTime]];
+            } else {
+                [NSException raise:@"DCALAssetsGroup error" format:@"Reason: unknown property"];
             }
         }
     } while (NO);
