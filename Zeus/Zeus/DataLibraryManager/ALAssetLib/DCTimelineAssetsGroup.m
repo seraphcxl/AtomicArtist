@@ -89,6 +89,16 @@
     }
 }
 
+- (void)setGregorianUnitIntervalFineness:(GregorianUnitIntervalFineness)intervalFineness {
+    do {
+        @synchronized(self) {
+            ZeroCFGregorianUnits(_currentTimeInterval);
+            _intervalFineness = intervalFineness;
+            _currentTimeInterval = CFGregorianUnits_IntervalArray[_intervalFineness];
+        }
+    } while (NO);
+}
+
 - (void)dealloc {
     do {
         @synchronized(self) {
@@ -120,17 +130,28 @@
                     if ([newGroup itemsCountWithParam:nil] == 0) {
                         [newGroup insertDataItem:[item origin]];
                     } else {
+                        BOOL needCreateNewGroup = NO;
                         NSTimeInterval currentAssetTimeInterval = [[[item origin] valueForProperty:ALAssetPropertyDate] timeIntervalSinceReferenceDate];
                         NSTimeInterval currentGroupTimeInterval = [newGroup.latestTime timeIntervalSinceReferenceDate];
-                        CFGregorianUnits diff = CFAbsoluteTimeGetDifferenceAsGregorianUnits(currentAssetTimeInterval, currentGroupTimeInterval, NULL, kCFGregorianAllUnits);
+                        CFGregorianUnits diff = CFAbsoluteTimeGetDifferenceAsGregorianUnits(currentAssetTimeInterval, currentGroupTimeInterval, CFTimeZoneCopyDefault(), kCFGregorianAllUnits);
                         int compareResult = GregorianUnitCompare(diff, newGroup.currentTimeInterval);
                         if (compareResult > 0) {
+                            needCreateNewGroup = YES;
+                        } else {
+                            if (newGroup.intervalFineness == GUIF_1Day) {
+                                CFGregorianDate currentAssetGregorianDate = CFAbsoluteTimeGetGregorianDate(currentAssetTimeInterval, CFTimeZoneCopyDefault());
+                                CFGregorianDate currentGroupGregorianDate = CFAbsoluteTimeGetGregorianDate(currentGroupTimeInterval, CFTimeZoneCopyDefault());
+                                if (currentAssetGregorianDate.day != currentGroupGregorianDate.day) {
+                                    needCreateNewGroup = YES;
+                                }
+                            }
+                        }
+                        
+                        if (needCreateNewGroup) {
                             // Create a new group
                             newGroup = [[DCTimelineAssetsGroup alloc] initWithGregorianUnitIntervalFineness:self.intervalFineness];
                             [refinedGroups addObject:newGroup];
                             SAFE_ARC_AUTORELEASE(newGroup);
-                        } else {  
-                            ;
                         }
                         // Insert into current group
                         [newGroup insertDataItem:[item origin]];
@@ -183,14 +204,26 @@
                 CFGregorianUnits diff = CFAbsoluteTimeGetDifferenceAsGregorianUnits(currentTimeInterval, currentGroupTimeInterval, NULL, kCFGregorianAllUnits);
                 
                 if (ABS(diff.years) == 0 && ABS(diff.months) == 0 && ABS(diff.days) == 0) {
-                    [dateFormatter setTimeStyle:NSDateFormatterNoStyle];
-                    [dateFormatter setDateStyle:NSDateFormatterShortStyle];
-                } else {
                     [dateFormatter setTimeStyle:NSDateFormatterShortStyle];
                     [dateFormatter setDateStyle:NSDateFormatterNoStyle];
+                    
+                    result = [NSString stringWithFormat:@"%@", [dateFormatter stringFromDate:self.latestTime]];
+                } else {
+                    [dateFormatter setTimeStyle:NSDateFormatterNoStyle];
+                    [dateFormatter setDateStyle:NSDateFormatterShortStyle];
+                    
+                    NSTimeInterval last = [self.latestTime timeIntervalSinceReferenceDate];
+                    NSTimeInterval earliest = [self.earliestTime timeIntervalSinceReferenceDate];
+                    CFGregorianUnits diff = CFAbsoluteTimeGetDifferenceAsGregorianUnits(last, earliest, CFTimeZoneCopyDefault(), kCFGregorianAllUnits);
+                    
+                    if (ABS(diff.years) == 0 && ABS(diff.months) == 0 && ABS(diff.days) == 0) {
+                        result = [NSString stringWithFormat:@"%@", [dateFormatter stringFromDate:self.latestTime]];
+                    } else {
+                        result = [NSString stringWithFormat:@"%@ - %@", [dateFormatter stringFromDate:self.latestTime], [dateFormatter stringFromDate:self.earliestTime]];
+                    }
                 }
                 
-                result = [NSString stringWithFormat:@"%@", [dateFormatter stringFromDate:self.latestTime]];
+                
             } else {
                 [NSException raise:@"DCALAssetsGroup error" format:@"Reason: unknown property"];
             }

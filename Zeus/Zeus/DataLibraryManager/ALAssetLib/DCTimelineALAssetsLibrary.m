@@ -116,34 +116,34 @@
         @synchronized(self) {
             if (!_currentGroup) {
                 _currentGroup = [[DCTimelineAssetsGroup alloc] initWithGregorianUnitIntervalFineness:GUIF_1Month];
-                _currentGroup.notifyhFrequency = DCTimelineDataGroup_NotifyhFrequencyForAddItem;
+                _currentGroup.notifyhFrequency = DCTimeline_Group_NotifyhFrequencyForAddItem;
                 [_currentGroup insertDataItem:asset];
                 NSUInteger index = [_allALAssetsGroupUIDs count];
                 NSString *uid = [_currentGroup uniqueID];
                 [_allALAssetsGroupUIDs insertObject:uid atIndex:index];
                 [_allALAssetsGroups setObject:_currentGroup forKey:uid];
-                [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_DATAGROUP_ADDED object:self];
+//                [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_DATAGROUP_ADDED object:self];
             } else {
                 NSAssert(_currentGroup, @"_currentGroup == nil");
                 // calc time interval
                 NSTimeInterval currentAssetTimeInterval = [[asset valueForProperty:ALAssetPropertyDate] timeIntervalSinceReferenceDate];
                 NSTimeInterval currentGroupTimeInterval = [_currentGroup.latestTime timeIntervalSinceReferenceDate];
-                CFGregorianUnits diff = CFAbsoluteTimeGetDifferenceAsGregorianUnits(currentAssetTimeInterval, currentGroupTimeInterval, NULL, kCFGregorianAllUnits);
+                CFGregorianUnits diff = CFAbsoluteTimeGetDifferenceAsGregorianUnits(currentAssetTimeInterval, currentGroupTimeInterval, CFTimeZoneCopyDefault(), kCFGregorianAllUnits);
                 int compareResult = GregorianUnitCompare(diff, [_currentGroup currentTimeInterval]);
                 if (compareResult > 0) {  // Create a new group
                     SAFE_ARC_SAFERELEASE(_currentGroup);
                     _currentGroup = [[DCTimelineAssetsGroup alloc] initWithGregorianUnitIntervalFineness:GUIF_1Month];
-                    _currentGroup.notifyhFrequency = DCTimelineDataGroup_NotifyhFrequencyForAddItem;
+                    _currentGroup.notifyhFrequency = DCTimeline_Group_NotifyhFrequencyForAddItem;
                     [_currentGroup insertDataItem:asset];
                     NSUInteger index = [_allALAssetsGroupUIDs count];
                     NSString *uid = [_currentGroup uniqueID];
                     [_allALAssetsGroupUIDs insertObject:uid atIndex:index];
                     [_allALAssetsGroups setObject:_currentGroup forKey:uid];
-                    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_DATAGROUP_ADDED object:self];
+//                    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_DATAGROUP_ADDED object:self];
                 } else {  // Insert into current group
                     [_currentGroup insertDataItem:asset];
                     // Refine group
-                    if ([_currentGroup itemsCountWithParam:nil] > DCTimelineDataGroup_CountForRefine) {
+                    if ([_currentGroup itemsCountWithParam:nil] > DCTimeline_Group_CountForRefine) {
                         [self refineCurrentGroup];
                         NSAssert(_currentGroup, @"_currentGroup == nil");
                     }
@@ -170,7 +170,7 @@
                 if (result != nil) {
                     [_unsortedAssetArray addObject:result];
                 } else {
-                    if ([_unsortedAssetArray count] >= DCTimelineDataGroup_CountForRefine || nextGroupIndex == [_assetsTimelineGroups count]) {
+                    if ([_unsortedAssetArray count] >= DCTimeline_Group_CountForRefine || nextGroupIndex == [_assetsTimelineGroups count]) {
                         if (_sortedAssetArray) {
                             [_sortedAssetArray removeAllObjects];
                             SAFE_ARC_SAFERELEASE(_sortedAssetArray);
@@ -185,9 +185,11 @@
                         }];
                         
                         for (ALAsset *asset in _sortedAssetArray) {
+                            dc_debug_NSLog(@"asset date: %@", [asset valueForProperty:ALAssetPropertyDate]);
                             [self insertAsset:asset];
                         }
                     }
+                    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_DATAGROUP_ADDED object:self];
                     _enumerating = NO;
                     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^(void){
                         [self enumTimelineGroupAtIndex:nextGroupIndex NotifyWithFrequency:_frequency];
@@ -356,21 +358,22 @@
             NSMutableArray *refinedGroups = [NSMutableArray array];
 //            SAFE_ARC_RETAIN(refinedGroups);
             [_currentGroup refining:refinedGroups];
-//            if ([refinedGroups count] > 1) {
-//                [_allALAssetsGroups removeObjectForKey:[_currentGroup uniqueID]];
-//                [_allALAssetsGroupUIDs removeObject:[_currentGroup uniqueID]];
-//                SAFE_ARC_SAFERELEASE(_currentGroup);
-//                for (DCTimelineAssetsGroup *group in refinedGroups) {
-//                    NSUInteger index = [_allALAssetsGroupUIDs count];
-//                    NSString *uid = [group uniqueID];
-//                    [_allALAssetsGroupUIDs insertObject:uid atIndex:index];
-//                    [_allALAssetsGroups setObject:group forKey:uid];
-//                    SAFE_ARC_SAFERELEASE(_currentGroup);
-//                    _currentGroup = group;
-//                    SAFE_ARC_RETAIN(_currentGroup);
-//                }
+            if ([refinedGroups count] > 1) {
+                [_allALAssetsGroups removeObjectForKey:[_currentGroup uniqueID]];
+                [_allALAssetsGroupUIDs removeObject:[_currentGroup uniqueID]];
+                SAFE_ARC_SAFERELEASE(_currentGroup);
+                for (DCTimelineAssetsGroup *group in refinedGroups) {
+                    NSUInteger index = [_allALAssetsGroupUIDs count];
+                    NSString *uid = [group uniqueID];
+                    [_allALAssetsGroupUIDs insertObject:uid atIndex:index];
+                    [_allALAssetsGroups setObject:group forKey:uid];
+                    SAFE_ARC_SAFERELEASE(_currentGroup);
+                    _currentGroup = group;
+                    SAFE_ARC_RETAIN(_currentGroup);
+                }
+                [_currentGroup setGregorianUnitIntervalFineness:GUIF_1Month];
 //                [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_DATAGROUP_ADDED object:self];
-//            }
+            }
             [refinedGroups removeAllObjects];
 //            SAFE_ARC_SAFERELEASE(refinedGroups);
         }

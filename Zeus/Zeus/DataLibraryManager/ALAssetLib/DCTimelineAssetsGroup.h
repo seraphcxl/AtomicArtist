@@ -25,4 +25,6 @@
 
 - (void)insertDataItem:(ALAsset *)asset;
 
+- (void)setGregorianUnitIntervalFineness:(GregorianUnitIntervalFineness) intervalFineness;
+
 @end

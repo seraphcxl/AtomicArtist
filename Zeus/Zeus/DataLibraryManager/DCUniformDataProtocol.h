@@ -99,8 +99,6 @@ extern NSString * const kDATAGROUPPROPERTY_POSTERIMAGEURL;
 @end
 
 #pragma mark - protocol DCTimelineDataGroup <DCDataGroupBase>
-#define DCTimelineDataGroup_CountForRefine (24)
-#define DCTimelineDataGroup_NotifyhFrequencyForAddItem (16)
 @protocol DCTimelineDataGroup <DCDataGroupBase>
 
 @property (nonatomic, SAFE_ARC_PROP_STRONG, readonly) NSDate *earliestTime;
