@@ -76,6 +76,8 @@
     @synchronized(self) {
         if (_allALAssetsGroups) {
             result = [_allALAssetsGroups objectForKey:uniqueID];
+            SAFE_ARC_RETAIN(result);
+            SAFE_ARC_AUTORELEASE(result);
         } else {
             [NSException raise:@"DCALAssetsLibrary error" format:@"Reason: allALGroups is nil"];
         }
@@ -90,6 +92,8 @@
             if (_allALAssetsGroupUIDs) {
                 if (index < [_allALAssetsGroupUIDs count]) {
                     result = [_allALAssetsGroupUIDs objectAtIndex:index];
+                    SAFE_ARC_RETAIN(result);
+                    SAFE_ARC_AUTORELEASE(result);
                 } else {
                     [NSException raise:@"DCALAssetsLibrary Error" format:@"Reason: Index: %d >= allALGroupPersistentIDs count: %d", index, [_allALAssetsGroupUIDs count]];
                 }

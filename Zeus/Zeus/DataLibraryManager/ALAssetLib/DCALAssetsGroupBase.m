@@ -71,6 +71,8 @@
     @synchronized(self) {
         if (_allAssetItems) {
             item = [_allAssetItems objectForKey:uniqueID];
+            SAFE_ARC_RETAIN(item);
+            SAFE_ARC_AUTORELEASE(item);
         }
     }
     return item;
@@ -83,6 +85,8 @@
             if (_allAssetUIDs) {
                 if (index < [_allAssetUIDs count]) {
                     result = [_allAssetUIDs objectAtIndex:index];
+                    SAFE_ARC_RETAIN(result);
+                    SAFE_ARC_AUTORELEASE(result);
                 } else {
                     [NSException raise:@"DCALAssetsGroup Error" format:@"Reason: Index: %d >= _allAssetUIDs count: %d", index, [_allAssetUIDs count]];
                 }

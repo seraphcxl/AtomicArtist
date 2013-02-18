@@ -222,8 +222,11 @@
                         result = [NSString stringWithFormat:@"%@ - %@", [dateFormatter stringFromDate:self.latestTime], [dateFormatter stringFromDate:self.earliestTime]];
                     }
                 }
-                
-                
+            } else if ([property isEqualToString:kDATAGROUPPROPERTY_POSTERIMAGE]) {
+                id<DCDataItem> item = [self itemWithUID:[self itemUIDAtIndex:0]];
+                if (item) {
+                    result = [item valueForProperty:kDATAITEMPROPERTY_THUMBNAIL withOptions:nil];
+                }
             } else {
                 [NSException raise:@"DCALAssetsGroup error" format:@"Reason: unknown property"];
             }
