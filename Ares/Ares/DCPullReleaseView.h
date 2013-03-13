@@ -13,11 +13,11 @@
 
 #define DCPULLRELEASEVIEW_ActionSwitchHeight (16.0)
 #define DCPULLRELEASEVIEW_DefultEdgeInset UIEdgeInsetsMake(8.0, 16.0, 8.0, 16.0)
-#define DCPULLRELEASEVIEW_IconContentSize (64.0)
+#define DCPULLRELEASEVIEW_IconContentSize (48.0)
 #define DCPULLRELEASEVIEW_Height (DCPULLRELEASEVIEW_IconContentSize + DCPULLRELEASEVIEW_DefultEdgeInset.top + DCPULLRELEASEVIEW_DefultEdgeInset.bottom + DCPULLRELEASEVIEW_ActionSwitchHeight)
 #define DCPULLRELEASEVIEW_InnerSpacing (4.0)
-#define DCPULLRELEASEVIEW_TitleLabelHeight (32.0)
-#define DCPULLRELEASEVIEW_DetailTextLabelHeight (24.0)
+#define DCPULLRELEASEVIEW_TitleLabelHeight (24.0)
+#define DCPULLRELEASEVIEW_DetailTextLabelHeight (20.0)
 
 #define DCPULLRELEASEVIEW_TextColor [UIColor darkTextColor]
 #define DCPULLRELEASEVIEW_FlipAnimationDuration 0.25f
