@@ -9,6 +9,7 @@
 #import "DCTimelineAssetsGroup.h"
 #import "DCALAssetItem.h"
 #import "DCTimelineCommonConstants.h"
+#import "DCTimelineInterval.h"
 
 @interface DCTimelineAssetsGroup () {
 }
@@ -52,9 +53,7 @@
                 NSString *assetURLStr = [url absoluteString];
                 
                 DCALAssetItem *item = [[DCALAssetItem alloc] initWithALAsset:asset];
-                [_allAssetItems setObject:item forKey:assetURLStr];
-                NSUInteger indexForAsset = [_allAssetUIDs count];
-                [_allAssetUIDs insertObject:assetURLStr atIndex:indexForAsset];
+                [self insertItem:item forUID:assetURLStr];
                 SAFE_ARC_AUTORELEASE(item);
                 
                 count = [_allAssetUIDs count];
@@ -83,6 +82,8 @@
                     _allAssetUIDs = [NSMutableArray array];
                     SAFE_ARC_RETAIN(_allAssetUIDs);
                 }
+                
+                self.notifyhFrequency = DCTimeline_Group_NotifyhFrequencyForAddItem;
             }
         }
         return self;
@@ -112,9 +113,24 @@
     } while (NO);
 }
 
+- (void)merge:(DCTimelineAssetsGroup *)otherGroup {
+    do {
+        if (!otherGroup) {
+            break;
+        }
+        @synchronized(self) {
+            NSUInteger itemCount = [otherGroup itemsCountWithParam:nil];
+            for (NSUInteger idx = 0; idx < itemCount; ++idx) {
+                [self insertDataItem:[[otherGroup itemWithUID:[otherGroup itemUIDAtIndex:idx]] origin]];
+            }
+        }
+    } while (NO);
+}
+
 #pragma mark - DCTimelineAssetsGroup - DCTimelineDataGroup
 - (void)refining:(NSMutableArray *)refinedGroups {
     do {
+#ifdef DCTimeline_Method_Refine_Enable
         @synchronized(self) {
             if (!refinedGroups) {
                 break;
@@ -123,6 +139,7 @@
                 ++_intervalFineness;
                 _currentTimeInterval = CFGregorianUnits_IntervalArray[self.intervalFineness];
                 DCTimelineAssetsGroup *newGroup = [[DCTimelineAssetsGroup alloc] initWithGregorianUnitIntervalFineness:self.intervalFineness];
+                newGroup.notifyhFrequency = self.notifyhFrequency;
                 [refinedGroups addObject:newGroup];
                 SAFE_ARC_AUTORELEASE(newGroup);
                 for (NSString *itemUID in _allAssetUIDs) {
@@ -134,8 +151,8 @@
                         NSTimeInterval currentAssetTimeInterval = [[[item origin] valueForProperty:ALAssetPropertyDate] timeIntervalSinceReferenceDate];
                         NSTimeInterval currentGroupTimeInterval = [newGroup.latestTime timeIntervalSinceReferenceDate];
                         CFGregorianUnits diff = CFAbsoluteTimeGetDifferenceAsGregorianUnits(currentAssetTimeInterval, currentGroupTimeInterval, CFTimeZoneCopyDefault(), kCFGregorianAllUnits);
-                        int compareResult = GregorianUnitCompare(diff, newGroup.currentTimeInterval);
-                        if (compareResult > 0) {
+                        NSComparisonResult compareResult = GregorianUnitCompare(diff, newGroup.currentTimeInterval);
+                        if (compareResult == NSOrderedDescending) {
                             needCreateNewGroup = YES;
                         } else {
                             if (newGroup.intervalFineness == GUIF_1Day) {
@@ -150,6 +167,7 @@
                         if (needCreateNewGroup) {
                             // Create a new group
                             newGroup = [[DCTimelineAssetsGroup alloc] initWithGregorianUnitIntervalFineness:self.intervalFineness];
+                            newGroup.notifyhFrequency = self.notifyhFrequency;
                             [refinedGroups addObject:newGroup];
                             SAFE_ARC_AUTORELEASE(newGroup);
                         }
@@ -159,6 +177,65 @@
                 }
             }
         }
+#else
+        @synchronized(self) {
+            if (!refinedGroups) {
+                break;
+            }
+            
+            NSMutableArray *intervalArray = [NSMutableArray array];
+            NSUInteger count = [_allAssetUIDs count];
+            for (NSUInteger idx = 0; idx < count - 1; ++idx) {
+                NSTimeInterval left = [[[[_allAssetItems objectForKey:[_allAssetUIDs objectAtIndex:idx]] origin]  valueForProperty:ALAssetPropertyDate] timeIntervalSinceReferenceDate];
+                NSTimeInterval right = [[[[_allAssetItems objectForKey:[_allAssetUIDs objectAtIndex:idx + 1]] origin]  valueForProperty:ALAssetPropertyDate] timeIntervalSinceReferenceDate];
+                DCTimelineInterval *interval = [[DCTimelineInterval alloc] init];
+                SAFE_ARC_AUTORELEASE(interval);
+                interval.leftIndex = idx;
+                interval.rightIndex = idx + 1;
+                interval.interval = CFAbsoluteTimeGetDifferenceAsGregorianUnits(left, right, CFTimeZoneCopyDefault(), kCFGregorianAllUnits);
+                [intervalArray addObject:interval];
+            }
+            [intervalArray sortUsingComparator:^(id obj1, id obj2) {
+                return GregorianUnitCompare([obj2 interval], [obj1 interval]);
+            }];
+            DCTimelineInterval *selectedInterval = nil;
+            for (DCTimelineInterval *interval in intervalArray) {
+                if (interval.leftIndex >= (DCTimelineGroup_AssetsCountForTinyGroup - 1) && interval.rightIndex <= count - (DCTimelineGroup_AssetsCountForTinyGroup - 1)) {
+                    selectedInterval = interval;
+                    break;
+                }
+            }
+            if (selectedInterval) {
+                dc_debug_NSLog(@"refining selected interval:%d, %d, %d, %d, %d, %f", (int)selectedInterval.interval.years, (int)selectedInterval.interval.months, (int)selectedInterval.interval.days, (int)selectedInterval.interval.hours, (int)selectedInterval.interval.minutes, selectedInterval.interval.seconds);
+                DCTimelineAssetsGroup *newGroup = [[DCTimelineAssetsGroup alloc] initWithGregorianUnitIntervalFineness:self.intervalFineness];
+                newGroup.notifyhFrequency = self.notifyhFrequency;
+                SAFE_ARC_AUTORELEASE(newGroup);
+                
+                NSUInteger idx = 0;
+                for (NSString *itemUID in _allAssetUIDs) {
+                    DCALAssetItem *item = [_allAssetItems objectForKey:itemUID];
+                    [newGroup insertDataItem:[item origin]];
+                    if (idx == selectedInterval.leftIndex) {
+                        if ([newGroup itemsCountWithParam:nil] > DCTimelineGroup_AssetsCountForLargeGroup) {
+                            [newGroup refining:refinedGroups];
+                        } else {
+                            [refinedGroups addObject:newGroup];
+                        }
+                        newGroup = [[DCTimelineAssetsGroup alloc] initWithGregorianUnitIntervalFineness:self.intervalFineness];
+                        newGroup.notifyhFrequency = self.notifyhFrequency;
+                        
+                        SAFE_ARC_AUTORELEASE(newGroup);
+                    }
+                    ++idx;
+                }
+                if ([newGroup itemsCountWithParam:nil] > DCTimelineGroup_AssetsCountForLargeGroup) {
+                    [newGroup refining:refinedGroups];
+                } else {
+                    [refinedGroups addObject:newGroup];
+                }
+            }
+        }
+#endif
     } while (NO);
 }
 
@@ -222,6 +299,7 @@
                         result = [NSString stringWithFormat:@"%@ - %@", [dateFormatter stringFromDate:self.latestTime], [dateFormatter stringFromDate:self.earliestTime]];
                     }
                 }
+                
             } else if ([property isEqualToString:kDATAGROUPPROPERTY_POSTERIMAGE]) {
                 id<DCDataItem> item = [self itemWithUID:[self itemUIDAtIndex:0]];
                 if (item) {

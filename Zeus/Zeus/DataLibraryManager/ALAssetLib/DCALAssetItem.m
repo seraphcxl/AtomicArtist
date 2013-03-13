@@ -111,19 +111,14 @@ NSString * const kDCALAssetItem_MetaData_Exif_DateTimeOriginal = @"DateTimeOrigi
             NSMutableString *tmp = [NSMutableString stringWithString:[self uniqueID]];
             ALAssetRepresentation *representation = [self.asset defaultRepresentation];
             if (representation) {
+                SAFE_ARC_AUTORELEASE_POOL_START()
                 NSDictionary *metadataDict = [representation metadata];
                 if (metadataDict) {
                     long width = [[metadataDict valueForKey:kDCALAssetItem_MetaData_PixelWidth] intValue];
                     long height = [[metadataDict valueForKey:kDCALAssetItem_MetaData_PixelHeight] intValue];
                     [tmp appendFormat:@"<%ld,%ld>", width, height];
-//                    NSDictionary* exifDict = [metadataDict valueForKey:kDCALAssetItem_MetaData_ExifDict];
-//                    if (exifDict) {
-//                        NSString *exifDateTimeOriginal = [exifDict valueForKey:kDCALAssetItem_MetaData_Exif_DateTimeOriginal];
-//                        if (exifDateTimeOriginal) {
-//                            [tmp appendString:exifDateTimeOriginal];
-//                        }
-//                    }
                 }
+                SAFE_ARC_AUTORELEASE_POOL_END()
             }
             NSDate *date = [self.asset valueForProperty:ALAssetPropertyDate];
             [tmp appendString:[date description]];
@@ -144,7 +139,7 @@ NSString * const kDCALAssetItem_MetaData_Exif_DateTimeOriginal = @"DateTimeOrigi
             }
             ALAssetRepresentation *representation = [self.asset defaultRepresentation];
             if (!representation) {
-                [NSException raise:@"DCALAssetItem error" format:@"Reason: representation == nil"];
+//                [NSException raise:@"DCALAssetItem error" format:@"Reason: representation == nil"];
                 break;
             }
             if ([property isEqualToString:kDATAITEMPROPERTY_UID]) {
@@ -171,6 +166,17 @@ NSString * const kDCALAssetItem_MetaData_Exif_DateTimeOriginal = @"DateTimeOrigi
                 SAFE_ARC_AUTORELEASE(result);
             } else if ([property isEqualToString:kDATAITEMPROPERTY_PROPERTYDATE]) {
                 result = [self.asset valueForProperty:ALAssetPropertyDate];
+                SAFE_ARC_AUTORELEASE(result);
+            } else if ([property isEqualToString:kDATAITEMPROPERTY_LAT_LNG]) {
+                result = [[NSMutableDictionary alloc] init];
+                NSDictionary *metadata = [representation metadata];
+                NSDictionary *gps = [metadata objectForKey:@"{GPS}"];
+                if ([gps objectForKey:@"Latitude"]) {
+                    [result setObject:[gps objectForKey:@"Latitude"] forKey:kDATAITEMPROPERTY_DICT_LAT];
+                }
+                if ([gps objectForKey:@"Longitude"]) {
+                    [result setObject:[gps objectForKey:@"Longitude"] forKey:kDATAITEMPROPERTY_DICT_LNG];
+                }
                 SAFE_ARC_AUTORELEASE(result);
             } else {
                 [NSException raise:@"DCALAssetItem error" format:@"Reason: unknown property"];

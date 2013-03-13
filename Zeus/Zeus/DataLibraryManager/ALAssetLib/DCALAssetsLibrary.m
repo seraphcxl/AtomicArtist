@@ -59,9 +59,7 @@
                             }
                             NSAssert(_allALAssetsGroupUIDs, @"_allALAssetsGroupUIDs == nil");
                             NSAssert(_allALAssetsGroups, @"_allALAssetsGroups == nil");
-                            NSUInteger index = [_allALAssetsGroupUIDs count];
-                            [_allALAssetsGroupUIDs insertObject:groupPersistentID atIndex:index];
-                            [_allALAssetsGroups setObject:assetsGroup forKey:groupPersistentID];
+                            [self insertGroup:assetsGroup forUID:groupPersistentID];
                         }
                     }
                     dc_debug_NSLog(@"Add group id: %@, count = %d", groupPersistentID, [group numberOfAssets]);

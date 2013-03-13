@@ -8,8 +8,37 @@
 
 #import "DCTimelineCommonConstants.h"
 
-int GregorianUnitCompare(CFGregorianUnits left, CFGregorianUnits right) {
-    int result = 0;
+double accurateDistanceMeters(double lat1, double lng1, double lat2, double lng2) {
+    double result = 0.0f;
+    do {
+        double dlat = sin(0.5 * (lat2 - lat1));
+        double dlng = sin(0.5 * (lng2 - lng1));
+        double x = dlat * dlat + dlng * dlng * cos(lat1) * cos(lat2);
+        result = (2 * atan2(sqrt(x), sqrt(MAX(0.0, 1.0 - x)))) * EARTH_RADIUS_METERS;
+    } while (NO);
+    return result;
+}
+
+double fastDistanceMeters(double lat1, double lng1, double lat2, double lng2) {
+    double result = 0.0f;
+    do {
+        if (ABS(lat1 - lat2) > RAD_PER_DEG || ABS(lng1 - lng2) > RAD_PER_DEG) {
+            result = accurateDistanceMeters(lat1, lng1, lat2, lng2);
+        } else {
+            double sineLat = (lat1 - lat2);
+            double sineLng = (lng1 - lng2);
+            double cosTerms = cos((lat1 + lat2) / 2.0);
+            cosTerms *= cosTerms;
+            double trigTerm = sineLat * sineLat + cosTerms * sineLng * sineLng;
+            trigTerm = sqrt(trigTerm);
+            result = trigTerm * EARTH_RADIUS_METERS;
+        }
+    } while (NO);
+    return result;
+}
+
+NSComparisonResult GregorianUnitCompare(CFGregorianUnits left, CFGregorianUnits right) {
+    int result = NSOrderedSame;
     do {
         left.years = ABS(left.years);
         left.months = ABS(left.months);
@@ -27,41 +56,41 @@ int GregorianUnitCompare(CFGregorianUnits left, CFGregorianUnits right) {
         
         // Year
         if (left.years > right.years) {
-            result = 1;
+            result = NSOrderedDescending;
         } else if (left.years < right.years) {
-            result = -1;
+            result = NSOrderedAscending;
         } else {
             // Month
             if (left.months > right.months) {
-                result = 1;
+                result = NSOrderedDescending;
             } else if (left.months < right.months) {
-                result = -1;
+                result = NSOrderedAscending;
             } else {
                 // Day
                 if (left.days > right.days) {
-                    result = 1;
+                    result = NSOrderedDescending;
                 } else if (left.days < right.days) {
-                    result = -1;
+                    result = NSOrderedAscending;
                 } else {
                     // Hour
                     if (left.hours > right.hours) {
-                        result = 1;
+                        result = NSOrderedDescending;
                     } else if (left.hours < right.hours) {
-                        result = -1;
+                        result = NSOrderedAscending;
                     } else {
                         // Minute
                         if (left.minutes > right.minutes) {
-                            result = 1;
+                            result = NSOrderedDescending;
                         } else if (left.minutes < right.minutes) {
-                            result = -1;
+                            result = NSOrderedAscending;
                         } else {
                             // Second
                             if (left.seconds > right.seconds) {
-                                result = 1;
+                                result = NSOrderedDescending;
                             } else if (left.seconds < right.seconds) {
-                                result = -1;
+                                result = NSOrderedAscending;
                             } else {
-                                result = 0;
+                                result = NSOrderedSame;
                             }
                         }
                     }

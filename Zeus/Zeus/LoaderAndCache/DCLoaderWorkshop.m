@@ -28,6 +28,7 @@ DEFINE_SINGLETON_FOR_CLASS(DCLoaderWorkshop);
             
             for (DCLoaderUID uid = (DCLoaderUID)0; uid < DCLoaderUID_Count; ++uid) {
                 NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+                [queue setMaxConcurrentOperationCount:1];
                 SAFE_ARC_AUTORELEASE(queue);
                 [_dictForQueue setObject:queue forKey:[NSNumber numberWithUnsignedInteger:uid]];
             }

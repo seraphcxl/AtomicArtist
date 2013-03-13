@@ -22,3 +22,5 @@
 
 @end
 
+#define DCMediaBucket_Count (24)
+

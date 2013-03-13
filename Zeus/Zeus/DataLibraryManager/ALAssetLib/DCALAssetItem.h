@@ -12,6 +12,9 @@
 #import "DCCommonConstants.h"
 #import "SafeARC.h"
 
+extern NSString * const kDCALAssetItem_MetaData_PixelWidth;
+extern NSString * const kDCALAssetItem_MetaData_PixelHeight;
+
 @interface DCALAssetItem : NSObject <DCDataItem>
 
 @property (nonatomic, SAFE_ARC_PROP_STRONG)ALAsset *asset;

@@ -26,13 +26,31 @@ extern NSString * const NOTIFY_MEDIAPOCKET_REMOVED;
 extern NSString * const NOTIFY_MEDIAPOCKET_UPDATED_MD5SAME;
 extern NSString * const NOTIFY_MEDIAPOCKET_UPDATED_MD5DIFF;
 
+//extern NSString * const NOTIFY_MEDIAPOCKET_TIMELINEGROUPINSERTED;
+//extern NSString * const NOTIFY_MEDIAPOCKET_TIMELINEGROUPREMOVED;
+
+extern NSString * const NOTIFY_MEDIAPOCKET_GROUPINGDONE;
+extern NSString * const NOTIFY_MEDIAPOCKET_TIMELINEGROUPINSERT_DONE;
+
+extern NSString * const kDCMediaPocketSnapshotParam_ItemDict;
+extern NSString * const kDCMediaPocketSnapshotParam_ItemArray;
+extern NSString * const kDCMediaPocketSnapshotParam_TimelineGroupDict;
+
+@class DCMediaBucket;
+
 @interface DCMediaPocket : NSObject <DCAssetsLibUser> {
 }
 
-DEFINE_SINGLETON_FOR_HEADER(DCMediaPocket);
+//DEFINE_SINGLETON_FOR_HEADER(DCMediaPocket);
+
++ (DCMediaPocket *)sharedDCMediaPocket;
++ (void)staticRelease;
 
 @property (nonatomic, assign) id<CameraActionDelegate> cameraActionDelegate;
 @property (atomic, assign, getter = isAllowRemoveWhenUseCountIsZero) BOOL allowRemoveWhenUseCountIsZero;
+@property (atomic, strong, readonly) NSString *uniqueID;
+@property (atomic, copy) NSString *insertingGroupUID;
+@property (atomic, assign, getter = isMediaPocketGrouping) BOOL mediaPocketGrouping;
 
 - (id)init;
 - (void)reset;
@@ -62,5 +80,19 @@ DEFINE_SINGLETON_FOR_HEADER(DCMediaPocket);
 - (void)insertPhotoFromImagePicker:(CGImageRef)cgImg orientation:(ALAssetOrientation)assetOrientation;
 
 - (void)insertItem:(NSString *)uniqueID withUseCount:(NSUInteger) useCount;
+
+//- (void)insertTimelineGroup:(NSString *)uniqueID;
+//- (void)removeTimelineGroup:(NSString *)uniqueID;
+//- (BOOL)findTimelineGroup:(NSString *)uniqueID;
+//- (NSUInteger)selectedTimelineGroupCount;
+
+- (DCMediaPocket *)snapshot;
+- (id)initByActionSnapshot:(NSDictionary *)params;
+
+- (void)grouping;
+
+- (NSUInteger)bucketCount;
+- (DCMediaBucket *)bucket:(NSUInteger)idx;
+- (DCMediaBucket *)bucketIncludeItem:(NSString *)uniqueID;
 
 @end

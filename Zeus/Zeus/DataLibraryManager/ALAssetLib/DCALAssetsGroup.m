@@ -102,9 +102,7 @@
                         @synchronized(self) {
                             NSAssert(_allAssetItems, @"_allAssetItems == nil");
                             NSAssert(_allAssetUIDs, @"_allAssetUIDs == nil");
-                            [_allAssetItems setObject:item forKey:assetURLStr];
-                            NSUInteger indexForAsset = [_allAssetUIDs count];
-                            [_allAssetUIDs insertObject:assetURLStr atIndex:indexForAsset];
+                            [self insertItem:item forUID:assetURLStr];
                         }
                         
                         ++_enumCount;
@@ -195,9 +193,7 @@
                         @synchronized(self) {
                             NSAssert(_allAssetItems, @"_allAssetItems == nil");
                             NSAssert(_allAssetUIDs, @"_allAssetUIDs == nil");
-                            [_allAssetItems setObject:item forKey:assetURLStr];
-                            NSUInteger indexForAsset = [_allAssetUIDs count];
-                            [_allAssetUIDs insertObject:assetURLStr atIndex:indexForAsset];
+                            [self insertItem:item forUID:assetURLStr];
                         }
                         
                         if (index == 0) {

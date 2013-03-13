@@ -88,7 +88,7 @@
                     SAFE_ARC_RETAIN(result);
                     SAFE_ARC_AUTORELEASE(result);
                 } else {
-                    [NSException raise:@"DCALAssetsGroup Error" format:@"Reason: Index: %d >= _allAssetUIDs count: %d", index, [_allAssetUIDs count]];
+//                    [NSException raise:@"DCALAssetsGroup Error" format:@"Reason: Index: %d >= _allAssetUIDs count: %d", index, [_allAssetUIDs count]];
                 }
             } else {
                 [NSException raise:@"DCALAssetsGroup Error" format:@"Reason: _allAssetUIDs is nil"];
@@ -132,6 +132,22 @@
 
 - (id)valueForProperty:(NSString *)property withOptions:(NSDictionary *)options {
     return nil;
+}
+
+- (void)insertItem:(id<DCDataItem>)item forUID:(NSString *)uid {
+    do {
+        if (!item || !uid) {
+            break;
+        }
+        @synchronized(self) {
+            if (!_allAssetItems || !_allAssetUIDs) {
+                break;
+            }
+            [_allAssetItems setObject:item forKey:uid];
+            NSUInteger indexForAsset = [_allAssetUIDs count];
+            [_allAssetUIDs insertObject:uid atIndex:indexForAsset];
+        }
+    } while (NO);
 }
 
 @end

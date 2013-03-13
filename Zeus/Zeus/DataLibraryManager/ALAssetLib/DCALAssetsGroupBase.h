@@ -17,4 +17,6 @@
     NSMutableDictionary *_allAssetItems; // Key:(NSString *)assetUID Value:(DCDataGroupBase *)item
 }
 
+- (void)insertItem:(id<DCDataItem>)item forUID:(NSString *)uid;
+
 @end

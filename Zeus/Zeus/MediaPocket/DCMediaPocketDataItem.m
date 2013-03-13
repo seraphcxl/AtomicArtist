@@ -46,7 +46,7 @@
             _useCount = useCount;
             _URL = [[dataItem valueForProperty:kDATAITEMPROPERTY_URL withOptions:nil] copy];
             _UID = [[dataItem uniqueID] copy];
-            _md5 = [[dataItem md5] copy];
+//            _md5 = [[dataItem md5] copy];
         }
         result = self;
     } while (NO);
@@ -127,7 +127,9 @@
     NSUInteger result = 0;
     do {
         @synchronized(self) {
-            --_useCount;
+            if (_useCount > 0) {
+                --_useCount;
+            }
             result = _useCount;
         }
     } while (NO);

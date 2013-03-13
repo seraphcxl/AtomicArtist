@@ -23,8 +23,12 @@ extern NSString * const NOTIFY_DATAITEM_ENUM_END;
 extern NSString * const NOTIFY_DATAITEM_ENUMFIRSTSCREEN_END;
 extern NSString * const NOTIFY_DATAITEMFORPOSTERIMAGE_ADDED;
 extern NSString * const NOTIFY_DATAGROUP_ADDED;
+extern NSString * const NOTIFY_DATAGROUP_FRISTADDED;
 extern NSString * const NOTIFY_DATAGROUP_ENUM_END;
 extern NSString * const NOTIFY_DATAGROUP_EMPTY;
+extern NSString * const NOTIFY_DATATIMELINEGROUP_YESTERDAY_READY;
+extern NSString * const NOTIFY_DATATIMELINEGROUP_LASTWEEK_READY;
+extern NSString * const NOTIFY_DATATIMELINEGROUP_LAST100_READY;
 
 @protocol DCDataItem;
 
@@ -48,6 +52,10 @@ extern NSString * const kDATAITEMPROPERTY_ORIGINIMAGE;
 extern NSString * const kDATAITEMPROPERTY_FULLSCREENIMAGE;
 extern NSString * const kDATAITEMPROPERTY_THUMBNAILURL;
 extern NSString * const kDATAITEMPROPERTY_PROPERTYDATE;
+extern NSString * const kDATAITEMPROPERTY_LAT_LNG;
+
+extern NSString * const kDATAITEMPROPERTY_DICT_LAT;
+extern NSString * const kDATAITEMPROPERTY_DICT_LNG;
 
 #pragma mark - protocol DCDataItem <NSObject>
 @protocol DCDataItem <NSObject>
@@ -136,6 +144,17 @@ extern NSString * const kDATAGROUPPROPERTY_POSTERIMAGEURL;
 
 #pragma mark - protocol DCTimelineDataLibrary <DCDataLibraryBase>
 @protocol DCTimelineDataLibrary <DCDataLibraryBase>
+
+#ifdef DCTimeline_Method_Refine_Enable
+#else
+@property (nonatomic, SAFE_ARC_PROP_STRONG, readonly) id<DCTimelineDataGroup> yesterday;
+@property (atomic, assign, readonly) BOOL yesterdayReady;
+@property (nonatomic, SAFE_ARC_PROP_STRONG, readonly) id<DCTimelineDataGroup> lastWeek;
+@property (atomic, assign, readonly) BOOL lastWeekReady;
+@property (nonatomic, SAFE_ARC_PROP_STRONG, readonly) id<DCTimelineDataGroup> last100;
+@property (atomic, assign, readonly) BOOL last100Ready;
+
+#endif
 
 - (void)enumTimelineNotifyWithFrequency:(NSUInteger)frequency;
 //- (void)enumTimelineAtIndexes:(NSIndexSet *)indexSet notifyWithFrequency:(NSUInteger)frequency;

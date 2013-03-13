@@ -27,4 +27,6 @@
 
 - (void)setGregorianUnitIntervalFineness:(GregorianUnitIntervalFineness) intervalFineness;
 
+- (void)merge:(DCTimelineAssetsGroup *)otherGroup;
+
 @end

@@ -25,5 +25,6 @@
 
 - (void)initAssetsLib;
 - (void)uninitAssetsLib;
+- (void)insertGroup:(id<DCDataGroupBase>)group forUID:(NSString *)uid;
 
 @end

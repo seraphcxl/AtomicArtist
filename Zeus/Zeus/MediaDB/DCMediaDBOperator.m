@@ -294,13 +294,15 @@
 #pragma mark - DCMediaDBOperator - Private method
 - (void)saveChanges {
     do {
-        if (_context) {
-            NSError *error = nil;
-            BOOL successful = [_context save:&error];
-            if (!successful) {
-                [NSException raise:@"DCMediaDBOperator error" format:@"Reason: %@", [error localizedDescription]];
-            }
-        }
+//        @synchronized(_context) {
+//            if (_context) {
+//                NSError *error = nil;
+//                BOOL successful = [_context save:&error];
+//                if (!successful) {
+//                    [NSException raise:@"DCMediaDBOperator error" format:@"Reason: %@", [error localizedDescription]];
+//                }
+//            }
+//        }
     } while (NO);
 }
 
