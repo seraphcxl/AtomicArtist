@@ -13,6 +13,7 @@
 #import "DCTimelineInterval.h"
 #import "DCALAssetItem.h"
 //#import "ASImagePickerCommonDefine.h"
+#import <CoreLocation/CoreLocation.h>
 
 #define TIMELINEALASSETSLIBRARY_FREQUENCY_FACTOR (4)
 
@@ -508,28 +509,19 @@
                     compareResult1 = GregorianUnitCompare(interval, difinedHours);
                     if (compareResult1 == NSOrderedDescending) {
                         ALAsset *asset1 = [[_currentGroup itemWithUID:[_currentGroup itemUIDAtIndex:([_currentGroup itemsCountWithParam:nil] - 1)]] origin];
-                        NSDictionary *metadata1 = [[asset1 defaultRepresentation] metadata];
-                        NSDictionary *metadata2 = [[asset defaultRepresentation] metadata];
-                        NSDictionary *gps1 = [metadata1 objectForKey:@"{GPS}"];
-                        NSDictionary *gps2 = [metadata2 objectForKey:@"{GPS}"];
+                        CLLocation *loc1 = [asset1 valueForProperty:ALAssetPropertyLocation];
+                        CLLocation *loc2 = [asset valueForProperty:ALAssetPropertyLocation];
                         double lat1 = LAT_LNG_ERROR;
-                        if (![gps1 objectForKey:@"Latitude"]) {
-                            lat1 = [[gps1 objectForKey:@"Latitude"] doubleValue];
-                        }
-                        
-                        double lat2 = LAT_LNG_ERROR;
-                        if (![gps2 objectForKey:@"Latitude"]) {
-                            lat2 = [[gps2 objectForKey:@"Latitude"] doubleValue];
-                        }
-                        
                         double lng1 = LAT_LNG_ERROR;
-                        if (![gps1 objectForKey:@"Longitude"]) {
-                            lng1 = [[gps1 objectForKey:@"Longitude"] doubleValue];
+                        if (loc1) {
+                            lat1 = [loc1 coordinate].latitude;
+                            lng1 = [loc1 coordinate].longitude;
                         }
-                        
+                        double lat2 = LAT_LNG_ERROR;
                         double lng2 = LAT_LNG_ERROR;
-                        if (![gps2 objectForKey:@"Longitude"]) {
-                            lng2 = [[gps2 objectForKey:@"Longitude"] doubleValue];
+                        if (loc2) {
+                            lat2 = [loc2 coordinate].latitude;
+                            lng2 = [loc2 coordinate].longitude;
                         }
                         
                         if (lat1 != LAT_LNG_ERROR && lat2 != LAT_LNG_ERROR && lng1 != LAT_LNG_ERROR && lng2 != LAT_LNG_ERROR) {
@@ -560,28 +552,19 @@
                                     if ([_currentGroup itemsCountWithParam:nil] > 0) {
                                         ALAsset *asset1 = [[_preprocessorGroup itemWithUID:[_preprocessorGroup itemUIDAtIndex:([_preprocessorGroup itemsCountWithParam:nil] - 1)]] origin];
                                         ALAsset *asset2 = [[_currentGroup itemWithUID:[_currentGroup itemUIDAtIndex:(0)]] origin];
-                                        NSDictionary *metadata1 = [[asset1 defaultRepresentation] metadata];
-                                        NSDictionary *metadata2 = [[asset2 defaultRepresentation] metadata];
-                                        NSDictionary *gps1 = [metadata1 objectForKey:@"{GPS}"];
-                                        NSDictionary *gps2 = [metadata2 objectForKey:@"{GPS}"];
+                                        CLLocation *loc1 = [asset1 valueForProperty:ALAssetPropertyLocation];
+                                        CLLocation *loc2 = [asset2 valueForProperty:ALAssetPropertyLocation];
                                         double lat1 = LAT_LNG_ERROR;
-                                        if (![gps1 objectForKey:@"Latitude"]) {
-                                            lat1 = [[gps1 objectForKey:@"Latitude"] doubleValue];
-                                        }
-                                        
-                                        double lat2 = LAT_LNG_ERROR;
-                                        if (![gps2 objectForKey:@"Latitude"]) {
-                                            lat2 = [[gps2 objectForKey:@"Latitude"] doubleValue];
-                                        }
-                                        
                                         double lng1 = LAT_LNG_ERROR;
-                                        if (![gps1 objectForKey:@"Longitude"]) {
-                                            lng1 = [[gps1 objectForKey:@"Longitude"] doubleValue];
+                                        if (loc1) {
+                                            lat1 = [loc1 coordinate].latitude;
+                                            lng1 = [loc1 coordinate].longitude;
                                         }
-                                        
+                                        double lat2 = LAT_LNG_ERROR;
                                         double lng2 = LAT_LNG_ERROR;
-                                        if (![gps2 objectForKey:@"Longitude"]) {
-                                            lng2 = [[gps2 objectForKey:@"Longitude"] doubleValue];
+                                        if (loc2) {
+                                            lat2 = [loc2 coordinate].latitude;
+                                            lng2 = [loc2 coordinate].longitude;
                                         }
                                         if (lat1 != LAT_LNG_ERROR && lat2 != LAT_LNG_ERROR && lng1 != LAT_LNG_ERROR && lng2 != LAT_LNG_ERROR) {
                                             double distanceMeters = fastDistanceMeters(lat1, lat2, lng1, lng2);

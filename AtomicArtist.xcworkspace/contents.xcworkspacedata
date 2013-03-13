@@ -31,6 +31,12 @@
       <FileRef
          location = "group:DCCommonUtility.m">
       </FileRef>
+      <FileRef
+         location = "group:DCReverseGeocoder.h">
+      </FileRef>
+      <FileRef
+         location = "group:DCReverseGeocoder.m">
+      </FileRef>
    </Group>
    <FileRef
       location = "group:Helius/Helius.xcodeproj">

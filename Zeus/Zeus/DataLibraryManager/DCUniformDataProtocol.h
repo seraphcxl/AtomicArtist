@@ -52,10 +52,10 @@ extern NSString * const kDATAITEMPROPERTY_ORIGINIMAGE;
 extern NSString * const kDATAITEMPROPERTY_FULLSCREENIMAGE;
 extern NSString * const kDATAITEMPROPERTY_THUMBNAILURL;
 extern NSString * const kDATAITEMPROPERTY_PROPERTYDATE;
-extern NSString * const kDATAITEMPROPERTY_LAT_LNG;
+extern NSString * const kDATAITEMPROPERTY_LOCATOIN;
 
-extern NSString * const kDATAITEMPROPERTY_DICT_LAT;
-extern NSString * const kDATAITEMPROPERTY_DICT_LNG;
+//extern NSString * const kDATAITEMPROPERTY_DICT_LAT;
+//extern NSString * const kDATAITEMPROPERTY_DICT_LNG;
 
 #pragma mark - protocol DCDataItem <NSObject>
 @protocol DCDataItem <NSObject>

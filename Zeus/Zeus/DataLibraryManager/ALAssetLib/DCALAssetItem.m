@@ -166,18 +166,8 @@ NSString * const kDCALAssetItem_MetaData_Exif_DateTimeOriginal = @"DateTimeOrigi
                 SAFE_ARC_AUTORELEASE(result);
             } else if ([property isEqualToString:kDATAITEMPROPERTY_PROPERTYDATE]) {
                 result = [self.asset valueForProperty:ALAssetPropertyDate];
-                SAFE_ARC_AUTORELEASE(result);
-            } else if ([property isEqualToString:kDATAITEMPROPERTY_LAT_LNG]) {
-                result = [[NSMutableDictionary alloc] init];
-                NSDictionary *metadata = [representation metadata];
-                NSDictionary *gps = [metadata objectForKey:@"{GPS}"];
-                if ([gps objectForKey:@"Latitude"]) {
-                    [result setObject:[gps objectForKey:@"Latitude"] forKey:kDATAITEMPROPERTY_DICT_LAT];
-                }
-                if ([gps objectForKey:@"Longitude"]) {
-                    [result setObject:[gps objectForKey:@"Longitude"] forKey:kDATAITEMPROPERTY_DICT_LNG];
-                }
-                SAFE_ARC_AUTORELEASE(result);
+            } else if ([property isEqualToString:kDATAITEMPROPERTY_LOCATOIN]) {
+                result = [self.asset valueForProperty:ALAssetPropertyLocation];
             } else {
                 [NSException raise:@"DCALAssetItem error" format:@"Reason: unknown property"];
             }

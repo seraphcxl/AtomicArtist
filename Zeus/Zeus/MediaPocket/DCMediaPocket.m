@@ -67,10 +67,7 @@ static DCMediaPocket *sharedDCMediaPocket = nil;
 
 + (void)staticRelease {
     @synchronized(self) {
-        if (sharedDCMediaPocket) {
-            [sharedDCMediaPocket dealloc];
-            sharedDCMediaPocket = nil;
-        }
+        SAFE_ARC_SAFERELEASE(sharedDCMediaPocket);
     }
 }
 
@@ -241,7 +238,7 @@ static DCMediaPocket *sharedDCMediaPocket = nil;
         }
         
         for (NSString *uniqueID in notifyArray) {
-            CheckImageUpdate([uniqueID magString]);
+//            CheckImageUpdate([uniqueID magString]);
         }
     } while (NO);
 }
@@ -515,7 +512,7 @@ static DCMediaPocket *sharedDCMediaPocket = nil;
                             
                             [self bottomInsertItem:mediaPocketDataItem];
                         }
-                        CheckImageUpdate([uniqueID magString]);
+//                        CheckImageUpdate([uniqueID magString]);
                     } while (NO);
 //                    if ([_lock tryLockWhenCondition:0]) {
 //                        [_lock unlockWithCondition:1];

@@ -20,6 +20,7 @@
 		1B88586E16B671110082F06C /* DCMediaPocketDataProtocel.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1B88586716B66AED0082F06C /* DCMediaPocketDataProtocel.h */; };
 		1B88587016B671110082F06C /* DCMediaPocket.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1B88586B16B66C890082F06C /* DCMediaPocket.h */; };
 		1BBBDB4516BA0A5300735EDA /* DCCommonUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BBBDB4416BA0A5300735EDA /* DCCommonUtility.m */; };
+		1BC067BC16F0553A00087023 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BC067BB16F0553A00087023 /* CoreLocation.framework */; };
 		1BCC890D16AF709100852851 /* Item.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BCC890C16AF709100852851 /* Item.m */; };
 		1BD25DCE16C1FE3F00943CC9 /* DCTimelineCommonConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BD25DCD16C1FE3F00943CC9 /* DCTimelineCommonConstants.m */; };
 		1BD6780616F04D000069AE2D /* DCMediaBucket.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BD6780316F04D000069AE2D /* DCMediaBucket.m */; };
@@ -99,6 +100,8 @@
 		1B88586B16B66C890082F06C /* DCMediaPocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCMediaPocket.h; sourceTree = "<group>"; };
 		1B88586C16B66C890082F06C /* DCMediaPocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCMediaPocket.m; sourceTree = "<group>"; };
 		1BBBDB4416BA0A5300735EDA /* DCCommonUtility.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = DCCommonUtility.m; path = ../Common/DCCommonUtility.m; sourceTree = "<group>"; };
+		1BC067BA16F0552100087023 /* DCReverseGeocoder.m */ = {isa = PBXFileReference; lastKnownFileType = file; name = DCReverseGeocoder.m; path = ../Common/DCReverseGeocoder.m; sourceTree = "<group>"; };
+		1BC067BB16F0553A00087023 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		1BCC890B16AF709100852851 /* Item.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Item.h; sourceTree = "<group>"; };
 		1BCC890C16AF709100852851 /* Item.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Item.m; sourceTree = "<group>"; };
 		1BD25DCC16C1FE3F00943CC9 /* DCTimelineCommonConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCTimelineCommonConstants.h; sourceTree = "<group>"; };
@@ -159,6 +162,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1BC067BC16F0553A00087023 /* CoreLocation.framework in Frameworks */,
 				1BDCD9B516B0FD6700222E08 /* ImageIO.framework in Frameworks */,
 				1BDCD9B316B0FD5300222E08 /* CoreGraphics.framework in Frameworks */,
 				1BDCD99616B0C65D00222E08 /* CoreImage.framework in Frameworks */,
@@ -191,6 +195,7 @@
 		1BE3FAEB16966D71004DDEAF = {
 			isa = PBXGroup;
 			children = (
+				1BC067BA16F0552100087023 /* DCReverseGeocoder.m */,
 				1BBBDB4416BA0A5300735EDA /* DCCommonUtility.m */,
 				1B88585C16B6679E0082F06C /* DCImageHelper.m */,
 				1BE3FAFB16966D71004DDEAF /* Zeus */,
@@ -210,6 +215,7 @@
 		1BE3FAF816966D71004DDEAF /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				1BC067BB16F0553A00087023 /* CoreLocation.framework */,
 				1BDCD9B416B0FD6700222E08 /* ImageIO.framework */,
 				1BDCD9B216B0FD5200222E08 /* CoreGraphics.framework */,
 				1BDCD99516B0C65D00222E08 /* CoreImage.framework */,
