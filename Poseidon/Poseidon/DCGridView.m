@@ -1104,14 +1104,15 @@ static const UIViewAnimationOptions kDefaultAnimationOptions = (UIViewAnimationO
                         [itemSubViews addObject:view];
                     }
                 }
-                
-                subviews = itemSubViews;
-                
-                self.itemSubviewsCache = [subviews copy];
+               
+                self.itemSubviewsCache = itemSubViews;
+                subviews = [itemSubViews copy];
+                SAFE_ARC_SAFERELEASE(itemSubViews);
                 _itemsSubviewsCacheIsValid = YES;
             }
         }
     } while (NO);
+    SAFE_ARC_AUTORELEASE(subviews);
     return subviews;
 }
 
@@ -1298,7 +1299,9 @@ static const UIViewAnimationOptions kDefaultAnimationOptions = (UIViewAnimationO
         cell = [_reusableCells anyObject];
         
         if (cell) {
+            SAFE_ARC_RETAIN(cell);
             [_reusableCells removeObject:cell];
+            SAFE_ARC_AUTORELEASE(cell);
         }
     } while (NO);
     return cell;

@@ -124,6 +124,24 @@ typedef enum {
 
 @end
 
+
+//#pragma mark - protocol DCGridViewSortingDelegate <NSObject>
+//@protocol DCGridViewSortingDelegate <NSObject>
+//
+//@required
+//// Item moved - right place to update the data structure
+//- (void)gridView:(DCGridView *)gridView moveItemAtIndex:(NSInteger)oldIndex toIndex:(NSInteger)newIndex;
+//- (void)gridView:(DCGridView *)gridView exchangeItemAtIndex:(NSInteger)index1 withItemAtIndex:(NSInteger)index2;
+//
+//@optional
+//// Sorting started/ended - indexes are not specified on purpose (not the right place to update data structure)
+//- (void)gridView:(DCGridView *)gridView didStartMovingCell:(DCGridViewCell *)cell;
+//- (void)gridView:(DCGridView *)gridView didEndMovingCell:(DCGridViewCell *)cell;
+//// Enable/Disable the shaking behavior of an item being moved
+//- (BOOL)gridView:(DCGridView *)gridView shouldAllowShakingBehaviorWhenMovingCell:(DCGridViewCell *)view atIndex:(NSInteger)index;
+//
+//@end
+
 #pragma mark - protocol DCGridViewDragDropDelegate <NSObject>
 @protocol DCGridViewDragDropDelegate <NSObject>
 
