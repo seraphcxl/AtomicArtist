@@ -14,6 +14,7 @@
 #import "DCMediaDBManager.h"
 #import "DCMediaDBOperator.h"
 #import "DCMediaDBCommonDefine.h"
+#import "DCFaceFeatureHelper.h"
 
 NSString * const NOTIFY_FACEFEATURELOADER_DONE = @"NOTIFY_FACEFEATURELOADER_DONE";
 
@@ -71,11 +72,14 @@ NSString * const NOTIFY_FACEFEATURELOADER_DONE = @"NOTIFY_FACEFEATURELOADER_DONE
         
         NSDictionary* metadata = (NSDictionary *)(__bridge NSString*)CGImageSourceCopyPropertiesAtIndex(cgImgSrc, 0, NULL);
         NSNumber *orientation = (NSNumber *)[metadata valueForKey:(NSString*)kCGImagePropertyOrientation];
+        SAFE_ARC_AUTORELEASE(metadata);
+        
         if (!orientation) {
             orientation = [NSNumber numberWithInt:[DCImageHelper UIImageOrientationToCGImagePropertyOrientation:UIImageOrientationUp]];
         }
         NSDictionary *options = [[NSDictionary alloc] initWithObjectsAndKeys:(id)kCFBooleanTrue, (id)kCGImageSourceCreateThumbnailWithTransform, (id)kCFBooleanTrue, (id)kCGImageSourceCreateThumbnailFromImageAlways, (id)[NSNumber numberWithDouble:self.pixelSize], (id)kCGImageSourceThumbnailMaxPixelSize, nil];
         cgImg = CGImageSourceCreateImageAtIndex(cgImgSrc, 0, (__bridge CFDictionaryRef)options);
+        SAFE_ARC_AUTORELEASE(options);
         if (!cgImg) {
             break;
         }
@@ -87,14 +91,13 @@ NSString * const NOTIFY_FACEFEATURELOADER_DONE = @"NOTIFY_FACEFEATURELOADER_DONE
         
         if ([features count] > 0) {
             result = [NSMutableArray array];
-            SAFE_ARC_AUTORELEASE(result);
             for (CIFaceFeature *ff in features) {
                 CGRect faceRect = [ff bounds];
                 DCFaceFeature *faceFeature = [[DCFaceFeature alloc] init];
                 SAFE_ARC_AUTORELEASE(faceFeature);
                 
-                faceFeature.scaleTop = faceRect.origin.y / cgImgHeight;
-                faceFeature.scaleBottom = (faceRect.origin.y + faceRect.size.height) / cgImgHeight;
+                faceFeature.scaleTop = (cgImgHeight - faceRect.origin.y - faceRect.size.height) / cgImgHeight;
+                faceFeature.scaleBottom = (cgImgHeight - faceRect.origin.y) / cgImgHeight;
                 faceFeature.scaleLeft = faceRect.origin.x / cgImgWidth;
                 faceFeature.scaleRight = (faceRect.origin.x + faceRect.size.width) / cgImgWidth;
                 
@@ -141,9 +144,21 @@ NSString * const NOTIFY_FACEFEATURELOADER_DONE = @"NOTIFY_FACEFEATURELOADER_DONE
                 break;
             }
             
-            [self saveFaceFeaturesToMediaDB:faceFeatures];
+//            [self saveFaceFeaturesToMediaDB:faceFeatures];
             
-            [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_FACEFEATURELOADER_DONE object:self.uid];
+            NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+            float top = -1.0;
+            float bottom = -1.0;
+            float left = -1.0;
+            float right = -1.0;
+            [DCFaceFeature calcBoundingRectangle:faceFeatures withTop:&top bottom:&bottom left:&left right:&right];
+            [dict setObject:self.uid forKey:kFACEFEATURE_DATAITEM_UID];
+            [dict setObject:[NSNumber numberWithFloat:top] forKey:kFACEFEATURE_RECT_TOP];
+            [dict setObject:[NSNumber numberWithFloat:bottom] forKey:kFACEFEATURE_RECT_BOTTOM];
+            [dict setObject:[NSNumber numberWithFloat:left] forKey:kFACEFEATURE_RECT_LEFT];
+            [dict setObject:[NSNumber numberWithFloat:right] forKey:kFACEFEATURE_RECT_RIGHT];
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_FACEFEATURELOADER_DONE object:dict];
         }
     } while (NO);
 }

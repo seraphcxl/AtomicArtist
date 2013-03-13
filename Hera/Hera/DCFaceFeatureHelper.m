@@ -20,7 +20,7 @@ NSString * const NOTIFY_FACEFEATURE_DETECTED = @"NOTIFY_FACEFEATURE_DETECTED";
 
 NSString * const kFACEFEATURE_DATAITEM_UID = @"FACEFEATURE_DATAITEM_UID";
 NSString * const kFACEFEATURE_RECT_TOP = @"FACEFEATURE_RECT_TOP";
-NSString * const kFACEFEATURE_RECT_BOTTOM = @"FACEFEATURE_RECT_BOTTOMP";
+NSString * const kFACEFEATURE_RECT_BOTTOM = @"FACEFEATURE_RECT_BOTTOM";
 NSString * const kFACEFEATURE_RECT_LEFT = @"FACEFEATURE_RECT_LEFT";
 NSString * const kFACEFEATURE_RECT_RIGHT = @"FACEFEATURE_RECT_RIGHT";
 
@@ -67,21 +67,23 @@ DEFINE_SINGLETON_FOR_CLASS(DCFaceFeatureHelper);
             if (!notification || !notification.object) {
                 break;
             }
-            NSString *uid = (NSString *)notification.object;
-            NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
-            if (!dict) {
-                break;
-            }
-            if (![self getFaceBoundingRectfromMediaDBForDataItem:uid forDict:dict]) {
-                SAFE_ARC_SAFERELEASE(dict);
-            } else {
-                if ([dict count] == 0) {
-                    SAFE_ARC_SAFERELEASE(dict);
-                } else {
-                    SAFE_ARC_AUTORELEASE(dict);
-                    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_FACEFEATURE_DETECTED object:dict];
-                }
-            }
+            NSMutableDictionary *dict = (NSMutableDictionary *)notification.object;
+            [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_FACEFEATURE_DETECTED object:dict];
+//            NSString *uid = (NSString *)notification.object;
+//            NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+//            if (!dict) {
+//                break;
+//            }
+//            if (![self getFaceBoundingRectfromMediaDBForDataItem:uid forDict:dict]) {
+//                SAFE_ARC_SAFERELEASE(dict);
+//            } else {
+//                if ([dict count] == 0) {
+//                    SAFE_ARC_SAFERELEASE(dict);
+//                } else {
+//                    SAFE_ARC_AUTORELEASE(dict);
+//                    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_FACEFEATURE_DETECTED object:dict];
+//                }
+//            }
         }
     } while (NO);
 }
