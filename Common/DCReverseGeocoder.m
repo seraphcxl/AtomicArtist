@@ -8,6 +8,11 @@
 
 #import "DCReverseGeocoder.h"
 
+NSString * const NOTIFY_REVERSEGEO_DONE = @"NOTIFY_REVERSEGEO_DONE";
+
+NSString * const kREVERSEGEO_LOCATION = @"REVERSEGEO_LOCATION";
+NSString * const kREVERSEGEO_LOCALITY = @"REVERSEGEO_LOCALITY";
+
 @interface DCReverseGeocoder () {
 }
 
@@ -38,10 +43,14 @@
     } while (NO);
 }
 
-- (NSString *)reverseGeocodeWithLatitude:(CLLocation *)location {
+- (NSString *)syncReverseGeocodeWithLatitude:(CLLocation *)location {
     __block NSString *result = nil;
     do {
         if (!self.geocoder) {
+            break;
+        }
+        
+        if ([NSThread currentThread] == [NSThread mainThread]) {
             break;
         }
         
@@ -65,6 +74,28 @@
         [_lock unlockWithCondition:0];
     } while (NO);
     return result;
+}
+
+- (void)asyncReverseGeocodeWithLatitude:(CLLocation *)location {
+    do {
+        if (!self.geocoder) {
+            break;
+        }
+        void (^DCGeocodeCompletionHandler)(NSArray *placemark, NSError *error) = ^(NSArray *placemark, NSError *error) {
+            do {
+                NSString *result = nil;
+                for (CLPlacemark *placemarkObj in placemark) {
+                    result = placemarkObj.locality;
+                    break;
+                }
+                
+                NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:location, kREVERSEGEO_LOCATION, result, kREVERSEGEO_LOCALITY, nil];
+                [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_REVERSEGEO_DONE object:dict];
+            } while (NO);
+        };
+        
+        [self.geocoder reverseGeocodeLocation:location completionHandler:DCGeocodeCompletionHandler];
+    } while (NO);
 }
 
 @end

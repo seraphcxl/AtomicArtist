@@ -11,8 +11,16 @@
 #import "DCCommonConstants.h"
 #import "SafeARC.h"
 
+extern NSString * const NOTIFY_REVERSEGEO_DONE;
+
+extern NSString * const kREVERSEGEO_LOCATION;
+extern NSString * const kREVERSEGEO_LOCALITY;
+
 @interface DCReverseGeocoder : NSObject
 
-- (NSString *)reverseGeocodeWithLatitude:(CLLocation *)location;
+// Do not use this method in main thread.
+- (NSString *)syncReverseGeocodeWithLatitude:(CLLocation *)location;
+
+- (void)asyncReverseGeocodeWithLatitude:(CLLocation *)location;
 
 @end

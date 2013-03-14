@@ -530,6 +530,8 @@
                             if (distanceMeters < KILOMETERS(100)) {
                                 insert = YES;
                             }
+                        } else {
+                            insert = YES;
                         }
                     } else {
                         insert = YES;

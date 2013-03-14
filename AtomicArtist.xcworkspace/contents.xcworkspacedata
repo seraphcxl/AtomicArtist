@@ -5,6 +5,12 @@
       location = "group:Common"
       name = "Common">
       <FileRef
+         location = "group:DCSegmentedControl.h">
+      </FileRef>
+      <FileRef
+         location = "group:DCSegmentedControl.m">
+      </FileRef>
+      <FileRef
          location = "group:DCTimelineInterval.h">
       </FileRef>
       <FileRef

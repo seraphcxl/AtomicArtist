@@ -59,6 +59,8 @@
 		1BE3FC06169675AC004DDEAF /* DCMediaDBOperator.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1BE3FBAD16966E76004DDEAF /* DCMediaDBOperator.h */; };
 		1BE3FC07169675AC004DDEAF /* Group.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1BE3FBAF16966E76004DDEAF /* Group.h */; };
 		1BE7472C169EB9A800E6EB52 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BE7472B169EB9A800E6EB52 /* AssetsLibrary.framework */; };
+		1BE95B0B16F1957100417518 /* DCSegmentedControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BE95B0916F1957100417518 /* DCSegmentedControl.m */; };
+		1BE95B0C16F1957100417518 /* DCTimelineInterval.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BE95B0A16F1957100417518 /* DCTimelineInterval.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -100,7 +102,7 @@
 		1B88586B16B66C890082F06C /* DCMediaPocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCMediaPocket.h; sourceTree = "<group>"; };
 		1B88586C16B66C890082F06C /* DCMediaPocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCMediaPocket.m; sourceTree = "<group>"; };
 		1BBBDB4416BA0A5300735EDA /* DCCommonUtility.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = DCCommonUtility.m; path = ../Common/DCCommonUtility.m; sourceTree = "<group>"; };
-		1BC067BA16F0552100087023 /* DCReverseGeocoder.m */ = {isa = PBXFileReference; lastKnownFileType = file; name = DCReverseGeocoder.m; path = ../Common/DCReverseGeocoder.m; sourceTree = "<group>"; };
+		1BC067BA16F0552100087023 /* DCReverseGeocoder.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = DCReverseGeocoder.m; path = ../Common/DCReverseGeocoder.m; sourceTree = "<group>"; };
 		1BC067BB16F0553A00087023 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		1BCC890B16AF709100852851 /* Item.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Item.h; sourceTree = "<group>"; };
 		1BCC890C16AF709100852851 /* Item.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Item.m; sourceTree = "<group>"; };
@@ -155,6 +157,8 @@
 		1BE3FBB416966E76004DDEAF /* MediaDB.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = MediaDB.xcdatamodel; sourceTree = "<group>"; };
 		1BE3FC0C169677A2004DDEAF /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = SOURCE_ROOT; };
 		1BE7472B169EB9A800E6EB52 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
+		1BE95B0916F1957100417518 /* DCSegmentedControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DCSegmentedControl.m; path = ../Common/DCSegmentedControl.m; sourceTree = "<group>"; };
+		1BE95B0A16F1957100417518 /* DCTimelineInterval.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DCTimelineInterval.m; path = ../Common/DCTimelineInterval.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -195,6 +199,8 @@
 		1BE3FAEB16966D71004DDEAF = {
 			isa = PBXGroup;
 			children = (
+				1BE95B0916F1957100417518 /* DCSegmentedControl.m */,
+				1BE95B0A16F1957100417518 /* DCTimelineInterval.m */,
 				1BC067BA16F0552100087023 /* DCReverseGeocoder.m */,
 				1BBBDB4416BA0A5300735EDA /* DCCommonUtility.m */,
 				1B88585C16B6679E0082F06C /* DCImageHelper.m */,
@@ -396,6 +402,8 @@
 				1BD25DCE16C1FE3F00943CC9 /* DCTimelineCommonConstants.m in Sources */,
 				1BD6780616F04D000069AE2D /* DCMediaBucket.m in Sources */,
 				1BD6780716F04D000069AE2D /* DCMediaPocketSnapshotPool.m in Sources */,
+				1BE95B0B16F1957100417518 /* DCSegmentedControl.m in Sources */,
+				1BE95B0C16F1957100417518 /* DCTimelineInterval.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
