@@ -754,7 +754,7 @@ static DCMediaPocket *sharedDCMediaPocket = nil;
                     NSUInteger idxForIntervalArray = 0;
                     for (NSUInteger idx = 0; idx < itemCount; ++idx) {
                         BOOL needCreateBucket = NO;
-                        id<DCMediaPocketDataItemProtocol> item = [_array objectAtIndex:idx];
+                        id<DCMediaPocketDataItemProtocol> item = [sortedArray objectAtIndex:idx];
                         if (idxForIntervalArray < [intervalArray count] && [[intervalArray objectAtIndex:idxForIntervalArray] leftIndex] == idx) {
                             needCreateBucket = YES;
                             ++idxForIntervalArray;
@@ -771,7 +771,13 @@ static DCMediaPocket *sharedDCMediaPocket = nil;
                     [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_MEDIAPOCKET_GROUPINGDONE object:nil];
                 });
             } else {
-                for (id<DCMediaPocketDataItemProtocol> item in _array) {
+                NSMutableArray *sortedArray = [NSMutableArray arrayWithArray:_array];
+                [sortedArray sortUsingComparator:^(id obj1, id obj2) {
+                    NSDate *leftDate = [[obj1 origin] valueForProperty:ALAssetPropertyDate];
+                    NSDate *rightDate = [[obj2 origin]  valueForProperty:ALAssetPropertyDate];
+                    return [rightDate compare:leftDate];
+                }];
+                for (id<DCMediaPocketDataItemProtocol> item in sortedArray) {
                     DCMediaBucket *bucket = [[DCMediaBucket alloc] init];
                     SAFE_ARC_AUTORELEASE(bucket);
                     [_buckets addObject:bucket];
