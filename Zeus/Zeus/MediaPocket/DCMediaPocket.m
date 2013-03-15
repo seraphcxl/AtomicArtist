@@ -400,15 +400,16 @@ static DCMediaPocket *sharedDCMediaPocket = nil;
                     void (^assetResultBlock)(ALAsset *asset) = ^(ALAsset *asset) {
                         do {
                             if (!asset) {
-                                break;
+                                [self removeItem:uid];
+                            } else {
+                                DCALAssetItem *dataItem = [[DCALAssetItem alloc] initWithALAsset:asset];
+                                SAFE_ARC_AUTORELEASE(dataItem);
+                                DCMediaPocketDataItem *mediaPocketDataItem = [[DCMediaPocketDataItem alloc] initWithDataItem:dataItem andUseCount:useCount];
+                                SAFE_ARC_AUTORELEASE(mediaPocketDataItem);
+                                NSAssert([uid isEqualToString:[mediaPocketDataItem uniqueID]], @"uid not equal.");
+                                
+                                [self updateItem:mediaPocketDataItem forUID:uid];
                             }
-                            DCALAssetItem *dataItem = [[DCALAssetItem alloc] initWithALAsset:asset];
-                            SAFE_ARC_AUTORELEASE(dataItem);
-                            DCMediaPocketDataItem *mediaPocketDataItem = [[DCMediaPocketDataItem alloc] initWithDataItem:dataItem andUseCount:useCount];
-                            SAFE_ARC_AUTORELEASE(mediaPocketDataItem);
-                            NSAssert([uid isEqualToString:[mediaPocketDataItem uniqueID]], @"uid not equal.");
-                            
-                            [self updateItem:mediaPocketDataItem forUID:uid];
                         } while (NO);
                     };
                     

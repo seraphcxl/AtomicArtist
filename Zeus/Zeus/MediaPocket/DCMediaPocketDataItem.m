@@ -37,7 +37,7 @@
 - (id)initWithDataItem:(id<DCDataItem>)dataItem andUseCount:(NSUInteger)useCount{
     id result = nil;
     do {
-        if (!dataItem) {
+        if (!dataItem || ![dataItem uniqueID]) {
             break;
         }
         self = [self init];
