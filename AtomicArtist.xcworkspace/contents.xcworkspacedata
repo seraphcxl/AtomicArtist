@@ -43,6 +43,18 @@
       <FileRef
          location = "group:DCReverseGeocoder.m">
       </FileRef>
+      <FileRef
+         location = "group:DCViewCtrlStub.h">
+      </FileRef>
+      <FileRef
+         location = "group:DCViewCtrlStub.m">
+      </FileRef>
+      <FileRef
+         location = "group:DCDrawerViewController.h">
+      </FileRef>
+      <FileRef
+         location = "group:DCDrawerViewController.m">
+      </FileRef>
    </Group>
    <FileRef
       location = "group:Helius/Helius.xcodeproj">

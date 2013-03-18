@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1B0208B116F6ACF000A93973 /* DCViewCtrlStub.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B0208B016F6ACF000A93973 /* DCViewCtrlStub.m */; };
+		1B0208B316F6BC4100A93973 /* DCDrawerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B0208B216F6BC4100A93973 /* DCDrawerViewController.m */; };
 		1B55A7DA16B61420004FF438 /* DCLocalImageLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B55A7D916B61420004FF438 /* DCLocalImageLoader.m */; };
 		1B88584816B665870082F06C /* DCAssetsLibAgent.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1BDCDB0C16B2136600EF7BEA /* DCAssetsLibAgent.h */; };
 		1B88584916B665870082F06C /* DCLoaderWorkshop.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1BDCD98A16B0C63300222E08 /* DCLoaderWorkshop.h */; };
@@ -93,6 +95,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		1B0208B016F6ACF000A93973 /* DCViewCtrlStub.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DCViewCtrlStub.m; path = ../Common/DCViewCtrlStub.m; sourceTree = "<group>"; };
+		1B0208B216F6BC4100A93973 /* DCDrawerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DCDrawerViewController.m; path = ../Common/DCDrawerViewController.m; sourceTree = "<group>"; };
 		1B55A7D816B61420004FF438 /* DCLocalImageLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCLocalImageLoader.h; sourceTree = "<group>"; };
 		1B55A7D916B61420004FF438 /* DCLocalImageLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCLocalImageLoader.m; sourceTree = "<group>"; };
 		1B88585C16B6679E0082F06C /* DCImageHelper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = DCImageHelper.m; path = ../Common/DCImageHelper.m; sourceTree = "<group>"; };
@@ -199,6 +203,8 @@
 		1BE3FAEB16966D71004DDEAF = {
 			isa = PBXGroup;
 			children = (
+				1B0208B216F6BC4100A93973 /* DCDrawerViewController.m */,
+				1B0208B016F6ACF000A93973 /* DCViewCtrlStub.m */,
 				1BE95B0916F1957100417518 /* DCSegmentedControl.m */,
 				1BE95B0A16F1957100417518 /* DCTimelineInterval.m */,
 				1BC067BA16F0552100087023 /* DCReverseGeocoder.m */,
@@ -404,6 +410,8 @@
 				1BD6780716F04D000069AE2D /* DCMediaPocketSnapshotPool.m in Sources */,
 				1BE95B0B16F1957100417518 /* DCSegmentedControl.m in Sources */,
 				1BE95B0C16F1957100417518 /* DCTimelineInterval.m in Sources */,
+				1B0208B116F6ACF000A93973 /* DCViewCtrlStub.m in Sources */,
+				1B0208B316F6BC4100A93973 /* DCDrawerViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
