@@ -50,11 +50,12 @@ typedef enum {
 extern NSComparisonResult GregorianUnitCompare(CFGregorianUnits left, CFGregorianUnits right);
 
 #define RAD_PER_DEG (M_PI / 180.0)
-#define EARTH_RADIUS_METERS (6367000)
+#define EARTH_RADIUS_METERS (6371004)
 #define KILOMETERS(n) (1000 * n)
 #define LAT_LNG_ERROR (361.0)
 
 extern double accurateDistanceMeters(double lat1, double lng1, double lat2, double lng2);
+extern double accurateDistanceMeters_V2(double lat1, double lng1, double lat2, double lng2);
 extern double fastDistanceMeters(double lat1, double lng1, double lat2, double lng2);
 
 @interface DCTimelineCommonConstants : NSObject

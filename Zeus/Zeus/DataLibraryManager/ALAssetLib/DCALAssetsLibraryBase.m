@@ -48,12 +48,16 @@
         @synchronized(self) {
             _cancelEnum = YES;
             
-            if (_allALAssetsGroupUIDs) {
-                [_allALAssetsGroupUIDs removeAllObjects];
+            @synchronized(_allALAssetsGroupUIDs) {
+                if (_allALAssetsGroupUIDs) {
+                    [_allALAssetsGroupUIDs removeAllObjects];
+                }
             }
             
-            if (_allALAssetsGroups) {
-                [_allALAssetsGroups removeAllObjects];
+            @synchronized(_allALAssetsGroups) {
+                if (_allALAssetsGroups) {
+                    [_allALAssetsGroups removeAllObjects];
+                }
             }
         }
     } while (NO);
@@ -62,7 +66,7 @@
 - (NSUInteger)groupsCount {
     NSUInteger result = 0;
     do {
-        @synchronized(self) {
+        @synchronized(_allALAssetsGroups) {
             if (_allALAssetsGroups) {
                 result = [_allALAssetsGroups count];
             }
@@ -73,7 +77,7 @@
 
 - (id<DCDataGroupBase>)groupWithUID:(NSString *)uniqueID {
     id<DCDataGroupBase> result = nil;
-    @synchronized(self) {
+    @synchronized(_allALAssetsGroups) {
         if (_allALAssetsGroups) {
             result = [_allALAssetsGroups objectForKey:uniqueID];
             SAFE_ARC_RETAIN(result);
@@ -90,7 +94,7 @@
     do {
         NSUInteger count = [_allALAssetsGroupUIDs count];
         if (index < count) {
-            @synchronized(self) {
+            @synchronized(_allALAssetsGroupUIDs) {
                 if (_allALAssetsGroupUIDs) {
                     if (index < [_allALAssetsGroupUIDs count]) {
                         result = [_allALAssetsGroupUIDs objectAtIndex:index];
@@ -112,7 +116,7 @@
     NSInteger result = -1;
     do {
         if (groupUID) {
-            @synchronized(self) {
+            @synchronized(_allALAssetsGroupUIDs) {
                 NSUInteger index = 0;
                 NSUInteger count = [_allALAssetsGroupUIDs count];
                 BOOL find = NO;
@@ -157,15 +161,20 @@
 - (void)initAssetsLib {
     do {
         @synchronized(self) {
-            if (!_allALAssetsGroups) {
-                _allALAssetsGroups = [NSMutableDictionary dictionary];
-                SAFE_ARC_RETAIN(_allALAssetsGroups);
+            @synchronized(_allALAssetsGroups) {
+                if (!_allALAssetsGroups) {
+                    _allALAssetsGroups = [NSMutableDictionary dictionary];
+                    SAFE_ARC_RETAIN(_allALAssetsGroups);
+                }
             }
             
-            if (!_allALAssetsGroupUIDs) {
-                _allALAssetsGroupUIDs = [NSMutableArray array];
-                SAFE_ARC_RETAIN(_allALAssetsGroupUIDs);
+            @synchronized(_allALAssetsGroupUIDs) {
+                if (!_allALAssetsGroupUIDs) {
+                    _allALAssetsGroupUIDs = [NSMutableArray array];
+                    SAFE_ARC_RETAIN(_allALAssetsGroupUIDs);
+                }
             }
+            
             _cancelEnum = NO;
             _enumerating = NO;
             
@@ -181,8 +190,13 @@
             
             [self clearCache];
             
-            SAFE_ARC_SAFERELEASE(_allALAssetsGroupUIDs);
-            SAFE_ARC_SAFERELEASE(_allALAssetsGroups);
+            @synchronized(_allALAssetsGroups) {
+                SAFE_ARC_SAFERELEASE(_allALAssetsGroups);
+            }
+            
+            @synchronized(_allALAssetsGroupUIDs) {
+                SAFE_ARC_SAFERELEASE(_allALAssetsGroupUIDs);
+            }
         }
     } while (NO);
 }
@@ -192,15 +206,17 @@
         if (!group || !uid) {
             break;
         }
-        @synchronized(self) {
-            if (!_allALAssetsGroups || !_allALAssetsGroupUIDs) {
-                break;
-            }
-            NSUInteger index = [_allALAssetsGroupUIDs count];
-            [_allALAssetsGroupUIDs insertObject:uid atIndex:index];
-            [_allALAssetsGroups setObject:group forKey:uid];
-            if ([_allALAssetsGroupUIDs count] == 1) {
-                [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_DATAGROUP_FRISTADDED object:self];
+        @synchronized(_allALAssetsGroups) {
+            @synchronized(_allALAssetsGroupUIDs) {
+                if (!_allALAssetsGroups || !_allALAssetsGroupUIDs) {
+                    break;
+                }
+                NSUInteger index = [_allALAssetsGroupUIDs count];
+                [_allALAssetsGroupUIDs insertObject:uid atIndex:index];
+                [_allALAssetsGroups setObject:group forKey:uid];
+                if ([_allALAssetsGroupUIDs count] == 1) {
+                    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_DATAGROUP_FRISTADDED object:self];
+                }
             }
         }
     } while (NO);

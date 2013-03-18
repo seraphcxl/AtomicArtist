@@ -19,20 +19,39 @@ double accurateDistanceMeters(double lat1, double lng1, double lat2, double lng2
     return result;
 }
 
+double rad(double d) {
+    return d * M_PI / 180.0f;
+}
+
+double accurateDistanceMeters_V2(double lat1, double lng1, double lat2, double lng2) {
+    double result = 0.0f;
+    do {
+        double radLat1 = rad(lat1);
+        double radLat2 = rad(lat2);
+        double a = radLat1 - radLat2;
+        double b = rad(lng1) - rad(lng2);
+        
+        double s = 2.0f * asin(sqrt(pow(sin(a / 2.0f), 2.0f) + cos(radLat1) * cos(radLat2) * pow(sin(b / 2.0f), 2.0f)));
+        s *= EARTH_RADIUS_METERS;
+        result = round(s * 10000) / 10000;
+    } while (NO);
+    return result;
+}
+
 double fastDistanceMeters(double lat1, double lng1, double lat2, double lng2) {
     double result = 0.0f;
     do {
-        if (ABS(lat1 - lat2) > RAD_PER_DEG || ABS(lng1 - lng2) > RAD_PER_DEG) {
-            result = accurateDistanceMeters(lat1, lng1, lat2, lng2);
-        } else {
-            double sineLat = (lat1 - lat2);
-            double sineLng = (lng1 - lng2);
-            double cosTerms = cos((lat1 + lat2) / 2.0);
-            cosTerms *= cosTerms;
-            double trigTerm = sineLat * sineLat + cosTerms * sineLng * sineLng;
-            trigTerm = sqrt(trigTerm);
-            result = trigTerm * EARTH_RADIUS_METERS;
-        }
+//        if (ABS (lat1 - lat2) > RAD_PER_DEG || ABS(lng1 - lng2) > RAD_PER_DEG) {
+            result = accurateDistanceMeters_V2(lat1, lng1, lat2, lng2);
+//        } else {
+//            double sineLat = (lat1 - lat2);
+//            double sineLng = (lng1 - lng2);
+//            double cosTerms = cos((lat1 + lat2) / 2.0);
+//            cosTerms *= cosTerms;
+//            double trigTerm = sineLat * sineLat + cosTerms * sineLng * sineLng;
+//            trigTerm = sqrt(trigTerm);
+//            result = trigTerm * EARTH_RADIUS_METERS;
+//        }
     } while (NO);
     return result;
 }

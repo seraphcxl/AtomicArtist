@@ -15,6 +15,7 @@
 
 NSString * const NOTIFY_MEDIAPOCKET_INSERTED = @"NOTIFY_MEDIAPOCKET_INSERTED";
 NSString * const NOTIFY_MEDIAPOCKET_REMOVED = @"NOTIFY_MEDIAPOCKET_REMOVED";
+NSString * const NOTIFY_MEDIAPOCKET_REMOVEDFROMNOTIFICATION = @"NOTIFY_MEDIAPOCKET_REMOVEDFROMNOTIFICATION";
 NSString * const NOTIFY_MEDIAPOCKET_UPDATED_MD5SAME = @"NOTIFY_MEDIAPOCKET_UPDATED_MD5SAME";
 NSString * const NOTIFY_MEDIAPOCKET_UPDATED_MD5DIFF = @"NOTIFY_MEDIAPOCKET_UPDATED_MD5DIFF";
 
@@ -348,17 +349,22 @@ static DCMediaPocket *sharedDCMediaPocket = nil;
 
 - (void)removeItem:(NSString *)uniqueID {
     do {
+        if (!uniqueID) {
+            break;
+        }
+        NSString *uid = [uniqueID copy];
         @synchronized(self) {
             if (!_array || !_dict) {
                 break;
             }
             
-            id<DCMediaPocketDataItemProtocol> item = [_dict objectForKey:uniqueID];
+            id<DCMediaPocketDataItemProtocol> item = [_dict objectForKey:uid];
             [_array removeObject:item];
             item = nil;
-            [_dict removeObjectForKey:uniqueID];
+            [_dict removeObjectForKey:uid];
         }
-        [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_MEDIAPOCKET_REMOVED object:uniqueID];
+        [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_MEDIAPOCKET_REMOVED object:uid];
+        SAFE_ARC_AUTORELEASE(uid);
     } while (NO);
 }
 
@@ -400,7 +406,10 @@ static DCMediaPocket *sharedDCMediaPocket = nil;
                     void (^assetResultBlock)(ALAsset *asset) = ^(ALAsset *asset) {
                         do {
                             if (!asset) {
+                                SAFE_ARC_RETAIN(uid);
                                 [self removeItem:uid];
+                                [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_MEDIAPOCKET_REMOVEDFROMNOTIFICATION object:uid];
+                                SAFE_ARC_RELEASE(uid);
                             } else {
                                 DCALAssetItem *dataItem = [[DCALAssetItem alloc] initWithALAsset:asset];
                                 SAFE_ARC_AUTORELEASE(dataItem);

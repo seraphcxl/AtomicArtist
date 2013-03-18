@@ -40,12 +40,16 @@
             } else {
                 NSUInteger count = [_allAssetUIDs count];
                 if (count == 0) {
-                    _latestTime = [asset valueForProperty:ALAssetPropertyDate];
+                    if ([asset respondsToSelector:@selector(valueForProperty:)]) {
+                        _latestTime = [asset valueForProperty:ALAssetPropertyDate];
+                    }
                     SAFE_ARC_RETAIN(_latestTime);
                 }
                 
                 SAFE_ARC_SAFERELEASE(_earliestTime);
-                _earliestTime = [asset valueForProperty:ALAssetPropertyDate];
+                if ([asset respondsToSelector:@selector(valueForProperty:)]) {
+                    _earliestTime = [asset valueForProperty:ALAssetPropertyDate];
+                }
                 SAFE_ARC_RETAIN(_earliestTime);
                 
                 ALAssetRepresentation *representation = [asset defaultRepresentation];

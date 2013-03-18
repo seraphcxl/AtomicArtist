@@ -331,8 +331,11 @@
                     NSAssert(NO, @"error");
                     break;
                 } else {
-                    @synchronized(self) {
+                    @synchronized(_allALAssetsGroups) {
                         [_allALAssetsGroups removeObjectForKey:[_currentGroup uniqueID]];
+                    }
+                    
+                    @synchronized(_allALAssetsGroupUIDs) {
                         [_allALAssetsGroupUIDs removeObject:[_currentGroup uniqueID]];
                     }
                     
@@ -362,32 +365,20 @@
                                     NSAssert(NO, @"error");
                                 } else {
                                     [_preprocessorGroup merge:first];
-                                    @synchronized(self) {
-                                        [self insertGroup:_preprocessorGroup forUID:[_preprocessorGroup uniqueID]];
-                                    }
+                                    [self insertGroup:_preprocessorGroup forUID:[_preprocessorGroup uniqueID]];
                                     
                                     SAFE_ARC_SAFERELEASE(_preprocessorGroup);
                                     first = nil;
                                 }
                                 
                             } else {
-                                @synchronized(self) {
-                                    [self insertGroup:_preprocessorGroup forUID:[_preprocessorGroup uniqueID]];
-                                }
-                                
+                                [self insertGroup:_preprocessorGroup forUID:[_preprocessorGroup uniqueID]];
                                 SAFE_ARC_SAFERELEASE(_preprocessorGroup);
-                                
-                                @synchronized(self) {
-                                    [self insertGroup:first forUID:[first uniqueID]];
-                                }
-                                
+                                [self insertGroup:first forUID:[first uniqueID]];
                                 first = nil;
                             }
                         } else {
-                            @synchronized(self) {
-                                [self insertGroup:first forUID:[first uniqueID]];
-                            }
-                            
+                            [self insertGroup:first forUID:[first uniqueID]];
                             first = nil;
                         }
                         if ([_allALAssetsGroupUIDs count] % _frequency == 0) {
@@ -400,10 +391,7 @@
                     NSUInteger count = [refinedGroups count];
                     for (NSUInteger idx = 1; idx < count; ++idx) {
                         DCTimelineAssetsGroup *group = [refinedGroups objectAtIndex:idx];
-                        @synchronized(self) {
-                            [self insertGroup:group forUID:[group uniqueID]];
-                        }
-                        
+                        [self insertGroup:group forUID:[group uniqueID]];
                         if ([_allALAssetsGroupUIDs count] % _frequency == 0) {
                             _frequency *= TIMELINEALASSETSLIBRARY_FREQUENCY_FACTOR;
                             [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_DATAGROUP_ADDED object:self];
@@ -484,6 +472,9 @@
 
 - (void)insertAsset:(ALAsset *)asset atIndex:(NSUInteger)index andInterval:(DCTimelineInterval *)timelineInterval {
     do {
+        if (_cancelEnum) {
+            break;
+        }
         @synchronized(_currentGroup) {
             if (!_currentGroup) {
                 if (asset) {
@@ -509,8 +500,14 @@
                     compareResult1 = GregorianUnitCompare(interval, difinedHours);
                     if (compareResult1 == NSOrderedDescending) {
                         ALAsset *asset1 = [[_currentGroup itemWithUID:[_currentGroup itemUIDAtIndex:([_currentGroup itemsCountWithParam:nil] - 1)]] origin];
-                        CLLocation *loc1 = [asset1 valueForProperty:ALAssetPropertyLocation];
-                        CLLocation *loc2 = [asset valueForProperty:ALAssetPropertyLocation];
+                        CLLocation *loc1 = nil;
+                        if ([asset1 respondsToSelector:@selector(valueForProperty:)]) {
+                            loc1 = [asset1 valueForProperty:ALAssetPropertyLocation];
+                        }
+                        CLLocation *loc2 = nil;
+                        if ([asset respondsToSelector:@selector(valueForProperty:)]) {
+                            loc2 = [asset valueForProperty:ALAssetPropertyLocation];
+                        }
                         double lat1 = LAT_LNG_ERROR;
                         double lng1 = LAT_LNG_ERROR;
                         if (loc1) {
@@ -554,8 +551,14 @@
                                     if ([_currentGroup itemsCountWithParam:nil] > 0) {
                                         ALAsset *asset1 = [[_preprocessorGroup itemWithUID:[_preprocessorGroup itemUIDAtIndex:([_preprocessorGroup itemsCountWithParam:nil] - 1)]] origin];
                                         ALAsset *asset2 = [[_currentGroup itemWithUID:[_currentGroup itemUIDAtIndex:(0)]] origin];
-                                        CLLocation *loc1 = [asset1 valueForProperty:ALAssetPropertyLocation];
-                                        CLLocation *loc2 = [asset2 valueForProperty:ALAssetPropertyLocation];
+                                        CLLocation *loc1 = nil;
+                                        if ([asset1 respondsToSelector:@selector(valueForProperty:)]) {
+                                            loc1 = [asset1 valueForProperty:ALAssetPropertyLocation];
+                                        }
+                                        CLLocation *loc2 = nil;
+                                        if ([asset2 respondsToSelector:@selector(valueForProperty:)]) {
+                                            loc2 = [asset2 valueForProperty:ALAssetPropertyLocation];
+                                        }
                                         double lat1 = LAT_LNG_ERROR;
                                         double lng1 = LAT_LNG_ERROR;
                                         if (loc1) {
@@ -587,10 +590,7 @@
                                     NSAssert(NO, @"error");
                                 } else {
                                     [_preprocessorGroup merge:_currentGroup];
-                                    @synchronized(self) {
-                                        [self insertGroup:_preprocessorGroup forUID:[_preprocessorGroup uniqueID]];
-                                    }
-                                    
+                                    [self insertGroup:_preprocessorGroup forUID:[_preprocessorGroup uniqueID]];
                                     SAFE_ARC_SAFERELEASE(_preprocessorGroup);
                                     if ([_allALAssetsGroupUIDs count] % _frequency == 0) {
                                         _frequency *= TIMELINEALASSETSLIBRARY_FREQUENCY_FACTOR;
@@ -599,10 +599,7 @@
                                 }
                                 
                             } else {
-                                @synchronized(self) {
-                                    [self insertGroup:_preprocessorGroup forUID:[_preprocessorGroup uniqueID]];
-                                }
-                                
+                                [self insertGroup:_preprocessorGroup forUID:[_preprocessorGroup uniqueID]];
                                 SAFE_ARC_SAFERELEASE(_preprocessorGroup);
                                 if ([_allALAssetsGroupUIDs count] % _frequency == 0) {
                                     _frequency *= TIMELINEALASSETSLIBRARY_FREQUENCY_FACTOR;
@@ -616,10 +613,7 @@
                                     // refine and redefine current group
                                     [self refineCurrentGroup];
                                 } else {
-                                    @synchronized(self) {
-                                        [self insertGroup:_currentGroup forUID:[_currentGroup uniqueID]];
-                                    }
-                                    
+                                    [self insertGroup:_currentGroup forUID:[_currentGroup uniqueID]];
                                     SAFE_ARC_SAFERELEASE(_currentGroup);
                                     if ([_allALAssetsGroupUIDs count] % _frequency == 0) {
                                         _frequency *= TIMELINEALASSETSLIBRARY_FREQUENCY_FACTOR;
@@ -645,10 +639,7 @@
                                 // refine and redefine current group
                                 [self refineCurrentGroup];
                             } else {
-                                @synchronized(self) {
-                                    [self insertGroup:_currentGroup forUID:[_currentGroup uniqueID]];
-                                }
-                                
+                                [self insertGroup:_currentGroup forUID:[_currentGroup uniqueID]];
                                 SAFE_ARC_SAFERELEASE(_currentGroup);
                                 if ([_allALAssetsGroupUIDs count] % _frequency == 0) {
                                     _frequency *= TIMELINEALASSETSLIBRARY_FREQUENCY_FACTOR;
@@ -726,6 +717,11 @@
         };
         
         if (!_enumerating || (_enumerating && groupIndex != 0)) {
+            if (_cancelEnum) {
+                _enumerating = NO;
+                break;
+            }
+            
             _enumerating = YES;
             
             if (groupIndex == 0) {
@@ -802,6 +798,9 @@
             for (ALAsset *asset in _sortedAssetArray) {
 #ifdef DCTimeline_Method_Refine_Enable
 #else
+                if (_cancelEnum) {
+                    break;
+                }
                 DCTimelineInterval *interval = nil;
                 NSTimeInterval currentAssetTimeInterval = [[[_sortedAssetArray objectAtIndex:index] valueForProperty:ALAssetPropertyDate] timeIntervalSinceReferenceDate];
                 if (index == 0) {
@@ -822,7 +821,9 @@
                 [self insertAsset:asset];
 #else
                 [self insertAsset:asset atIndex:index andInterval:interval];
-                
+                if (_cancelEnum) {
+                    break;
+                }
                 // action for last100 group
                 if (index < 100) {
                     @synchronized(_last100) {
@@ -878,18 +879,16 @@
             }
 #ifdef DCTimeline_Method_Refine_Enable
 #else
-            [self insertAsset:nil atIndex:index andInterval:nil];
-            if (_preprocessorGroup) {
-                @synchronized(self) {
+            if (!_cancelEnum) {
+                [self insertAsset:nil atIndex:index andInterval:nil];
+                if (_preprocessorGroup) {
                     [self insertGroup:_preprocessorGroup forUID:[_preprocessorGroup uniqueID]];
+                    SAFE_ARC_SAFERELEASE(_preprocessorGroup);
                 }
-                SAFE_ARC_SAFERELEASE(_preprocessorGroup);
-            }
-            if (_currentGroup) {
-                @synchronized(self) {
+                if (_currentGroup) {
                     [self insertGroup:_currentGroup forUID:[_currentGroup uniqueID]];
+                    SAFE_ARC_SAFERELEASE(_currentGroup);
                 }
-                SAFE_ARC_SAFERELEASE(_currentGroup);
             }
 #endif
             [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_DATAGROUP_ADDED object:self];
@@ -915,6 +914,9 @@
 #pragma mark - DCTimelineALAssetsLibrary - DCAssetsLibUser
 - (void)nofityAssetsLibStable {
     do {
+        @synchronized(self) {
+            _cancelEnum = YES;
+        }
         [super nofityAssetsLibStable];
         NSUInteger frequency = _frequency > 0 ? _frequency : 16;
         [self enumTimelineNotifyWithFrequency:frequency];
