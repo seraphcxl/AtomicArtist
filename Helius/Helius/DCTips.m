@@ -49,11 +49,54 @@
         self = [super init];
         if (self) {
             self.type = type;
+            
             self.titles = titles;
+            self.colorForTitle = TIPS_TITLECOLOR;
+            self.fontForTitle = [UIFont boldSystemFontOfSize:TIPS_TITLEFONTSIZE];
+            
             self.descriptions = descriptions;
+            self.colorForDescription = TIPS_DESCROPTIONCOLOR;
+            self.fontForDescription = [UIFont systemFontOfSize:TIPS_DESCROPTIONFONTSIZE];
+            
+            self.duration = TIPS_DURATION_SEC;
+            self.backgroundColor = TIPS_DEFBACKGROUNDCOLOR;
+            self.backgroundImagePath = nil;
+            
+            self.anchor = CGPointZero;
+            self.radius = 0.0f;
+            self.popupOrientation = TPPO_Top;
+            
+            UITapGestureRecognizer *tapGRForHide = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap:)];
+            self.tapGR = tapGRForHide;
+            self.tapGR.cancelsTouchesInView = NO;
+            [self addGestureRecognizer:self.tapGR];
+            SAFE_ARC_AUTORELEASE(tapGRForHide);
         }
         return self;
     }
+}
+
+- (void)dealloc {
+    do {
+        @synchronized(self) {
+            if (self.tapGR) {
+                [self removeGestureRecognizer:self.tapGR];
+                self.tapGR = nil;
+            }
+            
+            self.backgroundImagePath = nil;
+            self.backgroundColor = nil;
+            
+            self.fontForDescription = nil;
+            self.colorForDescription = nil;
+            self.descriptions = nil;
+            
+            self.fontForTitle = nil;
+            self.colorForTitle = nil;
+            self.titles = nil;
+        }
+        SAFE_ARC_SUPER_DEALLOC();
+    } while (NO);
 }
 
 /*

@@ -22,16 +22,17 @@ typedef enum {
     TPO_Right,
 } TipsPopupOrientation;
 
-#define TIPS_DEF_WIDTH (160)
+#define TIPS_DEF_WIDTH (48)
 #define TIPS_DEF_HEIGHT (24)
 #define TIPS_INNERSPACE (4)
-#define TIPS_EDGE_WIDTH (16)
-#define TIPS_EDGE_HEIGHT (16)
+#define TIPS_EDGE_WIDTH (8)
+#define TIPS_EDGE_HEIGHT (8)
 #define TIPS_TITLEFONTSIZE (18)
 #define TIPS_DESCROPTIONFONTSIZE (16)
-#define TIPS_TITLECOLOR ([UIColor colorWithRed:DC_RGB(0) green:DC_RGB(0) blue:DC_RGB(0) alpha:0.8f])
-#define TIPS_DESCROPTIONCOLOR ([UIColor colorWithRed:DC_RGB(0) green:DC_RGB(0) blue:DC_RGB(0) alpha:0.8f])
+#define TIPS_TITLECOLOR ([UIColor whiteColor])
+#define TIPS_DESCROPTIONCOLOR ([UIColor whiteColor])
 #define TIPS_DURATION_SEC (5.f)
+#define TIPS_DEFBACKGROUNDCOLOR ([UIColor colorWithRed:DC_RGB(0) green:DC_RGB(0) blue:DC_RGB(0) alpha:0.8f])
 
 @class DCTips;
 

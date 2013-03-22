@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1BC6F14616FC2F1700CB9937 /* DCTips.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BC6F14116FC2F1700CB9937 /* DCTips.m */; };
+		1BC6F14716FC2F1700CB9937 /* DCTipsHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BC6F14316FC2F1700CB9937 /* DCTipsHelper.m */; };
+		1BC6F14816FC2F1700CB9937 /* DCTipsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BC6F14516FC2F1700CB9937 /* DCTipsView.m */; };
 		1BE3FB4F16966DDA004DDEAF /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BE3FB4E16966DDA004DDEAF /* UIKit.framework */; };
 		1BE3FB5116966DDA004DDEAF /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BE3FB5016966DDA004DDEAF /* Foundation.framework */; };
 		1BE3FB5316966DDA004DDEAF /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BE3FB5216966DDA004DDEAF /* CoreGraphics.framework */; };
@@ -33,6 +36,12 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1BC6F14016FC2F1700CB9937 /* DCTips.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCTips.h; sourceTree = "<group>"; };
+		1BC6F14116FC2F1700CB9937 /* DCTips.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCTips.m; sourceTree = "<group>"; };
+		1BC6F14216FC2F1700CB9937 /* DCTipsHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCTipsHelper.h; sourceTree = "<group>"; };
+		1BC6F14316FC2F1700CB9937 /* DCTipsHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCTipsHelper.m; sourceTree = "<group>"; };
+		1BC6F14416FC2F1700CB9937 /* DCTipsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCTipsView.h; sourceTree = "<group>"; };
+		1BC6F14516FC2F1700CB9937 /* DCTipsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCTipsView.m; sourceTree = "<group>"; };
 		1BE3FB4A16966DDA004DDEAF /* Helius.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Helius.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1BE3FB4E16966DDA004DDEAF /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		1BE3FB5016966DDA004DDEAF /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -119,6 +128,12 @@
 		1BE3FB5416966DDA004DDEAF /* Helius */ = {
 			isa = PBXGroup;
 			children = (
+				1BC6F14016FC2F1700CB9937 /* DCTips.h */,
+				1BC6F14116FC2F1700CB9937 /* DCTips.m */,
+				1BC6F14216FC2F1700CB9937 /* DCTipsHelper.h */,
+				1BC6F14316FC2F1700CB9937 /* DCTipsHelper.m */,
+				1BC6F14416FC2F1700CB9937 /* DCTipsView.h */,
+				1BC6F14516FC2F1700CB9937 /* DCTipsView.m */,
 				1BE3FBDA169672DA004DDEAF /* GroupViewCtrl */,
 				1BE3FBDE169672DA004DDEAF /* ItemViewCtrl */,
 				1BE3FBE2169672DA004DDEAF /* MediaPocketViewCtrl */,
@@ -269,6 +284,9 @@
 				1BE3FBF6169672DA004DDEAF /* DCALAssetsGroupView.m in Sources */,
 				1BE3FBF7169672DA004DDEAF /* DCDataGroupView.m in Sources */,
 				1BE3FBF8169672DA004DDEAF /* DCDataItemView.m in Sources */,
+				1BC6F14616FC2F1700CB9937 /* DCTips.m in Sources */,
+				1BC6F14716FC2F1700CB9937 /* DCTipsHelper.m in Sources */,
+				1BC6F14816FC2F1700CB9937 /* DCTipsView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
