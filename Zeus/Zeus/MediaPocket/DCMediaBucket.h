@@ -1,6 +1,6 @@
 //
 //  DCMediaBucket.h
-//  Whip
+//
 //
 //  Created by Chen XiaoLiang on 13-2-19.
 //  Copyright (c) 2013年 arcsoft. All rights reserved.
@@ -15,6 +15,7 @@
 - (NSUInteger)itemCount;
 - (NSString *)itemUIDAtIndex:(NSUInteger)idx;
 - (void)insertItemUID:(NSString *)itemUID;
+- (void)removeItemUID:(NSString *)itemUID;
 - (NSInteger)findItem:(NSString *)uniqueID;
 
 @end

@@ -15,6 +15,9 @@
 #import "DCMediaPocketDataProtocel.h"
 #import "DCAssetsLibAgent.h"
 
+#define DCMP_LimitedCountForPhoto (50)
+#define DCMP_LimitedCountForVideo (5)
+
 @protocol CameraActionDelegate <NSObject>
 
 - (NSInteger)takePhotoWithDataItem:(NSString *)dataItemUID;
@@ -35,6 +38,9 @@ extern NSString * const NOTIFY_MEDIAPOCKET_TIMELINEGROUPINSERT_DONE;
 
 extern NSString * const kDCMediaPocketSnapshotParam_ItemDict;
 extern NSString * const kDCMediaPocketSnapshotParam_ItemArray;
+extern NSString * const kDCMediaPocketSnapshotParam_LimitedCount;
+extern NSString * const kDCMediaPocketSnapshotParam_AllowRemoveWhenUseCountIsZero;
+extern NSString * const kDCMediaPocketSnapshotParam_AllowFIFOForLimitedCountAction;
 extern NSString * const kDCMediaPocketSnapshotParam_TimelineGroupDict;
 
 @class DCMediaBucket;
@@ -44,16 +50,21 @@ extern NSString * const kDCMediaPocketSnapshotParam_TimelineGroupDict;
 
 //DEFINE_SINGLETON_FOR_HEADER(DCMediaPocket);
 
-+ (DCMediaPocket *)sharedDCMediaPocket;
-+ (void)staticRelease;
++ (DCMediaPocket *)sharedPhotoPocket;
++ (void)staticReleasePhotoPocket;
+
++ (DCMediaPocket *)sharedVideoPocket;
++ (void)staticReleaseVideoPocket;
 
 @property (nonatomic, assign) id<CameraActionDelegate> cameraActionDelegate;
 @property (atomic, assign, getter = isAllowRemoveWhenUseCountIsZero) BOOL allowRemoveWhenUseCountIsZero;
+@property (atomic, assign, getter = isAllowFIFOForLimitedCountAction) BOOL allowFIFOForLimitedCountAction;
 @property (atomic, strong, readonly) NSString *uniqueID;
 @property (atomic, copy) NSString *insertingGroupUID;
 @property (atomic, assign, getter = isMediaPocketGrouping) BOOL mediaPocketGrouping;
+@property (nonatomic, assign, readonly) NSUInteger limitedCount;
 
-- (id)init;
+- (id)initWithLimitedCount:(NSUInteger) limitedCount;
 - (void)reset;
 - (void)clearUseCountForItems;
 
@@ -76,6 +87,9 @@ extern NSString * const kDCMediaPocketSnapshotParam_TimelineGroupDict;
 - (void)bottomRemoveItem;
 - (void)removeItem:(NSString *)uniqueID;
 
+- (void)groupInsertItems:(NSArray *)items;
+- (void)groupRemoveItems:(NSArray *)items;
+
 - (void)moveItemFrom:(NSUInteger)from to:(NSUInteger)to;
 
 - (void)insertPhotoFromImagePicker:(CGImageRef)cgImg orientation:(ALAssetOrientation)assetOrientation;
@@ -91,6 +105,8 @@ extern NSString * const kDCMediaPocketSnapshotParam_TimelineGroupDict;
 - (id)initByActionSnapshot:(NSDictionary *)params;
 
 - (void)grouping;
+
+- (void)sortByOrder:(NSComparisonResult)order;
 
 - (NSUInteger)bucketCount;
 - (DCMediaBucket *)bucket:(NSUInteger)idx;

@@ -1,6 +1,6 @@
 //
 //  DCMediaBucket.m
-//  Whip
+//
 //
 //  Created by Chen XiaoLiang on 13-2-19.
 //  Copyright (c) 2013年 arcsoft. All rights reserved.
@@ -74,6 +74,17 @@
                 break;
             }
             [_array addObject:itemUID];
+        }
+    } while (NO);
+}
+
+- (void)removeItemUID:(NSString *)itemUID {
+    do {
+        @synchronized(self) {
+            if (!_array) {
+                break;
+            }
+            [_array removeObject:itemUID];
         }
     } while (NO);
 }

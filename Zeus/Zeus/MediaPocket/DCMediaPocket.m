@@ -12,6 +12,7 @@
 #import "DCMediaPocketSnapshotPool.h"
 #import "DCMediaBucket.h"
 #import "DCTimelineInterval.h"
+#import "DCCommonUtility.h"
 
 NSString * const NOTIFY_MEDIAPOCKET_INSERTED = @"NOTIFY_MEDIAPOCKET_INSERTED";
 NSString * const NOTIFY_MEDIAPOCKET_REMOVED = @"NOTIFY_MEDIAPOCKET_REMOVED";
@@ -27,10 +28,14 @@ NSString * const NOTIFY_MEDIAPOCKET_TIMELINEGROUPINSERT_DONE = @"NOTIFY_MEDIAPOC
 
 NSString * const kDCMediaPocketSnapshotParam_ItemDict = @"DCMediaPocketSnapshotParam_ItemDict";
 NSString * const kDCMediaPocketSnapshotParam_ItemArray = @"DCMediaPocketSnapshotParam_ItemArray";
+NSString * const kDCMediaPocketSnapshotParam_LimitedCount = @"DCMediaPocketSnapshotParam_LimitedCount";
+NSString * const kDCMediaPocketSnapshotParam_AllowRemoveWhenUseCountIsZero = @"DCMediaPocketSnapshotParam_AllowRemoveWhenUseCountIsZero";
+NSString * const kDCMediaPocketSnapshotParam_AllowFIFOForLimitedCountAction = @"DCMediaPocketSnapshotParam_AllowFIFOForLimitedCountAction";
 NSString * const kDCMediaPocketSnapshotParam_TimelineGroupDict = @"DCMediaPocketSnapshotParam_TimelineGroupDict";
 
 static NSUInteger g_uniqueIDNumber = 1;
-static DCMediaPocket *sharedDCMediaPocket = nil;
+static DCMediaPocket *sharedPhotoPocket = nil;
+static DCMediaPocket *sharedVideoPocket = nil;
 
 @interface DCMediaPocket () {
     NSMutableArray *_array;  // valve:(id<ASMediaDataItem>)
@@ -51,37 +56,56 @@ static DCMediaPocket *sharedDCMediaPocket = nil;
 
 @synthesize cameraActionDelegate = _cameraActionDelegate;
 @synthesize allowRemoveWhenUseCountIsZero = _allowRemoveWhenUseCountIsZero;
+@synthesize allowFIFOForLimitedCountAction = _allowFIFOForLimitedCountAction;
 @synthesize uniqueID = _uniqueID;
 @synthesize insertingGroupUID = _insertingGroupUID;
 @synthesize mediaPocketGrouping = _mediaPocketGrouping;
+@synthesize limitedCount = _limitedCount;
 
 //DEFINE_SINGLETON_FOR_CLASS(DCMediaPocket);
 
-+ (DCMediaPocket *)sharedDCMediaPocket {
++ (DCMediaPocket *)sharedPhotoPocket {
     @synchronized(self) {
-        if (sharedDCMediaPocket == nil) {
-            sharedDCMediaPocket = [[self alloc] init];
+        if (sharedPhotoPocket == nil) {
+            sharedPhotoPocket = [[self alloc] initWithLimitedCount:DCMP_LimitedCountForPhoto];
         }
     }
-    return sharedDCMediaPocket;
+    return sharedPhotoPocket;
 }
 
-+ (void)staticRelease {
++ (void)staticReleasePhotoPocket {
     @synchronized(self) {
-        SAFE_ARC_SAFERELEASE(sharedDCMediaPocket);
+        SAFE_ARC_SAFERELEASE(sharedPhotoPocket);
     }
 }
 
-- (id)init {
++ (DCMediaPocket *)sharedVideoPocket {
+    @synchronized(self) {
+        if (sharedVideoPocket == nil) {
+            sharedVideoPocket = [[self alloc] initWithLimitedCount:DCMP_LimitedCountForVideo];
+        }
+    }
+    return sharedVideoPocket;
+}
+
++ (void)staticReleaseVideoPocket {
+    @synchronized(self) {
+        SAFE_ARC_SAFERELEASE(sharedVideoPocket);
+    }
+}
+
+- (id)initWithLimitedCount:(NSUInteger)limitedCount {
     @synchronized(self) {
         self = [super init];
         if (self) {
             [self reset];
             _allowRemoveWhenUseCountIsZero = NO;
+            _allowFIFOForLimitedCountAction = NO;
             self.insertingGroupUID = nil;
             [[DCAssetsLibAgent sharedDCAssetsLibAgent] addAssetsLibUser:self];
             _uniqueID = [NSString stringWithFormat:@"%d", g_uniqueIDNumber++];
             SAFE_ARC_RETAIN(_uniqueID);
+            _limitedCount = limitedCount;
         }
         return self;
     }
@@ -114,11 +138,6 @@ static DCMediaPocket *sharedDCMediaPocket = nil;
             SAFE_ARC_SAFERELEASE(_dict);
         }
         
-//        if (_timelineGroupDict) {
-//            [_timelineGroupDict removeAllObjects];
-//            SAFE_ARC_SAFERELEASE(_timelineGroupDict);
-//        }
-        
         if (_buckets) {
             [_buckets removeAllObjects];
             SAFE_ARC_SAFERELEASE(_buckets);
@@ -133,9 +152,7 @@ static DCMediaPocket *sharedDCMediaPocket = nil;
         _array = [[NSMutableArray alloc] init];
         
         _dict = [[NSMutableDictionary alloc] init];
-        
-//        _timelineGroupDict = [[NSMutableDictionary alloc] init];
-        
+                
         _buckets = [[NSMutableArray alloc] init];
     }
 }
@@ -153,8 +170,8 @@ static DCMediaPocket *sharedDCMediaPocket = nil;
 - (NSUInteger)itemCount {
     NSUInteger result = 0;
     do {
-        @synchronized(self) {
-            if (!_array || !_dict) {
+        @synchronized(_array) {
+            if (!_array) {
                 break;
             }
             result = [_array count];
@@ -169,8 +186,8 @@ static DCMediaPocket *sharedDCMediaPocket = nil;
         if (!uniqueID) {
             break;
         }
-        @synchronized(self) {
-            if (!_array || !_dict || [_array count] == 0) {
+        @synchronized(_dict) {
+            if (!_dict) {
                 break;
             }
             
@@ -185,8 +202,8 @@ static DCMediaPocket *sharedDCMediaPocket = nil;
 - (id<DCMediaPocketDataItemProtocol>)itemAtIndex:(NSUInteger)index {
     id result = nil;
     do {
-        @synchronized(self) {
-            if (!_array || !_dict || [_array count] <= index) {
+        @synchronized(_array) {
+            if (!_array || [_array count] <= index) {
                 break;
             }
             
@@ -225,10 +242,8 @@ static DCMediaPocket *sharedDCMediaPocket = nil;
                     NSString *notify = nil;
                     if (same) {
                         notify = NOTIFY_MEDIAPOCKET_UPDATED_MD5SAME;
-//                        CheckImageUpdate([uniqueID magString]);
                     } else {
                         notify = NOTIFY_MEDIAPOCKET_UPDATED_MD5DIFF;
-//                        CheckImageUpdate([uniqueID magString]);
                     }
                     [notifyArray addObject:uniqueID];
                     [[NSNotificationCenter defaultCenter] postNotificationName:notify object:uniqueID];
@@ -238,9 +253,13 @@ static DCMediaPocket *sharedDCMediaPocket = nil;
             }
         }
         
-        for (NSString *uniqueID in notifyArray) {
-//            CheckImageUpdate([uniqueID magString]);
-        }
+//        for (NSString *uniqueID in notifyArray) {
+//            __block NSString *uid = [uniqueID copy];
+//            dispatch_async(dispatch_get_main_queue(), ^(void){
+//                CheckImageUpdate([uid magString]);
+//                SAFE_ARC_SAFERELEASE(uid);
+//            });
+//        }
     } while (NO);
 }
 
@@ -249,13 +268,11 @@ static DCMediaPocket *sharedDCMediaPocket = nil;
         if (!uniqueID) {
             break;
         }
-        @synchronized(self) {
-            id<DCMediaPocketDataItemProtocol> item = [self findItem:uniqueID];
-            if (!item) {
-                break;
-            }
-            [item increaseUseCount];
+        id<DCMediaPocketDataItemProtocol> item = [self findItem:uniqueID];
+        if (!item) {
+            break;
         }
+        [item increaseUseCount];
     } while (NO);
 }
 
@@ -264,15 +281,13 @@ static DCMediaPocket *sharedDCMediaPocket = nil;
         if (!uniqueID) {
             break;
         }
-        @synchronized(self) {
-            id<DCMediaPocketDataItemProtocol> item = [self findItem:uniqueID];
-            if (!item) {
-                break;
-            }
-            NSUInteger useCount = [item decreaseUseCount];
-            if (useCount == 0 && self.allowRemoveWhenUseCountIsZero) {
-                [self removeItem:uniqueID];
-            }
+        id<DCMediaPocketDataItemProtocol> item = [self findItem:uniqueID];
+        if (!item) {
+            break;
+        }
+        NSUInteger useCount = [item decreaseUseCount];
+        if (useCount == 0 && self.allowRemoveWhenUseCountIsZero) {
+            [self removeItem:uniqueID];
         }
     } while (NO);
 }
@@ -285,6 +300,18 @@ static DCMediaPocket *sharedDCMediaPocket = nil;
         @synchronized(self) {
             if (!_array || !_dict || [_array count] < index) {
                 break;
+            }
+            
+            if ([_array count] >= self.limitedCount) {
+                if (self.isAllowFIFOForLimitedCountAction) {
+                    [self removeItemAtIndex:0];
+                    NSAssert(index <= self.limitedCount, @"index <= self.limitedCount");
+                    if (index == self.limitedCount) {
+                        --index;
+                    }
+                } else {
+                    break;
+                }
             }
             
             [_array insertObject:item atIndex:index];
@@ -308,8 +335,8 @@ static DCMediaPocket *sharedDCMediaPocket = nil;
         if (!item) {
             break;
         }
-        @synchronized(self) {
-            if (!_array || !_dict) {
+        @synchronized(_array) {
+            if (!_array) {
                 break;
             }
             [self insertItem:item atIndex:[_array count]];
@@ -317,10 +344,31 @@ static DCMediaPocket *sharedDCMediaPocket = nil;
     } while (NO);
 }
 
+- (void)groupInsertItems:(NSArray *)items {
+    do {
+        if (!items || [items count] == 0) {
+            break;
+        }
+        @synchronized(_array) {
+            if (!_array) {
+                break;
+            }
+            for (id<DCMediaPocketDataItemProtocol> mediaItem in items) {
+                if ([_array count] >= self.limitedCount) {
+//                    NSArray *titles = [NSArray array];
+//                    NSArray *descs = [NSArray arrayWithObjects:[NSString stringWithFormat:@"You may not import more than %d items into the Photo Set.", self.limitedCount], nil];
+//                    [DCCommonUtility showPrompt:PPT_Center withTitles:titles color:nil font:nil descriptions:descs color:nil font:nil backgroundColor:nil andDuration:0.f inViewController:[AppDelegate appDelegate].tabController atAnchor:CGPointZero andRadius:0.f withPopupOrientation:PPO_Top];
+                }
+                [self bottomInsertItem:mediaItem];
+            }
+        }
+    } while (NO);
+}
+
 - (void)removeItemAtIndex:(NSUInteger)index {
     do {
-        @synchronized(self) {
-            if (!_array || !_dict || [_array count] <= index) {
+        @synchronized(_array) {
+            if (!_array || [_array count] <= index) {
                 break;
             }
             
@@ -338,8 +386,8 @@ static DCMediaPocket *sharedDCMediaPocket = nil;
 
 - (void)bottomRemoveItem {
     do {
-        @synchronized(self) {
-            if (!_array || !_dict) {
+        @synchronized(_array) {
+            if (!_array) {
                 break;
             }
             [self removeItemAtIndex:([_array count] - 1)];
@@ -368,10 +416,21 @@ static DCMediaPocket *sharedDCMediaPocket = nil;
     } while (NO);
 }
 
+- (void)groupRemoveItems:(NSArray *)items {
+    do {
+        if (!items || [items count] == 0) {
+            break;
+        }
+        for (NSString *uniqueID in items) {
+            [self removeItem:uniqueID];
+        }
+    } while (NO);
+}
+
 - (void)moveItemFrom:(NSUInteger)from to:(NSUInteger)to {
     do {
-        @synchronized(self) {
-            if (!_array || !_dict) {
+        @synchronized(_array) {
+            if (!_array) {
                 break;
             }
             
@@ -396,39 +455,41 @@ static DCMediaPocket *sharedDCMediaPocket = nil;
         if (!assetsLibrary) {
             break;
         }
-        @synchronized(self) {
-            for (id<DCMediaPocketDataItemProtocol> item in _array) {
-                if ([item type] == DataSourceType_AssetsLib) {
-                    __block NSURL *url = [item URL];
-                    __block NSString *uid = [item uniqueID];
-                    __block NSUInteger useCount = [item useCount];
-                    
-                    void (^assetResultBlock)(ALAsset *asset) = ^(ALAsset *asset) {
-                        do {
-                            if (!asset) {
-                                SAFE_ARC_RETAIN(uid);
-                                [self removeItem:uid];
-                                [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_MEDIAPOCKET_REMOVEDFROMNOTIFICATION object:uid];
-                                SAFE_ARC_RELEASE(uid);
-                            } else {
-                                DCALAssetItem *dataItem = [[DCALAssetItem alloc] initWithALAsset:asset];
-                                SAFE_ARC_AUTORELEASE(dataItem);
-                                DCMediaPocketDataItem *mediaPocketDataItem = [[DCMediaPocketDataItem alloc] initWithDataItem:dataItem andUseCount:useCount];
-                                SAFE_ARC_AUTORELEASE(mediaPocketDataItem);
-                                NSAssert([uid isEqualToString:[mediaPocketDataItem uniqueID]], @"uid not equal.");
-                                
-                                [self updateItem:mediaPocketDataItem forUID:uid];
-                            }
-                        } while (NO);
-                    };
-                    
-                    void (^failureBlock)(NSError *error) = ^(NSError *error) {
-                        dc_debug_NSLog(@"%@", [error localizedDescription]);
-                    };
-                    
-                    [assetsLibrary assetForURL:url resultBlock:assetResultBlock failureBlock:failureBlock];
-                }
+        NSArray *tmpAry = nil;
+        @synchronized(_array) {
+            tmpAry = [_array copy];
+            SAFE_ARC_AUTORELEASE(tmpAry);
+        }
+        for (id<DCMediaPocketDataItemProtocol> item in tmpAry) {
+            if ([item type] == DataSourceType_AssetsLib) {
+                __block NSURL *url = [item URL];
+                __block NSString *uid = [item uniqueID];
+                __block NSUInteger useCount = [item useCount];
                 
+                void (^assetResultBlock)(ALAsset *asset) = ^(ALAsset *asset) {
+                    do {
+                        if (!asset) {
+                            SAFE_ARC_RETAIN(uid);
+                            [self removeItem:uid];
+                            [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFY_MEDIAPOCKET_REMOVEDFROMNOTIFICATION object:uid];
+                            SAFE_ARC_RELEASE(uid);
+                        } else {
+                            DCALAssetItem *dataItem = [[DCALAssetItem alloc] initWithALAsset:asset];
+                            SAFE_ARC_AUTORELEASE(dataItem);
+                            DCMediaPocketDataItem *mediaPocketDataItem = [[DCMediaPocketDataItem alloc] initWithDataItem:dataItem andUseCount:useCount];
+                            SAFE_ARC_AUTORELEASE(mediaPocketDataItem);
+                            NSAssert([uid isEqualToString:[mediaPocketDataItem uniqueID]], @"uid not equal.");
+                            
+                            [self updateItem:mediaPocketDataItem forUID:uid];
+                        }
+                    } while (NO);
+                };
+                
+                void (^failureBlock)(NSError *error) = ^(NSError *error) {
+                    dc_debug_NSLog(@"%@", [error localizedDescription]);
+                };
+                
+                [assetsLibrary assetForURL:url resultBlock:assetResultBlock failureBlock:failureBlock];
             }
         }
     } while (NO);
@@ -514,15 +575,16 @@ static DCMediaPocket *sharedDCMediaPocket = nil;
                         if (!asset) {
                             break;
                         }
-                        @synchronized(self) {
-                            DCALAssetItem *dataItem = [[DCALAssetItem alloc] initWithALAsset:asset];
-                            SAFE_ARC_AUTORELEASE(dataItem);
-                            DCMediaPocketDataItem *mediaPocketDataItem = [[DCMediaPocketDataItem alloc] initWithDataItem:dataItem andUseCount:useCount];
-                            SAFE_ARC_AUTORELEASE(mediaPocketDataItem);
-                            
-                            [self bottomInsertItem:mediaPocketDataItem];
-                        }
-//                        CheckImageUpdate([uniqueID magString]);
+                        DCALAssetItem *dataItem = [[DCALAssetItem alloc] initWithALAsset:asset];
+                        SAFE_ARC_AUTORELEASE(dataItem);
+                        DCMediaPocketDataItem *mediaPocketDataItem = [[DCMediaPocketDataItem alloc] initWithDataItem:dataItem andUseCount:useCount];
+                        SAFE_ARC_AUTORELEASE(mediaPocketDataItem);
+                        [self bottomInsertItem:mediaPocketDataItem];
+//                        __block NSString *uid = [uniqueID copy];
+//                        dispatch_async(dispatch_get_main_queue(), ^(void){
+//                            CheckImageUpdate([uid magString]);
+//                            SAFE_ARC_SAFERELEASE(uid);
+//                        });
                     } while (NO);
 //                    if ([_lock tryLockWhenCondition:0]) {
 //                        [_lock unlockWithCondition:1];
@@ -622,7 +684,7 @@ static DCMediaPocket *sharedDCMediaPocket = nil;
 - (DCMediaPocket *)snapshot {
     DCMediaPocket *result = nil;
     do {
-        NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:_array, kDCMediaPocketSnapshotParam_ItemArray, _dict, kDCMediaPocketSnapshotParam_ItemDict, /*_timelineGroupDict*/nil, kDCMediaPocketSnapshotParam_TimelineGroupDict, nil];
+        NSDictionary *params = [NSDictionary dictionaryWithObjectsAndKeys:_array, kDCMediaPocketSnapshotParam_ItemArray, _dict, kDCMediaPocketSnapshotParam_ItemDict, [NSNumber numberWithUnsignedInteger:self.limitedCount], kDCMediaPocketSnapshotParam_LimitedCount, [NSNumber numberWithBool:self.isAllowRemoveWhenUseCountIsZero], kDCMediaPocketSnapshotParam_AllowRemoveWhenUseCountIsZero, [NSNumber numberWithBool:self.isAllowFIFOForLimitedCountAction], kDCMediaPocketSnapshotParam_AllowFIFOForLimitedCountAction, /*_timelineGroupDict*/nil, kDCMediaPocketSnapshotParam_TimelineGroupDict, nil];
         result = [[DCMediaPocket alloc] initByActionSnapshot:params];
         SAFE_ARC_AUTORELEASE(result);
     } while (NO);
@@ -638,11 +700,13 @@ static DCMediaPocket *sharedDCMediaPocket = nil;
             _array = [NSMutableArray arrayWithArray:[params objectForKey:kDCMediaPocketSnapshotParam_ItemArray]];
             SAFE_ARC_RETAIN(_array);
             _dict = [NSMutableDictionary dictionaryWithDictionary:[params objectForKey:kDCMediaPocketSnapshotParam_ItemDict]];
+            _limitedCount = [[params objectForKey:kDCMediaPocketSnapshotParam_LimitedCount] unsignedIntegerValue];
             SAFE_ARC_RETAIN(_dict);
 //            _timelineGroupDict = [NSMutableDictionary dictionaryWithDictionary:[params objectForKey:kDCMediaPocketSnapshotParam_TimelineGroupDict]];
 //            SAFE_ARC_RETAIN(_timelineGroupDict);
             
-            _allowRemoveWhenUseCountIsZero = NO;
+            _allowRemoveWhenUseCountIsZero = [[params objectForKey:kDCMediaPocketSnapshotParam_AllowRemoveWhenUseCountIsZero] boolValue];
+            _allowFIFOForLimitedCountAction = [[params objectForKey:kDCMediaPocketSnapshotParam_AllowFIFOForLimitedCountAction] boolValue];;
             [[DCAssetsLibAgent sharedDCAssetsLibAgent] addAssetsLibUser:self];
             _uniqueID = [NSString stringWithFormat:@"%d", g_uniqueIDNumber++];
             SAFE_ARC_RETAIN(_uniqueID);
@@ -654,11 +718,10 @@ static DCMediaPocket *sharedDCMediaPocket = nil;
 - (NSUInteger)bucketCount {
     NSUInteger result = 0;
     do {
-        @synchronized(self) {
+        @synchronized(_buckets) {
             if (!_buckets) {
                 break;
             }
-            
             result = [_buckets count];
         }
     } while (NO);
@@ -668,7 +731,7 @@ static DCMediaPocket *sharedDCMediaPocket = nil;
 - (DCMediaBucket *)bucket:(NSUInteger)idx {
     DCMediaBucket *result = nil;
     do {
-        @synchronized(self) {
+        @synchronized(_buckets) {
             if (!_buckets || idx >= [_buckets count]) {
                 break;
             }
@@ -687,7 +750,7 @@ static DCMediaPocket *sharedDCMediaPocket = nil;
         if (!uniqueID) {
             break;
         }
-        @synchronized(self) {
+        @synchronized(_buckets) {
             if (!_buckets) {
                 break;
             }
@@ -799,6 +862,36 @@ static DCMediaPocket *sharedDCMediaPocket = nil;
         }
     } while (NO);
     self.mediaPocketGrouping = NO;
+}
+
+- (void)sortByOrder:(NSComparisonResult)order {
+    do {
+        @synchronized(self) {
+            [_array sortUsingComparator:^(id obj1, id obj2) {
+                NSComparisonResult result = NSOrderedSame;
+                NSDate *leftDate = [[obj1 origin] valueForProperty:ALAssetPropertyDate];
+                NSDate *rightDate = [[obj2 origin]  valueForProperty:ALAssetPropertyDate];
+                switch (order) {
+                    case NSOrderedDescending:
+                    {
+                        result = [rightDate compare:leftDate];
+                    }
+                        break;
+                    case NSOrderedAscending:
+                    {
+                        result = [leftDate compare:rightDate];
+                    }
+                        break;
+                    default:
+                    {
+                        NSAssert(0, @"Unknown type!");
+                    }
+                        break;
+                }
+                return result;
+            }];
+        }
+    } while (NO);
 }
 
 @end

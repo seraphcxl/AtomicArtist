@@ -75,7 +75,7 @@
     CGImageRef result = nil;
     CGImageSourceRef sourceRef = nil;
     do {
-        if (!path || pixelSize == 0) {
+        if (!path) {
             break;
         }
         sourceRef = [DCImageHelper loadImageSourceFromContentsOfFile:path];
@@ -89,6 +89,7 @@
             options = [[NSDictionary alloc] initWithObjectsAndKeys:(id)kCFBooleanTrue, (id)kCGImageSourceCreateThumbnailWithTransform, (id)kCFBooleanTrue, (id)kCGImageSourceCreateThumbnailFromImageAlways, nil];
         }
         result = CGImageSourceCreateImageAtIndex(sourceRef, 0, (__bridge CFDictionaryRef)options);
+        SAFE_ARC_SAFERELEASE(options);
     } while (NO);
     if (sourceRef) {
         CFRelease(sourceRef);
@@ -117,7 +118,7 @@
     CGImageRef result = nil;
     CGImageSourceRef sourceRef = nil;
     do {
-        if (!asset || pixelSize == 0) {
+        if (!asset) {
             break;
         }
         sourceRef = [DCImageHelper loadImageSourceFromALAsset:asset];
@@ -145,7 +146,7 @@
     CGImageSourceRef sourceRef = nil;
     CGImageRef cgimage = nil;
     do {
-        if (!asset || pixelSize == 0) {
+        if (!asset) {
             break;
         }
         

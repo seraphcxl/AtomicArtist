@@ -1,6 +1,6 @@
 //
 //  DCSegmentedControl.h
-//  Whip
+//
 //
 //  Created by Chen XiaoLiang on 13-1-5.
 //  Copyright (c) 2013年 arcsoft. All rights reserved.

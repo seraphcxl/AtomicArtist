@@ -15,6 +15,7 @@ typedef enum {
     DCLoaderUID_ImagePicker_Group = 0,
     DCLoaderUID_ImagePicker_Item,
     DCLoaderUID_FaceFeature,
+    DCLoaderUID_WhipView,
     
     DCLoaderUID_Count,
 } DCLoaderUID;

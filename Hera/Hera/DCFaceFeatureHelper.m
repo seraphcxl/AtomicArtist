@@ -149,7 +149,7 @@ DEFINE_SINGLETON_FOR_CLASS(DCFaceFeatureHelper);
                 break;
             }
             
-            id<DCMediaPocketDataItemProtocol> item = [[DCMediaPocket sharedDCMediaPocket] findItem:dataItemUID];
+            id<DCMediaPocketDataItemProtocol> item = [[DCMediaPocket sharedPhotoPocket] findItem:dataItemUID];
             DCFaceFeatureLoader *ffLoader = nil;
             switch ([item type]) {
                 case DataSourceType_AssetsLib:

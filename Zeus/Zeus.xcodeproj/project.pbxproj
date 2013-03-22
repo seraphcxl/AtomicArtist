@@ -23,6 +23,12 @@
 		1B88587016B671110082F06C /* DCMediaPocket.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1B88586B16B66C890082F06C /* DCMediaPocket.h */; };
 		1BBBDB4516BA0A5300735EDA /* DCCommonUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BBBDB4416BA0A5300735EDA /* DCCommonUtility.m */; };
 		1BC067BC16F0553A00087023 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BC067BB16F0553A00087023 /* CoreLocation.framework */; };
+		1BC6F13A16FC2CA100CB9937 /* DCMediaBucket.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1BD6780216F04D000069AE2D /* DCMediaBucket.h */; };
+		1BC6F13B16FC2CA100CB9937 /* DCMediaPocketSnapshotPool.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1BD6780416F04D000069AE2D /* DCMediaPocketSnapshotPool.h */; };
+		1BC6F13C16FC2CA100CB9937 /* DCMediaPocketDataItem.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1B88586816B66C770082F06C /* DCMediaPocketDataItem.h */; };
+		1BC6F13D16FC2CA100CB9937 /* DCTimelineAssetsGroup.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1BDC809016C0DBF3004D2C2E /* DCTimelineAssetsGroup.h */; };
+		1BC6F13E16FC2CA100CB9937 /* DCTimelineALAssetsLibrary.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1BDC808116C0D33A004D2C2E /* DCTimelineALAssetsLibrary.h */; };
+		1BC6F13F16FC2CA100CB9937 /* DCTimelineCommonConstants.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1BD25DCC16C1FE3F00943CC9 /* DCTimelineCommonConstants.h */; };
 		1BCC890D16AF709100852851 /* Item.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BCC890C16AF709100852851 /* Item.m */; };
 		1BD25DCE16C1FE3F00943CC9 /* DCTimelineCommonConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BD25DCD16C1FE3F00943CC9 /* DCTimelineCommonConstants.m */; };
 		1BD6780616F04D000069AE2D /* DCMediaBucket.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BD6780316F04D000069AE2D /* DCMediaBucket.m */; };
@@ -72,6 +78,12 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
+				1BC6F13A16FC2CA100CB9937 /* DCMediaBucket.h in CopyFiles */,
+				1BC6F13B16FC2CA100CB9937 /* DCMediaPocketSnapshotPool.h in CopyFiles */,
+				1BC6F13C16FC2CA100CB9937 /* DCMediaPocketDataItem.h in CopyFiles */,
+				1BC6F13D16FC2CA100CB9937 /* DCTimelineAssetsGroup.h in CopyFiles */,
+				1BC6F13E16FC2CA100CB9937 /* DCTimelineALAssetsLibrary.h in CopyFiles */,
+				1BC6F13F16FC2CA100CB9937 /* DCTimelineCommonConstants.h in CopyFiles */,
 				1B88586E16B671110082F06C /* DCMediaPocketDataProtocel.h in CopyFiles */,
 				1B88587016B671110082F06C /* DCMediaPocket.h in CopyFiles */,
 				1B88586516B66A670082F06C /* Item.h in CopyFiles */,

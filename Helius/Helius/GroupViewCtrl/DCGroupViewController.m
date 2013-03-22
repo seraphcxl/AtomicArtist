@@ -144,7 +144,7 @@
 }
 
 - (DCGridViewDragDropStyle)dragdropStyle {
-    return DCGridViewDragDropStyle_Swap;
+    return DCGridViewDragDropStyle_SwapSort;
 }
 
 - (void)gridView:(DCGridView *)gridView dragdropStateBegin:(DCGridViewCell *)cell withGestureRecognizer:(UIGestureRecognizer *)gr {
