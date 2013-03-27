@@ -12,7 +12,7 @@
 
 typedef enum {
     TPT_Center = 0,
-    TPT_CustomLocation_Center,
+    TPT_CustomLocation_CenterAncher,
     TPT_CustomLocation_Popup,
 } TipsPopupType;
 
@@ -67,7 +67,7 @@ typedef enum {
 @property (nonatomic, assign) CGFloat popupRadius;
 @property (nonatomic, assign) TipsPopupOrientation popupOrientation;
 
-- (id)initWithType:(TipsPopupType)type descriptions:(NSArray *)descriptions;
+- (id)initWithType:(TipsPopupType)type descriptions:(NSArray *)descriptions andRecommendSize:(CGSize)size;
 - (id)initWithType:(TipsPopupType)type image:(UIImage *)image;
 - (id)initWithType:(TipsPopupType)type imagePath:(NSString *)imagePath;
 
