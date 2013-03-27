@@ -1,6 +1,6 @@
 //
 //  DCTips.m
-//  Whip
+//  Helius
 //
 //  Created by Chen XiaoLiang on 13-3-21.
 //  Copyright (c) 2013年 arcsoft. All rights reserved.
@@ -21,17 +21,19 @@
 
 @synthesize actionDelegate = _actionDelegate;
 @synthesize type = _type;
-@synthesize titles = _titles;
-@synthesize colorForTitle = _colorForTitle;
-@synthesize fontForTitle = _fontForTitle;
 @synthesize descriptions = _descriptions;
 @synthesize colorForDescription = _colorForDescription;
 @synthesize fontForDescription = _fontForDescription;
 @synthesize duration = _duration;
+@synthesize showBackground = _showBackground;
 @synthesize backgroundColor = _backgroundColor;
 @synthesize backgroundImagePath = _backgroundImagePath;
-@synthesize anchor = _anchor;
-@synthesize radius = _radius;
+@synthesize backgrondImage = _backgrondImage;
+@synthesize triangleHeight = _triangleHeight;
+@synthesize angle = _angle;
+@synthesize centerAnchor = _centerAnchor;
+@synthesize popupAnchor = _popupAnchor;
+@synthesize popupRadius = _popupRadius;
 @synthesize popupOrientation = _popupOrientation;
 @synthesize tapGR = _tapGR;
 
@@ -39,38 +41,69 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        // Initialization code
+        // Initialization code        
+        _descriptions = nil;
+        self.colorForDescription = TIPS_DESCROPTIONCOLOR;
+        self.fontForDescription = [UIFont systemFontOfSize:TIPS_DESCROPTIONFONTSIZE];
+        
+        self.duration = TIPS_DURATION_SEC;
+        self.backgroundColor = TIPS_DEFBACKGROUNDCOLOR;
+        _backgroundImagePath = nil;
+        _backgrondImage = nil;
+        
+        self.triangleHeight = 0.0f;
+        
+        self.angle = 0;
+        
+        self.centerAnchor = CGPointZero;
+        self.center = self.centerAnchor;
+        
+        self.popupAnchor = CGPointZero;
+        self.popupRadius = 0.0f;
+        self.popupOrientation = TPO_Top;
+        
+        UITapGestureRecognizer *tapGRForHide = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap:)];
+        self.tapGR = tapGRForHide;
+        self.tapGR.cancelsTouchesInView = NO;
+        [self addGestureRecognizer:self.tapGR];
+        SAFE_ARC_AUTORELEASE(tapGRForHide);
     }
     return self;
 }
 
-- (id)initWithType:(TipsPopupType)type titles:(NSArray *)titles andDescriptions:(NSArray *)descriptions {
+- (id)initWithType:(TipsPopupType)type descriptions:(NSArray *)descriptions {
     @synchronized(self) {
-        self = [super init];
+        self = [self initWithFrame:CGRectZero];
         if (self) {
-            self.type = type;
-            
-            self.titles = titles;
-            self.colorForTitle = TIPS_TITLECOLOR;
-            self.fontForTitle = [UIFont boldSystemFontOfSize:TIPS_TITLEFONTSIZE];
-            
-            self.descriptions = descriptions;
-            self.colorForDescription = TIPS_DESCROPTIONCOLOR;
-            self.fontForDescription = [UIFont systemFontOfSize:TIPS_DESCROPTIONFONTSIZE];
-            
-            self.duration = TIPS_DURATION_SEC;
-            self.backgroundColor = TIPS_DEFBACKGROUNDCOLOR;
-            self.backgroundImagePath = nil;
-            
-            self.anchor = CGPointZero;
-            self.radius = 0.0f;
-            self.popupOrientation = TPPO_Top;
-            
-            UITapGestureRecognizer *tapGRForHide = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap:)];
-            self.tapGR = tapGRForHide;
-            self.tapGR.cancelsTouchesInView = NO;
-            [self addGestureRecognizer:self.tapGR];
-            SAFE_ARC_AUTORELEASE(tapGRForHide);
+            SAFE_ARC_RETAIN(descriptions);
+            SAFE_ARC_SAFERELEASE(_descriptions);
+            _descriptions = [descriptions copy];
+            SAFE_ARC_RELEASE(descriptions);
+        }
+        return self;
+    }
+}
+
+- (id)initWithType:(TipsPopupType)type image:(UIImage *)image {
+    @synchronized(self) {
+        self = [self initWithFrame:CGRectZero];
+        if (self) {
+            SAFE_ARC_RETAIN(image);
+            SAFE_ARC_SAFERELEASE(_backgrondImage);
+            _backgrondImage = image;
+        }
+        return self;
+    }
+}
+
+- (id)initWithType:(TipsPopupType)type imagePath:(NSString *)imagePath {
+    @synchronized(self) {
+        self = [self initWithFrame:CGRectZero];
+        if (self) {
+            SAFE_ARC_RETAIN(imagePath);
+            SAFE_ARC_SAFERELEASE(_backgroundImagePath);
+            _backgroundImagePath = [imagePath copy];
+            SAFE_ARC_RELEASE(imagePath);
         }
         return self;
     }
@@ -84,18 +117,29 @@
                 self.tapGR = nil;
             }
             
-            self.backgroundImagePath = nil;
+            SAFE_ARC_SAFERELEASE(_backgrondImage);
+            SAFE_ARC_SAFERELEASE(_backgroundImagePath);
             self.backgroundColor = nil;
-            
+
             self.fontForDescription = nil;
             self.colorForDescription = nil;
-            self.descriptions = nil;
-            
-            self.fontForTitle = nil;
-            self.colorForTitle = nil;
-            self.titles = nil;
+            SAFE_ARC_SAFERELEASE(_descriptions);
         }
         SAFE_ARC_SUPER_DEALLOC();
+    } while (NO);
+}
+
+- (void)tap:(UITapGestureRecognizer *)tapGR {
+    do {
+        if (tapGR != self.tapGR) {
+            break;
+        }
+    } while (NO);
+}
+
+- (void)layoutSubviews {
+    do {
+        ;
     } while (NO);
 }
 
